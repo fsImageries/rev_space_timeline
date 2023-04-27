@@ -1,0 +1,64 @@
+{
+    "system1": {
+        "suns": [
+            {
+                "epsilonEridani" : {
+                    "diameter": 1016656.4,
+                    "radius": 508328.2,
+                    "rotationalPeriod": {
+                        "value": 11.4,
+                        "unit": "days"
+                    },
+                    "orbitalPeriod": null,
+                    "parent": null,
+                    "tilt": 0,
+                    "distanceToParent": null
+                }
+            }
+        ],
+        "planets": [
+            {
+                "tangerineDream": {
+                    "diameter": 169184.62,
+                    "radius": 84592.31,
+                    "rotationalPeriod": {
+                        "value": 1,
+                        "unit": "days"
+                    }, 
+                    "orbitalPeriod": {
+                        "value": 7.3,
+                        "unit": "years"
+                    },
+                    "parent": "epsilonEridani",
+                    "tilt": 45,
+                    "distanceToParent": 5086400000,
+                    "draw": {
+                        "albedoPath": "/2k_jupiter.jpg",
+                        "normalPath": "/ceres_normal_16k.png"
+                    }
+                }
+            },
+            {
+                "yellowstone": {
+                    "diameter": 17.2,
+                    "radius": 8.6,
+                    "rotationalPeriod": {
+                        "value": 26,
+                        "unit": "hours"
+                    }, 
+                    "orbitalPeriod": {
+                        "value": 280,
+                        "unit": "years"
+                    },
+                    "parent": "epsilonEridani",
+                    "tilt": 20,
+                    "distanceToParent": 59840000000,
+                    "draw": {
+                        "albedoPath": "/2k_venus_surface.jpg",
+                        "normalPath": "/ceres_normal_16k.png"
+                    }
+                }
+            }
+        ]
+    }
+}

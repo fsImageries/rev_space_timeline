@@ -32,9 +32,10 @@ import './style.css'
 import * as meshes from "./popuate"
 import * as cameraUtils from "./cameraUtils"
 
+import { System } from "./Models/System";
+
 import celestialData from "./object_data.json"
 
-console.log(celestialData)
 
 class World {
     canvas: HTMLElement;
@@ -78,14 +79,14 @@ class World {
         console.log('❌ error while loading')
         }
 
-        // ===== 💡 LIGHTS =====
+        // // ===== 💡 LIGHTS =====
         this.pointLight = new THREE.PointLight('#ffdca8', 10.2, 100)
-        this.pointLight.castShadow = true
-        this.pointLight.shadow.radius = 4
-        this.pointLight.shadow.camera.near = 0.5
-        this.pointLight.shadow.camera.far = 4000
-        this.pointLight.shadow.mapSize.width = 2048
-        this.pointLight.shadow.mapSize.height = 2048
+        // this.pointLight.castShadow = true
+        // this.pointLight.shadow.radius = 4
+        // this.pointLight.shadow.camera.near = 0.5
+        // this.pointLight.shadow.camera.far = 4000
+        // this.pointLight.shadow.mapSize.width = 2048
+        // this.pointLight.shadow.mapSize.height = 2048
         this.scene.add(this.pointLight)
 
         // ===== 🎥 CAMERA =====
@@ -104,7 +105,7 @@ class World {
         this.clickPointer = new Vector2(Infinity, Infinity)
         this.raycaster = new Raycaster()
 
-        this.populate()
+        // this.populate()
 
 
 
@@ -170,7 +171,7 @@ class Actions{
     update() {
         let target = this.dblclickTarget()
         if (target) {
-            console.log(target)
+            // console.log(target)
             cameraUtils.setCameraTarget(target, this.world.cameraCtrl)
             cameraUtils.jumpToTarget(target, this.world.cameraCtrl)
         }

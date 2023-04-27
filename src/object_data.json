@@ -2,61 +2,50 @@
     "system1": {
         "suns": [
             {
-                "epsilonEridani" : {
-                    "diameter": 1016656.4,
-                    "radius": 508328.2,
-                    "rotationalPeriod": {
-                        "value": 11.4,
-                        "unit": "days"
-                    },
-                    "orbitalPeriod": null,
-                    "parent": null,
-                    "tilt": 0,
-                    "distanceToParent": null
+                "name": "epsilonEridani",
+                "diameter": 1016656.4,
+                "radius": 508328.2,
+                "rotationPeriod": 273.6,
+                "orbitalPeriod": null,
+                "parent": null,
+                "tilt": 0,
+                "distanceToParent": null,
+                "draw": {
+                    "radius": 200
                 }
             }
         ],
         "planets": [
             {
-                "tangerineDream": {
-                    "diameter": 169184.62,
-                    "radius": 84592.31,
-                    "rotationalPeriod": {
-                        "value": 1,
-                        "unit": "days"
-                    }, 
-                    "orbitalPeriod": {
-                        "value": 7.3,
-                        "unit": "years"
-                    },
-                    "parent": "epsilonEridani",
-                    "tilt": 45,
-                    "distanceToParent": 5086400000,
-                    "draw": {
-                        "albedoPath": "/2k_jupiter.jpg",
-                        "normalPath": "/ceres_normal_16k.png"
-                    }
+                "name": "tangerineDream",
+                "diameter": 169184.62,
+                "radius": 84592.31,
+                "rotationPeriod": 24,
+                "orbitalPeriod": 63948,
+                "parent": "epsilonEridani",
+                "tilt": 45,
+                "distanceToParent": 5086400000,
+                "draw": {
+                    "albedoPath": "/2k_jupiter.jpg",
+                    "normalPath": "/ceres_normal_16k.png",
+                    "glowColor": "0xf69f1f",
+                    "radius": 100
                 }
             },
             {
-                "yellowstone": {
-                    "diameter": 17.2,
-                    "radius": 8.6,
-                    "rotationalPeriod": {
-                        "value": 26,
-                        "unit": "hours"
-                    }, 
-                    "orbitalPeriod": {
-                        "value": 280,
-                        "unit": "years"
-                    },
-                    "parent": "epsilonEridani",
-                    "tilt": 20,
-                    "distanceToParent": 59840000000,
-                    "draw": {
-                        "albedoPath": "/2k_venus_surface.jpg",
-                        "normalPath": "/ceres_normal_16k.png"
-                    }
+                "name": "yellowstone",
+                "diameter": 17.2,
+                "radius": 8.6,
+                "rotationPeriod": 26,
+                "orbitalPeriod": 2453000,
+                "parent": "epsilonEridani",
+                "tilt": 20,
+                "distanceToParent": 59840000000,
+                "draw": {
+                    "albedoPath": "/2k_venus_surface.jpg",
+                    "normalPath": "/ceres_normal_16k.png",
+                    "glowColor": "0xf69f1f",
+                    "radius": 8.6
                 }
             }
         ]

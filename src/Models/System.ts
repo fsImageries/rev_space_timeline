@@ -1,14 +1,15 @@
 import { Planet } from "./Planet"
-import { World} from "./World"
-import Constants from "../Constants";
+import { World } from "./World"
 import { Sun } from "./Sun";
+import { CelestiaObject } from "./Celestial";
 
 export class System {
     public suns: Sun[];
     public planets: Planet[];
 
-    constructor(data:any /*Json system data is coming in hot*/) { 
+    constructor(data: any /*Json system data is coming in hot*/) {
         this.suns = this.buildSuns(data.suns)
+        // this.suns = []
         this.planets = this.buildPlanets(data.planets)
 
         // ===== 💡 LIGHTS =====
@@ -22,8 +23,8 @@ export class System {
         // this.scene.add(this.pointLight)
     }
 
-    private buildSuns(data:any): Sun[] {
-        return data.map((sun:any) => new Sun({
+    private buildSuns(data: any): Sun[] {
+        return data.map((sun: any) => new Sun({
             name: sun.name,
             radius: sun.draw.radius,
             rotationPeriod: sun.rotationPeriod,
@@ -33,38 +34,32 @@ export class System {
         }));
     }
 
-    private buildPlanets(data:any): Planet[] {
-        return data.map((planet:any) => new Planet({
+    private buildPlanets(data: any): Planet[] {
+        return data.map((planet: any) => new Planet({
             name: planet.name,
-            glowColor: planet.glowColor,
+            glowColor: planet.draw.glowColor,
+            glowIntesity: planet.draw.glowIntensity,
             radius: planet.draw.radius,
             rotationPeriod: planet.rotationPeriod,
             orbitalPeriod: planet.orbitalPeriod,
             tilt: planet.tilt,
             distanceToParent: planet.distanceToParent,
             albedoPath: planet.draw.albedoPath,
-            normalPath: planet.draw.normalPath
+            normalPath: planet.draw.normalPath,
+            texts: planet.texts
         }));
     }
 
-    initWorld(world:World) {
-        this.planets.forEach((planet) => {
-            // console.log(planet.distanceToParent / Constants.DISTANCE_SCALE)
-            // console.log(this.perc(planet.distanceToParent, .00001))
-            // console.log("------------------------")
-            // const dist = planet.distanceToParent / Constants.DISTANCE_SCALE
-            // // const dist = planet.distanceToParent
-            // const obj = planet.group
-            // obj.position.set(0, 0, -dist)
-            world.scene.add(planet.group)
-        })
-
-        this.suns.forEach((sun) => {
-            world.scene.add(sun.object)
+    initWorld(world: World) {
+        (this.suns as any).concat(this.planets).forEach((obj:CelestiaObject) => {
+            if (obj.group) {
+                world.scene.add(obj.group)
+            }
         })
     }
 
-    update(world:World) {
+    update(world: World) {
         this.planets.forEach((planet) => planet.update(world))
+        this.suns.forEach((sun) => sun.update(world))
     }
 }

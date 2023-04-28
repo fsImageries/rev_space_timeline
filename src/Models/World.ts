@@ -1,8 +1,9 @@
 import * as THREE from "three"
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
-import * as cameraUtils from "./../cameraUtils"
+import * as cameraUtils from "../helpers/cameraUtils"
 import { resizeRendererToDisplaySize } from './../helpers/responsiveness'
+import { System } from "./System";
 
 
 let lastTime:number;
@@ -19,10 +20,13 @@ export class World {
     clickPointer: THREE.Vector2;
     raycaster: THREE.Raycaster;
 
+    systems: System[];
+    curSystem: System;
+
     /**
      *
      */
-    constructor() {
+    constructor(system:System) {
         // ===== 🖼️ CANVAS, RENDERER, & SCENE =====
         this.canvas = document.querySelector(`canvas#main`)!
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true })
@@ -52,7 +56,6 @@ export class World {
         // ===== 🎥 CAMERA =====
         this.camera = new THREE.PerspectiveCamera(30, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 100_000_000)
         
-
         // ===== 🕹️ CONTROLS =====
         this.cameraCtrl = new OrbitControls(this.camera, this.canvas)
         this.cameraCtrl.enableDamping = true
@@ -75,17 +78,21 @@ export class World {
         // }
 
         // ===== 💡 LIGHTS =====
-        const pointLight = new THREE.PointLight('#ffdca8', 10.2, 10)
+        // const pointLight = new THREE.PointLight('#ffdca8', 10.2, 100)
+        const pointLight = new THREE.PointLight('#ffffff', 1, 100000)
         pointLight.castShadow = true
         pointLight.shadow.radius = 4
         pointLight.shadow.camera.near = 0.5
-        pointLight.shadow.camera.far = 4000
+        pointLight.shadow.camera.far = 100000
         pointLight.shadow.mapSize.width = 2048
         pointLight.shadow.mapSize.height = 2048
         this.scene.add(pointLight)
 
-        const pointLight2 = new THREE.AmbientLight('#ffdca8', 1.2)
+        const pointLight2 = new THREE.AmbientLight('#ffdca8', 0.1)
         this.scene.add(pointLight2)
+
+        this.curSystem = system
+        this.systems = [system]
     }
 
     initListeners(){
@@ -124,6 +131,7 @@ export class World {
             this.camera.updateProjectionMatrix()
         }
     
+        this.curSystem.update(this)
         this.cameraCtrl.update()
         this.renderer.render(this.scene, this.camera)
     }

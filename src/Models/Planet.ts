@@ -1,9 +1,11 @@
 import * as THREE from "three"
+import { Text } from 'troika-three-text'
 import { CelestiaObject, CelestialParams } from "./Celestial";
+import { Internal3DObject } from "../interfaces";
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
-import Constants from "../Constants";
+import Constants from "../helpers/Constants";
 import { World } from "./World";
 
 export interface PlanetParams {
@@ -11,35 +13,26 @@ export interface PlanetParams {
     albedoPath: string;
     normalPath: string;
     glowColor: string;
+    glowIntesity: number;
+    texts: string[];
 }
 
 let outWorldPosition = new THREE.Vector3();
 
-interface Internal3DObject {
-    grp: THREE.Group;
-    mesh: THREE.Mesh;
-    atmo: THREE.Mesh
-}
-
 export class Planet extends CelestiaObject {
     private _albedoPath: string;
     private _normalPath: string;
-    private _object: Internal3DObject;
+    // private _object: Internal3DObject;
+    private _texts: string[];
 
 
     constructor(data: CelestialParams & PlanetParams, parent?: THREE.Object3D) {
         super(data);
         this._albedoPath = data.albedoPath;
         this._normalPath = data.normalPath;
-        this._object = this.build(data.glowColor)
-        // this._parent = parent
-
-        // Init
-        const base = parent ? parent.position.clone() : new THREE.Vector3()
-        const dist = this.distanceToParent / Constants.DISTANCE_SCALE
-        base.z = (-dist)
-        this.group.position.set(base.x, base.y, base.z)
-        
+        this._texts = data.texts;
+        this._object = this.build(data.glowColor, data.glowIntesity)
+        this.initPosition(parent)
     }
 
     public get albedoPath(): string {
@@ -56,40 +49,63 @@ export class Planet extends CelestiaObject {
         this._normalPath = value;
     }
 
-    public get group(): THREE.Group {
-        return this._object.grp;
-    }
-
-    public get mesh(): THREE.Mesh {
-        return this._object.mesh;
-    }
-
-    public get atmo(): THREE.Mesh {
-        return this._object.atmo;
-    }
-
     public update(world: World) {
-        // const atmo = (this._object.getObjectByName(`${this._name}_atmo`) as THREE.Mesh)
-        const vec = (this.atmo.material as THREE.ShaderMaterial).uniforms.viewVector.value
-        this.atmo.getWorldPosition(outWorldPosition)
+        const vec = (this.atmo?.material as THREE.ShaderMaterial).uniforms.viewVector.value
+        this.atmo?.getWorldPosition(outWorldPosition)
         vec.subVectors(world.camera.position.clone(), outWorldPosition);
     }
 
-    private build(glowColor: string): Internal3DObject {
-        const [mesh, atmo] = this.build_map_sphere(new THREE.Color(glowColor))
+    private initPosition(parent?:THREE.Object3D) {
+        const base = parent ? parent.position.clone() : new THREE.Vector3()
+        const dist = this.distanceToParent / Constants.DISTANCE_SCALE
+        const idlePos = new THREE.Vector3(0,0,-dist + this.radius * 6)
+        base.z = (-dist)
+        if (!this.group) return
+        console.log("first")
+        this.group.position.set(base.x, base.y, base.z)
+        this.group.userData["idlePosition"] = idlePos;
 
-        const grp = new THREE.Group()
-        // grp.userData["idlePosition"] = idlePos
-        grp.name = this.name
-        // grp.position.set(5, 0, -5)
-        grp.add(mesh)
-        grp.add(atmo)
-        // gen_yellowstone_text(grp)
-        grp.updateMatrixWorld()
-        return { grp, mesh, atmo }
+        if (!this.texts) return
+        console.log("second")
+        const l = this.texts.length
+        this.texts.forEach((txt) => {
+            const i = txt.userData["idx"]
+            txt.position.x = base.x + (this.radius) + (i / l)
+            txt.position.y = (base.y - 3) + 15 * (i / l)
+            txt.position.z = (base.z + dist - 5) + 3 * i
+        })
     }
 
-    private build_map_sphere(glowColor: THREE.Color) {
+    public build(glowColor: string, glowIntensity:number): Internal3DObject {
+        const [mesh, atmo] = this.build_map_sphere(new THREE.Color(parseInt(glowColor)), glowIntensity)
+        const texts = this.build_texts()
+
+        const grp = new THREE.Group()
+        grp.name = this.name
+        grp.add(mesh)
+        grp.add(atmo)
+        texts.forEach((t) => {
+            console.log(t)
+            grp.add(t)
+            t.sync()
+        })
+        grp.updateMatrixWorld()
+        return { grp, mesh, atmo, texts }
+    }
+
+    private build_texts() {
+        console.debug(this._texts)
+        return this._texts.map((txt, idx) => {
+            const textMesh = new Text()
+            textMesh.text = txt
+            textMesh.fontSize = 1
+            textMesh.color = 0xffffff
+            textMesh.userData["idx"] = idx
+            return textMesh
+        })
+    }
+
+    private build_map_sphere(glowColor: THREE.Color, glowIntesity:number) {
         const albedo = new THREE.TextureLoader().load(this.albedoPath);
         albedo.magFilter = THREE.NearestFilter
 
@@ -102,13 +118,13 @@ export class Planet extends CelestiaObject {
         })
 
         const sphereGeometry = new THREE.SphereGeometry(this.radius, 150, 150)
-        // const sphereGeometry = new THREE.SphereGeometry(1, 150, 150)
         const mesh = new THREE.Mesh(sphereGeometry, sphereMaterial)
         mesh.castShadow = true
         mesh.name = `${this.name}_mesh`
 
         const atmoMat = new THREE.ShaderMaterial({
             uniforms: {
+                intensityMult: { value: glowIntesity },
                 viewVector: { value: new THREE.Vector3() },
                 glowColor: { value: glowColor },
             },

@@ -1,3 +1,5 @@
+import { Internal3DObject } from "../interfaces";
+
 export interface CelestialParams {
     // all times are given in hours
     // all lengths are given in km
@@ -17,6 +19,8 @@ export class CelestiaObject {
     private _tilt: number;
     private _name: string;
     private _distanceToParent: number;
+    
+    public _object?: Internal3DObject;
 
     constructor(data:CelestialParams) {
         this._radius = data.radius;
@@ -26,6 +30,22 @@ export class CelestiaObject {
         this._name = data.name;
         this._distanceToParent = data.distanceToParent;
      }
+
+    public get group(): THREE.Group | undefined {
+        return this._object?.grp;
+    }
+
+    public get mesh(): THREE.Mesh | undefined {
+        return this._object?.mesh;
+    }
+
+    public get atmo(): THREE.Mesh | undefined {
+        return this._object?.atmo;
+    }
+
+    public get texts(): THREE.Mesh[] | undefined {
+        return this._object?.texts;
+    }
 
     public get radius(): number {
         return this._radius;

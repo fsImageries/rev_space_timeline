@@ -30,7 +30,7 @@ import { resizeRendererToDisplaySize } from './helpers/responsiveness'
 import './style.css'
 
 import * as meshes from "./popuate"
-import * as cameraUtils from "./cameraUtils"
+import * as cameraUtils from "./helpers/cameraUtils"
 
 import { System } from "./Models/System";
 

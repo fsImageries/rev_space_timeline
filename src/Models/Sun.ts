@@ -1,39 +1,35 @@
 import * as THREE from "three"
 import { CelestiaObject, CelestialParams } from "./Celestial";
+import { Internal3DObject } from "../interfaces";
 
-import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
-import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
-import Constants from "../Constants";
+import sunFrag from "./../glsl/sun_frag.glsl?raw"
+import sunVert from "./../glsl/sun_vert.glsl?raw"
 import { World } from "./World";
 
 
 export class Sun extends CelestiaObject {
-    private _object: THREE.Group;
+    // private _object: Internal3DObject;
 
     constructor(data: CelestialParams) {
         super(data);
         this._object = this.build()
     }
 
-    public get object(): THREE.Group {
-        return this._object;
+    public update(world:World) {
+        ((this.mesh as THREE.Mesh).material as THREE.ShaderMaterial).uniforms.time.value += .01;
     }
 
-    public update() {
+    public build(): Internal3DObject {
+        const mat = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0.0 },
+                resolution: { value: new THREE.Vector3() }
+            },
+            vertexShader: sunVert,
+            fragmentShader: sunFrag
+        })
+        // const mat = new THREE.MeshNormalMaterial()
 
-    }
-
-    public build() {
-        // const mat = new THREE.ShaderMaterial({
-        //     uniforms: {
-        //         time: { value: 0.0 },
-        //         resolution: { value: new THREE.Vector3() }
-        //     },
-        //     vertexShader: sunVert,
-        //     fragmentShader: sunFrag
-        // })
-        const mat = new THREE.MeshNormalMaterial()
-    
         const sphereGeometry = new THREE.SphereGeometry(this.radius, 50, 50)
         const mesh = new THREE.Mesh(sphereGeometry, mat)
         mesh.castShadow = true
@@ -44,6 +40,6 @@ export class Sun extends CelestiaObject {
         const grp = new THREE.Group()
         grp.name = this.name
         grp.add(mesh)
-        return grp 
+        return { grp:grp, mesh: mesh, atmo: undefined, texts: [] }
     }
 }

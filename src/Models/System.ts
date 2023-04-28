@@ -9,18 +9,7 @@ export class System {
 
     constructor(data: any /*Json system data is coming in hot*/) {
         this.suns = this.buildSuns(data.suns)
-        // this.suns = []
         this.planets = this.buildPlanets(data.planets)
-
-        // ===== 💡 LIGHTS =====
-        // this.pointLight = new THREE.PointLight('#ffdca8', 10.2, 100)
-        // this.pointLight.castShadow = true
-        // this.pointLight.shadow.radius = 4
-        // this.pointLight.shadow.camera.near = 0.5
-        // this.pointLight.shadow.camera.far = 4000
-        // this.pointLight.shadow.mapSize.width = 2048
-        // this.pointLight.shadow.mapSize.height = 2048
-        // this.scene.add(this.pointLight)
     }
 
     private buildSuns(data: any): Sun[] {
@@ -35,6 +24,7 @@ export class System {
     }
 
     private buildPlanets(data: any): Planet[] {
+        const parent = this.suns[0]
         return data.map((planet: any) => new Planet({
             name: planet.name,
             glowColor: planet.draw.glowColor,
@@ -46,7 +36,8 @@ export class System {
             distanceToParent: planet.distanceToParent,
             albedoPath: planet.draw.albedoPath,
             normalPath: planet.draw.normalPath,
-            texts: planet.texts
+            texts: planet.texts,
+            parent:parent,
         }));
     }
 
@@ -59,7 +50,10 @@ export class System {
     }
 
     update(world: World) {
-        this.planets.forEach((planet) => planet.update(world))
-        this.suns.forEach((sun) => sun.update(world))
+        (this.suns as any).concat(this.planets).forEach((obj:Sun | Planet) => {
+            if (obj.group) {
+                obj.update(world)
+            }
+        })
     }
 }

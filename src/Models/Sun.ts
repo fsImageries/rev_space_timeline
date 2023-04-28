@@ -8,14 +8,13 @@ import { World } from "./World";
 
 
 export class Sun extends CelestiaObject {
-    // private _object: Internal3DObject;
-
+    
     constructor(data: CelestialParams) {
         super(data);
         this._object = this.build()
     }
 
-    public update(world:World) {
+    public update(_world:World) {
         ((this.mesh as THREE.Mesh).material as THREE.ShaderMaterial).uniforms.time.value += .01;
     }
 

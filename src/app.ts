@@ -8,7 +8,6 @@ import './style.css'
 
 const sys = new System(celestialData.system1)
 const world = new World(sys)
-console.table(sys.planets)
 sys.initWorld(world)
 
 // const obj = world.scene.getObjectByName("tangerineDream")
@@ -19,7 +18,7 @@ if (obj) {
 
     cameraUtils.setCameraTarget(obj, world.cameraCtrl)
     // cameraUtils.jumpCloseToTarget(obj, world.cameraCtrl)
-    console.info("Hall", obj)
+    // console.info(obj)
     // console.log(world.camera.position)
     cameraUtils.jumpToTarget(obj, world.cameraCtrl)
 }

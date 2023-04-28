@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { Internal3DObject } from "../interfaces";
 
 export interface CelestialParams {
@@ -9,7 +10,8 @@ export interface CelestialParams {
     orbitalPeriod: number
     tilt: number
     name: string;
-    distanceToParent: number
+    distanceToParent: number;
+    parent?: CelestiaObject;
 }
 
 export class CelestiaObject {
@@ -21,6 +23,7 @@ export class CelestiaObject {
     private _distanceToParent: number;
     
     public _object?: Internal3DObject;
+    public _parent?: CelestiaObject
 
     constructor(data:CelestialParams) {
         this._radius = data.radius;
@@ -29,6 +32,7 @@ export class CelestiaObject {
         this._tilt = data.tilt;
         this._name = data.name;
         this._distanceToParent = data.distanceToParent;
+        this._parent = data.parent;
      }
 
     public get group(): THREE.Group | undefined {

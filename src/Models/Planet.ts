@@ -1,6 +1,6 @@
 import * as THREE from "three"
 import { Text } from 'troika-three-text'
-import { CelestiaObject, CelestialParams } from "./Celestial";
+import { CelestialObject, CelestialParams } from "./Celestial";
 import { Internal3DObject } from "../interfaces";
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
@@ -19,7 +19,7 @@ export interface PlanetParams {
 
 let outWorldPosition = new THREE.Vector3();
 
-export class Planet extends CelestiaObject {
+export class Planet extends CelestialObject {
     private _albedoPath: string;
     private _normalPath: string;
     private _texts: string[];

@@ -11,10 +11,10 @@ export interface CelestialParams {
     tilt: number
     name: string;
     distanceToParent: number;
-    parent?: CelestiaObject;
+    parent?: CelestialObject;
 }
 
-export class CelestiaObject {
+export class CelestialObject {
     private _radius: number;
     private _rotationPeriod: number;
     private _orbitalPeriod: number;
@@ -23,7 +23,7 @@ export class CelestiaObject {
     private _distanceToParent: number;
     
     public object?: Internal3DObject;
-    public parent?: CelestiaObject;
+    public parent?: CelestialObject;
     public angularRotVel: number;
     public angularOrbVel: number;
     

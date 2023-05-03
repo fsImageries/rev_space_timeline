@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { CelestiaObject, CelestialParams } from "./Celestial";
+import { CelestialObject, CelestialParams } from "./Celestial";
 import { Internal3DObject } from "../interfaces";
 
 import sunFrag from "./../glsl/sun_frag.glsl?raw"
@@ -7,7 +7,7 @@ import sunVert from "./../glsl/sun_vert.glsl?raw"
 import { World } from "./World";
 
 
-export class Sun extends CelestiaObject {
+export class Sun extends CelestialObject {
 
     constructor(data: CelestialParams) {
         super(data);

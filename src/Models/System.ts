@@ -1,7 +1,7 @@
 import { Planet } from "./Planet"
 import { World } from "./World"
 import { Sun } from "./Sun";
-import { CelestiaObject } from "./Celestial";
+import { CelestialObject } from "./Celestial";
 
 export class System {
     public suns: Sun[];

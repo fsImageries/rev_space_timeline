@@ -22,8 +22,11 @@ export class CelestiaObject {
     private _name: string;
     private _distanceToParent: number;
     
-    public _object?: Internal3DObject;
-    public _parent?: CelestiaObject
+    public object?: Internal3DObject;
+    public parent?: CelestiaObject;
+    public angularRotVel: number;
+    public angularOrbVel: number;
+    
 
     constructor(data:CelestialParams) {
         this._radius = data.radius;
@@ -32,23 +35,33 @@ export class CelestiaObject {
         this._tilt = data.tilt;
         this._name = data.name;
         this._distanceToParent = data.distanceToParent;
-        this._parent = data.parent;
+        this.parent = data.parent;
+
+        let secsPerRotation = this.rotationPeriod * 60 * 60;
+        this.angularRotVel = (2 * Math.PI) / secsPerRotation;
+
+        secsPerRotation = this.orbitalPeriod * 60 * 60;
+        this.angularOrbVel = (2 * Math.PI) / secsPerRotation;
      }
 
-    public get group(): THREE.Group | undefined {
-        return this._object?.grp;
+    public get masterGrp(): THREE.Group | undefined {
+        return this.object?.masterGrp;
+    }
+
+    public get meshGrp(): THREE.Group | undefined {
+        return this.object?.meshGrp;
     }
 
     public get mesh(): THREE.Mesh | undefined {
-        return this._object?.mesh;
+        return this.object?.mesh;
     }
 
     public get atmo(): THREE.Mesh | undefined {
-        return this._object?.atmo;
+        return this.object?.atmo;
     }
 
     public get texts(): THREE.Mesh[] | undefined {
-        return this._object?.texts;
+        return this.object?.texts;
     }
 
     public get radius(): number {

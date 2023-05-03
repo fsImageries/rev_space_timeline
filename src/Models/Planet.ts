@@ -24,6 +24,7 @@ export class Planet extends CelestiaObject {
     private _normalPath: string;
     // private _object: Internal3DObject;
     private _texts: string[];
+    public rotateGrp?: THREE.Object3D;
 
 
     constructor(data: CelestialParams & PlanetParams) {
@@ -31,10 +32,9 @@ export class Planet extends CelestiaObject {
         this._albedoPath = data.albedoPath;
         this._normalPath = data.normalPath;
         this._texts = data.texts;
-        this._object = this.build(data.glowColor, data.glowIntesity)
+        this.object = this.build(data.glowColor, data.glowIntesity)
         this.initPosition()
-        // this.build_orbit()
-        this.drawCircle()
+        this.build_orbit()
     }
 
     public get albedoPath(): string {
@@ -55,16 +55,26 @@ export class Planet extends CelestiaObject {
         const vec = (this.atmo?.material as THREE.ShaderMaterial).uniforms.viewVector.value
         this.atmo?.getWorldPosition(outWorldPosition)
         vec.subVectors(world.camera.position.clone(), outWorldPosition);
+
+        if (!this.meshGrp) return
+        let val = (world.delta * this.angularRotVel) * Constants.ROT_SCALE;
+        this.meshGrp.rotation.y += val;
+
+        if (!this.rotateGrp) return
+        val = (world.delta * this.angularOrbVel) * Constants.ORB_SCALE;
+        this.rotateGrp.rotation.y += val;
     }
 
     private initPosition() {
-        const base = this._parent && this._parent.group ? this._parent.group.position.clone() : new THREE.Vector3()
+        const base = this.parent && this.parent.masterGrp ? this.parent.masterGrp.position.clone() : new THREE.Vector3()
         const dist = this.distanceToParent / Constants.DISTANCE_SCALE
         const idlePos = new THREE.Vector3(0,0,-dist + this.radius * 6)
+        const idlePosAdd = new THREE.Vector3(0,0, this.radius * 6)
         base.z = (-dist)
-        if (!this.group) return
-        this.group.position.set(base.x, base.y, base.z)
-        this.group.userData["idlePosition"] = idlePos;
+        if (!this.masterGrp || !this.meshGrp) return
+        this.masterGrp.position.set(base.x, base.y, base.z)
+        this.masterGrp.userData["idlePosition"] = idlePos;
+        this.masterGrp.userData["idleAdd"] = idlePosAdd;
 
         if (!this.texts) return
         const l = this.texts.length
@@ -80,44 +90,32 @@ export class Planet extends CelestiaObject {
         const [mesh, atmo] = this.build_map_sphere(new THREE.Color(parseInt(glowColor)), glowIntensity)
         const texts = this.build_texts()
 
-        const grp = new THREE.Group()
-        grp.name = this.name
-        grp.add(mesh)
-        grp.add(atmo)
+        const meshGrp = new THREE.Group()
+        meshGrp.name = `${this.name}_meshGrp`
+        meshGrp.add(mesh)
+        meshGrp.add(atmo)
+
+        const masterGrp = new THREE.Group()
+        masterGrp.name = this.name
+        // masterGrp.add(mesh)
+        // masterGrp.add(atmo)
+        masterGrp.add(meshGrp)
         texts.forEach((t) => {
             // console.log(t)
-            grp.add(t)
+            masterGrp.add(t)
             t.sync()
         })
 
-        grp.updateMatrixWorld()
-        return { grp, mesh, atmo, texts }
+        const rotateGrp = new THREE.Object3D()
+        rotateGrp.name = `${this.name}_rotateGrp`
+        rotateGrp.add(masterGrp)
+
+        masterGrp.updateMatrixWorld()
+        this.rotateGrp = rotateGrp
+        return { masterGrp, meshGrp, mesh, atmo, texts }
     }
 
-    public build_orbit() {
-        const grp = this.group
-        if (!grp) return
-
-        let g = new THREE.BufferGeometry().setFromPoints(
-            new THREE.Path().absarc(0, 0, 5, 0, Math.PI * 2, false).getSpacedPoints(50)
-        );
-        let m = new THREE.LineBasicMaterial({color: "aqua"});
-        let l = new THREE.Line(g, m);
-
-        const base = this._parent && this._parent.group ? this._parent.group.position.clone() : new THREE.Vector3()
-        const dist = this.distanceToParent / Constants.DISTANCE_SCALE
-        l.position.set(
-            base.x - grp.position.x,
-            base.y - grp.position.y,
-            base.z - grp.position.z
-        )
-        l.scale.set(dist/2, dist/2, dist/2)
-        l.rotateX(Math.PI/2)
-        
-        grp.add(l)
-    }
-
-    public drawCircle(){
+    public build_orbit(){
 			
         var points = [];
         
@@ -135,10 +133,10 @@ export class Planet extends CelestiaObject {
             linewidth: 2
         });
 
-        const grp = this.group
+        const grp = this.masterGrp
         if (!grp) return
         const line = new THREE.Line( geometry, material );
-        const base = this._parent && this._parent.group ? this._parent.group.position.clone() : new THREE.Vector3()
+        const base = this.parent && this.parent.masterGrp ? this.parent.masterGrp.position.clone() : new THREE.Vector3()
         line.position.set(
             base.x - grp.position.x,
             base.y - grp.position.y,
@@ -173,7 +171,7 @@ export class Planet extends CelestiaObject {
             normalMap: normal,
         })
 
-        const sphereGeometry = new THREE.SphereGeometry(this.radius, 150, 150)
+        const sphereGeometry = new THREE.SphereGeometry(this.radius, 55, 55)
         const mesh = new THREE.Mesh(sphereGeometry, sphereMaterial)
         mesh.castShadow = true
         mesh.name = `${this.name}_mesh`

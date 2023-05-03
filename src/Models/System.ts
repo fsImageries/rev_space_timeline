@@ -42,16 +42,18 @@ export class System {
     }
 
     initWorld(world: World) {
-        (this.suns as any).concat(this.planets).forEach((obj:CelestiaObject) => {
-            if (obj.group) {
-                world.scene.add(obj.group)
-            }
+        (this.suns as any).concat(this.planets).forEach((obj:Sun | Planet) => {
+            // if (obj.masterGrp) {
+            //     world.scene.add(obj.masterGrp)
+            // }
+            if (obj instanceof Sun && obj.masterGrp) { world.scene.add(obj.masterGrp)}
+            if (obj instanceof Planet && obj.rotateGrp) { world.scene.add(obj.rotateGrp)}
         })
     }
 
     update(world: World) {
         (this.suns as any).concat(this.planets).forEach((obj:Sun | Planet) => {
-            if (obj.group) {
+            if (obj.masterGrp) {
                 obj.update(world)
             }
         })

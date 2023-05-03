@@ -8,10 +8,10 @@ import { World } from "./World";
 
 
 export class Sun extends CelestiaObject {
-    
+
     constructor(data: CelestialParams) {
         super(data);
-        this._object = this.build()
+        this.object = this.build()
     }
 
     public update(_world:World) {
@@ -39,6 +39,6 @@ export class Sun extends CelestiaObject {
         const grp = new THREE.Group()
         grp.name = this.name
         grp.add(mesh)
-        return { grp:grp, mesh: mesh, atmo: undefined, texts: [] }
+        return { masterGrp:grp, mesh: mesh, atmo: undefined, texts: [] }
     }
 }

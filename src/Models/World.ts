@@ -16,9 +16,12 @@ export class World {
     loadingManager: THREE.LoadingManager;
     camera: THREE.PerspectiveCamera;
     cameraCtrl: OrbitControls;
+    clock: THREE.Clock;
+    delta: number;
 
     clickPointer: THREE.Vector2;
     raycaster: THREE.Raycaster;
+    followTarget?: THREE.Object3D;
 
     systems: System[];
     curSystem: System;
@@ -62,6 +65,9 @@ export class World {
         this.cameraCtrl.autoRotate = false
         this.cameraCtrl.update()
 
+        this.clock = new THREE.Clock()
+        this.delta = 0;
+
         this.initListeners()
 
         this.clickPointer = new THREE.Vector2(Infinity, Infinity)
@@ -99,9 +105,17 @@ export class World {
         const clickHandler = (event: MouseEvent) => {
             this.clickPointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
             this.clickPointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+            this.followTarget = this.dblclickTarget()
+        }
+
+        const mousemoveHandler = (_: MouseEvent) => {
+            console.log("mousemove gefeuert")
+            this.followTarget = undefined
         }
 
         window.addEventListener("dblclick", clickHandler);
+        window.addEventListener("mousedown", mousemoveHandler)
     }
 
     dblclickTarget(){
@@ -109,20 +123,19 @@ export class World {
         const intersects = this.raycaster.intersectObjects( this.scene.children );
         this.clickPointer.set(Infinity, Infinity)
 
-        if (intersects.length === 0) return null
+        if (intersects.length === 0) return
         
         const obj = intersects[0].object
-        if (obj.parent instanceof THREE.Group) return obj.parent
-        
-        return obj
+        return cameraUtils.getRootParent(obj)
     }
 
     update() {
-        let target = this.dblclickTarget()
-        if (target) {
-            // console.log(target)
-            cameraUtils.setCameraTarget(target, this.cameraCtrl)
-            cameraUtils.jumpToTarget(target, this.cameraCtrl)
+        if (this.followTarget) {
+            // console.log(this.followTarget)
+            const v = new THREE.Vector3()
+            this.followTarget.getWorldPosition(v)
+            cameraUtils.setCameraTarget(v, this.cameraCtrl)
+            cameraUtils.jumpToTarget(this.followTarget, this.cameraCtrl)
         }
 
         if (resizeRendererToDisplaySize(this.renderer)) {
@@ -142,6 +155,7 @@ export class World {
         // delta time
         if (!lastTime) { lastTime = now; }
         const elapsed = now - lastTime;
+        world.delta = world.clock.getDelta()
 
         if (elapsed > requiredElapsed) {
             world.update()

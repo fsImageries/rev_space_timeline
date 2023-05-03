@@ -44,6 +44,10 @@ export class CelestiaObject {
         this.angularOrbVel = (2 * Math.PI) / secsPerRotation;
      }
 
+    public get topGrp(): THREE.Group | undefined {
+        return this.object?.topGrp
+    }
+
     public get masterGrp(): THREE.Group | undefined {
         return this.object?.masterGrp;
     }

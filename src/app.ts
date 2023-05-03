@@ -10,8 +10,8 @@ const sys = new System(celestialData.system1)
 const world = new World(sys)
 sys.initWorld(world)
 
-const obj = world.scene.getObjectByName("tangerineDream")
-// const obj = world.scene.getObjectByName("yellowstone")
+const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
+// const obj = world.scene.getObjectByName("yellowstone_masterGrp")
 if (obj) {
     cameraUtils.setCameraTarget(obj, world.cameraCtrl)
     cameraUtils.jumpToTarget(obj, world.cameraCtrl)

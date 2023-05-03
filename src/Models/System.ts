@@ -43,19 +43,15 @@ export class System {
 
     initWorld(world: World) {
         (this.suns as any).concat(this.planets).forEach((obj:Sun | Planet) => {
-            // if (obj.masterGrp) {
-            //     world.scene.add(obj.masterGrp)
-            // }
-            if (obj instanceof Sun && obj.masterGrp) { world.scene.add(obj.masterGrp)}
-            if (obj instanceof Planet && obj.rotateGrp) { world.scene.add(obj.rotateGrp)}
+            if (obj.topGrp) {
+                world.scene.add(obj.topGrp)
+            }
         })
     }
 
     update(world: World) {
         (this.suns as any).concat(this.planets).forEach((obj:Sun | Planet) => {
-            if (obj.masterGrp) {
-                obj.update(world)
-            }
+            obj.update(world)
         })
     }
 }

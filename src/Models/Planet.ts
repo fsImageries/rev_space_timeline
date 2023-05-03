@@ -22,10 +22,7 @@ let outWorldPosition = new THREE.Vector3();
 export class Planet extends CelestiaObject {
     private _albedoPath: string;
     private _normalPath: string;
-    // private _object: Internal3DObject;
     private _texts: string[];
-    public rotateGrp?: THREE.Object3D;
-
 
     constructor(data: CelestialParams & PlanetParams) {
         super(data);
@@ -60,9 +57,9 @@ export class Planet extends CelestiaObject {
         let val = (world.delta * this.angularRotVel) * Constants.ROT_SCALE;
         this.meshGrp.rotation.y += val;
 
-        if (!this.rotateGrp) return
+        if (!this.topGrp) return
         val = (world.delta * this.angularOrbVel) * Constants.ORB_SCALE;
-        this.rotateGrp.rotation.y += val;
+        this.topGrp.rotation.y += val;
     }
 
     private initPosition() {
@@ -96,23 +93,22 @@ export class Planet extends CelestiaObject {
         meshGrp.add(atmo)
 
         const masterGrp = new THREE.Group()
-        masterGrp.name = this.name
-        // masterGrp.add(mesh)
-        // masterGrp.add(atmo)
+        masterGrp.name = `${this.name}_masterGrp`
         masterGrp.add(meshGrp)
         texts.forEach((t) => {
-            // console.log(t)
             masterGrp.add(t)
             t.sync()
         })
 
-        const rotateGrp = new THREE.Object3D()
-        rotateGrp.name = `${this.name}_rotateGrp`
-        rotateGrp.add(masterGrp)
+        const topGrp = new THREE.Group()
+        topGrp.name = `${this.name}_topGrp`
+        topGrp.add(masterGrp)
 
+        meshGrp.updateMatrixWorld()
         masterGrp.updateMatrixWorld()
-        this.rotateGrp = rotateGrp
-        return { masterGrp, meshGrp, mesh, atmo, texts }
+        topGrp.updateMatrixWorld()
+
+        return { topGrp, masterGrp, meshGrp, mesh, atmo, texts }
     }
 
     public build_orbit(){

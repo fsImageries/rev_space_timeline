@@ -1,33 +1,36 @@
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
-export function setCameraTarget(target:THREE.Object3D | THREE.Vector3, cameraCtrl: OrbitControls) {
-    if (target instanceof THREE.Group) { target = getRootParent(target) }
+let worldPos = new THREE.Vector3()
 
-    cameraCtrl.target.copy(target instanceof THREE.Vector3 ? target : target.position)
+export function setCameraTarget(target: THREE.Object3D, cameraCtrl: OrbitControls) {
+    if (target instanceof THREE.Group) { target = getMasterParent(target) }
+
+    target.getWorldPosition(worldPos)
+    cameraCtrl.target.copy(worldPos)
     cameraCtrl.update()
 }
 
 export function jumpToTarget(target: THREE.Object3D, cameraCtrl: OrbitControls) {
-    target = getRootParent(target)
+    target = getMasterParent(target)
 
     if (Object.hasOwn(target.userData, "idlePosition")) {
-        const v = new THREE.Vector3()
-        target.getWorldPosition(v)
+        target.getWorldPosition(worldPos)
 
         const pos = target.userData["idleAdd"] as THREE.Vector3
-        const pos2 = v.clone().add(pos)
+        const pos2 = worldPos.clone().add(pos)
         cameraCtrl.object.position.copy(pos2)
         cameraCtrl.update()
     }
 }
 
-export function getRootParent(target: THREE.Object3D) {
-    if (!(target.parent instanceof THREE.Scene)) {
+export function getMasterParent(target: THREE.Object3D) {
+    if (!(target.parent instanceof THREE.Scene) && !target.name.includes("_masterGrp")) {
         while (true) {
             if (target.parent instanceof THREE.Group) {
                 target = target.parent as THREE.Object3D
-            } else {break}
+                if (target.name.includes("_masterGrp")) break
+            } else break
         }
     }
     return target

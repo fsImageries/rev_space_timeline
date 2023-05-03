@@ -39,6 +39,6 @@ export class Sun extends CelestiaObject {
         const grp = new THREE.Group()
         grp.name = this.name
         grp.add(mesh)
-        return { masterGrp:grp, mesh: mesh, atmo: undefined, texts: [] }
+        return { topGrp:grp, mesh: mesh, atmo: undefined, texts: [] }
     }
 }

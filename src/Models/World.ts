@@ -1,9 +1,11 @@
 import * as THREE from "three"
+import GUI from 'lil-gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import * as cameraUtils from "../helpers/cameraUtils"
 import { resizeRendererToDisplaySize } from './../helpers/responsiveness'
 import { System } from "./System";
+import Constants from "../helpers/Constants"
 
 
 let lastTime:number;
@@ -18,6 +20,7 @@ export class World {
     cameraCtrl: OrbitControls;
     clock: THREE.Clock;
     delta: number;
+    gui: GUI;
 
     clickPointer: THREE.Vector2;
     raycaster: THREE.Raycaster;
@@ -30,7 +33,7 @@ export class World {
      *
      */
     constructor(system:System) {
-        // ===== 🖼️ CANVAS, RENDERER, & SCENE =====
+        // Canvas, Renderer, Scene
         this.canvas = document.querySelector(`canvas#main`)!
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true })
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -39,7 +42,7 @@ export class World {
         this.renderer.setClearColor( 0x000000 )
         this.scene = new THREE.Scene()
 
-        // ===== 👨🏻‍💼 LOADING MANAGER =====
+        // Loading Manager
         this.loadingManager = new THREE.LoadingManager()
 
         this.loadingManager.onStart = () => {
@@ -56,34 +59,37 @@ export class World {
         console.log('❌ error while loading')
         }
 
-        // ===== 🎥 CAMERA =====
+        // Camera
         this.camera = new THREE.PerspectiveCamera(30, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 100_000_000)
         
-        // ===== 🕹️ CONTROLS =====
         this.cameraCtrl = new OrbitControls(this.camera, this.canvas)
         this.cameraCtrl.enableDamping = true
         this.cameraCtrl.autoRotate = false
         this.cameraCtrl.update()
 
+        // Gui
+        this.gui = new GUI({ title: 'Settings', width: 300 })
+        const worldFolder = this.gui.addFolder('World')
+
+        worldFolder.add(Constants, 'DISTANCE_SCALE').min(0).name('Distance speed')
+        worldFolder.add(Constants, 'ORB_SCALE').min(0).name('Orbital speed')
+        worldFolder.add(Constants, 'ROT_SCALE').min(0).name('Rotational speed')
+        worldFolder.add(this, 'topView').name('Top View')
+
+        // Helper setup
         this.clock = new THREE.Clock()
         this.delta = 0;
 
-        this.initListeners()
+        this.curSystem = system
+        this.systems = [system]
 
         this.clickPointer = new THREE.Vector2(Infinity, Infinity)
         this.raycaster = new THREE.Raycaster()
 
-        // const obj = this.scene.getObjectByName("yellowstone")
-        // const objAtmo = this.scene.getObjectByName("yellowstone_atmo")
-        // if (obj) {
-        //     // const vec = ((objAtmo as Mesh).material as ShaderMaterial).uniforms.viewVector.value
-        //     // const wu = vec.subVectors(this.camera.position, obj.getWorldPosition(obj.position));
-        
-        //     cameraUtils.setCameraTarget(obj, this.cameraCtrl)
-        //     cameraUtils.jumpToTarget(obj, this.cameraCtrl)
-        // }
+        // Init methods
+        this.initListeners()
 
-        // ===== 💡 LIGHTS =====
+        // Lights
         // const pointLight = new THREE.PointLight('#ffdca8', 10.2, 100)
         const pointLight = new THREE.PointLight('#ffffff', 1, 100000)
         pointLight.castShadow = true
@@ -96,9 +102,6 @@ export class World {
 
         const pointLight2 = new THREE.AmbientLight('#ffdca8', 0.1)
         this.scene.add(pointLight2)
-
-        this.curSystem = system
-        this.systems = [system]
     }
 
     initListeners(){
@@ -110,7 +113,6 @@ export class World {
         }
 
         const mousemoveHandler = (_: MouseEvent) => {
-            console.log("mousemove gefeuert")
             this.followTarget = undefined
         }
 
@@ -118,23 +120,10 @@ export class World {
         window.addEventListener("mousedown", mousemoveHandler)
     }
 
-    dblclickTarget(){
-        this.raycaster.setFromCamera( this.clickPointer, this.camera );
-        const intersects = this.raycaster.intersectObjects( this.scene.children );
-        this.clickPointer.set(Infinity, Infinity)
-
-        if (intersects.length === 0) return
-        
-        const obj = intersects[0].object
-        return cameraUtils.getRootParent(obj)
-    }
-
+    // World methods
     update() {
         if (this.followTarget) {
-            // console.log(this.followTarget)
-            const v = new THREE.Vector3()
-            this.followTarget.getWorldPosition(v)
-            cameraUtils.setCameraTarget(v, this.cameraCtrl)
+            cameraUtils.setCameraTarget(this.followTarget, this.cameraCtrl)
             cameraUtils.jumpToTarget(this.followTarget, this.cameraCtrl)
         }
 
@@ -161,5 +150,23 @@ export class World {
             world.update()
             lastTime = now;
         }
+    }
+
+    // Helper methods
+    dblclickTarget(){
+        this.raycaster.setFromCamera( this.clickPointer, this.camera );
+        const intersects = this.raycaster.intersectObjects( this.scene.children );
+        this.clickPointer.set(Infinity, Infinity)
+
+        if (intersects.length === 0) return
+        
+        const obj = intersects[0].object
+        return cameraUtils.getMasterParent(obj)
+    }
+
+    topView() {
+        this.cameraCtrl.target.set(0,0,0)
+        this.cameraCtrl.object.position.set(0,90000,0) // todo get widest radius of system
+        this.cameraCtrl.update()
     }
 }

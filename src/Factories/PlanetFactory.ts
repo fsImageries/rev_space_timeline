@@ -1,10 +1,10 @@
 import * as THREE from "three";
 import { Text } from 'troika-three-text'
 
-import Constants from "../helpers/Constants";
-import { Planet } from "../Models/Planet";
-import { CelestialObject } from "../Models/Celestial";
 import build_orbit from "./OrbitFactory";
+import { Planet } from "../Models/Planet";
+import Constants from "../helpers/Constants";
+import { CelestialObject } from "../Models/Celestial";
 import { PlanetJson, Internal3DObject } from "../interfaces";
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"

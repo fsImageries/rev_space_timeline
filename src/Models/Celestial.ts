@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { Internal3DObject, CelestialParams } from "../interfaces";
+import Constants from "../helpers/Constants";
 
 
 export class CelestialObject {
@@ -9,6 +10,7 @@ export class CelestialObject {
     private _tilt: number;
     private _name: string;
     private _distanceToParent: number;
+    private _dist: number;
     private _object: Internal3DObject;
     private _parent?: CelestialObject;
     
@@ -23,6 +25,7 @@ export class CelestialObject {
         this._tilt = data.tilt;
         this._name = data.name;
         this._distanceToParent = data.distanceToParent;
+        this._dist = this.distanceToParent ? this._distanceToParent / Constants.DISTANCE_SCALE : null;
         this._object = data.object;
         this._parent = data.parent;
 
@@ -53,7 +56,7 @@ export class CelestialObject {
         return this._object.atmo;
     }
 
-    public get orbit(): THREE.Line | undefined {
+    public get orbit(): THREE.Object3D | undefined {
         return this._object.orbit;
     }
 
@@ -103,7 +106,8 @@ export class CelestialObject {
     public get distanceToParent(): number {
         return this._distanceToParent;
     }
-    public set distanceToParent(value: number) {
-        this._distanceToParent = value;
+
+    public get dist(): number {
+        return this._dist;
     }
 }

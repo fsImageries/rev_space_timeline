@@ -10,13 +10,18 @@ export class System {
     public suns: Sun[];
     public planets: Planet[];
 
-    private _isSingleSun: boolean;
+    public isSingleSun: boolean;
+    public radius: number;
 
     constructor(data: SystemJson) {
-        this.name = data.name
-        this._isSingleSun = data.isSingleSun
         this.suns = data.suns.map((d) => sunFactory(d))
         this.planets = data.planets.map((d) => planetFactory(d))
+        this.name = data.name
+        this.isSingleSun = data.isSingleSun
+        this.radius = this.suns.concat(this.planets).reduce((acc, cur) => {
+            const n = acc.dist > cur.dist ? acc : cur
+            return n
+        }).dist
     }
 
     initWorld(world: World) {

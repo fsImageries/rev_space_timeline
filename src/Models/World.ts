@@ -166,7 +166,7 @@ export class World {
 
     topView() {
         this.cameraCtrl.target.set(0,0,0)
-        this.cameraCtrl.object.position.set(0,90000,0) // todo get widest radius of system
+        this.cameraCtrl.object.position.set(0,this.curSystem.radius*4,0) //TODO get widest radius of system
         this.cameraCtrl.update()
     }
 }

@@ -1,44 +1,22 @@
 import { Planet } from "./Planet"
 import { World } from "./World"
 import { Sun } from "./Sun";
-import { CelestialObject } from "./Celestial";
+import planetFactory from "../Factories/PlanetFactory"
+import sunFactory from "../Factories/SunFactory"
+import { SystemJson } from "../interfaces";
 
 export class System {
+    public name: string;
     public suns: Sun[];
     public planets: Planet[];
 
-    constructor(data: any /*Json system data is coming in hot*/) {
-        this.suns = this.buildSuns(data.suns)
-        this.planets = this.buildPlanets(data.planets)
-    }
+    private _isSingleSun: boolean;
 
-    private buildSuns(data: any): Sun[] {
-        return data.map((sun: any) => new Sun({
-            name: sun.name,
-            radius: sun.draw.radius,
-            rotationPeriod: sun.rotationPeriod,
-            orbitalPeriod: sun.orbitalPeriod,
-            tilt: sun.tilt,
-            distanceToParent: sun.distanceToParent,
-        }));
-    }
-
-    private buildPlanets(data: any): Planet[] {
-        const parent = this.suns[0]
-        return data.map((planet: any) => new Planet({
-            name: planet.name,
-            glowColor: planet.draw.glowColor,
-            glowIntesity: planet.draw.glowIntensity,
-            radius: planet.draw.radius,
-            rotationPeriod: planet.rotationPeriod,
-            orbitalPeriod: planet.orbitalPeriod,
-            tilt: planet.tilt,
-            distanceToParent: planet.distanceToParent,
-            albedoPath: planet.draw.albedoPath,
-            normalPath: planet.draw.normalPath,
-            texts: planet.texts,
-            parent:parent,
-        }));
+    constructor(data: SystemJson) {
+        this.name = data.name
+        this._isSingleSun = data.isSingleSun
+        this.suns = data.suns.map((d) => sunFactory(d))
+        this.planets = data.planets.map((d) => planetFactory(d))
     }
 
     initWorld(world: World) {

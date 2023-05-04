@@ -1,18 +1,6 @@
 import * as THREE from "three";
-import { Internal3DObject } from "../interfaces";
+import { Internal3DObject, CelestialParams } from "../interfaces";
 
-export interface CelestialParams {
-    // all times are given in hours
-    // all lengths are given in km
-
-    radius: number
-    rotationPeriod: number
-    orbitalPeriod: number
-    tilt: number
-    name: string;
-    distanceToParent: number;
-    parent?: CelestialObject;
-}
 
 export class CelestialObject {
     private _radius: number;
@@ -21,9 +9,9 @@ export class CelestialObject {
     private _tilt: number;
     private _name: string;
     private _distanceToParent: number;
+    private _object: Internal3DObject;
+    private _parent?: CelestialObject;
     
-    public object?: Internal3DObject;
-    public parent?: CelestialObject;
     public angularRotVel: number;
     public angularOrbVel: number;
     
@@ -35,7 +23,8 @@ export class CelestialObject {
         this._tilt = data.tilt;
         this._name = data.name;
         this._distanceToParent = data.distanceToParent;
-        this.parent = data.parent;
+        this._object = data.object;
+        this._parent = data.parent;
 
         let secsPerRotation = this.rotationPeriod * 60 * 60;
         this.angularRotVel = (2 * Math.PI) / secsPerRotation;
@@ -44,28 +33,36 @@ export class CelestialObject {
         this.angularOrbVel = (2 * Math.PI) / secsPerRotation;
      }
 
-    public get topGrp(): THREE.Group | undefined {
-        return this.object?.topGrp
+    public get topGrp(): THREE.Group {
+        return this._object.topGrp
     }
 
-    public get masterGrp(): THREE.Group | undefined {
-        return this.object?.masterGrp;
+    public get masterGrp(): THREE.Group {
+        return this._object?.masterGrp;
     }
 
-    public get meshGrp(): THREE.Group | undefined {
-        return this.object?.meshGrp;
+    public get meshGrp(): THREE.Group {
+        return this._object?.meshGrp;
     }
 
-    public get mesh(): THREE.Mesh | undefined {
-        return this.object?.mesh;
+    public get mesh(): THREE.Mesh {
+        return this._object?.mesh;
     }
 
     public get atmo(): THREE.Mesh | undefined {
-        return this.object?.atmo;
+        return this._object.atmo;
+    }
+
+    public get orbit(): THREE.Line | undefined {
+        return this._object.orbit;
     }
 
     public get texts(): THREE.Mesh[] | undefined {
-        return this.object?.texts;
+        return this._object.texts;
+    }
+
+    public get parent(): CelestialObject | undefined {
+        return this._parent
     }
 
     public get radius(): number {

@@ -1,13 +1,14 @@
 import * as THREE from "three";
 import { Text } from 'troika-three-text'
+
 import Constants from "../helpers/Constants";
+import { Planet } from "../Models/Planet";
+import { CelestialObject } from "../Models/Celestial";
+import build_orbit from "./OrbitFactory";
+import { PlanetJson, Internal3DObject } from "../interfaces";
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
-import { PlanetJson } from "../interfaces";
-import { Internal3DObject } from "../interfaces";
-import { Planet } from "../Models/Planet";
-import { CelestialObject } from "../Models/Celestial";
 
 
 export default function build(data: PlanetJson, parent?: CelestialObject) {
@@ -137,56 +138,6 @@ function build_sphere_mesh_and_atmo(
     atmo.scale.set(1.5, 1.5, 1.5);
 
     return [mesh, atmo]
-}
-
-function build_orbit(distance: number) {
-    var points = [];
-
-    const radius = distance / Constants.DISTANCE_SCALE;
-    for (let i = 0; i <= 180; i++) {
-        points.push(new THREE.Vector3(Math.sin(i * (Math.PI / 180)) * radius, Math.cos(i * (Math.PI / 180)) * radius, 0));
-    }
-
-    var geometry = new THREE.BufferGeometry();
-    geometry.setFromPoints(points);
-    geometry.computeBoundingBox()
-
-    var material = new THREE.ShaderMaterial({
-        uniforms: {
-            bboxMin: {
-                value: geometry.boundingBox.min
-            },
-            bboxMax: {
-                value: geometry.boundingBox.max
-            }
-        },
-        vertexShader: `
-            uniform vec3 bboxMin;
-            uniform vec3 bboxMax;
-        
-            varying vec2 vUv;
-
-            void main() {
-            vUv.y = (position.y - bboxMin.y) / (bboxMax.y - bboxMin.y);
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-            }
-        `,
-        fragmentShader: `
-            varying vec2 vUv;
-            
-            void main() {
-            
-            vec4 col = vec4(mix(vec3(1), vec3(0), vUv.y), 1);
-            gl_FragColor = vec4(1);
-            gl_FragColor.a = 1.0 - vUv.y;
-            }
-        `,
-        transparent: true
-    });
-
-    const line = new THREE.Line(geometry, material);
-    line.rotateX(Math.PI / 2)
-    return line
 }
 
 function build_texts(texts: string[]) {

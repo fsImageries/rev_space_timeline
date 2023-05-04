@@ -142,18 +142,46 @@ function build_sphere_mesh_and_atmo(
 function build_orbit(distance: number) {
     var points = [];
 
-    // 360 full circle will be drawn clockwise
     const radius = distance / Constants.DISTANCE_SCALE;
-    for (let i = 0; i <= 360; i++) {
+    for (let i = 0; i <= 180; i++) {
         points.push(new THREE.Vector3(Math.sin(i * (Math.PI / 180)) * radius, Math.cos(i * (Math.PI / 180)) * radius, 0));
     }
 
     var geometry = new THREE.BufferGeometry();
     geometry.setFromPoints(points);
+    geometry.computeBoundingBox()
 
-    var material = new THREE.LineBasicMaterial({
-        color: "aqua",
-        linewidth: 2
+    var material = new THREE.ShaderMaterial({
+        uniforms: {
+            bboxMin: {
+                value: geometry.boundingBox.min
+            },
+            bboxMax: {
+                value: geometry.boundingBox.max
+            }
+        },
+        vertexShader: `
+            uniform vec3 bboxMin;
+            uniform vec3 bboxMax;
+        
+            varying vec2 vUv;
+
+            void main() {
+            vUv.y = (position.y - bboxMin.y) / (bboxMax.y - bboxMin.y);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+            }
+        `,
+        fragmentShader: `
+            varying vec2 vUv;
+            
+            void main() {
+            
+            vec4 col = vec4(mix(vec3(1), vec3(0), vUv.y), 1);
+            gl_FragColor = vec4(1);
+            gl_FragColor.a = 1.0 - vUv.y;
+            }
+        `,
+        transparent: true
     });
 
     const line = new THREE.Line(geometry, material);

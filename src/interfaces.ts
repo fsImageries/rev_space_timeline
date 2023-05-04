@@ -25,7 +25,7 @@ export interface Internal3DObject {
     meshGrp: THREE.Group;
     mesh: THREE.Mesh;
     atmo?: THREE.Mesh;
-    orbit?: THREE.Line;
+    orbit?: THREE.Object3D;
     texts?: THREE.Mesh[];
 }
 

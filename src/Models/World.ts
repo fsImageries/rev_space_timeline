@@ -158,7 +158,7 @@ export class World {
         const intersects = this.raycaster.intersectObjects( this.scene.children );
         this.clickPointer.set(Infinity, Infinity)
 
-        if (intersects.length === 0) return
+        if (intersects.length === 0) return undefined
         
         const obj = intersects[0].object
         return cameraUtils.getMasterParent(obj)

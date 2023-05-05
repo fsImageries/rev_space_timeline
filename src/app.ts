@@ -17,6 +17,7 @@ sys.initWorld(world)
 
 const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
 // const obj = world.scene.getObjectByName("yellowstone_masterGrp")
+// const obj:any = null
 if (obj) {
     cameraUtils.setCameraTarget(obj, world.cameraCtrl)
     cameraUtils.jumpToTarget(obj, world.cameraCtrl)

@@ -1,7 +1,8 @@
 import * as THREE from "three";
-import { Text } from 'troika-three-text'
+import { Text } from 'troika-three-text';
 
 import build_orbit from "./OrbitFactory";
+import build_sprite from "./SpriteFactory";
 import { Planet } from "../Models/Planet";
 import Constants from "../helpers/Constants";
 import { CelestialObject } from "../Models/Celestial";
@@ -20,10 +21,10 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
         data.draw.radius,
         data.name
     )
-
     const orbit = build_orbit(data.distanceToParent)
     const texts = build_texts(data.texts)
-
+    const sprite = build_sprite(data.name, data.draw.radius)
+ 
     const meshGrp = new THREE.Group()
     meshGrp.name = `${data.name}_meshGrp`
     meshGrp.add(mesh)
@@ -33,6 +34,7 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
     masterGrp.name = `${data.name}_masterGrp`
     masterGrp.add(meshGrp)
     masterGrp.add(orbit)
+    masterGrp.add(sprite)
     texts.forEach((t) => {
         masterGrp.add(t)
         t.sync()
@@ -42,7 +44,7 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
     topGrp.name = `${data.name}_topGrp`
     topGrp.add(masterGrp)
 
-    const object3d: Internal3DObject = { topGrp, masterGrp, meshGrp, mesh, atmo, texts, orbit }
+    const object3d: Internal3DObject = { topGrp, masterGrp, meshGrp, mesh, atmo, texts, orbit, sprite }
     init(data, object3d, parent)
 
     meshGrp.updateMatrixWorld()

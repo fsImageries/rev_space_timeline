@@ -64,6 +64,10 @@ export class CelestialObject {
         return this._object.texts;
     }
 
+    public get sprite(): THREE.Object3D | undefined {
+        return this._object.sprite;
+    }
+
     public get parent(): CelestialObject | undefined {
         return this._parent
     }

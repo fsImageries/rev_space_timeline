@@ -27,6 +27,7 @@ export interface Internal3DObject {
     atmo?: THREE.Mesh;
     orbit?: THREE.Object3D;
     texts?: THREE.Mesh[];
+    sprite?: THREE.Object3D;
 }
 
 export interface SunJson {

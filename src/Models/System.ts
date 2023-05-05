@@ -14,6 +14,7 @@ export class System {
     public radius: number;
 
     constructor(data: SystemJson) {
+        // this.suns = []
         this.suns = data.suns.map((d) => sunFactory(d))
         this.planets = data.planets.map((d) => planetFactory(d))
         this.name = data.name

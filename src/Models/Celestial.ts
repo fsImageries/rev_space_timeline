@@ -10,7 +10,6 @@ export class CelestialObject {
     private _tilt: number;
     private _name: string;
     private _distanceToParent: number;
-    private _dist: number;
     private _object: Internal3DObject;
     private _parent?: CelestialObject;
     
@@ -25,7 +24,6 @@ export class CelestialObject {
         this._tilt = data.tilt;
         this._name = data.name;
         this._distanceToParent = data.distanceToParent;
-        this._dist = this.distanceToParent ? this._distanceToParent / Constants.DISTANCE_SCALE : null;
         this._object = data.object;
         this._parent = data.parent;
 
@@ -112,6 +110,6 @@ export class CelestialObject {
     }
 
     public get dist(): number {
-        return this._dist;
+        return this.distanceToParent ? this._distanceToParent / Constants.DISTANCE_SCALE : null;
     }
 }

@@ -1,10 +1,11 @@
 import * as THREE from "three";
 import Constants from "../helpers/Constants";
 
-export default function build(distance: number) {
+export default function build() {
     var points = [];
 
-    const radius = distance / Constants.DISTANCE_SCALE;
+    // const radius = distance / Constants.DISTANCE_SCALE;
+    const radius = 1;
     for (let i = 0; i <= 180; i++) {
         points.push(new THREE.Vector3(Math.sin(i * (Math.PI / 180)) * radius, Math.cos(i * (Math.PI / 180)) * radius, 0));
     }

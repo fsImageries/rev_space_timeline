@@ -21,7 +21,7 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
         data.draw.radius,
         data.name
     )
-    const orbit = build_orbit(data.distanceToParent)
+    const orbit = build_orbit()
     const texts = build_texts(data.texts)
     const sprite = build_sprite(data.name, data.draw.radius)
  
@@ -45,11 +45,11 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
     topGrp.add(masterGrp)
 
     const object3d: Internal3DObject = { topGrp, masterGrp, meshGrp, mesh, atmo, texts, orbit, sprite }
-    init(data, object3d, parent)
+    // init(data, object3d, parent)
 
-    meshGrp.updateMatrixWorld()
-    masterGrp.updateMatrixWorld()
-    topGrp.updateMatrixWorld()
+    // meshGrp.updateMatrixWorld()
+    // masterGrp.updateMatrixWorld()
+    // topGrp.updateMatrixWorld()
 
     return new Planet({
         name: data.name,

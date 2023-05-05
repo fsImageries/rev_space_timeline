@@ -4,6 +4,7 @@ import { Sun } from "./Sun";
 import planetFactory from "../Factories/PlanetFactory"
 import sunFactory from "../Factories/SunFactory"
 import { SystemJson } from "../interfaces";
+import { CelestialObject } from "./Celestial";
 
 export class System {
     public name: string;
@@ -25,7 +26,16 @@ export class System {
         }).dist
     }
 
+    public get allCelestialObjects(): CelestialObject[] {
+        return this.suns.concat(this.planets);
+    }
+
+    init() {
+        this.planets.forEach((obj) => obj.init())
+    }
+
     initWorld(world: World) {
+        this.init();
         (this.suns as any).concat(this.planets).forEach((obj:Sun | Planet) => {
             if (obj.topGrp) {
                 world.scene.add(obj.topGrp)

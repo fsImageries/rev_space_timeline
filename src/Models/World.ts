@@ -21,6 +21,7 @@ export class World {
     clock: THREE.Clock;
     delta: number;
     gui: GUI;
+    gridhelper: THREE.GridHelper;
 
     clickPointer: THREE.Vector2;
     raycaster: THREE.Raycaster;
@@ -67,15 +68,6 @@ export class World {
         this.cameraCtrl.autoRotate = false
         this.cameraCtrl.update()
 
-        // Gui
-        this.gui = new GUI({ title: 'Settings', width: 300 })
-        const worldFolder = this.gui.addFolder('World')
-
-        worldFolder.add(Constants, 'DISTANCE_SCALE').min(0).name('Distance speed')
-        worldFolder.add(Constants, 'ORB_SCALE').min(0).name('Orbital speed')
-        worldFolder.add(Constants, 'ROT_SCALE').min(0).name('Rotational speed')
-        worldFolder.add(this, 'topView').name('Top View')
-
         // Helper setup
         this.clock = new THREE.Clock()
         this.delta = 0;
@@ -88,6 +80,26 @@ export class World {
 
         // Init methods
         this.initListeners()
+
+        this.gridhelper = new THREE.GridHelper(100,100, 'teal', 'darkgray')
+        this.gridhelper.scale.setScalar(10000)
+        this.scene.add(this.gridhelper)
+
+        // Gui
+        this.gui = new GUI({ title: 'Settings', width: 300 })
+        const worldFolder = this.gui.addFolder('World')
+
+        worldFolder.add(Constants, 'DISTANCE_SCALE').min(0).name('Distance scale').onChange(() => {
+            this.curSystem.init()
+        })
+        worldFolder.add(Constants, 'ORB_SCALE').min(0).name('Orbital speed')
+        worldFolder.add(Constants, 'ROT_SCALE').min(0).name('Rotational speed')
+        worldFolder.add(this, 'topView').name('Top View')
+        worldFolder.add(this.gridhelper, "visible").name("Grid visiblity")
+
+        const planets:any = {}
+        this.curSystem.allCelestialObjects.forEach((obj) => planets[obj.name] = obj.masterGrp)
+        worldFolder.add(this, "followTarget", planets).name("Camera Target")
 
         // Lights
         // const pointLight = new THREE.PointLight('#ffdca8', 10.2, 100)

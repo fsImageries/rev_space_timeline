@@ -3,9 +3,7 @@ import { Text } from 'troika-three-text';
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
 import build_orbit from "./OrbitFactory";
-import build_sprite from "./SpriteFactory";
 import { Planet } from "../Models/Planet";
-import Constants from "../helpers/Constants";
 import { CelestialObject } from "../Models/Celestial";
 import { PlanetJson, Internal3DObject } from "../interfaces";
 
@@ -68,37 +66,6 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
         object: object3d,
         parent: parent
     })
-}
-
-function init(data: PlanetJson, object3d: Internal3DObject, parent?: CelestialObject) {
-    const base = parent ? parent.masterGrp.position.clone() : new THREE.Vector3()
-    const dist = data.distanceToParent / Constants.DISTANCE_SCALE
-    const idlePos = new THREE.Vector3(0, 0, -dist + data.draw.radius * 6)
-    const idlePosAdd = new THREE.Vector3(0, 0, data.draw.radius * 6)
-    base.z = (-dist)
-
-    object3d.masterGrp.position.set(base.x, base.y, base.z)
-    object3d.masterGrp.userData["idlePosition"] = idlePos;
-    object3d.masterGrp.userData["idleAdd"] = idlePosAdd;
-    object3d.masterGrp.userData["dist"] = dist;
-
-    if (object3d.orbit) {
-        object3d.orbit.position.set(
-            0 - base.x,
-            0 - base.y,
-            0 - base.z
-        )
-    }
-
-    if (object3d.texts) {
-        const l = object3d.texts.length
-        object3d.texts.forEach((txt) => {
-            const i = txt.userData["idx"]
-            txt.position.x = base.x + (data.draw.radius) + (i / l)
-            txt.position.y = (base.y - 3) + 15 * (i / l)
-            txt.position.z = (base.z + dist - 5) + 3 * i
-        })
-    }
 }
 
 function build_sphere_mesh_and_atmo(

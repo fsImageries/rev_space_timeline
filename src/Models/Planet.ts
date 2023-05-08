@@ -64,15 +64,14 @@ export class Planet extends CelestialObject {
         // Sprite scaling
         world.camera.getWorldPosition(outWorldPosition)
         const c = outWorldPosition.clone()
-        this.sprite.getWorldPosition(outWorldPosition)
+        this.masterGrp.getWorldPosition(outWorldPosition)
         const dist = outWorldPosition.distanceTo(c)
+        this.sprite.scale.setScalar(dist/50)
 
-        // var dist = world.camera.position.distanceTo(this.sprite.position)
-        // console.log(this.name, dist)
+        // Distance visibility
         this.sprite.visible = dist > 5000 ? true: false
         this.meshGrp.visible = dist < 10000 ? true: false
         this.texts.map(t => t.visible = dist < 10000 ? true: false)
-        this.sprite.scale.setScalar(dist/50)
 
     }
 }

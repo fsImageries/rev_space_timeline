@@ -62,7 +62,7 @@ export class World {
 
         // Camera
         this.camera = new THREE.PerspectiveCamera(30, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 100_000_000)
-        
+    
         this.cameraCtrl = new OrbitControls(this.camera, this.canvas)
         this.cameraCtrl.enableDamping = true
         this.cameraCtrl.autoRotate = false
@@ -125,12 +125,22 @@ export class World {
             this.followTarget = this.dblclickTarget()
         }
 
-        const mousemoveHandler = (_: MouseEvent) => {
-            this.followTarget = undefined
+        let mousedown = false;
+        const mouseDown = (_: MouseEvent) => {
+            mousedown = true;
+        }
+        const mouseUp = (_: MouseEvent) => {
+            mousedown = false;
+        }
+        const mouesMove = (_: MouseEvent) => {
+            if (mousedown) this.followTarget = undefined
         }
 
         window.addEventListener("dblclick", clickHandler);
-        window.addEventListener("mousedown", mousemoveHandler)
+        window.addEventListener("mousedown", mouseDown)
+        window.addEventListener("mouseup", mouseUp)
+        window.addEventListener("mousemove", mouesMove)
+
     }
 
     // World methods

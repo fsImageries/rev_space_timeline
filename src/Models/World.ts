@@ -83,6 +83,7 @@ export class World {
 
         this.gridhelper = new THREE.GridHelper(100,100, 'teal', 'darkgray')
         this.gridhelper.scale.setScalar(10000)
+        this.gridhelper.visible = false
         this.scene.add(this.gridhelper)
 
         // Gui
@@ -178,7 +179,7 @@ export class World {
 
     topView() {
         this.cameraCtrl.target.set(0,0,0)
-        this.cameraCtrl.object.position.set(0,this.curSystem.radius*4,0) //TODO get widest radius of system
+        this.cameraCtrl.object.position.set(0,this.curSystem.radius*4,0)
         this.cameraCtrl.update()
     }
 }

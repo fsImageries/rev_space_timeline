@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { Text } from 'troika-three-text';
+import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
 import build_orbit from "./OrbitFactory";
 import build_sprite from "./SpriteFactory";
@@ -23,7 +24,11 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
     )
     const orbit = build_orbit()
     const texts = build_texts(data.texts)
-    const sprite = build_sprite(data.name, data.draw.radius)
+    // const sprite = build_sprite(data.name, data.draw.radius)
+    const map = new THREE.TextureLoader().load( '/diamond-solid.svg' );
+    const material = new THREE.SpriteMaterial( { map: map } );
+    const sprite = new THREE.Sprite( material );
+    sprite.position.y = data.draw.radius + (data.draw.radius / 3)
  
     const meshGrp = new THREE.Group()
     meshGrp.name = `${data.name}_meshGrp`

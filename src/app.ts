@@ -13,8 +13,8 @@ const sys = new System(data.systems[0])
 const world = new World(sys)
 sys.initWorld(world)
 
-const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
-// const obj = world.scene.getObjectByName("yellowstone_masterGrp")
+// const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
+const obj = world.scene.getObjectByName("yellowstone_masterGrp")
 // const obj:any = null
 world.followTarget = obj
 

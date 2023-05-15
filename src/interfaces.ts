@@ -17,6 +17,7 @@ export interface CelestialParams {
     distanceToParent: number;
     object: Internal3DObject;
     parent?: CelestialObject;
+    id: string;
 }
 
 export interface Internal3DObject {

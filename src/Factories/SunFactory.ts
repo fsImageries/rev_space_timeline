@@ -2,8 +2,9 @@ import * as THREE from "three"
 
 import sunFrag from "./../glsl/sun_frag.glsl?raw"
 import sunVert from "./../glsl/sun_vert.glsl?raw"
-import { SunJson, Internal3DObject } from "../interfaces"
 import { Sun } from "../Models/Sun"
+import { uuidv4 } from "../helpers/cameraUtils";
+import { SunJson, Internal3DObject } from "../interfaces"
 
 
 export default function build(data:SunJson) {
@@ -30,6 +31,7 @@ export default function build(data:SunJson) {
 
     const masterGrp = new THREE.Group()
     const topGrp = new THREE.Group()
+    masterGrp.name = `${data.name}_masterGrp`
     masterGrp.add(meshGrp)
     topGrp.add(masterGrp)
     
@@ -43,5 +45,6 @@ export default function build(data:SunJson) {
         tilt: data.tilt,
         distanceToParent: data.distanceToParent,
         object: object3d,
+        id: uuidv4()
     })
 }

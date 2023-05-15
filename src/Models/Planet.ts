@@ -22,6 +22,7 @@ export class Planet extends CelestialObject {
         this.masterGrp.userData["idlePosition"] = idlePos;
         this.masterGrp.userData["idleAdd"] = idlePosAdd;
         this.masterGrp.userData["dist"] = this.dist;
+        this.masterGrp.userData["id"] = this.id;
     
         if (this.orbit) {
             this.orbit.scale.setScalar(this.dist)
@@ -51,7 +52,7 @@ export class Planet extends CelestialObject {
         // Atmo direction
         const vec = (this.atmo?.material as THREE.ShaderMaterial).uniforms.viewVector.value
         this.atmo?.getWorldPosition(outWorldPosition)
-        vec.subVectors(world.camera.position.clone(), outWorldPosition);
+        vec.subVectors(world.cam.active.position.clone(), outWorldPosition);
         
         // Axis Rotation
         let val = (world.delta * this.angularRotVel) * Constants.ROT_SCALE;
@@ -62,7 +63,7 @@ export class Planet extends CelestialObject {
         this.topGrp.rotation.y += val;
 
         // Sprite scaling
-        world.camera.getWorldPosition(outWorldPosition)
+        world.cam.active.getWorldPosition(outWorldPosition)
         const c = outWorldPosition.clone()
         this.masterGrp.getWorldPosition(outWorldPosition)
         const dist = outWorldPosition.distanceTo(c)

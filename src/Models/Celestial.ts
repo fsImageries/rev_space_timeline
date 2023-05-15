@@ -15,6 +15,8 @@ export class CelestialObject {
     
     public angularRotVel: number;
     public angularOrbVel: number;
+
+    public id: string;
     
 
     constructor(data:CelestialParams) {
@@ -26,6 +28,7 @@ export class CelestialObject {
         this._distanceToParent = data.distanceToParent;
         this._object = data.object;
         this._parent = data.parent;
+        this.id = data.id;
 
         let secsPerRotation = this.rotationPeriod * 60 * 60;
         this.angularRotVel = (2 * Math.PI) / secsPerRotation;

@@ -16,6 +16,9 @@ sys.initWorld(world)
 // const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
 const obj = world.scene.getObjectByName("yellowstone_masterGrp")
 // const obj:any = null
-world.followTarget = obj
+const target = sys.getById(obj.userData["id"])
+console.log(target)
+world.cam.setFollowTarget(target)
+world.cam.activateThird()
 
 requestAnimationFrame((n) => World.eventLoop(n, world))

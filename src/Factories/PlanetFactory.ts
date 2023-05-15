@@ -5,6 +5,7 @@ import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 import build_orbit from "./OrbitFactory";
 import { Planet } from "../Models/Planet";
 import { CelestialObject } from "../Models/Celestial";
+import { uuidv4 } from "../helpers/cameraUtils";
 import { PlanetJson, Internal3DObject } from "../interfaces";
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
@@ -64,7 +65,8 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
         tilt: data.tilt,
         distanceToParent: data.distanceToParent,
         object: object3d,
-        parent: parent
+        parent: parent,
+        id: uuidv4()
     })
 }
 

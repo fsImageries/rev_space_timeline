@@ -1,6 +1,5 @@
 import * as THREE from "three"
 import GUI from 'lil-gui'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import * as cameraUtils from "../helpers/cameraUtils"
 import { resizeRendererToDisplaySize } from './../helpers/responsiveness'
@@ -17,8 +16,6 @@ export class World {
     renderer: THREE.WebGLRenderer;
     scene: THREE.Scene;
     loadingManager: THREE.LoadingManager;
-    camera: THREE.PerspectiveCamera;
-    cameraCtrl: OrbitControls;
     clock: THREE.Clock;
     delta: number;
     gui: GUI;
@@ -60,14 +57,6 @@ export class World {
         this.loadingManager.onError = () => {
             console.log('❌ error while loading')
         }
-
-        // Camera
-        // this.camera = new THREE.PerspectiveCamera(30, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 100_000_000)
-
-        // this.cameraCtrl = new OrbitControls(this.camera, this.canvas)
-        // this.cameraCtrl.enableDamping = true
-        // this.cameraCtrl.autoRotate = false
-        // this.cameraCtrl.update()
 
         this.cam = new Camera(this.canvas as HTMLCanvasElement, this)
 

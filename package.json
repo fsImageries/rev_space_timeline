@@ -17,7 +17,6 @@
     "camera-controls": "^2.3.4",
     "lil-gui": "^0.18.1",
     "three": "^0.151.3",
-    "three-spritetext": "^1.8.1",
     "troika-three-text": "^0.47.1"
   }
 }

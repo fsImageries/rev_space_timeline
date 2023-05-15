@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import CameraControls from 'camera-controls';
 import { CelestialObject } from "./Celestial";
 import { World } from "./World";

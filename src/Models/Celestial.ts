@@ -112,7 +112,7 @@ export class CelestialObject {
         return this._distanceToParent;
     }
 
-    public get dist(): number {
+    public get dist(): number | null {
         return this.distanceToParent ? this._distanceToParent / Constants.DISTANCE_SCALE : null;
     }
 }

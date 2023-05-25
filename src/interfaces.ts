@@ -1,5 +1,13 @@
 import { CelestialObject } from "./Models/Celestial";
 
+export interface OortParams {
+    distanceToParent: number;
+    distanceEnd: number;
+    radius: number;
+    meshes: THREE.Mesh[];
+    parent?: CelestialObject;
+}
+
 export interface PlanetParams {
     glowColor: string;
     glowIntesity: number;
@@ -64,11 +72,21 @@ export interface PlanetJson {
     texts: string[]
 }
 
+export interface OortCloudJson {
+    parent: string,
+    distanceToParent: number,
+    distanceEnd: number,
+    draw: {
+        radius: number;
+    }
+}
+
 export interface SystemJson {
     name: string,
     isSingleSun: boolean,
     suns: SunJson[],
-    planets: PlanetJson[]
+    planets: PlanetJson[],
+    oortCloud: OortCloudJson
 }
 
 export interface SystemJsonData {

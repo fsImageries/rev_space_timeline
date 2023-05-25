@@ -9,7 +9,6 @@ export class Sun extends CelestialObject {
 
     constructor(data: CelestialParams) {
         super(data);
-        // this.object = this.build()
     }
 
     public update(_world:World) {

@@ -63,7 +63,15 @@
                         "2427\n•Aurora crisis"
                     ]
                 }
-            ]
+            ],
+            "oortCloud": {
+                "parent": "epsilonEridani",
+                "distanceToParent": 7.4799e+11,
+                "distanceEnd": 7.47989e+12,
+                "draw": {
+                    "radius": 2
+                }
+            }
         }
     ]
 }

@@ -95,6 +95,7 @@ export class World {
         worldFolder.add(this, "followTarget", planets).name("Camera Target")
 
         // Lights
+        // TODO set lights for the sun(s)
         // const pointLight = new THREE.PointLight('#ffdca8', 10.2, 100)
         const pointLight = new THREE.PointLight('#ffffff', 1, 100000)
         pointLight.castShadow = true
@@ -105,7 +106,7 @@ export class World {
         pointLight.shadow.mapSize.height = 2048
         this.scene.add(pointLight)
 
-        const pointLight2 = new THREE.AmbientLight('#ffdca8', 0.1)
+        const pointLight2 = new THREE.AmbientLight('#ffdca8', 1.1)
         this.scene.add(pointLight2)
     }
 

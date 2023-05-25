@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# 3D Files
+*.obj
+*.mtl
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

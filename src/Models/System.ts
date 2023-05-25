@@ -5,19 +5,34 @@ import planetFactory from "../Factories/PlanetFactory"
 import sunFactory from "../Factories/SunFactory"
 import { SystemJson } from "../interfaces";
 import { CelestialObject } from "./Celestial";
+import Oort from "./Oort";
+import oortFactoryAsync from "../Factories/OortFactory";
+
+interface Params {
+    suns: Sun[];
+    planets: Planet[];
+    oort: Oort;
+    name: string;
+    isSingleSun: boolean;
+}
 
 export class System {
     public name: string;
-    public suns: Sun[];
+
     public planets: Planet[];
+    public suns: Sun[];
+    public oort: Oort;
 
     public isSingleSun: boolean;
     public radius: number;
 
-    constructor(data: SystemJson) {
+    constructor(data: Params) {
         // this.suns = []
-        this.suns = data.suns.map((d) => sunFactory(d))
-        this.planets = data.planets.map((d) => planetFactory(d))
+        // this.planets = []
+        this.suns = data.suns
+        this.planets = data.planets
+        this.oort = data.oort
+
         this.name = data.name
         this.isSingleSun = data.isSingleSun
         this.radius = this.getRadius()
@@ -41,6 +56,7 @@ export class System {
 
     init() {
         this.planets.forEach((obj) => obj.init())
+        this.oort.init()
         this.radius = this.getRadius()
     }
 
@@ -51,6 +67,8 @@ export class System {
                 world.scene.add(obj.topGrp)
             }
         })
+
+        this.oort.meshes.forEach((mesh) => world.scene.add(mesh))
     }
 
     update(world: World) {

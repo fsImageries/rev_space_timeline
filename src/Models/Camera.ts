@@ -21,8 +21,8 @@ export class Camera {
     private _thirdTarget?: CelestialObject;
 
     constructor(canvas:HTMLCanvasElement, world:World) {
-        this.free  = new THREE.PerspectiveCamera(30, canvas.clientWidth / canvas.clientHeight, 0.1, 100_000_000)
-        this.third = new THREE.PerspectiveCamera(55, canvas.clientWidth / canvas.clientHeight, 0.1, 100_000_000)
+        this.free  = new THREE.PerspectiveCamera(30, canvas.clientWidth / canvas.clientHeight, 0.1, 1e+120)
+        this.third = new THREE.PerspectiveCamera(55, canvas.clientWidth / canvas.clientHeight, 0.1, 100_000)
 
         this.free.position.set(0,0,-10000)
         this.third.position.set(0,0,-10000)

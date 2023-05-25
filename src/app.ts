@@ -4,12 +4,13 @@ import { System } from "./Models/System";
 import celestialData from "./object_data.json"
 import { SystemJsonData } from "./interfaces";
 import './style.css'
+import systemFactory from "./Factories/SystemFactory";
 
 
 const data:SystemJsonData = celestialData;
 
 
-const sys = new System(data.systems[0])
+const sys = await systemFactory(data.systems[0])
 const world = new World(sys)
 sys.initWorld(world)
 

@@ -106,7 +106,7 @@ export class World {
         pointLight.shadow.mapSize.height = 2048
         this.scene.add(pointLight)
 
-        const pointLight2 = new THREE.AmbientLight('#ffdca8', 1.1)
+        const pointLight2 = new THREE.AmbientLight('#ffdca8', .1)
         this.scene.add(pointLight2)
     }
 

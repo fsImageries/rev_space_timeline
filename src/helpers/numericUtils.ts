@@ -11,6 +11,32 @@ export const randFloatExcludes = function (start: number, end: number, excludeSt
     return number
 }
 
+const randSpherePointExcludes = (r: number, mult=1) => {
+    let [x,y,z] = [0,0,0]
+    while (x**2 + y**2 + x**2 < r**2) {
+        [x,y,z] = randSpherePoint(mult)
+    }
+    return [x,y,z]
+}
+
+const randSpherePoint = (mult=1) => {
+    var u = Math.random();
+    var v = Math.random();
+    var theta = u * 2.0 * Math.PI;
+    var phi = Math.acos(2.0 * v - 1.0);
+    var r = Math.cbrt(Math.random());
+    var sinTheta = Math.sin(theta);
+    var cosTheta = Math.cos(theta);
+    var sinPhi = Math.sin(phi);
+    var cosPhi = Math.cos(phi);
+    var x = r * sinPhi * cosTheta;
+    var y = r * sinPhi * sinTheta;
+    var z = r * cosPhi;
+    // return {x: x, y: y, z: z};
+    return [x*mult,y*mult,z*mult]
+}
+
+// https://karthikkaranth.me/blog/generating-random-points-in-a-sphere/
 
 export const randomizeMatrix = function () {
 
@@ -29,13 +55,11 @@ export const randomizeMatrix = function () {
 
     return function (matrix: THREE.Matrix4, stats: RandStats) {
 
-        // position.x = randFloat(stats.distanceStart, stats.distanceEnd);
-        // position.y = randFloat(stats.distanceStart, stats.distanceEnd);
-        // position.z = randFloat(stats.distanceStart, stats.distanceEnd);
-
-        position.x = rand(stats)
-        position.y = rand(stats)
-        position.z = rand(stats)
+        const [x,y,z] = randSpherePointExcludes(stats.distanceStart, stats.distanceEnd)
+        // console.log(x,y,z)
+        position.x = x
+        position.y = y
+        position.z = z
 
         rotation.x = Math.random() * 2 * Math.PI;
         rotation.y = Math.random() * 2 * Math.PI;

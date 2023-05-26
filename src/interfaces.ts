@@ -1,5 +1,12 @@
 import { CelestialObject } from "./Models/Celestial";
 
+export interface RandStats {
+    range: number;
+    distanceStart: number;
+    distanceEnd: number;
+    radius: number;
+}
+
 export interface OortParams {
     distanceToParent: number;
     distanceEnd: number;

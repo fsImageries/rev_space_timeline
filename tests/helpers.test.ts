@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-
-import {randFloatExcludes} from "../src/Models/Oort"
+import {randFloatExcludes} from "../src/helpers/numericUtils"
 
 
 

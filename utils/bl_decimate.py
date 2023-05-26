@@ -20,7 +20,7 @@ def _next(gen):
 
 def import_mesh(path):
     bpy.ops.import_scene.obj(filepath=str(path))
-    obj = bpy.context.selected_objects[0] ####<--Fix
+    obj = bpy.context.selected_objects[0] 
     bpy.ops.object.origin_set(type='GEOMETRY_ORIGIN', center='MEDIAN')
     return obj
 
@@ -29,12 +29,13 @@ def setup_modifiers(obj):
     modifier=obj.modifiers.new(MODIFIER_NAME,'DECIMATE')
     modifier.ratio=DECIMATE_RATIO
     modifier.use_collapse_triangulate=True
-    
 
-def export_mesh(obj:bpy.types.Object, f:Path):
+
+def export_mesh(obj:bpy.types.Object, f:Path, format:str="gltf"):
     obj.select_set(True)
     f = f.with_stem(f"decimated_{DECIMATE_RATIO}")
-    bpy.ops.export_scene.obj(filepath=str(f), use_selection=True)
+    export_func = getattr(bpy.ops.export_scene, format)
+    export_func(filepath=str(f), use_selection=True)
 
 
 def main():
@@ -44,7 +45,8 @@ def main():
         print("Import done")
         setup_modifiers(obj)
         print("Decimate done")
-        export_mesh(obj, file)
+        # export_wavefront(obj, file)
+        export_mesh(obj, file, "gltf")
         print("Export done")
         
 

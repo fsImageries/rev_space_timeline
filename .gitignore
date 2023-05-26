@@ -15,6 +15,8 @@ dist-ssr
 # 3D Files
 *.obj
 *.mtl
+*.glb
+*.gltf
 
 # Editor directories and files
 .vscode/*

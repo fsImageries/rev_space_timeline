@@ -36,6 +36,8 @@ export class System {
         this.name = data.name
         this.isSingleSun = data.isSingleSun
         this.radius = this.getRadius()
+
+        this.allCelestialObjects.forEach(obj => obj.visible = false)
     }
 
     private getRadius() {

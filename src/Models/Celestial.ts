@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { Internal3DObject, CelestialParams } from "../interfaces";
 import Constants from "../helpers/Constants";
+import { World } from "./World";
 
 
 export class CelestialObject {
@@ -36,6 +37,10 @@ export class CelestialObject {
         secsPerRotation = this.orbitalPeriod * 60 * 60;
         this.angularOrbVel = (2 * Math.PI) / secsPerRotation;
      }
+
+    public set visible(val:boolean) {
+        this.topGrp.visible = val
+    }
 
     public get topGrp(): THREE.Group {
         return this._object.topGrp

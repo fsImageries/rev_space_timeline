@@ -70,12 +70,14 @@ export class System {
             }
         })
 
-        this.oort.meshes.forEach((mesh) => world.scene.add(mesh))
+        world.scene.add(this.oort.points)
     }
 
     update(world: World) {
         (this.suns as any).concat(this.planets).forEach((obj: Sun | Planet) => {
             obj.update(world)
         })
+        
+        this.oort.update(world)
     }
 }

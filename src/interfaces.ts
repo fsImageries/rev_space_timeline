@@ -11,7 +11,6 @@ export interface OortParams {
     distanceToParent: number;
     distanceEnd: number;
     radius: number;
-    meshes: THREE.Mesh[];
     parent?: CelestialObject;
 }
 

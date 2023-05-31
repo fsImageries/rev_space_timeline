@@ -11,15 +11,22 @@ export const randFloatExcludes = function (start: number, end: number, excludeSt
     return number
 }
 
-const randSpherePointExcludes = (r: number, mult=1) => {
-    let [x,y,z] = [0,0,0]
-    while (x**2 + y**2 + x**2 < r**2) {
-        [x,y,z] = randSpherePoint(mult)
-    }
-    return [x,y,z]
+let v3 = new THREE.Vector3()
+const inSphere = (pos:number[], rad:number) => {
+    const diff = [0,0,0].map((v, i)=> v - pos[i])
+    const dist = v3.set(diff[0],diff[1],diff[2]).length()
+    return dist < rad
 }
 
-const randSpherePoint = (mult=1) => {
+export const randSpherePointExcludes = (r: number, mult=1) => {
+    let pnt = [0,0,0]
+    while (inSphere(pnt, r)) {
+        pnt = randSpherePoint(mult)
+    }
+    return pnt
+}
+
+export const randSpherePoint = (mult=1) => {
     var u = Math.random();
     var v = Math.random();
     var theta = u * 2.0 * Math.PI;

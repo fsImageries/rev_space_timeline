@@ -9,6 +9,5 @@ export default async function buildAsync(data:OortCloudJson) {
         distanceToParent: data.distanceToParent,
         distanceEnd: data.distanceEnd,
         radius: data.draw.radius,
-        meshes: await importRocks()
     })
 }

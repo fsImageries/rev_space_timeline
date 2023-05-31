@@ -97,7 +97,7 @@ export class World {
         // Lights
         // TODO set lights for the sun(s)
         // const pointLight = new THREE.PointLight('#ffdca8', 10.2, 100)
-        const pointLight = new THREE.PointLight('#ffffff', 1, 100000)
+        const pointLight = new THREE.PointLight('#ffffff', 1, 1e+6)
         pointLight.castShadow = true
         pointLight.shadow.radius = 4
         pointLight.shadow.camera.near = 0.5

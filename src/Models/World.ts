@@ -78,6 +78,13 @@ export class World {
         this.gridhelper.visible = false
         this.scene.add(this.gridhelper)
 
+        // Sky box
+        const textureLoader = new THREE.TextureLoader();
+        const backgroundImage = textureLoader.load("/starmap_8k.jpg");
+        backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
+        backgroundImage.encoding = THREE.sRGBEncoding;
+        this.scene.background = backgroundImage
+
         // Gui
         this.gui = new GUI({ title: 'Settings', width: 300 })
         const worldFolder = this.gui.addFolder('World')

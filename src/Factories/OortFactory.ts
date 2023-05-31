@@ -1,6 +1,7 @@
 import Oort from "../Models/Oort";
 import importRocks from "../helpers/rockImporter";
-import { OortCloudJson } from "../interfaces";
+import { OortCloudJson } from "../jsonInterfaces";
+
 
 export default async function buildAsync(data:OortCloudJson) {
 

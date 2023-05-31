@@ -29,8 +29,8 @@
                     "tilt": 45,
                     "distanceToParent": 5086400000,
                     "draw": {
-                        "albedoPath": "/2k_jupiter.jpg",
-                        "normalPath": "/ceres_normal_16k.png",
+                        "albedoPath": "/epsilonEridani/2k_jupiter.jpg",
+                        "normalPath": "/epsilonEridani/ceres_normal_16k.png",
                         "glowColor": "0xffffff",
                         "glowIntensity": 0.1,
                         "radius": 100
@@ -49,8 +49,8 @@
                     "tilt": 20,
                     "distanceToParent": 59840000000,
                     "draw": {
-                        "albedoPath": "/2k_venus_surface.jpg",
-                        "normalPath": "/ceres_normal_16k.png",
+                        "albedoPath": "/epsilonEridani/2k_venus_surface.jpg",
+                        "normalPath": "/epsilonEridani/ceres_normal_16k.png",
                         "glowColor": "0xf69f1f",
                         "glowIntensity": 0.25,
                         "radius": 8.6
@@ -61,6 +61,25 @@
                         "2405\n•Departure of Sylveste expedition to Lascaille’s Shroud",
                         "2415\n•Clockworker incident",
                         "2427\n•Aurora crisis"
+                    ],
+                    "children": [
+                        {
+                            "name": "glitterband",
+                            "type": "particles",
+                            "objectType": "points"
+                        },
+                        {
+                            "name": "marcosEye",
+                            "type": "object",
+                            "objectType": "sphere",
+                            "draw": {
+                                "albedoPath": "/epsilonEridani/marcosEye/moon_albedo.jpg",
+                                "normalPath": "/epsilonEridani/marcosEye/moon_normal.png",
+                                "glowColor": "0xffffff",
+                                "glowIntensity": 0.1,
+                                "radius": 1
+                            }
+                        }
                     ]
                 }
             ],

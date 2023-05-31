@@ -3,7 +3,7 @@ import { World } from "./World"
 import { Sun } from "./Sun";
 import planetFactory from "../Factories/PlanetFactory"
 import sunFactory from "../Factories/SunFactory"
-import { SystemJson } from "../interfaces";
+import { SystemJson } from "../jsonInterfaces";
 import { CelestialObject } from "./Celestial";
 import Oort from "./Oort";
 import oortFactoryAsync from "../Factories/OortFactory";

@@ -6,7 +6,8 @@ import build_orbit from "./OrbitFactory";
 import { Planet } from "../Models/Planet";
 import { CelestialObject } from "../Models/Celestial";
 import { uuidv4 } from "../helpers/cameraUtils";
-import { PlanetJson, Internal3DObject } from "../interfaces";
+import { Internal3DObject } from "../interfaces";
+import { PlanetJson } from "../jsonInterfaces";
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"

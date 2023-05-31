@@ -77,6 +77,10 @@ export class CelestialObject {
         return this._parent
     }
 
+    public set parent(val: CelestialObject) {
+        this._parent = val
+    }
+
     public get radius(): number {
         return this._radius;
     }

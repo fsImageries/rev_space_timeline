@@ -81,6 +81,26 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "marcosEye",
+                    "diameter": 3474.8,
+                    "radius": 1737.4,
+                    "rotationPeriod": 20,
+                    "orbitalPeriod": 6552,
+                    "parent": "yellowstone",
+                    "tilt": 0,
+                    "distanceToParent": 508440000,
+                    "draw": {
+                        "albedoPath": "/epsilonEridani/marcosEye/moon_albedo.jpg",
+                        "normalPath": "/epsilonEridani/marcosEye/moon_normal.png",
+                        "glowColor": "0xffffff",
+                        "glowIntensity": 0.1,
+                        "radius": 1
+                    },
+                    "texts": [
+                        "≈2100\n•Named in honour of Marco Ferris"
+                    ]
                 }
             ],
             "oortCloud": {

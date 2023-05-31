@@ -1,7 +1,8 @@
 export interface CelestialChildrenJson {
     name: string,
     type: string,
-    objectType: string
+    objectType: string,
+    draw?: DrawData,
 }
 
 export interface SunJson {
@@ -26,7 +27,8 @@ export interface PlanetJson {
     tilt: number,
     distanceToParent: number,
     draw: DrawData,
-    texts: string[]
+    texts: string[],
+    children: CelestialChildrenJson[],
 }
 
 export interface OortCloudJson {

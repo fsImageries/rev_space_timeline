@@ -39,6 +39,10 @@ export class System {
 
         // this.allCelestialObjects.forEach(obj => obj.visible = false)
     }
+    
+    public get allCelestialObjects(): CelestialObject[] {
+        return this.suns.concat(this.planets);
+    }
 
     private getRadius() {
         return this.suns.concat(this.planets).reduce((acc, cur) => {
@@ -47,27 +51,23 @@ export class System {
         }).dist
     }
 
-    public get allCelestialObjects(): CelestialObject[] {
-        return this.suns.concat(this.planets);
-    }
-
     public getById(id: string): Sun | Planet | undefined {
         const arr = (this.suns).concat(this.planets).filter(obj => obj.id === id)
         return !arr ? undefined : arr[0]
     }
 
-    init() {
+    public init() {
         this.planets.forEach((obj) => obj.init())
         this.oort.init()
         this.radius = this.getRadius()
     }
 
-    initWorld(world: World) {
+    public initWorld(world: World) {
         this.init();
         world.scene.add(this.group)
     }
 
-    update(world: World) {
+    public update(world: World) {
         (this.suns as any).concat(this.planets).forEach((obj: Sun | Planet) => {
             obj.update(world)
         })

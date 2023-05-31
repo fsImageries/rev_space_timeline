@@ -41,7 +41,7 @@ export default class Oort {
         return this._points;
     }
 
-    init() {
+    public init() {
         const range = (this._distanceEnd - this._distanceStart) / Constants.DISTANCE_SCALE
         // const distanceStart= this._distanceStart / Constants.DISTANCE_SCALE
         const distanceEnd = this._distanceEnd / Constants.DISTANCE_SCALE
@@ -55,7 +55,7 @@ export default class Oort {
         this._points.geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertexs, 3))
     }
 
-    update(_world: World) {
+    public update(_world: World) {
         // const d = world.cam.active.position.distanceTo(this._parent ? this._parent.masterGrp.position : new THREE.Vector3(0,0,0))
         // const d2 = this.distanceStart / Constants.DISTANCE_SCALE
 

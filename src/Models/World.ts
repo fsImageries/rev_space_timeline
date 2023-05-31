@@ -110,7 +110,7 @@ export class World {
         this.scene.add(pointLight2)
     }
 
-    initListeners() {
+    public initListeners() {
         const clickHandler = (event: MouseEvent) => {
             this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
             this.clickPointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
@@ -146,7 +146,7 @@ export class World {
     }
 
     // World methods
-    update() {
+    public update() {
         if (resizeRendererToDisplaySize(this.renderer)) {
             const canvas = this.renderer.domElement
             this.cam.active.aspect = canvas.clientWidth / canvas.clientHeight
@@ -173,7 +173,7 @@ export class World {
     }
 
     // Helper methods
-    dblclickTarget() {
+    public dblclickTarget() {
         this.raycaster.setFromCamera(this.clickPointer, this.cam.active);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
         this.clickPointer.set(Infinity, Infinity)
@@ -184,7 +184,7 @@ export class World {
         return cameraUtils.getMasterParent(obj)
     }
 
-    topView() {
+    public topView() {
         this.cam.activateFree()
         this.cam.activeCtrl.setTarget(0, 0, 0, true)
         this.cam.activeCtrl.setPosition(0, this.curSystem.radius * 4, 0)

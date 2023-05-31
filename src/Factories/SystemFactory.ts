@@ -1,6 +1,6 @@
 import planetFactory from "../Factories/PlanetFactory"
 import sunFactory from "../Factories/SunFactory"
-import { PlanetJson, SystemJson } from "../jsonInterfaces";
+import { SystemJson } from "../jsonInterfaces";
 import oortFactoryAsync from "../Factories/OortFactory";
 import { System } from "../Models/System";
 

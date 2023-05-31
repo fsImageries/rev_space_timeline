@@ -1,6 +1,6 @@
 import * as THREE from "three"
 import { CelestialObject } from "./Celestial";
-import { CelestialParams, Internal3DObject } from "../interfaces";
+import { CelestialParams } from "../interfaces";
 
 import { World } from "./World";
 

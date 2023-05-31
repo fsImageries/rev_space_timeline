@@ -1,3 +1,4 @@
+import * as THREE from "three"
 import { Planet } from "./Planet"
 import { World } from "./World"
 import { Sun } from "./Sun";
@@ -15,6 +16,7 @@ interface Params {
 export class System {
     public name: string;
 
+    public group: THREE.Group;
     public planets: Planet[];
     public suns: Sun[];
     public oort: Oort;
@@ -23,11 +25,13 @@ export class System {
     public radius: number;
 
     constructor(data: Params) {
-        // this.suns = []
-        // this.planets = []
         this.suns = data.suns
         this.planets = data.planets
         this.oort = data.oort
+
+        this.group = new THREE.Group()
+        this.allCelestialObjects.forEach(obj => this.group.add(obj.topGrp))
+        this.group.add(this.oort.points)
 
         this.name = data.name
         this.isSingleSun = data.isSingleSun
@@ -60,20 +64,14 @@ export class System {
 
     initWorld(world: World) {
         this.init();
-        (this.suns as any).concat(this.planets).forEach((obj: Sun | Planet) => {
-            if (obj.topGrp) {
-                world.scene.add(obj.topGrp)
-            }
-        })
-
-        world.scene.add(this.oort.points)
+        world.scene.add(this.group)
     }
 
     update(world: World) {
         (this.suns as any).concat(this.planets).forEach((obj: Sun | Planet) => {
             obj.update(world)
         })
-        
+
         this.oort.update(world)
     }
 }

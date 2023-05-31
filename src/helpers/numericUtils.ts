@@ -52,14 +52,6 @@ export const randomizeMatrix = function () {
     const quaternion = new THREE.Quaternion();
     const scale = new THREE.Vector3();
 
-    const rand = (stats: RandStats) => {
-        return randFloatExcludes(
-            -stats.distanceEnd,
-            stats.distanceEnd,
-            -stats.distanceStart,
-            stats.distanceStart)
-    }
-
     return function (matrix: THREE.Matrix4, stats: RandStats) {
 
         const [x,y,z] = randSpherePointExcludes(stats.distanceStart, stats.distanceEnd)

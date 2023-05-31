@@ -1,5 +1,4 @@
 import Oort from "../Models/Oort";
-import importRocks from "../helpers/rockImporter";
 import { OortCloudJson } from "../jsonInterfaces";
 
 

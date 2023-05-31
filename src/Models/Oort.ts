@@ -2,26 +2,22 @@ import * as THREE from "three"
 import { OortParams } from "../interfaces";
 import Constants from "../helpers/Constants";
 import { CelestialObject } from "./Celestial";
-import { randSpherePoint, randSpherePointExcludes, randomizeMatrix } from "../helpers/numericUtils";
+import { randSpherePointExcludes } from "../helpers/numericUtils";
 import { World } from "./World";
 
 // avg distance between objects
-const DIST = 50_000_000 / Constants.DISTANCE_SCALE
-const COUNT = 50_000
 const PNTCOUNT = 100_000
 
 
 export default class Oort {
     private _distanceStart: number;
     private _distanceEnd: number;
-    private _radius: number;
     private _points: THREE.Points;
     private _parent?: CelestialObject;
 
     constructor(data: OortParams) {
         this._distanceStart = data.distanceToParent
         this._distanceEnd = data.distanceEnd
-        this._radius = data.radius
         this._parent = data.parent
 
         const material = new THREE.PointsMaterial({
@@ -59,7 +55,7 @@ export default class Oort {
         this._points.geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertexs,3))
     }
 
-    update(world:World) {
+    update(_world:World) {
         // const d = world.cam.active.position.distanceTo(this._parent ? this._parent.masterGrp.position : new THREE.Vector3(0,0,0))
         // const d2 = this.distanceStart / Constants.DISTANCE_SCALE
         

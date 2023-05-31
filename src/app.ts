@@ -1,6 +1,4 @@
 import { World } from "./Models/World";
-import { System } from "./Models/System";
-
 import celestialData from "./object_data.json"
 import { SystemJsonData } from "./jsonInterfaces";
 import './style.css'

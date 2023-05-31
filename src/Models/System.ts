@@ -1,12 +1,8 @@
 import { Planet } from "./Planet"
 import { World } from "./World"
 import { Sun } from "./Sun";
-import planetFactory from "../Factories/PlanetFactory"
-import sunFactory from "../Factories/SunFactory"
-import { SystemJson } from "../jsonInterfaces";
 import { CelestialObject } from "./Celestial";
 import Oort from "./Oort";
-import oortFactoryAsync from "../Factories/OortFactory";
 
 interface Params {
     suns: Sun[];

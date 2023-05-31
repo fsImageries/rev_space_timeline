@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { Text } from 'troika-three-text';
-import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
 import build_orbit from "./OrbitFactory";
 import { Planet } from "../Models/Planet";

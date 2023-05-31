@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { Internal3DObject, CelestialParams } from "../interfaces";
 import Constants from "../helpers/Constants";
-import { World } from "./World";
 
 
 export class CelestialObject {
@@ -81,36 +80,21 @@ export class CelestialObject {
     public get radius(): number {
         return this._radius;
     }
-    public set radius(value: number) {
-        this._radius = value;
-    }
 
     public get rotationPeriod(): number {
         return this._rotationPeriod;
-    }
-    public set rotationPeriod(value: number) {
-        this._rotationPeriod = value;
     }
 
     public get orbitalPeriod(): number {
         return this._orbitalPeriod;
     }
-    public set orbitalPeriod(value: number) {
-        this._orbitalPeriod = value;
-    }
 
     public get tilt(): number {
         return this._tilt;
     }
-    public set tilt(value: number) {
-        this._tilt = value;
-    }
 
     public get name(): string {
         return this._name;
-    }
-    public set name(value: string) {
-        this._name = value;
     }
 
     public get distanceToParent(): number {

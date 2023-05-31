@@ -27,9 +27,9 @@ export class Planet extends CelestialObject {
         if (this.orbit) {
             this.orbit.scale.setScalar(this.dist)
             this.orbit.position.set(
-                0 - base.x,
-                0 - base.y,
-                0 - base.z
+                -base.x,
+                -base.y,
+                -base.z
             )
         }
     

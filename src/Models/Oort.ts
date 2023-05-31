@@ -26,7 +26,7 @@ export default class Oort {
             transparent: true
         })
         const geometry = new THREE.BufferGeometry()
-        this._points = new THREE.Points(geometry,material)
+        this._points = new THREE.Points(geometry, material)
     }
 
     public get distanceStart(): number {
@@ -42,23 +42,23 @@ export default class Oort {
     }
 
     init() {
-        const range= (this._distanceEnd - this._distanceStart) / Constants.DISTANCE_SCALE
+        const range = (this._distanceEnd - this._distanceStart) / Constants.DISTANCE_SCALE
         // const distanceStart= this._distanceStart / Constants.DISTANCE_SCALE
-        const distanceEnd= this._distanceEnd / Constants.DISTANCE_SCALE
+        const distanceEnd = this._distanceEnd / Constants.DISTANCE_SCALE
 
         const vertexs = []
-        for(let i = 0;i<PNTCOUNT;i++){
-            const [x,y,z] = randSpherePointExcludes(distanceEnd, distanceEnd + range)
-            vertexs.push(x,y,z)
+        for (let i = 0; i < PNTCOUNT; i++) {
+            const [x, y, z] = randSpherePointExcludes(distanceEnd, distanceEnd + range)
+            vertexs.push(x, y, z)
         }
-        
-        this._points.geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertexs,3))
+
+        this._points.geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertexs, 3))
     }
 
-    update(_world:World) {
+    update(_world: World) {
         // const d = world.cam.active.position.distanceTo(this._parent ? this._parent.masterGrp.position : new THREE.Vector3(0,0,0))
         // const d2 = this.distanceStart / Constants.DISTANCE_SCALE
-        
+
         // const v = d > d2 / 2
         // if (v != this.enable) this.enable = v
     }

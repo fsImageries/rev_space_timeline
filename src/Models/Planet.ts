@@ -14,19 +14,15 @@ export class Planet extends CelestialObject {
 
     public init() {
         const base = this.parent ? this.parent.masterGrp.position.clone() : new THREE.Vector3()
-
         const idlePos = new THREE.Vector3(0, 0, -this.dist + this.radius * 6)
         const idlePosAdd = new THREE.Vector3(0, 0, this.radius * 6)
         if (this.name == "marcosEye") {
             console.log(this.parent.name)
             console.log(this.parent.masterGrp.position)
         }
-        
-        console.log(base)
-        // this.topGrp.position.copy(base)
+    
         base.z = -this.dist
 
-    
         this.masterGrp.position.set(base.x, base.y, base.z)
         this.masterGrp.userData["idlePosition"] = idlePos;
         this.masterGrp.userData["idleAdd"] = idlePosAdd;
@@ -61,11 +57,9 @@ export class Planet extends CelestialObject {
         // Update topGrp
         if (this.parent) {
             this.parent.masterGrp.getWorldPosition(outWorldPosition)
-            // console.log(outWorldPosition)
             this.topGrp.position.copy(outWorldPosition)
         }
         
-
         // Atmo direction
         const vec = (this.atmo?.material as THREE.ShaderMaterial).uniforms.viewVector.value
         this.atmo?.getWorldPosition(outWorldPosition)

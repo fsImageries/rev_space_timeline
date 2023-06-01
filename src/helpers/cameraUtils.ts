@@ -1,13 +1,13 @@
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
-let worldPos = new THREE.Vector3()
+let outWorldPos = new THREE.Vector3()
 
 export function setCameraTarget(target: THREE.Object3D, cameraCtrl: OrbitControls) {
     if (target instanceof THREE.Group) { target = getMasterParent(target) }
 
-    target.getWorldPosition(worldPos)
-    cameraCtrl.target.copy(worldPos)
+    target.getWorldPosition(outWorldPos)
+    cameraCtrl.target.copy(outWorldPos)
     cameraCtrl.update()
 }
 
@@ -15,10 +15,10 @@ export function jumpToTarget(target: THREE.Object3D, cameraCtrl: OrbitControls) 
     target = getMasterParent(target)
 
     if (Object.hasOwn(target.userData, "idlePosition")) {
-        target.getWorldPosition(worldPos)
+        target.getWorldPosition(outWorldPos)
 
         const pos = target.userData["idleAdd"] as THREE.Vector3
-        const pos2 = worldPos.clone().add(pos)
+        const pos2 = outWorldPos.clone().add(pos)
         cameraCtrl.object.position.copy(pos2)
         cameraCtrl.update()
     }

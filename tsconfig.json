@@ -15,7 +15,10 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "types": [
+      "@modyfi/vite-plugin-yaml/modules"
+      ],
   },
   "include": ["src"]
 }

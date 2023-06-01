@@ -1,12 +1,11 @@
 import { World } from "./Models/World";
-import celestialData from "./object_data.json"
 import { SystemJsonData } from "./jsonInterfaces";
 import './style.css'
 import systemFactory from "./Factories/SystemFactory";
+import celestialData from "./object_data.yaml"
 
 
-const data:SystemJsonData = celestialData;
-
+const data = celestialData as SystemJsonData;
 
 const sys = await systemFactory(data.systems[0])
 const world = new World(sys)

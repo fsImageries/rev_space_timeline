@@ -28,7 +28,7 @@ export interface PlanetJson {
     distanceToParent: number,
     draw: DrawData,
     texts: string[],
-    children: CelestialChildrenJson[],
+    children?: CelestialChildrenJson[],
 }
 
 export interface OortCloudJson {

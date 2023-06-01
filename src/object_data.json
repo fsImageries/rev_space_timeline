@@ -67,18 +67,6 @@
                             "name": "glitterband",
                             "type": "particles",
                             "objectType": "points"
-                        },
-                        {
-                            "name": "marcosEye",
-                            "type": "object",
-                            "objectType": "sphere",
-                            "draw": {
-                                "albedoPath": "/epsilonEridani/marcosEye/moon_albedo.jpg",
-                                "normalPath": "/epsilonEridani/marcosEye/moon_normal.png",
-                                "glowColor": "0xffffff",
-                                "glowIntensity": 0.1,
-                                "radius": 1
-                            }
                         }
                     ]
                 },

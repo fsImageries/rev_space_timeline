@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  basic_check:
 
     runs-on: ubuntu-latest
 

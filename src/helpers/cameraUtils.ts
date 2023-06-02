@@ -14,7 +14,8 @@ export function setCameraTarget(target: THREE.Object3D, cameraCtrl: OrbitControl
 export function jumpToTarget(target: THREE.Object3D, cameraCtrl: OrbitControls) {
     target = getMasterParent(target)
 
-    if (Object.hasOwn(target.userData, "idlePosition")) {
+    // if (Object.hasOwn(target.userData, "idlePosition")) {
+    if ("idlePosition" in target.userData) {        
         target.getWorldPosition(outWorldPos)
 
         const pos = target.userData["idleAdd"] as THREE.Vector3

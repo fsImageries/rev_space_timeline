@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import Constants from "../helpers/Constants";
 
 export default function build() {
     var points = [];

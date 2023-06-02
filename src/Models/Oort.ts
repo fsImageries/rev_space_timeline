@@ -1,7 +1,6 @@
 import * as THREE from "three"
 import { OortParams } from "../interfaces";
 import Constants from "../helpers/Constants";
-import { CelestialObject } from "./Celestial";
 import { randSpherePointExcludes } from "../helpers/numericUtils";
 import { World } from "./World";
 
@@ -13,12 +12,11 @@ export default class Oort {
     private _distanceStart: number;
     private _distanceEnd: number;
     private _points: THREE.Points;
-    private _parent?: CelestialObject;
 
     constructor(data: OortParams) {
         this._distanceStart = data.distanceToParent
         this._distanceEnd = data.distanceEnd
-        this._parent = data.parent
+        // this._parent = data.parent
 
         const material = new THREE.PointsMaterial({
             color: "white",

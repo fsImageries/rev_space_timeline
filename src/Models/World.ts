@@ -92,6 +92,10 @@ export class World {
         worldFolder.add(Constants, 'DISTANCE_SCALE').min(0).name('Distance scale').onChange(() => {
             this.curSystem.init()
         })
+
+        worldFolder.add(Constants, 'TIME_SCALE').min(0).name('Time scale').onChange((v:number) => {
+            Constants.TIME_SCALE = v
+        })
         worldFolder.add(Constants, 'ORB_SCALE').min(0).name('Orbital speed')
         worldFolder.add(Constants, 'ROT_SCALE').min(0).name('Rotational speed')
         worldFolder.add(this, 'topView').name('Top View')

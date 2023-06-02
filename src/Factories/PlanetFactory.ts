@@ -6,7 +6,7 @@ import { Planet } from "../Models/Planet";
 import { CelestialObject } from "../Models/Celestial";
 import { uuidv4 } from "../helpers/cameraUtils";
 import { Internal3DObject } from "../interfaces";
-import { CelestialChildrenJson, PlanetJson } from "../jsonInterfaces";
+import { PlanetJson } from "../jsonInterfaces";
 import satelliteFactory from "./SatelliteFactory"
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"

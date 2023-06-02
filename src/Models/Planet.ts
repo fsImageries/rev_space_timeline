@@ -6,6 +6,8 @@ import { PlanetParams, CelestialParams } from "../interfaces";
 
 
 let outWorldPos = new THREE.Vector3();
+let camWorldPos = new THREE.Vector3();
+let masterGrpWorldPos = new THREE.Vector3();
 
 export class Planet extends CelestialObject {
     private _children: any[];
@@ -65,32 +67,34 @@ export class Planet extends CelestialObject {
             this.parent.masterGrp.getWorldPosition(outWorldPos)
             this.topGrp.position.copy(outWorldPos)
         }
-
-        // if (this.children)
-        // this.children.forEach(child => {
-        //     this.masterGrp.getWorldPosition(outWorldPos);
-        //     (child.topGrp as THREE.Points).position.copy(outWorldPos)
-        // })
         
         // Atmo direction
         const vec = (this.atmo?.material as THREE.ShaderMaterial).uniforms.viewVector.value
         this.atmo?.getWorldPosition(outWorldPos)
         vec.subVectors(world.cam.active.position.clone(), outWorldPos);
-        
+
         // Axis Rotation
-        let val = (world.delta * this.angularRotVel) * Constants.ROT_SCALE;
-        this.meshGrp.rotation.y -= val;
+        let axisVal = (world.delta * this.angularRotVel) * Constants.ROT_SCALE;
+        this.meshGrp.rotation.y -= axisVal;
 
         // Orbital Rotation
-        val = (world.delta * this.angularOrbVel) * Constants.ORB_SCALE;
-        this.topGrp.rotation.y += val;
+        let orbVal = (world.delta * this.angularOrbVel) * Constants.ORB_SCALE;
+        this.topGrp.rotation.y += orbVal;
 
         // Sprite scaling
-        world.cam.active.getWorldPosition(outWorldPos)
-        const c = outWorldPos.clone()
-        this.masterGrp.getWorldPosition(outWorldPos)
-        const dist = outWorldPos.distanceTo(c)
+        world.cam.active.getWorldPosition(camWorldPos)
+        this.masterGrp.getWorldPosition(masterGrpWorldPos)
+        const dist = masterGrpWorldPos.distanceTo(camWorldPos)
         this.sprite.scale.setScalar(dist/50)
+
+        // Children update
+        if (this.children) {
+            this.children.forEach(child=>{
+                const dist = camWorldPos.distanceTo(masterGrpWorldPos);
+                (child.topGrp.material as THREE.ShaderMaterial).uniforms.dist.value = dist;
+                child.topGrp.rotation.y -= axisVal * 1.3793
+            })
+        }
 
         // Distance visibility
         this.sprite.visible = dist > 5000 ? true: false

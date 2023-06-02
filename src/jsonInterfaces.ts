@@ -59,5 +59,7 @@ interface DrawData {
     glowColor?: string,
     glowIntensity?: number,
     count?:number,
-    radiusMult?: number
+    radiusMult?: number,
+    distDiv?: number,
+    height?: number,
 }

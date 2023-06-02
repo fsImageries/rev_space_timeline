@@ -71,8 +71,10 @@ systems:
       type: particles
       objectType: points
       draw:
-        count: 10000
-        radiusMult: 7.5
+        count: 1000
+        radiusMult: 32
+        distDiv: 90000
+        height: 2.5
 
   # we assume that planet children come last in list to group them properly
   - name: marcosEye

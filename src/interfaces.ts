@@ -17,6 +17,7 @@ export interface OortParams {
 export interface PlanetParams {
     glowColor: string;
     glowIntesity: number;
+    children?: any[];
 }
 
 export interface CelestialParams {

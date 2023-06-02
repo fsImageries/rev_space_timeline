@@ -3,6 +3,7 @@ export interface CelestialChildrenJson {
     type: string,
     objectType: string,
     draw?: DrawData,
+    count?: number
 }
 
 export interface SunJson {
@@ -57,4 +58,6 @@ interface DrawData {
     normalPath?: string,
     glowColor?: string,
     glowIntensity?: number,
+    count?:number,
+    radiusMult?: number
 }

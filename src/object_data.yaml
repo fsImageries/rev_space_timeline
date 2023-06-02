@@ -59,7 +59,7 @@ systems:
       •The Eighty
     - |-
       2405
-      •Departure of Sylveste expedition to Lascaille’s Shroud
+      •Departure of Sylveste expedition to Lascaille's Shroud
     - |-
       2415
       •Clockworker incident
@@ -70,6 +70,9 @@ systems:
     - name: glitterband
       type: particles
       objectType: points
+      draw:
+        count: 10000
+        radiusMult: 7.5
 
   # we assume that planet children come last in list to group them properly
   - name: marcosEye

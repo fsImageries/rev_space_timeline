@@ -7,6 +7,7 @@ import { CelestialObject } from "../Models/Celestial";
 import { uuidv4 } from "../helpers/cameraUtils";
 import { Internal3DObject } from "../interfaces";
 import { CelestialChildrenJson, PlanetJson } from "../jsonInterfaces";
+import satelliteFactory from "./SatelliteFactory"
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
@@ -49,11 +50,17 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
     topGrp.add(masterGrp)
 
     const object3d: Internal3DObject = { topGrp, masterGrp, meshGrp, mesh, atmo, texts, orbit, sprite }
-    // init(data, object3d, parent)
 
-    // meshGrp.updateMatrixWorld()
-    // masterGrp.updateMatrixWorld()
-    // topGrp.updateMatrixWorld()
+    let children
+    if ("children" in data) {
+        children = data.children.map(d => {
+            const child = satelliteFactory(d, data.draw.radius)
+            // console.log(data.draw.radius)
+            // console.log(child)
+            masterGrp.add(child.topGrp)
+            return child
+        })
+    }
 
     return new Planet({
         name: data.name,
@@ -66,9 +73,11 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
         distanceToParent: data.distanceToParent,
         object: object3d,
         parent: parent,
-        id: uuidv4()
+        id: uuidv4(),
+        children: children
     })
 }
+
 
 function build_sphere_mesh_and_atmo(
     glowColor: THREE.Color,

@@ -12,7 +12,7 @@ const world = new World(sys)
 sys.initWorld(world)
 
 // const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
-const obj = world.scene.getObjectByName("marcosEye_masterGrp")
+const obj = world.scene.getObjectByName("yellowstone_masterGrp")
 // const obj:any = null
 const target = sys.getById(obj.userData["id"])
 // console.log(target)

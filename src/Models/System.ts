@@ -16,7 +16,7 @@ interface Params {
 export class System {
     public name: string;
 
-    public group: THREE.Group;
+    public topGrp: THREE.Group;
     public planets: Planet[];
     public suns: Sun[];
     public oort: Oort;
@@ -29,9 +29,16 @@ export class System {
         this.planets = data.planets
         this.oort = data.oort
 
-        this.group = new THREE.Group()
-        this.allCelestialObjects.forEach(obj => this.group.add(obj.topGrp))
-        this.group.add(this.oort.points)
+        // Add all meshes to topGrp
+        this.topGrp = new THREE.Group()
+        this.topGrp.add(this.oort.points)
+        this.allCelestialObjects.forEach(obj => {
+            this.topGrp.add(obj.topGrp)
+            // if (obj instanceof Planet && obj.children) {
+            //     obj.children.forEach(child=>console.log(child.topGrp.position))
+            //     obj.children.forEach(child => this.topGrp.add(child.topGrp))
+            // }
+        })
 
         this.name = data.name
         this.isSingleSun = data.isSingleSun
@@ -64,7 +71,7 @@ export class System {
 
     public initWorld(world: World) {
         this.init();
-        world.scene.add(this.group)
+        world.scene.add(this.topGrp)
     }
 
     public update(world: World) {

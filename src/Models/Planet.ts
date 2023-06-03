@@ -86,8 +86,10 @@ export class Planet extends CelestialObject {
         this.meshGrp.rotation.y -= axisVal;
 
         // Orbital Rotation
-        const orbVal = (world.delta * this.angularOrbVel) * Constants.ORB_SCALE;
-        this.topGrp.rotation.y += orbVal;
+        if (Constants.CELESTIAL_ORB || this.isSatellite) {
+            const orbVal = (world.delta * this.angularOrbVel) * Constants.ORB_SCALE;
+            this.topGrp.rotation.y += orbVal;
+        }
 
         // Sprite scaling
         world.cam.active.getWorldPosition(camWorldPos)

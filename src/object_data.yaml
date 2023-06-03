@@ -71,7 +71,7 @@ systems:
       type: particles
       objectType: points  # TODO if not used in future delete this property
       draw:
-        count: 10000
+        count: 1000
         radiusMult: 32
         distDiv: 450000
         height: 4

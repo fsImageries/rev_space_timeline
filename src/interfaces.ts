@@ -34,6 +34,7 @@ export interface CelestialParams {
     object: Internal3DObject;
     parent?: CelestialObject;
     id: string;
+    isSatellite: boolean;
 }
 
 export interface Internal3DObject {

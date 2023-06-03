@@ -13,7 +13,7 @@ import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
 
 
-export default function build(data: PlanetJson, parent?: CelestialObject, orbLen = 180) {
+export default function build(data: PlanetJson, parent?: CelestialObject, isSatellite=false) {
     const [mesh, atmo] = build_sphere_mesh_and_atmo(
         new THREE.Color(parseInt(data.draw.glowColor)),
         data.draw.glowIntensity,
@@ -23,8 +23,6 @@ export default function build(data: PlanetJson, parent?: CelestialObject, orbLen
         data.name
     )
 
-    console.log(data.name, orbLen)
-    console.log(data.draw)
     const orbit = build_orbit(data.draw)
     const texts = build_texts(data.texts)
 
@@ -75,7 +73,8 @@ export default function build(data: PlanetJson, parent?: CelestialObject, orbLen
         object: object3d,
         parent: parent,
         id: uuidv4(),
-        satellites: satellites
+        satellites: satellites,
+        isSatellite: isSatellite,
     })
 }
 

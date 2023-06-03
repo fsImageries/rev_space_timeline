@@ -92,7 +92,6 @@ export class World {
         worldFolder.add(Constants, 'DISTANCE_SCALE').min(0).name('Distance scale').onChange(() => {
             this.curSystem.init()
         })
-
         worldFolder.add(Constants, 'TIME_SCALE').min(0).name('Time scale').onChange((v:number) => {
             Constants.TIME_SCALE = v
         })
@@ -100,6 +99,7 @@ export class World {
         worldFolder.add(Constants, 'ROT_SCALE').min(0).name('Rotational speed')
         worldFolder.add(this, 'topView').name('Top View')
         worldFolder.add(this.gridhelper, "visible").name("Grid visiblity")
+        worldFolder.add(Constants, "CELESTIAL_ORB").name("Main Orb Rotation")
 
         const planets: any = {}
         this.curSystem.allCelestialObjects.forEach((obj) => planets[obj.name] = obj.masterGrp)

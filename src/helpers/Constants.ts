@@ -10,7 +10,9 @@ const Constants = {
         this.ROT_SCALE = v
         this.ORB_SCALE = v
         this._time_scale = v
-    }
+    },
+
+    CELESTIAL_ORB: true,
 }
 
 export default Constants

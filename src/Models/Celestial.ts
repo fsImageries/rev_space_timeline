@@ -11,6 +11,7 @@ export class CelestialObject {
     private _name: string;
     private _distanceToParent: number;
     private _object: Internal3DObject;
+    private _isSatellite: boolean;
     private _parent?: CelestialObject;
     
     public angularRotVel: number;
@@ -27,6 +28,7 @@ export class CelestialObject {
         this._name = data.name;
         this._distanceToParent = data.distanceToParent;
         this._object = data.object;
+        this._isSatellite = data.isSatellite;
         this._parent = data.parent;
         this.id = data.id;
 
@@ -45,6 +47,10 @@ export class CelestialObject {
         this.angularOrbVel *= -1
     }
 
+    public get isSatellite(): boolean {
+        return this._isSatellite;
+    }
+    
     public set visible(val:boolean) {
         this.topGrp.visible = val
     }

@@ -13,8 +13,7 @@ import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
 
 
-export default function build(data: PlanetJson, parent?: CelestialObject) {
-    console.log(data)
+export default function build(data: PlanetJson, parent?: CelestialObject, orbLen=180) {
     const [mesh, atmo] = build_sphere_mesh_and_atmo(
         new THREE.Color(parseInt(data.draw.glowColor)),
         data.draw.glowIntensity,
@@ -23,9 +22,11 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
         data.draw.radius,
         data.name
     )
-    const orbit = build_orbit()
+
+    console.log(data.name, orbLen)
+    const orbit = build_orbit(orbLen)
     const texts = build_texts(data.texts)
-    // const sprite = build_sprite(data.name, data.draw.radius)
+
     const map = new THREE.TextureLoader().load( '/diamond-solid.svg' );
     const material = new THREE.SpriteMaterial( { map: map } );
     const sprite = new THREE.Sprite( material );

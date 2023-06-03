@@ -1,12 +1,12 @@
 import * as THREE from "three";
 
-export default function build() {
+export default function build(length:number= 180) {
     var points = [];
 
     // const radius = distance / Constants.DISTANCE_SCALE;
     const radius = 1;
-    for (let i = 0; i <= 180; i++) {
-        points.push(new THREE.Vector3(Math.sin(i * (Math.PI / 180)) * radius, Math.cos(i * (Math.PI / 180)) * radius, 0));
+    for (let i = 0; i <= 360; i++) {
+        points.push(new THREE.Vector3(Math.sin(i * (Math.PI / 360)) * radius, Math.cos(i * (Math.PI / 360)) * radius, 0));
     }
 
     var geometry = new THREE.BufferGeometry();

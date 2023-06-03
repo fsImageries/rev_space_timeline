@@ -15,7 +15,7 @@ export default function build(data: PlanetJson): Satellites {
                 break;
     
             case "planet":
-                children.push(planetFactory(d.data as PlanetJson))
+                children.push(planetFactory(d.data as PlanetJson, undefined, 360))
                 break;
         }
     }

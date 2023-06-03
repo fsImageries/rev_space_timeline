@@ -80,6 +80,7 @@ systems:
       type: "planet"
       objectType: "mesh"
       data:
+        name: marcosEye
         diameter: 3474.8
         radius: 1737.4
         rotationPeriod: 6552

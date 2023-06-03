@@ -94,6 +94,8 @@ systems:
           glowColor: '0xffffff'
           glowIntensity: 0.1
           radius: 1
+          orbInvert: true
+          orbLen: 45
         texts:
         - |-
           ≈2100

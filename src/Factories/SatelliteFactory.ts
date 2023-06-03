@@ -15,7 +15,9 @@ export default function build(data: PlanetJson): Satellites {
                 break;
     
             case "planet":
-                children.push(planetFactory(d.data as PlanetJson, undefined, 360))
+                const planet = planetFactory(d.data as PlanetJson, undefined, 45)
+                planet.invertAngularOrbVel()
+                children.push(planet)
                 break;
         }
     }

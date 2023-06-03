@@ -42,7 +42,7 @@ export class Planet extends CelestialObject {
         this.masterGrp.userData["id"] = this.id;
     
         if (this.orbit) {
-            this.orbit.scale.setScalar(this.dist)
+            this.orbit.scale.multiplyScalar(this.dist)
             this.orbit.position.set(
                 -base.x,
                 -base.y,

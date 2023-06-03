@@ -6,7 +6,7 @@ export interface CelestialChildrenJson {
     draw?: DrawData,
 }
 
-interface DrawData {
+export interface DrawData {
     radius: number,
     albedoPath?: string,
     normalPath?: string,
@@ -16,6 +16,8 @@ interface DrawData {
     radiusMult?: number,
     distDiv?: number,
     height?: number,
+    orbInvert?: boolean,
+    orbLen?: number,
 }
 
 export interface SunJson {

@@ -24,7 +24,8 @@ export default function build(data: PlanetJson, parent?: CelestialObject, orbLen
     )
 
     console.log(data.name, orbLen)
-    const orbit = build_orbit(orbLen)
+    console.log(data.draw)
+    const orbit = build_orbit(data.draw)
     const texts = build_texts(data.texts)
 
     const map = new THREE.TextureLoader().load('/diamond-solid.svg');

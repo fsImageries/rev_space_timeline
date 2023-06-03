@@ -11,7 +11,7 @@ export class CelestialObject {
     private _name: string;
     private _distanceToParent: number;
     private _object: Internal3DObject;
-    private _isSatellite: boolean;
+    private _isSatellite?: boolean;
     private _parent?: CelestialObject;
     
     public angularRotVel: number;

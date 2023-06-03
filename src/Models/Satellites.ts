@@ -1,4 +1,3 @@
-import * as THREE from "three";
 import { Planet } from "./Planet";
 import { World } from "./World";
 import { satelliteParticles } from "./SatelliteParticles";

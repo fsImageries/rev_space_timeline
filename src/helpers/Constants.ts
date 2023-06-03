@@ -1,3 +1,5 @@
+import { Vector3 } from "three"
+
 const Constants = {
     DISTANCE_SCALE : 3000000,
     SIZE_SCALE: 10,
@@ -13,6 +15,9 @@ const Constants = {
     },
 
     CELESTIAL_ORB: true,
+
+    __OUT_WORLD__POS: new Vector3(),
+    __OUT_CAM_POS: new Vector3()
 }
 
 export default Constants

@@ -70,6 +70,8 @@ systems:
     - name: glitterband
       type: particles
       objectType: points  # TODO if not used in future delete this property
+      data:
+        orbitalPeriod: 62000
       draw:
         count: 1000
         radiusMult: 32

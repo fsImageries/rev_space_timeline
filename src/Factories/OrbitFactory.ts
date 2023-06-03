@@ -1,17 +1,21 @@
 import * as THREE from "three";
+import { DEG2RAD } from "three/src/math/MathUtils";
+import { DrawData } from "../jsonInterfaces";
 
-export default function build() {
+export default function build(data: DrawData) {
     var points = [];
 
-    // const radius = distance / Constants.DISTANCE_SCALE;
     const radius = 1;
-    for (let i = 0; i <= 180; i++) {
-        points.push(new THREE.Vector3(Math.sin(i * (Math.PI / 180)) * radius, Math.cos(i * (Math.PI / 180)) * radius, 0));
+    const len = data.orbLen ? data.orbLen : 180
+    console.log(len)
+    for (let i = 0; i <= len; i++) {
+        points.push(new THREE.Vector3(radius* Math.sin(i * DEG2RAD), radius * Math.cos(i * DEG2RAD), 0));
     }
 
     var geometry = new THREE.BufferGeometry();
     geometry.setFromPoints(points);
     geometry.computeBoundingBox()
+    geometry.computeVertexNormals()
 
     var material = new THREE.ShaderMaterial({
         uniforms: {
@@ -46,6 +50,9 @@ export default function build() {
     });
 
     const line = new THREE.Line(geometry, material);
+    line.scale.x = data.orbInvert ? -1 : 1
+    line.rotateY(((180-len) * (data.orbInvert ? -1 : 1)) * DEG2RAD)
     line.rotateX(Math.PI / 2)
+    line.updateMatrixWorld()
     return line
 }

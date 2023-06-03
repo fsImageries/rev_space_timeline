@@ -3,6 +3,7 @@ import { CelestialObject } from "./Celestial";
 import Constants from "../helpers/Constants";
 import { World } from "./World";
 import { PlanetParams, CelestialParams } from "../interfaces";
+import { Satellites } from "./Satellites";
 
 
 let outWorldPos = new THREE.Vector3();
@@ -10,14 +11,17 @@ let camWorldPos = new THREE.Vector3();
 let masterGrpWorldPos = new THREE.Vector3();
 
 export class Planet extends CelestialObject {
-    private _children: any[];
-    public get children(): any[] {
-        return this._children;
-    }
+    private _satellites: Satellites;
 
     constructor(data: CelestialParams & PlanetParams) {
         super(data);
-        this._children = data.children
+
+        if (data.satellites) data.satellites.parent = this
+        this._satellites = data.satellites
+    }
+
+    public get satellites(): Satellites {
+        return this._satellites;
     }
 
     public init() {
@@ -38,7 +42,7 @@ export class Planet extends CelestialObject {
         this.masterGrp.userData["id"] = this.id;
     
         if (this.orbit) {
-            this.orbit.scale.setScalar(this.dist)
+            this.orbit.scale.multiplyScalar(this.dist)
             this.orbit.position.set(
                 -base.x,
                 -base.y,
@@ -56,17 +60,21 @@ export class Planet extends CelestialObject {
             })
         }
 
+        this._satellites?.init()
+
+        console.log(this.parent?.name)
+        console.log(this.name)
         this.meshGrp.updateMatrixWorld()
         this.masterGrp.updateMatrixWorld()
         this.topGrp.updateMatrixWorld()
     }
 
     public update(world: World) {
-        // Update topGrp
-        if (this.parent) {
-            this.parent.masterGrp.getWorldPosition(outWorldPos)
-            this.topGrp.position.copy(outWorldPos)
-        }
+        // // Update topGrp
+        // if (this.parent) {
+        //     this.parent.masterGrp.getWorldPosition(outWorldPos)
+        //     this.topGrp.position.copy(outWorldPos)
+        // }
         
         // Atmo direction
         const vec = (this.atmo?.material as THREE.ShaderMaterial).uniforms.viewVector.value
@@ -74,11 +82,11 @@ export class Planet extends CelestialObject {
         vec.subVectors(world.cam.active.position.clone(), outWorldPos);
 
         // Axis Rotation
-        let axisVal = (world.delta * this.angularRotVel) * Constants.ROT_SCALE;
+        const axisVal = (world.delta * this.angularRotVel) * Constants.ROT_SCALE;
         this.meshGrp.rotation.y -= axisVal;
 
         // Orbital Rotation
-        let orbVal = (world.delta * this.angularOrbVel) * Constants.ORB_SCALE;
+        const orbVal = (world.delta * this.angularOrbVel) * Constants.ORB_SCALE;
         this.topGrp.rotation.y += orbVal;
 
         // Sprite scaling
@@ -87,14 +95,8 @@ export class Planet extends CelestialObject {
         const dist = masterGrpWorldPos.distanceTo(camWorldPos)
         this.sprite.scale.setScalar(dist/50)
 
-        // Children update
-        if (this.children) {
-            this.children.forEach(child=>{
-                const dist = camWorldPos.distanceTo(masterGrpWorldPos);
-                (child.topGrp.material as THREE.ShaderMaterial).uniforms.dist.value = dist;
-                child.topGrp.rotation.y -= axisVal * 1.3793
-            })
-        }
+        // Satellites Updates
+        this._satellites?.update(world)
 
         // Distance visibility
         this.sprite.visible = dist > 5000 ? true: false

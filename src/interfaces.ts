@@ -1,4 +1,5 @@
 import { CelestialObject } from "./Models/Celestial";
+import { Satellites } from "./Models/Satellites";
 
 export interface RandStats {
     range: number;
@@ -17,7 +18,7 @@ export interface OortParams {
 export interface PlanetParams {
     glowColor: string;
     glowIntesity: number;
-    children?: any[];
+    satellites?: Satellites;
 }
 
 export interface CelestialParams {

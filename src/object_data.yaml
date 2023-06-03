@@ -69,32 +69,57 @@ systems:
     children:
     - name: glitterband
       type: particles
-      objectType: points
+      objectType: points  # TODO if not used in future delete this property
       draw:
         count: 1000
         radiusMult: 32
         distDiv: 90000
         height: 2.5
+    
+    - name: marcosEye
+      type: "planet"
+      objectType: "mesh"
+      data:
+        name: marcosEye
+        diameter: 3474.8
+        radius: 1737.4
+        rotationPeriod: 6552
+        orbitalPeriod: 6552
+        parent: yellowstone
+        tilt: 0
+        distanceToParent: 508440000
+        draw:
+          albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
+          normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
+          glowColor: '0xffffff'
+          glowIntensity: 0.1
+          radius: 1
+          orbInvert: true
+          orbLen: 45
+        texts:
+        - |-
+          ≈2100
+          •Named in honour of Marco Ferris
 
-  # we assume that planet children come last in list to group them properly
-  - name: marcosEye
-    diameter: 3474.8
-    radius: 1737.4
-    rotationPeriod: 6552
-    orbitalPeriod: 6552
-    parent: yellowstone
-    tilt: 0
-    distanceToParent: 508440000
-    draw:
-      albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
-      normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
-      glowColor: '0xffffff'
-      glowIntensity: 0.1
-      radius: 1
-    texts:
-    - |-
-      ≈2100
-      •Named in honour of Marco Ferris
+  # # we assume that planet children come last in list to group them properly
+  # - name: marcosEye
+  #   diameter: 3474.8
+  #   radius: 1737.4
+  #   rotationPeriod: 6552
+  #   orbitalPeriod: 6552
+  #   parent: yellowstone
+  #   tilt: 0
+  #   distanceToParent: 508440000
+  #   draw:
+  #     albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
+  #     normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
+  #     glowColor: '0xffffff'
+  #     glowIntensity: 0.1
+  #     radius: 1
+  #   texts:
+  #   - |-
+  #     ≈2100
+  #     •Named in honour of Marco Ferris
 
   oortCloud:
     parent: epsilonEridani

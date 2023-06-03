@@ -37,6 +37,14 @@ export class CelestialObject {
         this.angularOrbVel = (2 * Math.PI) / secsPerRotation;
      }
 
+    public invertAngularRotVel() {
+        this.angularRotVel *= -1
+    }
+
+    public invertAngularOrbVel() {
+        this.angularOrbVel *= -1
+    }
+
     public set visible(val:boolean) {
         this.topGrp.visible = val
     }

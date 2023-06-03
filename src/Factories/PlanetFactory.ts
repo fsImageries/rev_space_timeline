@@ -14,6 +14,7 @@ import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
 
 
 export default function build(data: PlanetJson, parent?: CelestialObject) {
+    console.log(data)
     const [mesh, atmo] = build_sphere_mesh_and_atmo(
         new THREE.Color(parseInt(data.draw.glowColor)),
         data.draw.glowIntensity,
@@ -51,14 +52,12 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
 
     const object3d: Internal3DObject = { topGrp, masterGrp, meshGrp, mesh, atmo, texts, orbit, sprite }
 
-    let children
+    let satellites
     if ("children" in data) {
-        children = data.children.map(d => {
-            const child = satelliteFactory(d, data.draw.radius)
-            // console.log(data.draw.radius)
-            // console.log(child)
-            masterGrp.add(child.topGrp)
-            return child
+        satellites = satelliteFactory(data)
+        satellites.children.forEach(child => {
+            if (child instanceof Planet) masterGrp.add(child.topGrp)
+            if (child instanceof THREE.Points) masterGrp.add(child)
         })
     }
 
@@ -74,7 +73,7 @@ export default function build(data: PlanetJson, parent?: CelestialObject) {
         object: object3d,
         parent: parent,
         id: uuidv4(),
-        children: children
+        satellites: satellites
     })
 }
 

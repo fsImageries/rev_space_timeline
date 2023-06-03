@@ -2,8 +2,20 @@ export interface CelestialChildrenJson {
     name: string,
     type: string,
     objectType: string,
+    data?: PlanetJson | SunJson
     draw?: DrawData,
-    count?: number
+}
+
+interface DrawData {
+    radius: number,
+    albedoPath?: string,
+    normalPath?: string,
+    glowColor?: string,
+    glowIntensity?: number,
+    count?:number,
+    radiusMult?: number,
+    distDiv?: number,
+    height?: number,
 }
 
 export interface SunJson {
@@ -49,17 +61,4 @@ export interface SystemJson {
 
 export interface SystemJsonData {
     systems: SystemJson[]
-}
-
-
-interface DrawData {
-    radius: number,
-    albedoPath?: string,
-    normalPath?: string,
-    glowColor?: string,
-    glowIntensity?: number,
-    count?:number,
-    radiusMult?: number,
-    distDiv?: number,
-    height?: number,
 }

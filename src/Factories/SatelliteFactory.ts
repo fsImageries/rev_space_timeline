@@ -1,15 +1,25 @@
-import * as THREE from "three"
-import { CelestialChildrenJson } from "../jsonInterfaces";
+import * as THREE from "three";
+import { CelestialChildrenJson, PlanetJson } from "../jsonInterfaces";
 import { inSphere } from "../helpers/numericUtils";
 import { randFloat } from "three/src/math/MathUtils";
+import planetFactory from "./PlanetFactory";
+import { Satellites } from "../Models/Satellites";
 
 
-export default function build(data: CelestialChildrenJson, radius:number) {
-    // switch (data.type) {
-    //     case "particles":
-    //     return build_particle_satellites(data, radius)
-    // }
-    return build_particle_satellites(data, radius)
+export default function build(data: PlanetJson): Satellites {
+    const children = []
+    for (const d of data.children) {
+        switch (d.type) {
+            case "particles":
+                children.push(build_particle_satellites(d, data.draw.radius))
+                break;
+    
+            case "planet":
+                children.push(planetFactory(d.data as PlanetJson))
+                break;
+        }
+    }
+    return new Satellites(children)    
 }
 
 function build_particle_satellites(data: CelestialChildrenJson, radius:number) {
@@ -56,7 +66,7 @@ function build_particle_satellites(data: CelestialChildrenJson, radius:number) {
     vertexs = relaxTorusPoints(vertexs, data.draw.height)
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertexs, 3))
 
-    return {topGrp:points}
+    return points
 }
 
 function relaxTorusPoints(points: number[], rad: number = 1) {

@@ -4,7 +4,6 @@ import Constants from "../helpers/Constants";
 import { randSpherePointExcludes } from "../helpers/numericUtils";
 import { World } from "./World";
 
-// avg distance between objects
 const PNTCOUNT = 100_000
 
 

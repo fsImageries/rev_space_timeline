@@ -2,7 +2,7 @@ export interface CelestialChildrenJson {
     name: string,
     type: string,
     objectType: string,
-    data?: PlanetJson | SunJson
+    data?: CelestialData
     draw?: DrawData,
 }
 
@@ -20,7 +20,17 @@ export interface DrawData {
     orbLen?: number,
 }
 
-export interface SunJson {
+export interface CelestialData {
+    diameter?: number,
+    radius?: number,
+    rotationPeriod?: number,
+    orbitalPeriod?: number,
+    parent?: string,
+    tilt?: number,
+    distanceToParent?: number,
+}
+
+export interface SunJson extends CelestialData {
     name: string,
     diameter: number,
     radius: number,
@@ -32,7 +42,7 @@ export interface SunJson {
     draw: DrawData
 }
 
-export interface PlanetJson {
+export interface PlanetJson extends CelestialData {
     name: string,
     diameter: number,
     radius: number,

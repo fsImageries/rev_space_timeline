@@ -55,10 +55,7 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
     let satellites
     if ("children" in data) {
         satellites = satelliteFactory(data)
-        satellites.children.forEach(child => {
-            if (child instanceof Planet) masterGrp.add(child.topGrp)
-            if (child instanceof THREE.Points) masterGrp.add(child)
-        })
+        satellites.children.forEach(child => masterGrp.add(child.topGrp))
     }
 
     return new Planet({

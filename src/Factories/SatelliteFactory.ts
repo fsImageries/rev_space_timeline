@@ -4,6 +4,7 @@ import { inSphere } from "../helpers/numericUtils";
 import { randFloat } from "three/src/math/MathUtils";
 import planetFactory from "./PlanetFactory";
 import { Satellites } from "../Models/Satellites";
+import { satelliteParticles } from "../Models/SatelliteParticles";
 
 
 export default function build(data: PlanetJson): Satellites {
@@ -11,7 +12,7 @@ export default function build(data: PlanetJson): Satellites {
     for (const d of data.children) {
         switch (d.type) {
             case "particles":
-                children.push(build_particle_satellites(d, data.draw.radius))
+                children.push(new satelliteParticles(build_particle_satellites(d, data.draw.radius), d.data.orbitalPeriod))
                 break;
     
             case "planet":

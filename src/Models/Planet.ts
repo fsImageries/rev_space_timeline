@@ -12,15 +12,16 @@ let masterGrpWorldPos = new THREE.Vector3();
 
 export class Planet extends CelestialObject {
     private _satellites: Satellites;
-    public get children(): Satellites {
-        return this._satellites;
-    }
 
     constructor(data: CelestialParams & PlanetParams) {
         super(data);
 
         if (data.satellites) data.satellites.parent = this
         this._satellites = data.satellites
+    }
+
+    public get satellites(): Satellites {
+        return this._satellites;
     }
 
     public init() {

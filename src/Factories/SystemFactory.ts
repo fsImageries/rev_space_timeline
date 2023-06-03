@@ -10,16 +10,10 @@ export default async function buildAsync(data: SystemJson) {
     const isSingleSun = data.isSingleSun
     
     const suns = data.suns.map((d) => sunFactory(d))
-    // const planets = data.planets.map((d) => planetFactory(d))
-
-    const planets = Array(data.planets.length)
-    for (let i = 0; i < data.planets.length; i++) {
-        const planet = data.planets[i]
-        let parent = suns.filter(s => s.name === planet.parent)
-        if (parent.length == 0) 
-        parent = planets.filter(p => p.name === planet.parent)
-        planets.push(planetFactory(data.planets[i], parent.length == 0 ? undefined : parent[0]))
-    }
+    const planets = data.planets.map((d) => {
+        let parent = suns.filter(s => s.name === d.parent)
+        return planetFactory(d, parent.length == 0 ? undefined : parent[0])
+    })
 
     // planets.forEach((planet) => {
     //     console.log(planet.name, planet.parent.name)

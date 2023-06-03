@@ -71,10 +71,10 @@ systems:
       type: particles
       objectType: points  # TODO if not used in future delete this property
       draw:
-        count: 1000
+        count: 10000
         radiusMult: 32
-        distDiv: 90000
-        height: 2.5
+        distDiv: 450000
+        height: 4
     
     - name: marcosEye
       type: "planet"

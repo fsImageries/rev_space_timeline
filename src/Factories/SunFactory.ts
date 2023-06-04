@@ -12,18 +12,16 @@ export default function build(data:SunJson) {
     const mat = new THREE.ShaderMaterial({
         uniforms: {
             time: { value: 1.0 },
-            tex: { value: new THREE.TextureLoader().load("/epsilonEridani/abstract1.jpg")},
-            resolution: { value: new THREE.Vector3() },
-            u_resolution: {value: new THREE.Vector2(window.innerHeight, window.innerWidth)},
+            scale: {value: 2.5 },
+            highTemp: {value: data.highTemp},
+            lowTemp: {value: data.lowTemp}    
         },
         vertexShader: sunVert,
         fragmentShader: sunFrag
     })
-    // const mat = new THREE.MeshNormalMaterial()
 
     const sphereGeometry = new THREE.SphereGeometry(data.draw.radius, 50, 50)
     const mesh = new THREE.Mesh(sphereGeometry, mat)
-    // mesh.castShadow = true
     mesh.name = `${data.name}_mesh`
     // mesh.scale.set(2, 2, 2)
     // mesh.userData["idlePosition"] = new THREE.Vector3(2, 2, 5)

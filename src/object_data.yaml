@@ -12,6 +12,8 @@ systems:
     parent:
     tilt: 0
     distanceToParent:
+    highTemp: 5100
+    lowTemp: 1700
     draw:
       radius: 1000
 

@@ -55,9 +55,37 @@ export class System {
         }).dist
     }
 
+    public traverse(f:any) {
+        let ret;
+
+        const traversePlanet = (planet:Planet, f:any) => {
+            planet.satellites?.children.forEach(child => {
+                ret = f(child)
+                if (ret) return
+                if (child instanceof Planet) traversePlanet(child, f)
+            })
+        }
+        this.allCelestialObjects.forEach(cel => {
+            ret = f(cel)
+            if (ret) return
+            if (cel instanceof Planet) {
+                traversePlanet(cel, f)
+            }
+        })
+    }
+
     public getById(id: string): Sun | Planet | undefined {
-        const arr = (this.suns).concat(this.planets).filter(obj => obj.id === id)
-        return !arr ? undefined : arr[0]
+        let found;
+        this.traverse((obj:any) => {
+            if (obj.id && obj.id === id) {
+                found = obj
+                return true
+            }
+            return false
+        })
+        return found
+        // const arr = (this.suns).concat(this.planets).filter(obj => obj.id === id)
+        // return !arr ? undefined : arr[0]
     }
 
     public init() {

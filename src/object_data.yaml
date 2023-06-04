@@ -12,6 +12,8 @@ systems:
     parent:
     tilt: 0
     distanceToParent:
+    highTemp: 5100
+    lowTemp: 1700
     draw:
       radius: 1000
 
@@ -76,7 +78,7 @@ systems:
         count: 1000
         radiusMult: 32
         distDiv: 450000
-        height: 4
+        height: 3
     
     - name: marcosEye
       type: "planet"

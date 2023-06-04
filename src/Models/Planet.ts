@@ -32,7 +32,7 @@ export class Planet extends CelestialObject {
             console.log(this.parent.name)
             console.log(this.parent.masterGrp.position)
         }
-    
+
         base.z = -this.dist
 
         this.masterGrp.position.set(base.x, base.y, base.z)
@@ -40,7 +40,9 @@ export class Planet extends CelestialObject {
         this.masterGrp.userData["idleAdd"] = idlePosAdd;
         this.masterGrp.userData["dist"] = this.dist;
         this.masterGrp.userData["id"] = this.id;
-    
+
+        this.masterGrp.traverse(child => child.userData["id"] = this.id)
+
         if (this.orbit) {
             this.orbit.scale.multiplyScalar(this.dist)
             this.orbit.position.set(
@@ -49,7 +51,7 @@ export class Planet extends CelestialObject {
                 -base.z
             )
         }
-    
+
         if (this.texts) {
             const l = this.texts.length
             this.texts.forEach((txt) => {
@@ -62,8 +64,6 @@ export class Planet extends CelestialObject {
 
         this._satellites?.init()
 
-        console.log(this.parent?.name)
-        console.log(this.name)
         this.meshGrp.updateMatrixWorld()
         this.masterGrp.updateMatrixWorld()
         this.topGrp.updateMatrixWorld()
@@ -75,7 +75,7 @@ export class Planet extends CelestialObject {
         //     this.parent.masterGrp.getWorldPosition(outWorldPos)
         //     this.topGrp.position.copy(outWorldPos)
         // }
-        
+
         // Atmo direction
         const vec = (this.atmo?.material as THREE.ShaderMaterial).uniforms.viewVector.value
         this.atmo?.getWorldPosition(outWorldPos)
@@ -91,19 +91,21 @@ export class Planet extends CelestialObject {
             this.topGrp.rotation.y += orbVal;
         }
 
-        // Sprite scaling
-        world.cam.active.getWorldPosition(camWorldPos)
-        this.masterGrp.getWorldPosition(masterGrpWorldPos)
-        const dist = masterGrpWorldPos.distanceTo(camWorldPos)
-        this.sprite.scale.setScalar(dist/50)
+        if (!this.isSatellite) {
+            // Sprite scaling
+            world.cam.active.getWorldPosition(camWorldPos)
+            this.masterGrp.getWorldPosition(masterGrpWorldPos)
+            const dist = masterGrpWorldPos.distanceTo(camWorldPos)
+            this.sprite.scale.setScalar(dist / 50)
+
+            // Distance visibility
+            this.sprite.visible = dist > 5000 ? true : false
+            this.meshGrp.visible = dist < 10000 ? true : false
+            this.texts.map(t => t.visible = dist < 10000 ? true : false)
+        }
 
         // Satellites Updates
         this._satellites?.update(world)
-
-        // Distance visibility
-        this.sprite.visible = dist > 5000 ? true: false
-        this.meshGrp.visible = dist < 10000 ? true: false
-        this.texts.map(t => t.visible = dist < 10000 ? true: false)
 
     }
 }

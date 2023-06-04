@@ -129,6 +129,7 @@ export class World {
             const target = this.dblclickTarget();
             if (!target) return
             const obj = this.curSystem.getById(target.userData["id"])
+            console.log(obj)
             this.cam.setFollowTarget(obj)
             this.cam.activateThird()
             this.cam.third2Free()
@@ -186,7 +187,7 @@ export class World {
     // Helper methods
     public dblclickTarget() {
         this.raycaster.setFromCamera(this.clickPointer, this.cam.active);
-        const intersects = this.raycaster.intersectObjects(this.scene.children);
+        const intersects = this.raycaster.intersectObjects(this.curSystem.topGrp.children);
         this.clickPointer.set(Infinity, Infinity)
 
         if (intersects.length === 0) return undefined

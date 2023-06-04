@@ -39,7 +39,9 @@ export interface SunJson extends CelestialData {
     parent?: string,
     tilt: number,
     distanceToParent?: number,
-    draw: DrawData
+    draw: DrawData,
+    highTemp: number,
+    lowTemp: number
 }
 
 export interface PlanetJson extends CelestialData {

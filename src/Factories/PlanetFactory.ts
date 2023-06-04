@@ -13,7 +13,7 @@ import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
 
 
-export default function build(data: PlanetJson, parent?: CelestialObject, isSatellite=false) {
+export default function build(data: PlanetJson, parent?: CelestialObject, isSatellite = false) {
     const [mesh, atmo] = build_sphere_mesh_and_atmo(
         new THREE.Color(parseInt(data.draw.glowColor)),
         data.draw.glowIntensity,
@@ -23,28 +23,32 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
         data.name
     )
 
-    const orbit = build_orbit(data.draw)
-    const texts = build_texts(data.texts)
-
-    const map = new THREE.TextureLoader().load('/diamond-solid.svg');
-    const material = new THREE.SpriteMaterial({ map: map });
-    const sprite = new THREE.Sprite(material);
-    sprite.position.y = data.draw.radius + (data.draw.radius / 3)
+    const masterGrp = new THREE.Group()
+    masterGrp.name = `${data.name}_masterGrp`
 
     const meshGrp = new THREE.Group()
     meshGrp.name = `${data.name}_meshGrp`
     meshGrp.add(mesh)
     meshGrp.add(atmo)
-
-    const masterGrp = new THREE.Group()
-    masterGrp.name = `${data.name}_masterGrp`
     masterGrp.add(meshGrp)
+
+    const orbit = build_orbit(data.draw)
     masterGrp.add(orbit)
-    masterGrp.add(sprite)
+
+    const texts = build_texts(data.texts)
     texts.forEach((t) => {
         masterGrp.add(t)
         t.sync()
     })
+    
+    let sprite
+    if (!isSatellite) {
+        const map = new THREE.TextureLoader().load('/diamond-solid.svg');
+        const material = new THREE.SpriteMaterial({ map: map });
+        sprite = new THREE.Sprite(material);
+        sprite.position.y = data.draw.radius + (data.draw.radius / 3)
+        masterGrp.add(sprite)
+    }
 
     const topGrp = new THREE.Group()
     topGrp.name = `${data.name}_topGrp`

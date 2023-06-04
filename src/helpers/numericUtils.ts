@@ -55,7 +55,6 @@ export const randomizeMatrix = function () {
     return function (matrix: THREE.Matrix4, stats: RandStats) {
 
         const [x, y, z] = randSpherePointExcludes(stats.distanceStart, stats.distanceEnd)
-        // console.log(x,y,z)
         position.x = x
         position.y = y
         position.z = z

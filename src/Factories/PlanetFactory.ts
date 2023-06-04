@@ -4,7 +4,7 @@ import { Text } from 'troika-three-text';
 import build_orbit from "./OrbitFactory";
 import { Planet } from "../Models/Planet";
 import { CelestialObject } from "../Models/Celestial";
-import { uuidv4 } from "../helpers/cameraUtils";
+import { uuidv4 } from "../helpers/utils";
 import { Internal3DObject } from "../interfaces";
 import { PlanetJson } from "../jsonInterfaces";
 import satelliteFactory from "./SatelliteFactory"

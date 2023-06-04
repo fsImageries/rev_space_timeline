@@ -28,10 +28,6 @@ export class Planet extends CelestialObject {
         const base = this.parent ? this.parent.masterGrp.position.clone() : new THREE.Vector3()
         const idlePos = new THREE.Vector3(0, 0, -this.dist + this.radius * 6)
         const idlePosAdd = new THREE.Vector3(0, 0, this.radius * 6)
-        if (this.name == "marcosEye") {
-            console.log(this.parent.name)
-            console.log(this.parent.masterGrp.position)
-        }
 
         base.z = -this.dist
 

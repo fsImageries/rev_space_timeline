@@ -15,11 +15,6 @@ export default async function buildAsync(data: SystemJson) {
         return planetFactory(d, parent.length == 0 ? undefined : parent[0])
     })
 
-    // planets.forEach((planet) => {
-    //     console.log(planet.name, planet.parent.name)
-    // })
-    
-
     const oortParent = isSingleSun ? suns[0] : suns.reduce((acc, cur) => acc.name == data.oortCloud.parent ? acc : cur)
     const oort = await oortFactoryAsync(data.oortCloud, oortParent)
     

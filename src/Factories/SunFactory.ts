@@ -3,7 +3,7 @@ import * as THREE from "three"
 import sunFrag from "./../glsl/sun_frag.glsl?raw"
 import sunVert from "./../glsl/sun_vert.glsl?raw"
 import { Sun } from "../Models/Sun"
-import { uuidv4 } from "../helpers/cameraUtils";
+import { uuidv4 } from "../helpers/utils";
 import { Internal3DObject } from "../interfaces"
 import { SunJson } from "../jsonInterfaces";
 

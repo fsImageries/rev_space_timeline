@@ -1,8 +1,8 @@
 import * as THREE from "three"
 import GUI from 'lil-gui'
 
-import * as cameraUtils from "../helpers/cameraUtils"
-import { resizeRendererToDisplaySize } from './../helpers/responsiveness'
+import {getMasterParent} from "../helpers/utils"
+import { resizeRendererToDisplaySize } from './../helpers/utils'
 import { System } from "./System";
 import Constants from "../helpers/Constants"
 import { Camera } from "./Camera"
@@ -193,7 +193,7 @@ export class World {
         if (intersects.length === 0) return undefined
 
         const obj = intersects[0].object
-        return cameraUtils.getMasterParent(obj)
+        return getMasterParent(obj)
     }
 
     public topView() {

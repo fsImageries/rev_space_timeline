@@ -7,7 +7,6 @@ export default function build(data: DrawData) {
 
     const radius = 1;
     const len = data.orbLen ? data.orbLen : 180
-    console.log(len)
     for (let i = 0; i <= len; i++) {
         points.push(new THREE.Vector3(radius* Math.sin(i * DEG2RAD), radius * Math.cos(i * DEG2RAD), 0));
     }

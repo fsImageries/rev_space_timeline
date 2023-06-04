@@ -40,6 +40,8 @@ export class Planet extends CelestialObject {
         this.masterGrp.userData["idleAdd"] = idlePosAdd;
         this.masterGrp.userData["dist"] = this.dist;
         this.masterGrp.userData["id"] = this.id;
+
+        this.masterGrp.traverse(child=>child.userData["id"] = this.id)
     
         if (this.orbit) {
             this.orbit.scale.multiplyScalar(this.dist)

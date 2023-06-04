@@ -127,6 +127,7 @@ export class World {
             this.clickPointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
             const target = this.dblclickTarget();
+            console.log(target)
             if (!target) return
             const obj = this.curSystem.getById(target.userData["id"])
             this.cam.setFollowTarget(obj)
@@ -186,7 +187,7 @@ export class World {
     // Helper methods
     public dblclickTarget() {
         this.raycaster.setFromCamera(this.clickPointer, this.cam.active);
-        const intersects = this.raycaster.intersectObjects(this.scene.children);
+        const intersects = this.raycaster.intersectObjects(this.curSystem.topGrp.children);
         this.clickPointer.set(Infinity, Infinity)
 
         if (intersects.length === 0) return undefined

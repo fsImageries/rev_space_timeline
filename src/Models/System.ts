@@ -14,6 +14,8 @@ interface Params {
 }
 
 export class System {
+    private _allCelestialObjects: CelestialObject[];
+
     public name: string;
 
     public topGrp: THREE.Group;
@@ -28,17 +30,12 @@ export class System {
         this.suns = data.suns
         this.planets = data.planets
         this.oort = data.oort
+        this._allCelestialObjects = this.suns.concat(this.planets);
 
         // Add all meshes to topGrp
         this.topGrp = new THREE.Group()
         this.topGrp.add(this.oort.points)
-        this.allCelestialObjects.forEach(obj => {
-            this.topGrp.add(obj.topGrp)
-            // if (obj instanceof Planet && obj.children) {
-            //     obj.children.forEach(child=>console.log(child.topGrp.position))
-            //     obj.children.forEach(child => this.topGrp.add(child.topGrp))
-            // }
-        })
+        this.allCelestialObjects.forEach(obj => this.topGrp.add(obj.topGrp))
 
         this.name = data.name
         this.isSingleSun = data.isSingleSun
@@ -46,9 +43,9 @@ export class System {
 
         // this.allCelestialObjects.forEach(obj => obj.visible = false)
     }
-    
+
     public get allCelestialObjects(): CelestialObject[] {
-        return this.suns.concat(this.planets);
+        return this._allCelestialObjects;
     }
 
     private getRadius() {
@@ -64,7 +61,7 @@ export class System {
     }
 
     public init() {
-        this.planets.forEach((obj) => obj.init())
+        (this.allCelestialObjects as (Sun | Planet)[]).forEach((obj) => obj.init())
         this.oort.init()
         this.radius = this.getRadius()
     }

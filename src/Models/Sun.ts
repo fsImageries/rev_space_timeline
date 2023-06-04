@@ -3,8 +3,6 @@ import { CelestialObject } from "./Celestial";
 import { CelestialParams } from "../interfaces";
 
 import { World } from "./World";
-import Constants from "../helpers/Constants";
-
 
 export class Sun extends CelestialObject {
 

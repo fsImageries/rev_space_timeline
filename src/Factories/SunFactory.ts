@@ -11,8 +11,10 @@ import { SunJson } from "../jsonInterfaces";
 export default function build(data:SunJson) {
     const mat = new THREE.ShaderMaterial({
         uniforms: {
-            time: { value: 0.0 },
-            resolution: { value: new THREE.Vector3() }
+            time: { value: 1.0 },
+            tex: { value: new THREE.TextureLoader().load("/epsilonEridani/abstract1.jpg")},
+            resolution: { value: new THREE.Vector3() },
+            u_resolution: {value: new THREE.Vector2(window.innerHeight, window.innerWidth)},
         },
         vertexShader: sunVert,
         fragmentShader: sunFrag

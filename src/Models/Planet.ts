@@ -39,14 +39,12 @@ export class Planet extends CelestialObject {
 
         this.masterGrp.traverse(child => child.userData["id"] = this.id)
 
-        if (this.orbit) {
-            this.orbit.scale.multiplyScalar(this.dist)
-            this.orbit.position.set(
-                -base.x,
-                -base.y,
-                -base.z
-            )
-        }
+        this.orbit.scale.multiplyScalar(this.dist)
+        this.orbit.position.set(
+            -base.x,
+            -base.y,
+            -base.z
+        )
 
         if (this.texts) {
             const l = this.texts.length
@@ -59,7 +57,10 @@ export class Planet extends CelestialObject {
         }
 
         if (this.infoSprite) {
-            this.infoSprite.position.copy(base).x += this.radius + 1
+            const side = this.orbit.scale.x > 0 ? -1 : 1
+            const scale = this.radius/10
+            this.infoSprite.scale.setScalar(scale)
+            this.infoSprite.position.copy(base).x += (this.radius + scale) * side
         }
 
         this._satellites?.init()
@@ -91,9 +92,9 @@ export class Planet extends CelestialObject {
             this.topGrp.rotation.y += orbVal;
         }
 
+        this.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
         if (!this.isSatellite || this.texts) {
             world.cam.active.getWorldPosition(Constants.__OUT_CAM_POS)
-            this.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
             const dist = Constants.__OUT_WORLD__POS.distanceTo(Constants.__OUT_CAM_POS)
 
             if (!this.isSatellite) {
@@ -108,7 +109,6 @@ export class Planet extends CelestialObject {
             if (this.texts)
                 this.texts.map(t => t.visible = dist < 10000 ? true : false)
         }
-
 
         // Satellites Updates
         this._satellites?.update(world)

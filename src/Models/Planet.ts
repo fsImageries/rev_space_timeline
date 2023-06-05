@@ -58,6 +58,10 @@ export class Planet extends CelestialObject {
             })
         }
 
+        if (this.infoSprite) {
+            this.infoSprite.position.copy(base).x += this.radius + 1
+        }
+
         this._satellites?.init()
 
         this.meshGrp.updateMatrixWorld()
@@ -87,18 +91,24 @@ export class Planet extends CelestialObject {
             this.topGrp.rotation.y += orbVal;
         }
 
-        if (!this.isSatellite) {
-            // Sprite scaling
-            world.cam.active.getWorldPosition(camWorldPos)
-            this.masterGrp.getWorldPosition(masterGrpWorldPos)
-            const dist = masterGrpWorldPos.distanceTo(camWorldPos)
-            this.sprite.scale.setScalar(dist / 50)
+        if (!this.isSatellite || this.texts) {
+            world.cam.active.getWorldPosition(Constants.__OUT_CAM_POS)
+            this.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
+            const dist = Constants.__OUT_WORLD__POS.distanceTo(Constants.__OUT_CAM_POS)
 
-            // Distance visibility
-            this.sprite.visible = dist > 5000 ? true : false
-            this.meshGrp.visible = dist < 10000 ? true : false
-            this.texts.map(t => t.visible = dist < 10000 ? true : false)
+            if (!this.isSatellite) {
+                // Sprite scaling
+                this.markerSprite.scale.setScalar(dist / 50)
+
+                // Distance visibility
+                this.markerSprite.visible = dist > 5000 ? true : false
+                this.meshGrp.visible = dist < 10000 ? true : false
+            }
+
+            if (this.texts)
+                this.texts.map(t => t.visible = dist < 10000 ? true : false)
         }
+
 
         // Satellites Updates
         this._satellites?.update(world)

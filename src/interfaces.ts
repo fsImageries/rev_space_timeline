@@ -45,5 +45,6 @@ export interface Internal3DObject {
     atmo?: THREE.Mesh;
     orbit?: THREE.Object3D;
     texts?: THREE.Mesh[];
-    sprite?: THREE.Object3D;
+    markerSprite?: THREE.Object3D;
+    infoSprite?: THREE.Object3D;
 }

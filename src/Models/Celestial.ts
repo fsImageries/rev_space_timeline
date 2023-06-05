@@ -83,8 +83,12 @@ export class CelestialObject {
         return this._object.texts;
     }
 
-    public get sprite(): THREE.Object3D | undefined {
-        return this._object.sprite;
+    public get markerSprite(): THREE.Object3D | undefined {
+        return this._object.markerSprite;
+    }
+
+    public get infoSprite(): THREE.Object3D | undefined {
+        return this._object.infoSprite;
     }
 
     public get parent(): CelestialObject | undefined {

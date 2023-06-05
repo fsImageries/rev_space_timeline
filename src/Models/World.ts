@@ -116,6 +116,7 @@ export class World {
             this.clickPointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
             const target = this.dblclickTarget();
+            console.log(target)
             if (!target) return
             const obj = this.curSystem.getById(target.userData["id"])
             if (!obj) return

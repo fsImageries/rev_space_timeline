@@ -6,6 +6,10 @@ export function getMasterParent(target: THREE.Object3D) {
             if (target.parent instanceof THREE.Group) {
                 target = target.parent as THREE.Object3D
                 if (target.name.includes("_masterGrp")) break
+                if (target.name.includes("_topGrp")) {
+                    target = target.children.reduce((acc, cur) => acc.name.includes("_masterGrp") ? acc : cur)
+                    break;
+                }
             } else break
         }
     }

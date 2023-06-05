@@ -50,6 +50,7 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
     let infoSprite
     if (data.texts) {
         infoSprite = infoSpriteFactory()
+        infoSprite.name = `${data.name}_infoSprite`
         topGrp.add(infoSprite)
     }
     

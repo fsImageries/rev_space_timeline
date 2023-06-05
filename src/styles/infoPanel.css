@@ -1,0 +1,44 @@
+:root {
+    --main-text-color: rgb(154, 160, 166);
+    color: var(--main-text-color);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+#parent {
+    position: absolute;
+    background-color: rgba(32, 33, 36, .9);
+    width: 50vw;
+    height: 98vh;
+    padding: 0;
+    /* margin-left: 1vh; */
+    overflow: hidden;
+    border-radius: 1vh;
+    margin: 1%;
+    opacity: 0;
+
+    #child {
+        #title {
+            padding: 1%;
+            font-weight: bold;
+            font-size: 1.6rem;
+
+            #title_sun {
+                display: inline-block;
+                font-size: 1rem;
+            }
+        }
+
+        #text {
+            height: 90vh;
+            overflow-y: scroll;
+            border-top: solid white;
+            border-bottom: solid white;
+            padding: 1% 0 0 1%;
+            line-height: 1.7rem;
+        }
+
+        #footer {
+            padding: 0.25% 0 0 1%;
+        }
+    }
+}

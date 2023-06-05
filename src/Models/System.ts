@@ -4,6 +4,7 @@ import { World } from "./World"
 import { Sun } from "./Sun";
 import { CelestialObject } from "./Celestial";
 import Oort from "./Oort";
+import Constants from "../helpers/Constants";
 
 interface Params {
     suns: Sun[];
@@ -30,7 +31,7 @@ export class System {
         this.suns = data.suns
         this.planets = data.planets
         this.oort = data.oort
-        this._allCelestialObjects = this.suns.concat(this.planets);
+        this._allCelestialObjects = [...this.suns, ...this.planets];
 
         // Add all meshes to topGrp
         this.topGrp = new THREE.Group()
@@ -40,7 +41,6 @@ export class System {
         this.name = data.name
         this.isSingleSun = data.isSingleSun
         this.radius = this.getRadius()
-
         // this.allCelestialObjects.forEach(obj => obj.visible = false)
     }
 
@@ -49,7 +49,7 @@ export class System {
     }
 
     private getRadius() {
-        return this.suns.concat(this.planets).reduce((acc, cur) => {
+        return this.allCelestialObjects.reduce((acc, cur) => {
             const n = acc.dist > cur.dist ? acc : cur
             return n
         }).dist
@@ -84,14 +84,15 @@ export class System {
             return false
         })
         return found
-        // const arr = (this.suns).concat(this.planets).filter(obj => obj.id === id)
-        // return !arr ? undefined : arr[0]
     }
 
     public init() {
-        (this.allCelestialObjects as (Sun | Planet)[]).forEach((obj) => obj.init())
+        this.radius = this.getRadius();
+        (this.allCelestialObjects as (Sun | Planet)[]).forEach((obj) => {
+            if (obj instanceof Sun) obj.lightRadius = (this.oort.distanceEnd/ Constants.DISTANCE_SCALE)
+            obj.init()
+        })
         this.oort.init()
-        this.radius = this.getRadius()
     }
 
     public initWorld(world: World) {

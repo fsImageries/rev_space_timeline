@@ -106,19 +106,8 @@ export class World {
         worldFolder.add(this, "followTarget", planets).name("Camera Target")
 
         // Lights
-        // TODO set lights for the sun(s)
-        // const pointLight = new THREE.PointLight('#ffdca8', 10.2, 100)
-        const pointLight = new THREE.PointLight('#ffffff', 1, 1e+6)
-        pointLight.castShadow = true
-        pointLight.shadow.radius = 4
-        pointLight.shadow.camera.near = 0.5
-        pointLight.shadow.camera.far = 100000
-        pointLight.shadow.mapSize.width = 2048
-        pointLight.shadow.mapSize.height = 2048
-        this.scene.add(pointLight)
-
-        const pointLight2 = new THREE.AmbientLight('#ffdca8', .1)
-        this.scene.add(pointLight2)
+        // const ambientLight = new THREE.AmbientLight('#ffdca8', .1)
+        // this.scene.add(ambientLight)
     }
 
     public initListeners() {
@@ -129,7 +118,7 @@ export class World {
             const target = this.dblclickTarget();
             if (!target) return
             const obj = this.curSystem.getById(target.userData["id"])
-            console.log(obj)
+            if (!obj) return
             this.cam.setFollowTarget(obj)
             this.cam.activateThird()
             this.cam.third2Free()

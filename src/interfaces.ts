@@ -2,6 +2,8 @@ import { CelestialObject } from "./Models/Celestial";
 import CelestialBase from "./Models/CelestialBase";
 import { Satellites } from "./Models/Satellites";
 import Internal3DObject2 from "./Models/Internal3DObject";
+import SystemObject from "./Models/SystemObject";
+import Oort from "./Models/Oort";
 
 export interface RandStats {
     range: number;
@@ -80,4 +82,11 @@ export interface SystemObjectParams {
     data: CelestialBase;
     object: Internal3DObject2;
     satellites?: Satellites;
+}
+
+export interface SystemParams {
+    objects: SystemObject[];
+    oort: Oort;
+    name: string;
+    isSingleSun: boolean;
 }

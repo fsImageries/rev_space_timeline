@@ -74,7 +74,7 @@ export class System {
         })
     }
 
-    public getById(id: string): Sun | Planet | undefined {
+    public getById(id: string): (Sun | Planet | undefined) {
         let found;
         this.traverse((obj:any) => {
             if (obj.id && obj.id === id) {

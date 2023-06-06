@@ -1,13 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/threejs-icon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Revelation Space - Timeline</title>
-  </head>
-  <body>
-    <canvas id="main"></canvas>
-    <script type="module" src="/src/app.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/threejs-icon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Revelation Space - Timeline</title>
+</head>
+
+<body>
+  <canvas id="main"></canvas>
+  <style>
+
+  </style>
+  <div id="parent" class="lil-gui allow-touch-styles root autoPlace">
+    <div id="child" class="lil-gui">
+      <div id="title_div" class="lil-gui">
+        <div id="title" class="lil-gui">Yellowstone</div>
+        <div id="title_sep" class="lil-gui">-</div>
+        <div id="title_parent" class="lil-gui">Epsilon Eridani</div>
+      </div>
+      <div id="text" class="lil-gui">
+        2351
+        - Dan Sylveste born in Chasm City, Yellowstone
+        <br>
+        2372
+        - The Eighty
+        <br>
+        2405
+        - Departure of Sylveste expedition to Lascaille's Shroud
+        <br>
+        2415
+        - Clockworker incident
+        <br>
+        2427
+        - Aurora crisis
+      </div>
+      <!-- <div id="footer" class="lil-gui">x: 0.23 y: 1.25 z: 12.1</div> -->
+    </div>
+  </div>
+  <script type="module" src="/src/app.ts"></script>
+</body>
+
 </html>

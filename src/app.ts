@@ -2,7 +2,8 @@ import { World } from "./Models/World";
 import { SystemJsonData } from "./jsonInterfaces";
 import systemFactory from "./Factories/SystemFactory";
 import celestialData from "./object_data.yaml"
-import './style.css'
+import './styles/baseStyle.css'
+import './styles/infoPanel.css'
 
 
 new Promise((resolve) => {resolve(null)}).then(async () => {

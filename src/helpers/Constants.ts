@@ -1,4 +1,4 @@
-import { Vector3 } from "three"
+import { Vector3, TextureLoader } from "three"
 
 const Constants = {
     DISTANCE_SCALE : 3000000,
@@ -17,7 +17,8 @@ const Constants = {
     CELESTIAL_ORB: true,
 
     __OUT_WORLD__POS: new Vector3(),
-    __OUT_CAM_POS: new Vector3()
+    __OUT_CAM_POS: new Vector3(),
+    __TEX_LOADER: new TextureLoader(),
 }
 
 export default Constants

@@ -8,6 +8,7 @@ import { uuidv4 } from "../helpers/utils";
 import { Internal3DObject } from "../interfaces";
 import { PlanetJson } from "../jsonInterfaces";
 import satelliteFactory from "./SatelliteFactory"
+import infoSpriteFactory from "./InfoSpriteFactory";
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
@@ -26,6 +27,10 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
     const masterGrp = new THREE.Group()
     masterGrp.name = `${data.name}_masterGrp`
 
+    const topGrp = new THREE.Group()
+    topGrp.name = `${data.name}_topGrp`
+    topGrp.add(masterGrp)
+
     const meshGrp = new THREE.Group()
     meshGrp.name = `${data.name}_meshGrp`
     meshGrp.add(mesh)
@@ -35,11 +40,19 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
     const orbit = build_orbit(data.draw)
     masterGrp.add(orbit)
 
-    const texts = build_texts(data.texts)
-    texts.forEach((t) => {
-        masterGrp.add(t)
-        t.sync()
-    })
+    let texts;
+    // const texts = build_texts(data.texts)
+    // texts.forEach((t) => {
+    //     masterGrp.add(t)
+    //     t.sync()
+    // })
+
+    let infoSprite
+    if (data.texts) {
+        infoSprite = infoSpriteFactory()
+        infoSprite.name = `${data.name}_infoSprite`
+        topGrp.add(infoSprite)
+    }
     
     let sprite
     if (!isSatellite) {
@@ -50,11 +63,7 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
         masterGrp.add(sprite)
     }
 
-    const topGrp = new THREE.Group()
-    topGrp.name = `${data.name}_topGrp`
-    topGrp.add(masterGrp)
-
-    const object3d: Internal3DObject = { topGrp, masterGrp, meshGrp, mesh, atmo, texts, orbit, sprite }
+    const object3d: Internal3DObject = { topGrp, masterGrp, meshGrp, mesh, atmo, texts, orbit, markerSprite: sprite, infoSprite }
 
     let satellites
     if ("children" in data) {
@@ -76,6 +85,7 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
         id: uuidv4(),
         satellites: satellites,
         isSatellite: isSatellite,
+        texts: data.texts
     })
 }
 
@@ -126,7 +136,7 @@ function build_sphere_mesh_and_atmo(
     return [mesh, atmo]
 }
 
-function build_texts(texts: string[]) {
+export function build_texts(texts: string[]) {
     return texts.map((txt, idx) => {
         const textMesh = new Text()
         textMesh.text = txt

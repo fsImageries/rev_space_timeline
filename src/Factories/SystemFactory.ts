@@ -11,7 +11,7 @@ export default async function buildAsync(data: SystemJson) {
     
     const suns = data.suns.map((d) => sunFactory(d))
     const planets = data.planets.map((d) => {
-        let parent = suns.filter(s => s.name === d.parent)
+        const parent = suns.filter(s => s.name === d.parent)
         return planetFactory(d, parent.length == 0 ? undefined : parent[0])
     })
 

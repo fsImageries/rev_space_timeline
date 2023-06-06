@@ -1,31 +1,14 @@
 import * as THREE from "three";
-import { CelestialChildrenJson, PlanetJson } from "../jsonInterfaces";
-import { inSphere } from "../helpers/numericUtils";
+import { SystemObjectData } from "../jsonInterfaces";
 import { randFloat } from "three/src/math/MathUtils";
-import planetFactory from "./PlanetFactory";
-import { Satellites } from "../Models/Satellites";
-import { satelliteParticles } from "../Models/SatelliteParticles";
+import { inSphere } from "../helpers/numericUtils";
+import CelestialBase from "../Models/CelestialBase";
+import { uuidv4 } from "../helpers/utils";
+import Internal3DObject from "../Models/Internal3DObject";
+import { ParticleRing } from "../Models/ParticleRing";
 
 
-export default function build(data: PlanetJson): Satellites {
-    const children = []
-    for (const d of data.children) {
-        switch (d.type) {
-            case "particles":
-                children.push(new satelliteParticles(build_particle_satellites(d, data.draw.radius), d.data.orbitalPeriod))
-                break;
-    
-            case "planet":
-                const planet = planetFactory(d.data as PlanetJson, undefined, true)
-                planet.invertAngularOrbVel()
-                children.push(planet)
-                break;
-        }
-    }
-    return new Satellites(children)    
-}
-
-function build_particle_satellites(data: CelestialChildrenJson, radius:number) {
+export default function build(data: SystemObjectData) {
     let material = new THREE.ShaderMaterial({
         transparent: true,
         depthWrite: false,
@@ -56,7 +39,7 @@ function build_particle_satellites(data: CelestialChildrenJson, radius:number) {
     
     const geometry = new THREE.BufferGeometry()
     const points = new THREE.Points(geometry, material)
-    radius = radius * data.draw.radiusMult
+    const radius = data.radius * data.draw.radiusMult
 
     let vertexs = []
     const base = 360 / data.draw.count
@@ -69,7 +52,33 @@ function build_particle_satellites(data: CelestialChildrenJson, radius:number) {
     vertexs = relaxTorusPoints(vertexs, data.draw.height)
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertexs, 3))
 
-    return points
+    const parentGrp = new THREE.Group()
+    parentGrp.add(points)
+    parentGrp.name = `${data.name}_parentGrp`
+    points.name = `${data.name}_masterGrp`
+
+    const celestialData = new CelestialBase({
+        id: uuidv4(),
+        name: data.name,
+        type: data.type,
+        tilt: data.tilt,
+        parent: data.parent,
+        radius: data.radius,
+        texts: data.texts,
+        orbitalPeriod: data.orbitalPeriod,
+        rotationPeriod: data.rotationPeriod,
+        distanceToParent: data.distanceToParent
+    })
+
+    const internalObject = new Internal3DObject({
+        parentGrp,
+        masterGrp: points,
+    })
+
+    return new ParticleRing({
+        data: celestialData,
+        object: internalObject
+    })
 }
 
 function relaxTorusPoints(points: number[], rad: number = 1) {

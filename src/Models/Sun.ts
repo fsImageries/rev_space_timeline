@@ -1,14 +1,16 @@
 import * as THREE from "three"
 import { CelestialObject } from "./Celestial";
-import { CelestialParams } from "../interfaces";
+import { CelestialParams, SystemObjectParams } from "../interfaces";
 
 import { World } from "./World";
+import CelestialBase from "./CelestialBase";
+import SystemObject from "./SystemObject";
 
-export class Sun extends CelestialObject {
+export class Sun extends SystemObject {
     private light: THREE.PointLight;
     public lightRadius: number;
 
-    constructor(data: CelestialParams) {
+    constructor(data: SystemObjectParams) {
         super(data);
 
         // TODO implement coloring on yaml level
@@ -20,15 +22,17 @@ export class Sun extends CelestialObject {
         this.light.shadow.camera.far = 100000
         this.light.shadow.mapSize.width = 2048
         this.light.shadow.mapSize.height = 2048
-        this.masterGrp.add(this.light)
+        this.object.masterGrp.add(this.light)
     }
 
     public init() {
-        this.masterGrp.traverse(child=>child.userData["id"] = this.id)
+        this.object.masterGrp.traverse(child=>child.userData["id"] = this.data.id)
         this.light.distance = this.lightRadius
+        this.initSatellites(this)
     }
 
-    public update(_world:World) {
-        ((this.mesh as THREE.Mesh).material as THREE.ShaderMaterial).uniforms.time.value += .05;
+    public update(world:World) {
+        ((this.object.mesh as THREE.Mesh).material as THREE.ShaderMaterial).uniforms.time.value += .05;
+        this.updateSatellites(world, this)
     }
 }

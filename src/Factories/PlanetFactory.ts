@@ -3,18 +3,17 @@ import { Text } from 'troika-three-text';
 
 import build_orbit from "./OrbitFactory";
 import { Planet } from "../Models/Planet";
-import { CelestialObject } from "../Models/Celestial";
 import { uuidv4 } from "../helpers/utils";
-import { Internal3DObject } from "../interfaces";
-import { PlanetJson } from "../jsonInterfaces";
-import satelliteFactory from "./SatelliteFactory"
+import { SystemObjectData } from "../jsonInterfaces";
 import infoSpriteFactory from "./InfoSpriteFactory";
 
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
+import CelestialBase from "../Models/CelestialBase";
+import Internal3DObject from "../Models/Internal3DObject";
 
 
-export default function build(data: PlanetJson, parent?: CelestialObject, isSatellite = false) {
+export default function build(data: SystemObjectData) {
     const [mesh, atmo] = build_sphere_mesh_and_atmo(
         new THREE.Color(parseInt(data.draw.glowColor)),
         data.draw.glowIntensity,
@@ -27,9 +26,9 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
     const masterGrp = new THREE.Group()
     masterGrp.name = `${data.name}_masterGrp`
 
-    const topGrp = new THREE.Group()
-    topGrp.name = `${data.name}_topGrp`
-    topGrp.add(masterGrp)
+    const parentGrp = new THREE.Group()
+    parentGrp.name = `${data.name}_parentGrp`
+    parentGrp.add(masterGrp)
 
     const meshGrp = new THREE.Group()
     meshGrp.name = `${data.name}_meshGrp`
@@ -40,22 +39,15 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
     const orbit = build_orbit(data.draw)
     masterGrp.add(orbit)
 
-    let texts;
-    // const texts = build_texts(data.texts)
-    // texts.forEach((t) => {
-    //     masterGrp.add(t)
-    //     t.sync()
-    // })
-
     let infoSprite
     if (data.texts) {
         infoSprite = infoSpriteFactory()
         infoSprite.name = `${data.name}_infoSprite`
-        topGrp.add(infoSprite)
+        parentGrp.add(infoSprite)
     }
     
     let sprite
-    if (!isSatellite) {
+    if (!data.type.includes("moon")) {
         const map = new THREE.TextureLoader().load('/diamond-solid.svg');
         const material = new THREE.SpriteMaterial({ map: map });
         sprite = new THREE.Sprite(material);
@@ -63,29 +55,39 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
         masterGrp.add(sprite)
     }
 
-    const object3d: Internal3DObject = { topGrp, masterGrp, meshGrp, mesh, atmo, texts, orbit, markerSprite: sprite, infoSprite }
+    // let satellites
+    // if ("children" in data) {
+    //     satellites = satelliteFactory(data)
+    //     satellites.children.forEach(child => masterGrp.add(child.topGrp))
+    // }
 
-    let satellites
-    if ("children" in data) {
-        satellites = satelliteFactory(data)
-        satellites.children.forEach(child => masterGrp.add(child.topGrp))
-    }
+    const celestialData = new CelestialBase({
+        id: uuidv4(),
+        name: data.name,
+        type: data.type,
+        tilt: data.tilt,
+        parent: data.parent,
+        radius: data.radius,
+        texts: data.texts,
+        orbitalPeriod: data.orbitalPeriod,
+        rotationPeriod: data.rotationPeriod,
+        distanceToParent: data.distanceToParent
+    })
+
+    const internalObject = new Internal3DObject({
+        parentGrp,
+        masterGrp,
+        meshGrp,
+        mesh,
+        atmo,
+        orbit,
+        markerSprite: sprite,
+        infoSprite
+    })
 
     return new Planet({
-        name: data.name,
-        glowColor: data.draw.glowColor,
-        glowIntesity: data.draw.glowIntensity,
-        radius: data.draw.radius,
-        rotationPeriod: data.rotationPeriod,
-        orbitalPeriod: data.orbitalPeriod,
-        tilt: data.tilt,
-        distanceToParent: data.distanceToParent,
-        object: object3d,
-        parent: parent,
-        id: uuidv4(),
-        satellites: satellites,
-        isSatellite: isSatellite,
-        texts: data.texts
+        data: celestialData,
+        object: internalObject
     })
 }
 

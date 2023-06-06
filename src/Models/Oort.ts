@@ -1,47 +1,25 @@
 import * as THREE from "three"
-import { OortParams } from "../interfaces";
+import { OortParams, SystemObjectParams } from "../interfaces";
 import Constants from "../helpers/Constants";
 import { randSpherePointExcludes } from "../helpers/numericUtils";
 import { World } from "./World";
+import SystemObject from "./SystemObject";
 
 const PNTCOUNT = 100_000
+const RANGE = 6731900000000
 
 
-export default class Oort {
-    private _distanceStart: number;
-    private _distanceEnd: number;
-    private _points: THREE.Points;
+export default class Oort extends SystemObject {
+    public distanceEnd : number;
 
-    constructor(data: OortParams) {
-        this._distanceStart = data.distanceToParent
-        this._distanceEnd = data.distanceEnd
-        // this._parent = data.parent
-
-        const material = new THREE.PointsMaterial({
-            color: "white",
-            opacity: 0.2,
-            transparent: true
-        })
-        const geometry = new THREE.BufferGeometry()
-        this._points = new THREE.Points(geometry, material)
-    }
-
-    public get distanceStart(): number {
-        return this._distanceStart;
-    }
-
-    public get distanceEnd(): number {
-        return this._distanceEnd;
-    }
-
-    public get points(): THREE.Points {
-        return this._points;
+    constructor(data: SystemObjectParams) {
+        super(data)
+        this.distanceEnd = this.data.distanceToParent + RANGE
     }
 
     public init() {
-        const range = (this._distanceEnd - this._distanceStart) / Constants.DISTANCE_SCALE
-        // const distanceStart= this._distanceStart / Constants.DISTANCE_SCALE
-        const distanceEnd = this._distanceEnd / Constants.DISTANCE_SCALE
+        const range = (this.distanceEnd - this.data.distanceToParent) / Constants.DISTANCE_SCALE
+        const distanceEnd = this.distanceEnd / Constants.DISTANCE_SCALE
 
         const vertexs = []
         for (let i = 0; i < PNTCOUNT; i++) {
@@ -49,7 +27,7 @@ export default class Oort {
             vertexs.push(x, y, z)
         }
 
-        this._points.geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertexs, 3))
+        (this.object.masterGrp as THREE.Points).geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertexs, 3))
     }
 
     public update(_world: World) {

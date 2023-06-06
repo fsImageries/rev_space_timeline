@@ -3,24 +3,22 @@ systems:
 - name: epsilonEridani
   isSingleSun: true
 
-  suns:
+  objects:
   - name: epsilonEridani
-    diameter: 1016656.4
+    type: sun
     radius: 508328.2
     rotationPeriod: 273.6
     orbitalPeriod:
     parent:
     tilt: 0
     distanceToParent:
-    highTemp: 5100
-    lowTemp: 1700
+    highTemp: 5100 # TODO implement into new interfaces
+    lowTemp: 1700 # TODO implement into new interfaces
     draw:
       radius: 1000
 
-  planets:
-
   - name: tangerineDream
-    diameter: 169184.62
+    type: planet
     radius: 84592.31
     rotationPeriod: 24
     orbitalPeriod: 63948
@@ -39,7 +37,7 @@ systems:
       War between Demarchists and Conjoiners starts
 
   - name: yellowstone
-    diameter: 17.2
+    type: planet
     radius: 8.6
     rotationPeriod: 26
     orbitalPeriod: 2453000
@@ -68,66 +66,51 @@ systems:
     - |-
       2427
       Aurora crisis
-    children:
-    - name: glitterband
-      type: particles
-      objectType: points  # TODO if not used in future delete this property
-      data:
-        orbitalPeriod: 62000
-      draw:
-        count: 1000
-        radiusMult: 32
-        distDiv: 450000
-        height: 3
     
-    - name: marcosEye
-      type: "planet"
-      objectType: "mesh"
-      data:
-        name: marcosEye
-        diameter: 3474.8
-        radius: 1737.4
-        rotationPeriod: 6552
-        orbitalPeriod: 6552
-        parent: yellowstone
-        tilt: 0
-        distanceToParent: 508440000
-        draw:
-          albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
-          normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
-          glowColor: '0xffffff'
-          glowIntensity: 0.1
-          radius: 1
-          orbInvert: true
-          orbLen: 45
-        texts:
-        - |-
-          ≈2100
-          Named in honour of Marco Ferris
+    
+  - name: marcosEye
+    type: "moon"
+    radius: 1737.4
+    rotationPeriod: 6552
+    orbitalPeriod: 6552
+    parent: yellowstone
+    tilt: 0
+    distanceToParent: 508440000
+    draw:
+      albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
+      normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      radius: 1
+      orbInvert: true
+      orbLen: 45
+      showMarker: false # TODO Defaults to true
+    texts:
+    - |-
+      ≈2100
+      Named in honour of Marco Ferris
+      
+  - name: glitterband
+    type: particlering
+    radius: 2737.4
+    rotationPeriod: 
+    orbitalPeriod: 62000
+    parent: yellowstone
+    tilt: 0
+    distanceToParent: 1000
+    draw:
+      count: 1000
+      radiusMult: 32
+      distDiv: 450000
+      height: 3
 
-  # # we assume that planet children come last in list to group them properly
-  # - name: marcosEye
-  #   diameter: 3474.8
-  #   radius: 1737.4
-  #   rotationPeriod: 6552
-  #   orbitalPeriod: 6552
-  #   parent: yellowstone
-  #   tilt: 0
-  #   distanceToParent: 508440000
-  #   draw:
-  #     albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
-  #     normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
-  #     glowColor: '0xffffff'
-  #     glowIntensity: 0.1
-  #     radius: 1
-  #   texts:
-  #   - |-
-  #     ≈2100
-  #     Named in honour of Marco Ferris
-
-  oortCloud:
+  - name: oortCloud
+    type: oortcloud
+    radius: 
+    rotationPeriod: 
+    orbitalPeriod: 62000
     parent: epsilonEridani
+    tilt: 0
     distanceToParent: 747990000000
-    distanceEnd: 7479890000000
     draw:
       radius: 2

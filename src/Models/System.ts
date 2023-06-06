@@ -13,18 +13,21 @@ export class System {
     public name: string;
 
     public topGrp: THREE.Group;
-    public objects: SystemObject[];
-    public oort: Oort;
+    public tree: SystemObject[];
+    private flat: SystemObject[];
 
     public isSingleSun: boolean;
     public radius: number;
 
     constructor(data: SystemParams) {
-        this.objects = data.objects
-        this.oort = data.oort
+        this.tree = data.tree
 
         this.name = data.name
         this.isSingleSun = data.isSingleSun
+
+        this.topGrp = new THREE.Group()
+        this.tree.forEach(obj => this.topGrp.add(obj.object.parentGrp))
+        this.flat = data.flat
         // this.radius = this.getRadius()
     }
 
@@ -39,41 +42,13 @@ export class System {
     //     }).dist
     // }
 
-    // public traverse(f:any) {
-    //     let ret;
-
-    //     const traversePlanet = (planet:Planet, f:any) => {
-    //         planet.satellites?.children.forEach(child => {
-    //             ret = f(child)
-    //             if (ret) return
-    //             if (child instanceof Planet) traversePlanet(child, f)
-    //         })
-    //     }
-    //     this.allCelestialObjects.forEach(cel => {
-    //         ret = f(cel)
-    //         if (ret) return
-    //         if (cel instanceof Planet) {
-    //             traversePlanet(cel, f)
-    //         }
-    //     })
-    // }
-
-    // public getById(id: string): (Sun | Planet | undefined) {
-    //     let found;
-    //     this.traverse((obj:any) => {
-    //         if (obj.id && obj.id === id) {
-    //             found = obj
-    //             return true
-    //         }
-    //         return false
-    //     })
-    //     return found
-    // }
+    public getById(id: string): (Sun | Planet | undefined) {
+        return this.flat.reduce((acc, cur) => acc.data.id === id ? acc : cur)
+    }
 
     public init() {
         // this.radius = this.getRadius();
-        this.objects.forEach(obj => obj.init())
-        this.oort.init()
+        this.tree.forEach(obj => obj.init())
     }
 
     public initWorld(world: World) {
@@ -82,7 +57,6 @@ export class System {
     }
 
     public update(world: World) {
-        this.objects.forEach(obj=>obj.update(world))
-        this.oort.update(world)
+        this.tree.forEach(obj=>obj.update(world))
     }
 }

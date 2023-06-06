@@ -3,7 +3,6 @@ import { CelestialObject } from "./Celestial";
 import Constants from "../helpers/Constants";
 import { World } from "./World";
 import { PlanetParams, CelestialParams, SystemObjectParams } from "../interfaces";
-import { Satellites } from "./Satellites";
 import CelestialBase from "./CelestialBase";
 import SystemObject from "./SystemObject";
 
@@ -16,19 +15,18 @@ export class Planet extends SystemObject {
         super(data);
     }
 
-    public init(parent?:SystemObject) {
+    public init(parent?: SystemObject) {
         const base = parent ? parent.object.masterGrp.position.clone() : new THREE.Vector3()
-        const idlePos = new THREE.Vector3(0, 0, -this.dist + this.data.radius * 6)
-        const idlePosAdd = new THREE.Vector3(0, 0, this.data.radius * 6)
+        // const idlePos = new THREE.Vector3(0, 0, -this.dist + this.data.radius * 6)
+        // const idlePosAdd = new THREE.Vector3(0, 0, this.data.radius * 6)
 
         base.z = -this.dist
 
         this.object.masterGrp.position.set(base.x, base.y, base.z)
-        this.object.masterGrp.userData["idlePosition"] = idlePos;
-        this.object.masterGrp.userData["idleAdd"] = idlePosAdd;
-        this.object.masterGrp.userData["dist"] = this.dist;
+        // this.object.masterGrp.userData["idlePosition"] = idlePos;
+        // this.object.masterGrp.userData["idleAdd"] = idlePosAdd;
+        // this.object.masterGrp.userData["dist"] = this.dist;
         this.object.masterGrp.userData["id"] = this.data.id;
-
         this.object.masterGrp.traverse(child => child.userData["id"] = this.data.id)
 
         this.object.orbit.scale.multiplyScalar(this.dist)
@@ -40,19 +38,19 @@ export class Planet extends SystemObject {
 
         if (this.object.infoSprite) {
             const side = this.object.orbit.scale.x > 0 ? -1 : 1
-            const scale = this.data.radius/10
+            const scale = this.data.radius / 10
             this.object.infoSprite.scale.setScalar(scale)
             this.object.infoSprite.position.copy(base).x += (this.data.radius + scale) * side
         }
 
-        this.satellites?.init()
+        this.initSatellites(parent)
 
         this.object.meshGrp.updateMatrixWorld()
         this.object.masterGrp.updateMatrixWorld()
         this.object.parentGrp.updateMatrixWorld()
     }
 
-    public update(world: World, _parent?:SystemObject) {
+    public update(world: World, parent?: SystemObject) {
         // // Update topGrp
         // if (this.parent) {
         //     this.parent.masterGrp.getWorldPosition(outWorldPos)
@@ -78,17 +76,16 @@ export class Planet extends SystemObject {
         world.cam.active.getWorldPosition(Constants.__OUT_CAM_POS)
         const dist = Constants.__OUT_WORLD__POS.distanceTo(Constants.__OUT_CAM_POS)
 
-        
-        // Both only on main planets!
-        // Sprite scaling
-        this.object.markerSprite.scale.setScalar(dist / 50)
-
-        // Distance visibility
-        this.object.markerSprite.visible = dist > 5000 ? true : false
+        if (!this.data.type.includes("moon")) {
+            // Sprite scaling
+            this.object.markerSprite.scale.setScalar(dist / 50)
+            // Distance visibility
+            this.object.markerSprite.visible = dist > 5000 ? true : false
+        }
         this.object.meshGrp.visible = dist < 10000 ? true : false
 
         // Satellites Updates
-        this.satellites?.update(world)
+        this.updateSatellites(world, parent)
 
     }
 }

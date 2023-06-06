@@ -1,6 +1,5 @@
 import { CelestialObject } from "./Models/Celestial";
 import CelestialBase from "./Models/CelestialBase";
-import { Satellites } from "./Models/Satellites";
 import Internal3DObject2 from "./Models/Internal3DObject";
 import SystemObject from "./Models/SystemObject";
 import Oort from "./Models/Oort";
@@ -22,7 +21,7 @@ export interface OortParams {
 export interface PlanetParams {
     glowColor: string;
     glowIntesity: number;
-    satellites?: Satellites;
+    satellites?: any;
 }
 
 export interface CelestialParams {
@@ -59,7 +58,9 @@ export interface CelestialBaseParams {
     // all lengths are given in km
     id: string;
     name: string;
+    type: string;
     tilt?: number;
+    parent?: string;
     radius?: number;
     texts?: string[];
     orbitalPeriod?: number;
@@ -81,12 +82,12 @@ export interface Internal3DObjectParams {
 export interface SystemObjectParams {
     data: CelestialBase;
     object: Internal3DObject2;
-    satellites?: Satellites;
+    satellites?: SystemObject[];
 }
 
 export interface SystemParams {
-    objects: SystemObject[];
-    oort: Oort;
+    tree: SystemObject[];
+    flat: SystemObject[];
     name: string;
     isSingleSun: boolean;
 }

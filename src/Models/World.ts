@@ -104,10 +104,6 @@ export class World {
         worldFolder.add(this.gridhelper, "visible").name("Grid visiblity")
         worldFolder.add(Constants, "CELESTIAL_ORB").name("Main Orb Rotation")
 
-        const planets: any = {}
-        this.curSystem.allCelestialObjects.forEach((obj) => planets[obj.name] = obj.masterGrp)
-        worldFolder.add(this, "followTarget", planets).name("Camera Target")
-
         this.infoPanel = new InfoPanel()
         // Lights
         // const ambientLight = new THREE.AmbientLight('#ffdca8', .1)

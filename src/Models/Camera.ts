@@ -2,6 +2,7 @@ import * as THREE from "three";
 import CameraControls from 'camera-controls';
 import { CelestialObject } from "./Celestial";
 import { World } from "./World";
+import SystemObject from "./SystemObject";
 
 CameraControls.install( { THREE: THREE } );
 let outWorldPosition = new THREE.Vector3();
@@ -18,7 +19,7 @@ export class Camera {
     public thirdCtrl: Controls;
 
     private _isFree: boolean;
-    private _thirdTarget?: CelestialObject;
+    private _thirdTarget?: SystemObject;
 
     constructor(canvas:HTMLCanvasElement, world:World) {
         this.free  = new THREE.PerspectiveCamera(30, canvas.clientWidth / canvas.clientHeight, 0.1, 1e+10)
@@ -43,7 +44,7 @@ export class Camera {
         return this._activeCtrl;
     }
 
-    public get thirdTarget(): CelestialObject {
+    public get thirdTarget(): SystemObject {
         return this._thirdTarget;
     }
 
@@ -53,7 +54,7 @@ export class Camera {
 
     public update(delta:number) {
         if (this.thirdTarget && this.activeCtrl === this.thirdCtrl) {
-            this.thirdTarget.masterGrp.getWorldPosition(outWorldPosition)
+            this.thirdTarget.object.masterGrp.getWorldPosition(outWorldPosition)
             this.thirdCtrl.setTarget(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z, true)
         }
 
@@ -61,10 +62,10 @@ export class Camera {
         this.thirdCtrl.update(delta)
     }
     
-    public setFollowTarget(target:CelestialObject) {
+    public setFollowTarget(target:SystemObject) {
         // if (this.thirdTarget) this.thirdTarget.masterGrp.remove(this.third)
-        target.masterGrp.getWorldPosition(outWorldPosition)
-        this.thirdCtrl.setPosition(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z + target.radius * 4)
+        target.object.masterGrp.getWorldPosition(outWorldPosition)
+        this.thirdCtrl.setPosition(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z + target.data.radius * 4)
         // this.thirdCtrl.lookInDirectionOf(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z)
         // this.thirdCtrl.setOrbitPoint(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z)
         this.thirdCtrl.setTarget(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z, true)

@@ -1,4 +1,5 @@
 import { CelestialObject } from "./Celestial";
+import SystemObject from "./SystemObject";
 
 
 export class InfoPanel {
@@ -26,10 +27,10 @@ export class InfoPanel {
         this._parentPanel.style.opacity = this._visible ? "1" : "0"
     }
 
-    public show(obj: CelestialObject) {
-        this.writeTitle(obj.name, obj.parent?.name)
-        if (obj.rawTexts)
-        this.writeText(obj.rawTexts)
+    public show(obj: SystemObject) {
+        this.writeTitle(obj.data.name, obj.data.parent || "null")
+        if (obj.data.texts)
+        this.writeText(obj.data.texts)
         this.visible = true
     }
 

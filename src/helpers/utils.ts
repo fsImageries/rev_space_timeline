@@ -1,6 +1,6 @@
 import * as THREE from "three"
 
-export function getMasterParent(target: THREE.Object3D) {
+export function getMasterGrp(target: THREE.Object3D) {
     if (!(target.parent instanceof THREE.Scene) && !target.name.includes("_masterGrp")) {
         while (true) {
             if (target.parent instanceof THREE.Group) {

@@ -1,11 +1,12 @@
 import * as THREE from "three"
 import GUI from 'lil-gui'
 
-import {getMasterParent} from "../helpers/utils"
+import {getMasterGrp} from "../helpers/utils"
 import { resizeRendererToDisplaySize } from './../helpers/utils'
 import { System } from "./System";
 import Constants from "../helpers/Constants"
 import { Camera } from "./Camera"
+import { InfoPanel } from "./InfoPanel";
 
 
 let lastTime: number;
@@ -18,9 +19,11 @@ export class World {
     loadingManager: THREE.LoadingManager;
     clock: THREE.Clock;
     delta: number;
-    gui: GUI;
     gridhelper: THREE.GridHelper;
     cam: Camera
+    
+    gui: GUI;
+    infoPanel: InfoPanel
 
     clickPointer: THREE.Vector2;
     raycaster: THREE.Raycaster;
@@ -105,24 +108,36 @@ export class World {
         this.curSystem.allCelestialObjects.forEach((obj) => planets[obj.name] = obj.masterGrp)
         worldFolder.add(this, "followTarget", planets).name("Camera Target")
 
+        this.infoPanel = new InfoPanel()
         // Lights
         // const ambientLight = new THREE.AmbientLight('#ffdca8', .1)
         // this.scene.add(ambientLight)
     }
 
     public initListeners() {
-        const clickHandler = (event: MouseEvent) => {
+        const dblclickHandler = (event: MouseEvent) => {
             this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
             this.clickPointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
-            const target = this.dblclickTarget();
-            console.log(target)
+            let target = this.raycastTarget();
             if (!target) return
+            target = getMasterGrp(target)
             const obj = this.curSystem.getById(target.userData["id"])
             if (!obj) return
             this.cam.setFollowTarget(obj)
             this.cam.activateThird()
             this.cam.third2Free()
+        }
+
+        const clickHandler = (event: MouseEvent) => {
+            this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+            this.clickPointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            let target = this.raycastTarget();
+            if (target && target.name.includes("_infoSprite")) {
+                this.infoPanel.visible = true
+                return
+            } else if (this.infoPanel.visible) this.infoPanel.visible = false
         }
 
         let mousedown = false;
@@ -140,11 +155,11 @@ export class World {
 
         }
 
-        window.addEventListener("dblclick", clickHandler);
+        window.addEventListener("dblclick", dblclickHandler);
+        window.addEventListener("click", clickHandler);
         window.addEventListener("mousedown", mouseDown)
         window.addEventListener("mouseup", mouseUp)
         window.addEventListener("mousemove", mouesMove)
-
     }
 
     // World methods
@@ -175,15 +190,16 @@ export class World {
     }
 
     // Helper methods
-    public dblclickTarget() {
+    public raycastTarget() {
         this.raycaster.setFromCamera(this.clickPointer, this.cam.active);
         const intersects = this.raycaster.intersectObjects(this.curSystem.topGrp.children);
         this.clickPointer.set(Infinity, Infinity)
 
         if (intersects.length === 0) return undefined
 
-        const obj = intersects[0].object
-        return getMasterParent(obj)
+        return intersects[0].object
+        // const obj = intersects[0].object
+        // return getMasterGrp(obj)
     }
 
     public topView() {

@@ -36,7 +36,7 @@ systems:
     texts:
     - |-
       2600
-      •War between Demarchists and Conjoiners starts
+      War between Demarchists and Conjoiners starts
 
   - name: yellowstone
     diameter: 17.2
@@ -55,19 +55,19 @@ systems:
     texts:
     - |-
       2351
-      •Dan Sylveste born in Chasm City, Yellowstone
+      Dan Sylveste born in Chasm City, Yellowstone
     - |-
       2372
-      •The Eighty
+      The Eighty
     - |-
       2405
-      •Departure of Sylveste expedition to Lascaille's Shroud
+      Departure of Sylveste expedition to Lascaille's Shroud
     - |-
       2415
-      •Clockworker incident
+      Clockworker incident
     - |-
       2427
-      •Aurora crisis
+      Aurora crisis
     children:
     - name: glitterband
       type: particles
@@ -103,7 +103,7 @@ systems:
         texts:
         - |-
           ≈2100
-          •Named in honour of Marco Ferris
+          Named in honour of Marco Ferris
 
   # # we assume that planet children come last in list to group them properly
   # - name: marcosEye
@@ -123,7 +123,7 @@ systems:
   #   texts:
   #   - |-
   #     ≈2100
-  #     •Named in honour of Marco Ferris
+  #     Named in honour of Marco Ferris
 
   oortCloud:
     parent: epsilonEridani

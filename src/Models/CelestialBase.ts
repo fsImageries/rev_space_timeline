@@ -1,5 +1,6 @@
 import { CelestialBaseParams } from "../interfaces";
 
+
 export default class CelestialBase {
     public name:                string;
     public tilt:                number;

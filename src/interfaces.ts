@@ -1,5 +1,7 @@
 import { CelestialObject } from "./Models/Celestial";
+import CelestialBase from "./Models/CelestialBase";
 import { Satellites } from "./Models/Satellites";
+import Internal3DObject2 from "./Models/Internal3DObject";
 
 export interface RandStats {
     range: number;
@@ -72,4 +74,10 @@ export interface Internal3DObjectParams {
     orbit?: THREE.Object3D;
     markerSprite?: THREE.Object3D;
     infoSprite?: THREE.Object3D;
+}
+
+export interface SystemObjectParams {
+    data: CelestialBase;
+    object: Internal3DObject2;
+    satellites?: Satellites;
 }

@@ -7,8 +7,6 @@ import { Satellites } from "./Satellites";
 
 
 let outWorldPos = new THREE.Vector3();
-let camWorldPos = new THREE.Vector3();
-let masterGrpWorldPos = new THREE.Vector3();
 
 export class Planet extends CelestialObject {
     private _satellites: Satellites;

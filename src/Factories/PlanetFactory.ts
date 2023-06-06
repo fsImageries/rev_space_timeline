@@ -136,7 +136,7 @@ function build_sphere_mesh_and_atmo(
     return [mesh, atmo]
 }
 
-function build_texts(texts: string[]) {
+export function build_texts(texts: string[]) {
     return texts.map((txt, idx) => {
         const textMesh = new Text()
         textMesh.text = txt

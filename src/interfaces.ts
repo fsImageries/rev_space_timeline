@@ -49,3 +49,27 @@ export interface Internal3DObject {
     markerSprite?: THREE.Object3D;
     infoSprite?: THREE.Object3D;
 }
+
+export interface CelestialBaseParams {
+    // all times are given in hours
+    // all lengths are given in km
+    id: string;
+    name: string;
+    tilt?: number;
+    radius?: number;
+    texts?: string[];
+    orbitalPeriod?: number;
+    rotationPeriod?: number;
+    distanceToParent?: number;
+}
+
+export interface Internal3DObjectParams {
+    parentGrp: THREE.Object3D;
+    masterGrp: THREE.Object3D;
+    meshGrp?: THREE.Object3D;
+    mesh?: THREE.Object3D;
+    atmo?: THREE.Object3D;
+    orbit?: THREE.Object3D;
+    markerSprite?: THREE.Object3D;
+    infoSprite?: THREE.Object3D;
+}

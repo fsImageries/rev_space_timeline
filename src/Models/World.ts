@@ -134,8 +134,11 @@ export class World {
             this.clickPointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
             let target = this.raycastTarget();
+            // console.log(target) // TODO react when something like glitterband is clicked
             if (target && target.name.includes("_infoSprite")) {
-                this.infoPanel.visible = true
+                target = getMasterGrp(target)
+                const obj = this.curSystem.getById(target.userData["id"])
+                this.infoPanel.show(obj)
                 return
             } else if (this.infoPanel.visible) this.infoPanel.visible = false
         }

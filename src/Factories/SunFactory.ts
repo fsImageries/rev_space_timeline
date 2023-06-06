@@ -46,6 +46,6 @@ export default function build(data:SunJson) {
         tilt: data.tilt,
         distanceToParent: data.distanceToParent,
         object: object3d,
-        id: uuidv4()
+        id: uuidv4(),
     })
 }

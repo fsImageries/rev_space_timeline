@@ -21,16 +21,30 @@
     transition: opacity 500ms;
 
     #child {
-        #title {
+        #title_div {
             font-weight: bold;
             font-size: 1rem;
             background: var(--title-background-color);
             color: var(--title-text-color);
-            /* margin: 1%; */
-            
-            #title_sun {
+            display: flex;
+            align-content: center;
+            justify-content: flex-start;
+            flex-direction: row;
+            align-items: flex-end;
+            padding: 1%;
+
+            #title {
+                font-weight: bold;
+                font-size: 1rem;
+            }
+
+            #title_sep {
+                margin: 0 1% 0 1%;
+            }
+
+            #title_parent {
                 display: inline-block;
-                /* font-size: 1rem; */
+                font-size: .8rem;
             }
         }
 
@@ -50,6 +64,7 @@
             line-height: 1.5rem;
             font-size: .8rem;
             padding: .5% 0 .5% 1%;
+            white-space: pre-line;
         }
 
         #footer {

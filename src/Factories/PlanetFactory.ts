@@ -85,6 +85,7 @@ export default function build(data: PlanetJson, parent?: CelestialObject, isSate
         id: uuidv4(),
         satellites: satellites,
         isSatellite: isSatellite,
+        texts: data.texts
     })
 }
 

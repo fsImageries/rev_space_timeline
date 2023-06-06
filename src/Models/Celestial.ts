@@ -18,6 +18,7 @@ export class CelestialObject {
     public angularOrbVel: number;
 
     public id: string;
+    public rawTexts?: string[];
     
 
     constructor(data:CelestialParams) {
@@ -31,6 +32,7 @@ export class CelestialObject {
         this._isSatellite = data.isSatellite;
         this._parent = data.parent;
         this.id = data.id;
+        this.rawTexts = data.texts;
 
         let secsPerRotation = this.rotationPeriod * 60 * 60;
         this.angularRotVel = (2 * Math.PI) / secsPerRotation;

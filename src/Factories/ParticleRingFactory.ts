@@ -30,7 +30,8 @@ export default function build(data: SystemObjectData) {
             float ll = length(xy);
             gl_FragColor = vec4(color, step(ll, 0.5));
 
-            float falloff = dist_div / (dist * dist);
+            // float falloff = dist_div / (dist * dist);
+            float falloff = 1.0;
             falloff = clamp(0.0 + falloff, 0.0, 0.5);
             gl_FragColor.a = falloff;
         }

@@ -1,4 +1,4 @@
-import { Vector3, TextureLoader } from "three";
+import { Vector3, TextureLoader, Quaternion } from "three";
 
 const Constants = {
   DISTANCE_SCALE: 3000000,
@@ -20,7 +20,8 @@ const Constants = {
 
   __OUT_WORLD__POS: new Vector3(),
   __OUT_CAM_POS: new Vector3(),
-  __TEX_LOADER: new TextureLoader()
+  __TEX_LOADER: new TextureLoader(),
+  __OUT_WORLD_QUAT: new Quaternion()
 };
 
 export default Constants;

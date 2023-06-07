@@ -10,7 +10,7 @@ import { SystemObjectData } from "../jsonInterfaces";
 
 
 export default function build(data: SystemObjectData) {
-    let material = new ShaderMaterial({
+    const material = new ShaderMaterial({
         transparent: true,
         depthWrite: false,
         uniforms: {
@@ -84,7 +84,7 @@ export default function build(data: SystemObjectData) {
     })
 }
 
-function relaxRingPoints(points: number[], rad: number = 1) {
+function relaxRingPoints(points: number[], rad = 1) {
     for (let cur_i = 0; cur_i < points.length; cur_i += 3) {
         points[cur_i + 1] += randFloat(-rad, rad)           // y
         points[cur_i] += randFloat(-rad * 12.5, rad * 12.5)       // x

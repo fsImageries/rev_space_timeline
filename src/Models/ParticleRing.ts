@@ -12,9 +12,11 @@ export class ParticleRing extends SystemObject {
         super(data)
     }
 
-    public init(_parent?: SystemObject): void {}
+    public init(parent:SystemObject): void {
+        this.initSatellites(parent)
+    }
 
-    public update(world: World) {
+    public update(world: World, parent:SystemObject) {
         // Distance calculation
         world.cam.active.getWorldPosition(Constants.__OUT_CAM_POS)
         this.object.parentGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
@@ -24,5 +26,7 @@ export class ParticleRing extends SystemObject {
         // Orbit Rot
         const axisVal = (world.delta * this.data.angularOrbVel) * Constants.ORB_SCALE;
         this.object.masterGrp.rotation.y -= axisVal * 1.3793
+
+        this.updateSatellites(world, parent)
     }
 }

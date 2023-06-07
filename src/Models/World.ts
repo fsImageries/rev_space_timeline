@@ -9,7 +9,7 @@ import { System } from "./System";
 
 
 let lastTime: number;
-let requiredElapsed = 1000 / 60; // desired interval is 60fps
+const requiredElapsed = 1000 / 60; // desired interval is 60fps
 
 export class World {
     canvas: HTMLElement;
@@ -32,7 +32,7 @@ export class World {
 
     constructor(system: System) {
         // Canvas, Renderer, Scene
-        this.canvas = document.querySelector(`canvas#main`)!
+        this.canvas = document.querySelector(`canvas#main`)
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true })
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         this.renderer.shadowMap.enabled = true
@@ -133,10 +133,10 @@ export class World {
         }
 
         let mousedown = false;
-        const mouseDown = (_: MouseEvent) => {
+        const mouseDown = () => {
             mousedown = true;
         }
-        const mouseUp = (_: MouseEvent) => {
+        const mouseUp = () => {
             mousedown = false;
         }
         const mouesMove = (e: MouseEvent) => {

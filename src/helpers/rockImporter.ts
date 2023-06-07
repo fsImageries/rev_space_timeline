@@ -23,11 +23,11 @@ export default async function importMain() {
 }
 
 export async function importRocksAsync(folderpaths: string[]) {
-    let meshes = [];
+    const meshes = [];
 
     for (const folderpath of folderpaths) {
         let curMesh;
-        let textures: { [key: string]: THREE.Texture } = {}
+        const textures: { [key: string]: THREE.Texture } = {}
         for (const name of lookup) {
             const path = `${folderpath}\\${name}`
 
@@ -42,7 +42,7 @@ export async function importRocksAsync(folderpaths: string[]) {
             textures[name] = tex
         }
 
-        let mat = new THREE.MeshStandardMaterial({
+        const mat = new THREE.MeshStandardMaterial({
             map: textures["color"],
             normalMap: textures["normal"],
             roughnessMap: textures["roughness"],
@@ -51,7 +51,7 @@ export async function importRocksAsync(folderpaths: string[]) {
         mat.polygonOffset = false
 
         if (curMesh)
-        curMesh.material = mat
+            curMesh.material = mat
     }
     // console.log(meshes)
     return meshes

@@ -3,7 +3,6 @@ import Constants from "../helpers/Constants";
 import { randSpherePointExcludes } from "../helpers/numericUtils";
 import { SystemObjectParams } from "../interfaces";
 import SystemObject from "./SystemObject";
-import { World } from "./World";
 
 const PNTCOUNT = 100_000
 const RANGE = 6731900000000
@@ -30,7 +29,7 @@ export default class Oort extends SystemObject {
         (this.object.masterGrp as Points).geometry.setAttribute('position', new Float32BufferAttribute(vertexs, 3))
     }
 
-    public update(_world: World) {
+    public update() {
         // const d = world.cam.active.position.distanceTo(this._parent ? this._parent.masterGrp.position : new THREE.Vector3(0,0,0))
         // const d2 = this.distanceStart / Constants.DISTANCE_SCALE
 

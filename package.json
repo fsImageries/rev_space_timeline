@@ -1,4 +1,9 @@
 {
+  "eslintConfig": {
+    "rules": {
+      "ban-ts-comment": "off"
+    }
+  },
   "name": "revelation-space-timeline",
   "private": true,
   "version": "1.0.0",

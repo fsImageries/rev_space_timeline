@@ -27,18 +27,18 @@ export const randSpherePointExcludes = (r: number, mult = 1) => {
 }
 
 export const randSpherePoint = (mult = 1) => {
-    var u = Math.random();
-    var v = Math.random();
-    var theta = u * 2.0 * Math.PI;
-    var phi = Math.acos(2.0 * v - 1.0);
-    var r = Math.cbrt(Math.random());
-    var sinTheta = Math.sin(theta);
-    var cosTheta = Math.cos(theta);
-    var sinPhi = Math.sin(phi);
-    var cosPhi = Math.cos(phi);
-    var x = r * sinPhi * cosTheta;
-    var y = r * sinPhi * sinTheta;
-    var z = r * cosPhi;
+    const u = Math.random();
+    const v = Math.random();
+    const theta = u * 2.0 * Math.PI;
+    const phi = Math.acos(2.0 * v - 1.0);
+    const r = Math.cbrt(Math.random());
+    const sinTheta = Math.sin(theta);
+    const cosTheta = Math.cos(theta);
+    const sinPhi = Math.sin(phi);
+    const cosPhi = Math.cos(phi);
+    const x = r * sinPhi * cosTheta;
+    const y = r * sinPhi * sinTheta;
+    const z = r * cosPhi;
     // return {x: x, y: y, z: z};
     return [x * mult, y * mult, z * mult]
 }

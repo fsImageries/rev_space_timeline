@@ -2,10 +2,9 @@ import CameraControls from 'camera-controls';
 import * as THREE from "three";
 import SystemObject from "./SystemObject";
 import { World } from "./World";
+import Constants from '../helpers/Constants';
 
 CameraControls.install( { THREE: THREE } );
-let outWorldPosition = new THREE.Vector3();
-
 type Controls = CameraControls;
 
 export class Camera {
@@ -53,8 +52,8 @@ export class Camera {
 
     public update(delta:number) {
         if (this.thirdTarget && this.activeCtrl === this.thirdCtrl) {
-            this.thirdTarget.object.masterGrp.getWorldPosition(outWorldPosition)
-            this.thirdCtrl.setTarget(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z, true)
+            this.thirdTarget.object.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
+            this.thirdCtrl.setTarget(Constants.__OUT_WORLD__POS.x, Constants.__OUT_WORLD__POS.y, Constants.__OUT_WORLD__POS.z, true)
         }
 
         this.freeCtrl.update(delta)
@@ -63,21 +62,21 @@ export class Camera {
     
     public setFollowTarget(target:SystemObject) {
         // if (this.thirdTarget) this.thirdTarget.masterGrp.remove(this.third)
-        target.object.masterGrp.getWorldPosition(outWorldPosition)
-        this.thirdCtrl.setPosition(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z + target.data.drawRadius * 4)
+        target.object.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
+        this.thirdCtrl.setPosition(Constants.__OUT_WORLD__POS.x, Constants.__OUT_WORLD__POS.y, Constants.__OUT_WORLD__POS.z + target.data.drawRadius * 4)
         // this.thirdCtrl.lookInDirectionOf(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z)
         // this.thirdCtrl.setOrbitPoint(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z)
-        this.thirdCtrl.setTarget(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z, true)
+        this.thirdCtrl.setTarget(Constants.__OUT_WORLD__POS.x, Constants.__OUT_WORLD__POS.y, Constants.__OUT_WORLD__POS.z, true)
         // target.masterGrp.add(this.third)
         this._thirdTarget = target
     }
 
     public third2Free() {
-        this.thirdCtrl.getPosition(outWorldPosition)
-        this.freeCtrl.setPosition(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z)
+        this.thirdCtrl.getPosition(Constants.__OUT_WORLD__POS)
+        this.freeCtrl.setPosition(Constants.__OUT_WORLD__POS.x, Constants.__OUT_WORLD__POS.y, Constants.__OUT_WORLD__POS.z)
 
-        this.thirdCtrl.getTarget(outWorldPosition)
-        this.freeCtrl.setTarget(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z)
+        this.thirdCtrl.getTarget(Constants.__OUT_WORLD__POS)
+        this.freeCtrl.setTarget(Constants.__OUT_WORLD__POS.x, Constants.__OUT_WORLD__POS.y, Constants.__OUT_WORLD__POS.z)
     }
 
     public swtich() {

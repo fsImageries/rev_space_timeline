@@ -3,7 +3,7 @@ import { DEG2RAD } from "three/src/math/MathUtils";
 import { DrawData } from "../jsonInterfaces";
 
 export default function build(data: DrawData) {
-    var points = [];
+    const points = [];
 
     const radius = 1;
     const len = data.orbLen ? data.orbLen : 180
@@ -11,12 +11,12 @@ export default function build(data: DrawData) {
         points.push(new THREE.Vector3(radius* Math.sin(i * DEG2RAD), radius * Math.cos(i * DEG2RAD), 0));
     }
 
-    var geometry = new THREE.BufferGeometry();
+    const geometry = new THREE.BufferGeometry();
     geometry.setFromPoints(points);
     geometry.computeBoundingBox()
     geometry.computeVertexNormals()
 
-    var material = new THREE.ShaderMaterial({
+    const material = new THREE.ShaderMaterial({
         uniforms: {
             bboxMin: {
                 value: geometry.boundingBox.min

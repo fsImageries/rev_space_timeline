@@ -146,7 +146,7 @@ vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
 
 }
-`
+`;
 
 const frag = `
 varying vec2 vUv;
@@ -169,27 +169,27 @@ void main() {
   gl_FragColor = vec4( color.rgb, 1.0 );
 
 }
-`
+`;
 
 // https://github.com/mra1794/Rock-Generator/blob/main/Rock%20Generator.py
 // https://github.com/versluis/Rock-Generator/blob/master/add_mesh_rocks/rockgen.py
 
 export default function build() {
-    const sphere = new THREE.SphereGeometry(1, 5, 5)
+  const sphere = new THREE.SphereGeometry(1, 5, 5);
 
-    const shader = new THREE.ShaderMaterial({
-        uniforms: {
-            ttexture: {
-                value: new THREE.TextureLoader().load( 'rock_textures1\\coast_sand_05_diff_4k.jpg' )
-                },
-            seed: { value: randFloat(.75,1) }
-        },
-        vertexShader: vert,
-        fragmentShader: frag
-    })
+  const shader = new THREE.ShaderMaterial({
+    uniforms: {
+      ttexture: {
+        value: new THREE.TextureLoader().load("rock_textures1\\coast_sand_05_diff_4k.jpg")
+      },
+      seed: { value: randFloat(0.75, 1) }
+    },
+    vertexShader: vert,
+    fragmentShader: frag
+  });
 
-    const mesh = new THREE.Mesh(sphere, shader)
-    sphere.computeVertexNormals()
+  const mesh = new THREE.Mesh(sphere, shader);
+  sphere.computeVertexNormals();
 
-    return mesh
+  return mesh;
 }

@@ -112,6 +112,8 @@ export class World {
     worldFolder.add(Constants, "CELESTIAL_ORB").name("Main Orb Rotation");
 
     this.infoPanel = new InfoPanel();
+
+    this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
   }
 
   public initListeners() {

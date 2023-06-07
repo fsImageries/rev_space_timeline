@@ -22,8 +22,6 @@ const Constants = {
   CAM_POS: new Vector3(),
   TEX_LOADER: new TextureLoader(),
   WORLD_QUAT: new Quaternion()
-
-
 };
 
 export default Constants;

@@ -113,7 +113,7 @@ export class World {
 
     this.infoPanel = new InfoPanel();
 
-    this.scene.add(new THREE.AmbientLight("#ffffff", .03))
+    this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
   }
 
   public initListeners() {

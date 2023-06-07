@@ -48,7 +48,7 @@ export default function build(data: SystemObjectData) {
 
   let markerSprite;
   if (!data.type.includes("moon")) {
-    const map = Constants.__TEX_LOADER.load("/diamond-solid.svg");
+    const map = Constants.TEX_LOADER.load("/diamond-solid.svg");
     const material = new THREE.SpriteMaterial({ map: map });
     markerSprite = new THREE.Sprite(material);
     markerSprite.position.y = data.draw.radius + data.draw.radius / 3;

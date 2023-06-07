@@ -44,8 +44,8 @@ export class Planet extends SystemObject {
     // Atmo direction
     // We assume that a planet has a atmo/mesh object
     const vec = ((this.object.atmo as Mesh).material as ShaderMaterial).uniforms.viewVector.value;
-    this.object.atmo?.getWorldPosition(Constants.__OUT_WORLD__POS);
-    vec.subVectors(world.cam.active.position.clone(), Constants.__OUT_WORLD__POS);
+    this.object.atmo?.getWorldPosition(Constants.WORLD_POS);
+    vec.subVectors(world.cam.active.position.clone(), Constants.WORLD_POS);
 
     // Axis Rotation
     const axisVal = world.delta * this.data.angularRotVel * Constants.ROT_SCALE;
@@ -57,9 +57,9 @@ export class Planet extends SystemObject {
       const orbVal = world.delta * this.data.angularOrbVel * Constants.ORB_SCALE;
       this.object.parentGrp.rotation.y += orbVal;
     }
-    this.object.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS);
-    world.cam.active.getWorldPosition(Constants.__OUT_CAM_POS);
-    const dist = Constants.__OUT_WORLD__POS.distanceTo(Constants.__OUT_CAM_POS);
+    this.object.masterGrp.getWorldPosition(Constants.WORLD_POS);
+    world.cam.active.getWorldPosition(Constants.CAM_POS);
+    const dist = Constants.WORLD_POS.distanceTo(Constants.CAM_POS);
 
     if (!this.data.type.includes("moon")) {
       // Sprite scaling

@@ -57,20 +57,20 @@ export class Camera {
   public idealOffset() {
     const rad = this._thirdTarget.data.drawRadius
     const idealOffset = new THREE.Vector3(rad * 5, rad * 2, -rad * 6);
-    this._thirdTarget.object.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
-    this._thirdTarget.object.masterGrp.getWorldQuaternion(Constants.__OUT_WORLD_QUAT)
-    idealOffset.applyQuaternion(Constants.__OUT_WORLD_QUAT);
-    idealOffset.add(Constants.__OUT_WORLD__POS);
+    this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS)
+    this._thirdTarget.object.masterGrp.getWorldQuaternion(Constants.WORLD_QUAT)
+    idealOffset.applyQuaternion(Constants.WORLD_QUAT);
+    idealOffset.add(Constants.WORLD_POS);
     return idealOffset;
   }
 
   public idealLookat() {
     const rad = this._thirdTarget.data.drawRadius
     const idealLookat = new THREE.Vector3(0, rad / 2, rad);
-    this._thirdTarget.object.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
-    this._thirdTarget.object.masterGrp.getWorldQuaternion(Constants.__OUT_WORLD_QUAT)
-    idealLookat.applyQuaternion(Constants.__OUT_WORLD_QUAT);
-    idealLookat.add(Constants.__OUT_WORLD__POS);
+    this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS)
+    this._thirdTarget.object.masterGrp.getWorldQuaternion(Constants.WORLD_QUAT)
+    idealLookat.applyQuaternion(Constants.WORLD_QUAT);
+    idealLookat.add(Constants.WORLD_POS);
     return idealLookat;
   }
 
@@ -93,11 +93,11 @@ export class Camera {
   }
 
   public third2Free() {
-    this.third.getWorldPosition(Constants.__OUT_WORLD__POS);
-    this.freeCtrl.setPosition(Constants.__OUT_WORLD__POS.x, Constants.__OUT_WORLD__POS.y, Constants.__OUT_WORLD__POS.z);
+    this.third.getWorldPosition(Constants.WORLD_POS);
+    this.freeCtrl.setPosition(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
 
-    this._thirdTarget.object.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
-    this.freeCtrl.setTarget(Constants.__OUT_WORLD__POS.x, Constants.__OUT_WORLD__POS.y, Constants.__OUT_WORLD__POS.z);
+    this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS)
+    this.freeCtrl.setTarget(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
   }
 
   public swtich() {

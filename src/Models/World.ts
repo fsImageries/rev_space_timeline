@@ -145,6 +145,10 @@ export class World {
       } else if (this.infoPanel.visible) this.infoPanel.visible = false;
     };
 
+    const keyHandler = (e: KeyboardEvent) => {
+      this.cam.rotateThird(e.key.toLowerCase()) 
+    }
+
     let mousedown = false;
     const mouseDown = () => {
       mousedown = true;
@@ -164,6 +168,7 @@ export class World {
     window.addEventListener("mousedown", mouseDown);
     window.addEventListener("mouseup", mouseUp);
     window.addEventListener("mousemove", mouesMove);
+    window.addEventListener("keydown", keyHandler)
   }
 
   // World methods

@@ -20,6 +20,7 @@ export class Camera {
 
   private _currentPosition: THREE.Vector3;
   private _currentLookat: THREE.Vector3;
+  private _dummyRotate: THREE.Object3D;
 
   constructor(canvas: HTMLCanvasElement, world: World) {
     this.free = new THREE.PerspectiveCamera(30, canvas.clientWidth / canvas.clientHeight, 0.1, 1e10);
@@ -36,6 +37,7 @@ export class Camera {
 
     this._currentPosition = new THREE.Vector3();
     this._currentLookat = new THREE.Vector3();
+    this._dummyRotate = new THREE.Object3D();
   }
 
   public get active(): THREE.PerspectiveCamera {
@@ -54,11 +56,32 @@ export class Camera {
     return this._isFree;
   }
 
+  public rotateThird(key: string) {
+    const speed = Math.PI / 64
+    switch (key) {
+      case "arrowleft":
+        this._dummyRotate.rotateY(speed)
+        break;
+
+      case "arrowright":
+        this._dummyRotate.rotateY(-speed)
+        break
+
+      case "arrowup":
+        this._dummyRotate.rotateX(speed)
+        break
+
+      case "arrowdown":
+        this._dummyRotate.rotateX(-speed)
+        break
+    }
+  }
+
   public idealOffset() {
     const rad = this._thirdTarget.data.drawRadius;
     const idealOffset = new THREE.Vector3(rad * 5, rad * 2, -rad * 6);
     this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS);
-    this._thirdTarget.object.masterGrp.getWorldQuaternion(Constants.WORLD_QUAT);
+    this._dummyRotate.getWorldQuaternion(Constants.WORLD_QUAT);
     idealOffset.applyQuaternion(Constants.WORLD_QUAT);
     idealOffset.add(Constants.WORLD_POS);
     return idealOffset;
@@ -77,8 +100,11 @@ export class Camera {
   public update(delta: number) {
     const idealOffset = this.idealOffset();
     const idealLookat = this.idealLookat();
-
-    this._currentPosition.copy(idealOffset);
+    
+    // const 
+    const t = 1.0 - Math.pow(0.001, delta);
+    this._currentPosition.lerp(idealOffset, t);
+    // this._currentPosition.copy(idealOffset);
     this._currentLookat.copy(idealLookat);
 
     this.third.position.copy(this._currentPosition);
@@ -89,6 +115,7 @@ export class Camera {
 
   public setFollowTarget(target: SystemObject) {
     this._thirdTarget = target;
+    this._dummyRotate.copy(target.object.masterGrp)
     console.log(this._thirdTarget.data.name);
   }
 

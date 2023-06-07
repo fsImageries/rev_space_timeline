@@ -1,213 +1,213 @@
-import * as THREE from "three"
-import GUI from 'lil-gui'
-
-import {getMasterGrp} from "../helpers/utils"
-import { resizeRendererToDisplaySize } from './../helpers/utils'
-import { System } from "./System";
-import Constants from "../helpers/Constants"
-import { Camera } from "./Camera"
+import GUI from "lil-gui";
+import * as THREE from "three";
+import Constants from "../helpers/Constants";
+import { getMasterGrp } from "../helpers/utils";
+import { resizeRendererToDisplaySize } from "./../helpers/utils";
+import { Camera } from "./Camera";
 import { InfoPanel } from "./InfoPanel";
-
+import { System } from "./System";
 
 let lastTime: number;
-let requiredElapsed = 1000 / 60; // desired interval is 60fps
+const requiredElapsed = 1000 / 60; // desired interval is 60fps
 
 export class World {
-    canvas: HTMLElement;
-    renderer: THREE.WebGLRenderer;
-    scene: THREE.Scene;
-    loadingManager: THREE.LoadingManager;
-    clock: THREE.Clock;
-    delta: number;
-    gridhelper: THREE.GridHelper;
-    cam: Camera
-    
-    gui: GUI;
-    infoPanel: InfoPanel
+  canvas: HTMLElement;
+  renderer: THREE.WebGLRenderer;
+  scene: THREE.Scene;
+  loadingManager: THREE.LoadingManager;
+  clock: THREE.Clock;
+  delta: number;
+  gridhelper: THREE.GridHelper;
+  cam: Camera;
 
-    clickPointer: THREE.Vector2;
-    raycaster: THREE.Raycaster;
+  gui: GUI;
+  infoPanel: InfoPanel;
 
-    systems: System[];
-    curSystem: System;
+  clickPointer: THREE.Vector2;
+  raycaster: THREE.Raycaster;
 
-    /**
-     *
-     */
-    constructor(system: System) {
-        // Canvas, Renderer, Scene
-        this.canvas = document.querySelector(`canvas#main`)!
-        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true })
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-        this.renderer.shadowMap.enabled = true
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
-        this.renderer.setClearColor(0x000000)
-        this.scene = new THREE.Scene()
+  systems: System[];
+  curSystem: System;
 
-        // Loading Manager
-        this.loadingManager = new THREE.LoadingManager()
+  constructor(system: System) {
+    // Canvas, Renderer, Scene
+    this.canvas = document.querySelector(`canvas#main`);
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      antialias: true,
+      alpha: true
+    });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.setClearColor(0x000000);
+    this.scene = new THREE.Scene();
 
-        this.loadingManager.onStart = () => {
-            console.log('loading started')
-        }
-        this.loadingManager.onProgress = (url, loaded, total) => {
-            console.log('loading in progress:')
-            console.log(`${url} -> ${loaded} / ${total}`)
-        }
-        this.loadingManager.onLoad = () => {
-            console.log('loaded!')
-        }
-        this.loadingManager.onError = () => {
-            console.log('❌ error while loading')
-        }
+    // Loading Manager
+    this.loadingManager = new THREE.LoadingManager();
 
-        this.cam = new Camera(this.canvas as HTMLCanvasElement, this)
+    this.loadingManager.onStart = () => {
+      console.log("loading started");
+    };
+    this.loadingManager.onProgress = (url, loaded, total) => {
+      console.log("loading in progress:");
+      console.log(`${url} -> ${loaded} / ${total}`);
+    };
+    this.loadingManager.onLoad = () => {
+      console.log("loaded!");
+    };
+    this.loadingManager.onError = () => {
+      console.log("❌ error while loading");
+    };
 
-        // Helper setup
-        this.clock = new THREE.Clock()
-        this.delta = 0;
+    this.cam = new Camera(this.canvas as HTMLCanvasElement, this);
 
-        this.curSystem = system
-        this.systems = [system]
+    // Helper setup
+    this.clock = new THREE.Clock();
+    this.delta = 0;
 
-        this.clickPointer = new THREE.Vector2(Infinity, Infinity)
-        this.raycaster = new THREE.Raycaster()
+    this.curSystem = system;
+    this.systems = [system];
 
-        // Init methods
-        this.initListeners()
+    this.clickPointer = new THREE.Vector2(Infinity, Infinity);
+    this.raycaster = new THREE.Raycaster();
 
-        this.gridhelper = new THREE.GridHelper(100, 100, 'teal', 'darkgray')
-        this.gridhelper.scale.setScalar(10000)
-        this.gridhelper.visible = false
-        this.scene.add(this.gridhelper)
+    // Init methods
+    this.initListeners();
 
-        // Sky box
-        const textureLoader = new THREE.TextureLoader();
-        const backgroundImage = textureLoader.load("/starmap_8k.jpg");
-        backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
-        backgroundImage.encoding = THREE.sRGBEncoding;
-        this.scene.background = backgroundImage
+    this.gridhelper = new THREE.GridHelper(100, 100, "teal", "darkgray");
+    this.gridhelper.scale.setScalar(10000);
+    this.gridhelper.visible = false;
+    this.scene.add(this.gridhelper);
 
-        // Gui
-        this.gui = new GUI({ title: 'Settings', width: 300 })
-        const worldFolder = this.gui.addFolder('World')
+    // Sky box
+    const textureLoader = new THREE.TextureLoader();
+    const backgroundImage = textureLoader.load("/starmap_8k.jpg");
+    backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
+    backgroundImage.encoding = THREE.sRGBEncoding;
+    this.scene.background = backgroundImage;
 
-        worldFolder.add(Constants, 'DISTANCE_SCALE').min(0).name('Distance scale').onChange(() => {
-            this.curSystem.init()
-        })
-        worldFolder.add(Constants, 'TIME_SCALE').min(0).name('Time scale').onChange((v:number) => {
-            Constants.TIME_SCALE = v
-        })
-        worldFolder.add(Constants, 'ORB_SCALE').min(0).name('Orbital speed')
-        worldFolder.add(Constants, 'ROT_SCALE').min(0).name('Rotational speed')
-        worldFolder.add(this, 'topView').name('Top View')
-        worldFolder.add(this.gridhelper, "visible").name("Grid visiblity")
-        worldFolder.add(Constants, "CELESTIAL_ORB").name("Main Orb Rotation")
+    // Gui
+    this.gui = new GUI({ title: "Settings", width: 300 });
+    const worldFolder = this.gui.addFolder("World");
 
-        const planets: any = {}
-        this.curSystem.allCelestialObjects.forEach((obj) => planets[obj.name] = obj.masterGrp)
-        worldFolder.add(this, "followTarget", planets).name("Camera Target")
+    worldFolder
+      .add(Constants, "DISTANCE_SCALE")
+      .min(0)
+      .name("Distance scale")
+      .onChange(() => {
+        this.curSystem.init();
+      });
+    worldFolder
+      .add(Constants, "TIME_SCALE")
+      .min(0)
+      .name("Time scale")
+      .onChange((v: number) => {
+        Constants.TIME_SCALE = v;
+      });
+    worldFolder.add(Constants, "ORB_SCALE").min(0).name("Orbital speed");
+    worldFolder.add(Constants, "ROT_SCALE").min(0).name("Rotational speed");
+    worldFolder.add(this, "topView").name("Top View");
+    worldFolder.add(this.gridhelper, "visible").name("Grid visiblity");
+    worldFolder.add(Constants, "CELESTIAL_ORB").name("Main Orb Rotation");
 
-        this.infoPanel = new InfoPanel()
-        // Lights
-        // const ambientLight = new THREE.AmbientLight('#ffdca8', .1)
-        // this.scene.add(ambientLight)
+    this.infoPanel = new InfoPanel();
+  }
+
+  public initListeners() {
+    const dblclickHandler = (event: MouseEvent) => {
+      this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      let target = this.raycastTarget();
+      if (!target) return;
+      target = getMasterGrp(target);
+      const obj = this.curSystem.getById(target.userData["id"]);
+      if (!obj) return;
+      this.cam.setFollowTarget(obj);
+      this.cam.activateThird();
+      this.cam.third2Free();
+    };
+
+    const clickHandler = (event: MouseEvent) => {
+      this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      let target = this.raycastTarget();
+      // console.log(target) // TODO react when something like glitterband is clicked
+      if (target && target.name.includes("_infoSprite")) {
+        target = getMasterGrp(target);
+        const obj = this.curSystem.getById(target.userData["id"]);
+        this.infoPanel.show(obj);
+        return;
+      } else if (this.infoPanel.visible) this.infoPanel.visible = false;
+    };
+
+    let mousedown = false;
+    const mouseDown = () => {
+      mousedown = true;
+    };
+    const mouseUp = () => {
+      mousedown = false;
+    };
+    const mouesMove = (e: MouseEvent) => {
+      if (mousedown && e.altKey && !this.cam.isFree) {
+        this.cam.third2Free();
+        this.cam.activateFree();
+      }
+    };
+
+    window.addEventListener("dblclick", dblclickHandler);
+    window.addEventListener("click", clickHandler);
+    window.addEventListener("mousedown", mouseDown);
+    window.addEventListener("mouseup", mouseUp);
+    window.addEventListener("mousemove", mouesMove);
+  }
+
+  // World methods
+  public update() {
+    if (resizeRendererToDisplaySize(this.renderer)) {
+      const canvas = this.renderer.domElement;
+      this.cam.active.aspect = canvas.clientWidth / canvas.clientHeight;
+      this.cam.active.updateProjectionMatrix();
     }
 
-    public initListeners() {
-        const dblclickHandler = (event: MouseEvent) => {
-            this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-            this.clickPointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    this.curSystem.update(this);
+    this.cam.update(this.delta);
+    this.renderer.render(this.scene, this.cam.active);
+  }
 
-            let target = this.raycastTarget();
-            if (!target) return
-            target = getMasterGrp(target)
-            const obj = this.curSystem.getById(target.userData["id"])
-            if (!obj) return
-            this.cam.setFollowTarget(obj)
-            this.cam.activateThird()
-            this.cam.third2Free()
-        }
+  static eventLoop(now: number, world: World) {
+    window.requestAnimationFrame((n: number) => World.eventLoop(n, world));
 
-        const clickHandler = (event: MouseEvent) => {
-            this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-            this.clickPointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-            let target = this.raycastTarget();
-            // console.log(target) // TODO react when something like glitterband is clicked
-            if (target && target.name.includes("_infoSprite")) {
-                target = getMasterGrp(target)
-                const obj = this.curSystem.getById(target.userData["id"])
-                this.infoPanel.show(obj)
-                return
-            } else if (this.infoPanel.visible) this.infoPanel.visible = false
-        }
-
-        let mousedown = false;
-        const mouseDown = (_: MouseEvent) => {
-            mousedown = true;
-        }
-        const mouseUp = (_: MouseEvent) => {
-            mousedown = false;
-        }
-        const mouesMove = (e: MouseEvent) => {
-            if (mousedown && e.altKey && !this.cam.isFree) {
-                this.cam.third2Free()
-                this.cam.activateFree()
-            }
-
-        }
-
-        window.addEventListener("dblclick", dblclickHandler);
-        window.addEventListener("click", clickHandler);
-        window.addEventListener("mousedown", mouseDown)
-        window.addEventListener("mouseup", mouseUp)
-        window.addEventListener("mousemove", mouesMove)
+    // delta time
+    if (!lastTime) {
+      lastTime = now;
     }
+    const elapsed = now - lastTime;
+    world.delta = world.clock.getDelta();
 
-    // World methods
-    public update() {
-        if (resizeRendererToDisplaySize(this.renderer)) {
-            const canvas = this.renderer.domElement
-            this.cam.active.aspect = canvas.clientWidth / canvas.clientHeight
-            this.cam.active.updateProjectionMatrix()
-        }
-
-        this.curSystem.update(this)
-        this.cam.update(this.delta)
-        this.renderer.render(this.scene, this.cam.active)
+    if (elapsed > requiredElapsed) {
+      world.update();
+      lastTime = now;
     }
+  }
 
-    static eventLoop(now: number, world: World) {
-        window.requestAnimationFrame((n: number) => World.eventLoop(n, world))
+  // Helper methods
+  public raycastTarget() {
+    this.raycaster.setFromCamera(this.clickPointer, this.cam.active);
+    const intersects = this.raycaster.intersectObjects(this.curSystem.topGrp.children);
+    this.clickPointer.set(Infinity, Infinity);
 
-        // delta time
-        if (!lastTime) { lastTime = now; }
-        const elapsed = now - lastTime;
-        world.delta = world.clock.getDelta()
+    if (intersects.length === 0) return undefined;
 
-        if (elapsed > requiredElapsed) {
-            world.update()
-            lastTime = now;
-        }
-    }
+    return intersects[0].object;
+  }
 
-    // Helper methods
-    public raycastTarget() {
-        this.raycaster.setFromCamera(this.clickPointer, this.cam.active);
-        const intersects = this.raycaster.intersectObjects(this.curSystem.topGrp.children);
-        this.clickPointer.set(Infinity, Infinity)
-
-        if (intersects.length === 0) return undefined
-
-        return intersects[0].object
-        // const obj = intersects[0].object
-        // return getMasterGrp(obj)
-    }
-
-    public topView() {
-        this.cam.activateFree()
-        this.cam.activeCtrl.setTarget(0, 0, 0, true)
-        this.cam.activeCtrl.setPosition(0, this.curSystem.radius * 4, 0)
-    }
+  public topView() {
+    this.cam.activateFree();
+    this.cam.activeCtrl.setTarget(0, 0, 0, true);
+    console.log(this.curSystem.radius);
+    this.cam.activeCtrl.setPosition(0, this.curSystem.radius * 4, 0);
+  }
 }

@@ -1,5 +1,10 @@
 {
-  "name": "Revelation-Space-Timeline",
+  "eslintConfig": {
+    "rules": {
+      "ban-ts-comment": "off"
+    }
+  },
+  "name": "revelation-space-timeline",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -7,11 +12,17 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "eslint . --ext .ts",
+    "pretty": "prettier --config .prettierrc src/**/*.ts --write"
   },
   "devDependencies": {
     "@modyfi/vite-plugin-yaml": "^1.0.4",
     "@types/three": "^0.150.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "@typescript-eslint/parser": "^5.59.9",
+    "eslint": "^8.42.0",
+    "prettier": "^2.8.8",
     "typescript": "^5.0.4",
     "vite": "^4.2.1",
     "vitest": "^0.31.1"

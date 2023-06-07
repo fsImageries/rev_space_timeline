@@ -1,110 +1,77 @@
-import * as THREE from "three"
-import { Planet } from "./Planet"
-import { World } from "./World"
-import { Sun } from "./Sun";
-import { CelestialObject } from "./Celestial";
-import Oort from "./Oort";
+import { Group } from "three";
 import Constants from "../helpers/Constants";
-
-interface Params {
-    suns: Sun[];
-    planets: Planet[];
-    oort: Oort;
-    name: string;
-    isSingleSun: boolean;
-}
+import { SystemParams } from "../interfaces";
+import Oort from "./Oort";
+import { Planet } from "./Planet";
+import { Sun } from "./Sun";
+import SystemObject from "./SystemObject";
+import { World } from "./World";
 
 export class System {
-    private _allCelestialObjects: CelestialObject[];
+  public name: string;
 
-    public name: string;
+  public topGrp: Group;
+  public tree: SystemObject[];
+  private flat: SystemObject[];
 
-    public topGrp: THREE.Group;
-    public planets: Planet[];
-    public suns: Sun[];
-    public oort: Oort;
+  public isSingleSun: boolean;
+  public radius: number;
 
-    public isSingleSun: boolean;
-    public radius: number;
+  constructor(data: SystemParams) {
+    this.tree = data.tree;
 
-    constructor(data: Params) {
-        this.suns = data.suns
-        this.planets = data.planets
-        this.oort = data.oort
-        this._allCelestialObjects = [...this.suns, ...this.planets];
+    this.name = data.name;
+    this.isSingleSun = data.isSingleSun;
 
-        // Add all meshes to topGrp
-        this.topGrp = new THREE.Group()
-        this.topGrp.add(this.oort.points)
-        this.allCelestialObjects.forEach(obj => this.topGrp.add(obj.topGrp))
+    this.topGrp = new Group();
+    this.tree.forEach((obj) => this.topGrp.add(obj.object.parentGrp));
+    this.flat = data.flat;
+    this.radius = this.getRadius();
+    console.log(this.radius);
+  }
 
-        this.name = data.name
-        this.isSingleSun = data.isSingleSun
-        this.radius = this.getRadius()
-        // this.allCelestialObjects.forEach(obj => obj.visible = false)
-    }
+  // public get allCelestialObjects(): CelestialObject[] {
+  //     return this._allCelestialObjects;
+  // }
 
-    public get allCelestialObjects(): CelestialObject[] {
-        return this._allCelestialObjects;
-    }
+  private getRadius() {
+    return this.mainSequenceObjects().reduce((acc, cur) => {
+      const n = acc.dist > cur.dist ? acc : cur;
+      return n;
+    }).dist;
+  }
 
-    private getRadius() {
-        return this.allCelestialObjects.reduce((acc, cur) => {
-            const n = acc.dist > cur.dist ? acc : cur
-            return n
-        }).dist
-    }
+  public getById(id: string): Sun | Planet | undefined {
+    return this.flat.reduce((acc, cur) => (acc.data.id === id ? acc : cur));
+  }
 
-    public traverse(f:any) {
-        let ret;
+  public oortCloud() {
+    return this.flat.reduce((acc, cur) => (acc.data.type === "oortcloud" ? acc : cur));
+  }
 
-        const traversePlanet = (planet:Planet, f:any) => {
-            planet.satellites?.children.forEach(child => {
-                ret = f(child)
-                if (ret) return
-                if (child instanceof Planet) traversePlanet(child, f)
-            })
-        }
-        this.allCelestialObjects.forEach(cel => {
-            ret = f(cel)
-            if (ret) return
-            if (cel instanceof Planet) {
-                traversePlanet(cel, f)
-            }
-        })
-    }
+  public suns() {
+    return this.flat.filter((obj) => obj.data.type.includes("sun"));
+  }
 
-    public getById(id: string): (Sun | Planet | undefined) {
-        let found;
-        this.traverse((obj:any) => {
-            if (obj.id && obj.id === id) {
-                found = obj
-                return true
-            }
-            return false
-        })
-        return found
-    }
+  public mainSequenceObjects() {
+    return this.flat.filter(
+      (obj) => obj.data.type.includes("sun") || obj.data.type.includes("planet") || obj.data.type.includes("moon")
+    );
+  }
 
-    public init() {
-        this.radius = this.getRadius();
-        (this.allCelestialObjects as (Sun | Planet)[]).forEach((obj) => {
-            if (obj instanceof Sun) obj.lightRadius = (this.oort.distanceEnd/ Constants.DISTANCE_SCALE)
-            obj.init()
-        })
-        this.oort.init()
-    }
+  public init() {
+    this.radius = this.getRadius();
+    const lightRadius = (this.oortCloud() as Oort).distanceEnd / Constants.DISTANCE_SCALE;
+    (this.suns() as Sun[]).forEach((sun) => (sun.lightRadius = lightRadius));
+    this.tree.forEach((obj) => obj.init());
+  }
 
-    public initWorld(world: World) {
-        this.init();
-        world.scene.add(this.topGrp)
-    }
+  public initWorld(world: World) {
+    this.init();
+    world.scene.add(this.topGrp);
+  }
 
-    public update(world: World) {
-        (this.suns as any).concat(this.planets).forEach((obj: Sun | Planet) => {
-            obj.update(world)
-        })
-
-        this.oort.update(world)
-    }
+  public update(world: World) {
+    this.tree.forEach((obj) => obj.update(world));
+  }
 }

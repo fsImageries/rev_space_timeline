@@ -1,13 +1,10 @@
-import * as THREE from "three"
-import { CelestialObject } from "./Celestial";
-import { CelestialParams, SystemObjectParams } from "../interfaces";
-
-import { World } from "./World";
-import CelestialBase from "./CelestialBase";
+import { Mesh, PointLight, ShaderMaterial } from "three";
+import { SystemObjectParams } from "../interfaces";
 import SystemObject from "./SystemObject";
+import { World } from "./World";
 
 export class Sun extends SystemObject {
-    private light: THREE.PointLight;
+    private light: PointLight;
     public lightRadius: number;
 
     constructor(data: SystemObjectParams) {
@@ -15,7 +12,7 @@ export class Sun extends SystemObject {
 
         // TODO implement coloring on yaml level
         this.lightRadius = 1;
-        this.light = new THREE.PointLight('#ffffff', 1, this.lightRadius)
+        this.light = new PointLight('#ffffff', 1, this.lightRadius)
         this.light.castShadow = true
         this.light.shadow.radius = 4
         this.light.shadow.camera.near = 0.5
@@ -33,7 +30,7 @@ export class Sun extends SystemObject {
     }
 
     public update(world:World) {
-        ((this.object.mesh as THREE.Mesh).material as THREE.ShaderMaterial).uniforms.time.value += .05;
+        ((this.object.mesh as Mesh).material as ShaderMaterial).uniforms.time.value += .05;
         this.updateSatellites(world, this)
     }
 }

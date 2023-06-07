@@ -1,13 +1,9 @@
-import * as THREE from "three"
-import { CelestialObject } from "./Celestial";
+import { Mesh, ShaderMaterial, Vector3 } from "three";
 import Constants from "../helpers/Constants";
-import { World } from "./World";
-import { PlanetParams, CelestialParams, SystemObjectParams } from "../interfaces";
-import CelestialBase from "./CelestialBase";
+import { SystemObjectParams } from "../interfaces";
 import SystemObject from "./SystemObject";
+import { World } from "./World";
 
-
-let outWorldPos = new THREE.Vector3();
 
 export class Planet extends SystemObject {
 
@@ -16,16 +12,10 @@ export class Planet extends SystemObject {
     }
 
     public init(parent?: SystemObject) {
-        const base = parent ? parent.object.masterGrp.position.clone() : new THREE.Vector3()
-        // const idlePos = new THREE.Vector3(0, 0, -this.dist + this.data.radius * 6)
-        // const idlePosAdd = new THREE.Vector3(0, 0, this.data.radius * 6)
-
+        const base = parent ? parent.object.masterGrp.position.clone() : new Vector3()
         base.z = -this.dist
 
         this.object.masterGrp.position.set(base.x, base.y, base.z)
-        // this.object.masterGrp.userData["idlePosition"] = idlePos;
-        // this.object.masterGrp.userData["idleAdd"] = idlePosAdd;
-        // this.object.masterGrp.userData["dist"] = this.dist;
         this.object.masterGrp.userData["id"] = this.data.id;
         this.object.masterGrp.traverse(child => child.userData["id"] = this.data.id)
 
@@ -59,7 +49,7 @@ export class Planet extends SystemObject {
 
         // Atmo direction
         // We assume that a planet has a atmo/mesh object
-        const vec = ((this.object.atmo as THREE.Mesh).material as THREE.ShaderMaterial).uniforms.viewVector.value
+        const vec = ((this.object.atmo as Mesh).material as ShaderMaterial).uniforms.viewVector.value
         this.object.atmo?.getWorldPosition(Constants.__OUT_WORLD__POS)
         vec.subVectors(world.cam.active.position.clone(), Constants.__OUT_WORLD__POS);
 

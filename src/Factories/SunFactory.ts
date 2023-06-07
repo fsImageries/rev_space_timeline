@@ -1,16 +1,15 @@
-import * as THREE from "three"
-
-import sunFrag from "./../glsl/sun_frag.glsl?raw"
-import sunVert from "./../glsl/sun_vert.glsl?raw"
-import { Sun } from "../Models/Sun"
-import { uuidv4 } from "../helpers/utils";
-import { SunData } from "../jsonInterfaces";
+import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
 import CelestialBase from "../Models/CelestialBase";
 import Internal3DObject from "../Models/Internal3DObject";
+import { Sun } from "../Models/Sun";
+import { uuidv4 } from "../helpers/utils";
+import { SunData } from "../jsonInterfaces";
+import sunFrag from "./../glsl/sun_frag.glsl?raw";
+import sunVert from "./../glsl/sun_vert.glsl?raw";
 
 
 export default function build(data:SunData) {
-    const mat = new THREE.ShaderMaterial({
+    const mat = new ShaderMaterial({
         uniforms: {
             time: { value: 1.0 },
             scale: {value: 2.5 },
@@ -21,17 +20,17 @@ export default function build(data:SunData) {
         fragmentShader: sunFrag
     })
 
-    const sphereGeometry = new THREE.SphereGeometry(data.draw.radius, 50, 50)
-    const mesh = new THREE.Mesh(sphereGeometry, mat)
+    const sphereGeometry = new SphereGeometry(data.draw.radius, 50, 50)
+    const mesh = new Mesh(sphereGeometry, mat)
     mesh.name = `${data.name}_mesh`
 
 
-    const meshGrp = new THREE.Group()
+    const meshGrp = new Group()
     meshGrp.name = `${data.name}_meshGrp`
     meshGrp.add(mesh)
 
-    const masterGrp = new THREE.Group()
-    const parentGrp = new THREE.Group()
+    const masterGrp = new Group()
+    const parentGrp = new Group()
     masterGrp.name = `${data.name}_masterGrp`
     parentGrp.name = `${data.name}_parentGrp`
     masterGrp.add(meshGrp)

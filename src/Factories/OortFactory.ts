@@ -1,22 +1,21 @@
-import * as THREE from "three";
-import { CelestialObject } from "../Models/Celestial";
+import { BufferGeometry, Group, Points, PointsMaterial } from "three";
 import CelestialBase from "../Models/CelestialBase";
 import Internal3DObject from "../Models/Internal3DObject";
 import Oort from "../Models/Oort";
 import { uuidv4 } from "../helpers/utils";
-import { OortCloudJson, SystemObjectData } from "../jsonInterfaces";
+import { SystemObjectData } from "../jsonInterfaces";
 
 
 export default async function buildAsync(data:SystemObjectData) {
-    const material = new THREE.PointsMaterial({
+    const material = new PointsMaterial({
         color: "white",
         opacity: 0.2,
         transparent: true
     })
-    const geometry = new THREE.BufferGeometry()
-    const points = new THREE.Points(geometry, material)
+    const geometry = new BufferGeometry()
+    const points = new Points(geometry, material)
 
-    const parentGrp = new THREE.Group()
+    const parentGrp = new Group()
     parentGrp.add(points)
     points.name = `${data.name}_masterGrp`
     parentGrp.name = `${data.name}_parentGrp`

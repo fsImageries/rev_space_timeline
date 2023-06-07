@@ -1,9 +1,9 @@
-import * as THREE from "three"
-import { OortParams, SystemObjectParams } from "../interfaces";
+import { Float32BufferAttribute, Points } from "three";
 import Constants from "../helpers/Constants";
 import { randSpherePointExcludes } from "../helpers/numericUtils";
-import { World } from "./World";
+import { SystemObjectParams } from "../interfaces";
 import SystemObject from "./SystemObject";
+import { World } from "./World";
 
 const PNTCOUNT = 100_000
 const RANGE = 6731900000000
@@ -27,7 +27,7 @@ export default class Oort extends SystemObject {
             vertexs.push(x, y, z)
         }
 
-        (this.object.masterGrp as THREE.Points).geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertexs, 3))
+        (this.object.masterGrp as Points).geometry.setAttribute('position', new Float32BufferAttribute(vertexs, 3))
     }
 
     public update(_world: World) {

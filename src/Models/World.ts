@@ -1,12 +1,11 @@
-import * as THREE from "three"
-import GUI from 'lil-gui'
-
-import {getMasterGrp} from "../helpers/utils"
-import { resizeRendererToDisplaySize } from './../helpers/utils'
-import { System } from "./System";
-import Constants from "../helpers/Constants"
-import { Camera } from "./Camera"
+import GUI from 'lil-gui';
+import * as THREE from "three";
+import Constants from "../helpers/Constants";
+import { getMasterGrp } from "../helpers/utils";
+import { resizeRendererToDisplaySize } from './../helpers/utils';
+import { Camera } from "./Camera";
 import { InfoPanel } from "./InfoPanel";
+import { System } from "./System";
 
 
 let lastTime: number;

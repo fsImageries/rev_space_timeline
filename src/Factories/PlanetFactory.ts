@@ -1,16 +1,17 @@
 import * as THREE from "three";
 import { Text } from 'troika-three-text';
 
-import build_orbit from "./OrbitFactory";
 import { Planet } from "../Models/Planet";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
 import infoSpriteFactory from "./InfoSpriteFactory";
+import build_orbit from "./OrbitFactory";
 
-import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw"
-import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw"
 import CelestialBase from "../Models/CelestialBase";
 import Internal3DObject from "../Models/Internal3DObject";
+import Constants from "../helpers/Constants";
+import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
+import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
 
 
 export default function build(data: SystemObjectData) {
@@ -48,7 +49,7 @@ export default function build(data: SystemObjectData) {
     
     let markerSprite
     if (!data.type.includes("moon")) {
-        const map = new THREE.TextureLoader().load('/diamond-solid.svg');
+        const map = Constants.__TEX_LOADER.load('/diamond-solid.svg');
         const material = new THREE.SpriteMaterial({ map: map });
         markerSprite = new THREE.Sprite(material);
         markerSprite.position.y = data.draw.radius + (data.draw.radius / 3)

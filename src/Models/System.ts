@@ -1,18 +1,17 @@
-import * as THREE from "three"
-import { Planet } from "./Planet"
-import { World } from "./World"
-import { Sun } from "./Sun";
-import { CelestialObject } from "./Celestial";
-import Oort from "./Oort";
+import { Group } from "three";
 import Constants from "../helpers/Constants";
-import SystemObject from "./SystemObject";
 import { SystemParams } from "../interfaces";
+import Oort from "./Oort";
+import { Planet } from "./Planet";
+import { Sun } from "./Sun";
+import SystemObject from "./SystemObject";
+import { World } from "./World";
 
 
 export class System {
     public name: string;
 
-    public topGrp: THREE.Group;
+    public topGrp: Group;
     public tree: SystemObject[];
     private flat: SystemObject[];
 
@@ -25,7 +24,7 @@ export class System {
         this.name = data.name
         this.isSingleSun = data.isSingleSun
 
-        this.topGrp = new THREE.Group()
+        this.topGrp = new Group()
         this.tree.forEach(obj => this.topGrp.add(obj.object.parentGrp))
         this.flat = data.flat
         this.radius = this.getRadius()

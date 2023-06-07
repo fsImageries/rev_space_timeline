@@ -1,8 +1,7 @@
-import * as THREE from "three";
 import CameraControls from 'camera-controls';
-import { CelestialObject } from "./Celestial";
-import { World } from "./World";
+import * as THREE from "three";
 import SystemObject from "./SystemObject";
+import { World } from "./World";
 
 CameraControls.install( { THREE: THREE } );
 let outWorldPosition = new THREE.Vector3();

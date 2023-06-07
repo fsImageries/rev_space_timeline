@@ -1,26 +1,26 @@
-import * as THREE from "three";
-import { SystemObjectData } from "../jsonInterfaces";
+import { BufferGeometry, Float32BufferAttribute, Group, Points, ShaderLib, ShaderMaterial } from "three";
 import { randFloat } from "three/src/math/MathUtils";
-import { inSphere } from "../helpers/numericUtils";
 import CelestialBase from "../Models/CelestialBase";
-import { uuidv4 } from "../helpers/utils";
 import Internal3DObject from "../Models/Internal3DObject";
 import { ParticleRing } from "../Models/ParticleRing";
 import Constants from "../helpers/Constants";
+import { inSphere } from "../helpers/numericUtils";
+import { uuidv4 } from "../helpers/utils";
+import { SystemObjectData } from "../jsonInterfaces";
 
 
 export default function build(data: SystemObjectData) {
-    let material = new THREE.ShaderMaterial({
+    let material = new ShaderMaterial({
         transparent: true,
         depthWrite: false,
         uniforms: {
-            dist: {value: 1.0},
-            dist_div: {value: data.draw.distDiv},
-            size: {value: 2},
-            scale: {value: 1},
-            color: {value: [1,1,1]}
+            dist: { value: 1.0 },
+            dist_div: { value: data.draw.distDiv },
+            size: { value: 2 },
+            scale: { value: 1 },
+            color: { value: [1, 1, 1] }
         },
-        vertexShader: THREE.ShaderLib.points.vertexShader,
+        vertexShader: ShaderLib.points.vertexShader,
         fragmentShader: `
         uniform vec3 color;
         uniform float dist;
@@ -37,24 +37,24 @@ export default function build(data: SystemObjectData) {
         }
         `
     });
-    
-    const geometry = new THREE.BufferGeometry()
-    const points = new THREE.Points(geometry, material)
+
+    const geometry = new BufferGeometry()
+    const points = new Points(geometry, material)
     const radius = (data.distanceToParent / Constants.DISTANCE_SCALE)
 
     let vertexs = []
     const base = 360 / data.draw.count
     for (let i = 0; i < data.draw.count; i++) {
         const n = base * i
-        const[x,y,z] = [Math.sin(n * (Math.PI / 180)) * radius, 0, Math.cos(n * (Math.PI / 180)) * radius]
+        const [x, y, z] = [Math.sin(n * (Math.PI / 180)) * radius, 0, Math.cos(n * (Math.PI / 180)) * radius]
         vertexs.push(x, y, z)
     }
 
     console.log(data)
     vertexs = relaxRingPoints(vertexs, data.draw.height)
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertexs, 3))
+    geometry.setAttribute('position', new Float32BufferAttribute(vertexs, 3))
 
-    const parentGrp = new THREE.Group()
+    const parentGrp = new Group()
     parentGrp.add(points)
     parentGrp.name = `${data.name}_parentGrp`
     points.name = `${data.name}_masterGrp`

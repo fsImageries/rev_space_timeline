@@ -1,4 +1,3 @@
-import { CelestialObject } from "./Celestial";
 import SystemObject from "./SystemObject";
 
 

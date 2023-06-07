@@ -46,20 +46,14 @@ export default function build(data: SystemObjectData) {
         parentGrp.add(infoSprite)
     }
     
-    let sprite
+    let markerSprite
     if (!data.type.includes("moon")) {
         const map = new THREE.TextureLoader().load('/diamond-solid.svg');
         const material = new THREE.SpriteMaterial({ map: map });
-        sprite = new THREE.Sprite(material);
-        sprite.position.y = data.draw.radius + (data.draw.radius / 3)
-        masterGrp.add(sprite)
+        markerSprite = new THREE.Sprite(material);
+        markerSprite.position.y = data.draw.radius + (data.draw.radius / 3)
+        masterGrp.add(markerSprite)
     }
-
-    // let satellites
-    // if ("children" in data) {
-    //     satellites = satelliteFactory(data)
-    //     satellites.children.forEach(child => masterGrp.add(child.topGrp))
-    // }
 
     const celestialData = new CelestialBase({
         id: uuidv4(),
@@ -71,8 +65,12 @@ export default function build(data: SystemObjectData) {
         texts: data.texts,
         orbitalPeriod: data.orbitalPeriod,
         rotationPeriod: data.rotationPeriod,
-        distanceToParent: data.distanceToParent
+        distanceToParent: data.distanceToParent,
+        drawRadius: data.draw.radius
     })
+
+    if (data.draw.orbInvert)
+    celestialData.invertAngularOrbVel()
 
     const internalObject = new Internal3DObject({
         parentGrp,
@@ -81,7 +79,7 @@ export default function build(data: SystemObjectData) {
         mesh,
         atmo,
         orbit,
-        markerSprite: sprite,
+        markerSprite: markerSprite,
         infoSprite
     })
 

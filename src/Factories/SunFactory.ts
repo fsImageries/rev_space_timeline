@@ -47,7 +47,8 @@ export default function build(data:SunData) {
         texts: data.texts,
         orbitalPeriod: data.orbitalPeriod,
         rotationPeriod: data.rotationPeriod,
-        distanceToParent: data.distanceToParent
+        distanceToParent: data.distanceToParent,
+        drawRadius: data.draw.radius
     })
 
     const internalObject = new Internal3DObject({

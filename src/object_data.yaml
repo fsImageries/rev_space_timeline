@@ -92,15 +92,14 @@ systems:
       
   - name: glitterband
     type: particlering
-    radius: 2737.4
+    radius: 
     rotationPeriod: 
     orbitalPeriod: 62000
     parent: yellowstone
     tilt: 0
-    distanceToParent: 1000
+    distanceToParent: 750000000
     draw:
       count: 1000
-      radiusMult: 32
       distDiv: 450000
       height: 3
 

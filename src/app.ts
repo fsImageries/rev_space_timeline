@@ -14,12 +14,12 @@ new Promise((resolve) => {resolve(null)}).then(async () => {
     sys.initWorld(world)
 
     // const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
-    // const obj = world.scene.getObjectByName("yellowstone_masterGrp")
+    const obj = world.scene.getObjectByName("yellowstone_masterGrp")
     // // const obj:any = null
-    // const target = sys.getById(obj.userData["id"])
+    const target = sys.getById(obj.userData["id"])
     // console.log(target)
-    // world.cam.setFollowTarget(target)
-    // world.cam.activateThird()
+    world.cam.setFollowTarget(target)
+    world.cam.activateThird()
 
     requestAnimationFrame((n) => World.eventLoop(n, world))
 })

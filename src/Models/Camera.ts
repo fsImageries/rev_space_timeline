@@ -65,7 +65,7 @@ export class Camera {
     public setFollowTarget(target:SystemObject) {
         // if (this.thirdTarget) this.thirdTarget.masterGrp.remove(this.third)
         target.object.masterGrp.getWorldPosition(outWorldPosition)
-        this.thirdCtrl.setPosition(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z + target.data.radius * 4)
+        this.thirdCtrl.setPosition(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z + target.data.drawRadius * 4)
         // this.thirdCtrl.lookInDirectionOf(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z)
         // this.thirdCtrl.setOrbitPoint(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z)
         this.thirdCtrl.setTarget(outWorldPosition.x, outWorldPosition.y, outWorldPosition.z, true)

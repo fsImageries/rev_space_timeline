@@ -66,6 +66,7 @@ export interface CelestialBaseParams {
     orbitalPeriod?: number;
     rotationPeriod?: number;
     distanceToParent?: number;
+    drawRadius: number;
 }
 
 export interface Internal3DObjectParams {

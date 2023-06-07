@@ -6,7 +6,7 @@ export function getMasterGrp(target: THREE.Object3D) {
             if (target.parent instanceof THREE.Group) {
                 target = target.parent as THREE.Object3D
                 if (target.name.includes("_masterGrp")) break
-                if (target.name.includes("_topGrp")) {
+                if (target.name.includes("_parentGrp")) {
                     target = target.children.reduce((acc, cur) => acc.name.includes("_masterGrp") ? acc : cur)
                     break;
                 }

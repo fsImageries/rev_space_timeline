@@ -26,6 +26,7 @@ export class Sun extends SystemObject {
     }
 
     public init() {
+        console.log(this.lightRadius)
         this.object.masterGrp.traverse(child=>child.userData["id"] = this.data.id)
         this.light.distance = this.lightRadius
         this.initSatellites(this)

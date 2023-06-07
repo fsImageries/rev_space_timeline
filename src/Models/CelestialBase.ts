@@ -15,6 +15,7 @@ export default class CelestialBase {
     public angularRotVel:       number;
     public angularOrbVel:       number;
 
+    public drawRadius:          number;
     public texts?:              string[];
     public id:                  string;
 
@@ -29,6 +30,8 @@ export default class CelestialBase {
         this.orbitalPeriod =        data.orbitalPeriod || 1;
         this.rotationPeriod =       data.rotationPeriod || 1;
         this.distanceToParent =     data.distanceToParent || 0;
+
+        this.drawRadius =           data.drawRadius;
 
         let secsPerRotation = this.rotationPeriod * 60 * 60;
         this.angularRotVel = (2 * Math.PI) / secsPerRotation;

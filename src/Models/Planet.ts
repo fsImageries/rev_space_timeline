@@ -38,9 +38,9 @@ export class Planet extends SystemObject {
 
         if (this.object.infoSprite) {
             const side = this.object.orbit.scale.x > 0 ? -1 : 1
-            const scale = this.data.radius / 10
+            const scale = this.data.drawRadius / 10
             this.object.infoSprite.scale.setScalar(scale)
-            this.object.infoSprite.position.copy(base).x += (this.data.radius + scale) * side
+            this.object.infoSprite.position.copy(base).x += (this.data.drawRadius + scale) * side
         }
 
         this.initSatellites(parent)
@@ -67,11 +67,13 @@ export class Planet extends SystemObject {
         const axisVal = (world.delta * this.data.angularRotVel) * Constants.ROT_SCALE;
         this.object.meshGrp.rotation.y -= axisVal;
 
-        // Orbital Rotation
-        // Needs deactivation if main planets should not move
-        const orbVal = (world.delta * this.data.angularOrbVel) * Constants.ORB_SCALE;
-        this.object.parentGrp.rotation.y += orbVal;
 
+        if (Constants.CELESTIAL_ORB || this.data.type.includes("moon")) {
+            // Orbital Rotation
+            // Needs deactivation if main planets should not move
+            const orbVal = (world.delta * this.data.angularOrbVel) * Constants.ORB_SCALE;
+            this.object.parentGrp.rotation.y += orbVal;
+        }
         this.object.masterGrp.getWorldPosition(Constants.__OUT_WORLD__POS)
         world.cam.active.getWorldPosition(Constants.__OUT_CAM_POS)
         const dist = Constants.__OUT_WORLD__POS.distanceTo(Constants.__OUT_CAM_POS)
@@ -80,9 +82,9 @@ export class Planet extends SystemObject {
             // Sprite scaling
             this.object.markerSprite.scale.setScalar(dist / 50)
             // Distance visibility
-            this.object.markerSprite.visible = dist > 5000 ? true : false
+            this.object.markerSprite.visible = dist > 10000 ? true : false
         }
-        this.object.meshGrp.visible = dist < 10000 ? true : false
+        this.object.meshGrp.visible = dist < 20000 ? true : false
 
         // Satellites Updates
         this.updateSatellites(world, parent)

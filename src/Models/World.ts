@@ -31,9 +31,6 @@ export class World {
     systems: System[];
     curSystem: System;
 
-    /**
-     *
-     */
     constructor(system: System) {
         // Canvas, Renderer, Scene
         this.canvas = document.querySelector(`canvas#main`)!
@@ -105,9 +102,6 @@ export class World {
         worldFolder.add(Constants, "CELESTIAL_ORB").name("Main Orb Rotation")
 
         this.infoPanel = new InfoPanel()
-        // Lights
-        // const ambientLight = new THREE.AmbientLight('#ffdca8', .1)
-        // this.scene.add(ambientLight)
     }
 
     public initListeners() {
@@ -197,13 +191,12 @@ export class World {
         if (intersects.length === 0) return undefined
 
         return intersects[0].object
-        // const obj = intersects[0].object
-        // return getMasterGrp(obj)
     }
 
     public topView() {
         this.cam.activateFree()
         this.cam.activeCtrl.setTarget(0, 0, 0, true)
+        console.log(this.curSystem.radius)
         this.cam.activeCtrl.setPosition(0, this.curSystem.radius * 4, 0)
     }
 }

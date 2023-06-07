@@ -6,6 +6,7 @@ import CelestialBase from "../Models/CelestialBase";
 import { uuidv4 } from "../helpers/utils";
 import Internal3DObject from "../Models/Internal3DObject";
 import { ParticleRing } from "../Models/ParticleRing";
+import Constants from "../helpers/Constants";
 
 
 export default function build(data: SystemObjectData) {
@@ -39,7 +40,7 @@ export default function build(data: SystemObjectData) {
     
     const geometry = new THREE.BufferGeometry()
     const points = new THREE.Points(geometry, material)
-    const radius = data.radius * data.draw.radiusMult
+    const radius = (data.distanceToParent / Constants.DISTANCE_SCALE)
 
     let vertexs = []
     const base = 360 / data.draw.count
@@ -49,7 +50,8 @@ export default function build(data: SystemObjectData) {
         vertexs.push(x, y, z)
     }
 
-    vertexs = relaxTorusPoints(vertexs, data.draw.height)
+    console.log(data)
+    vertexs = relaxRingPoints(vertexs, data.draw.height)
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertexs, 3))
 
     const parentGrp = new THREE.Group()
@@ -67,7 +69,8 @@ export default function build(data: SystemObjectData) {
         texts: data.texts,
         orbitalPeriod: data.orbitalPeriod,
         rotationPeriod: data.rotationPeriod,
-        distanceToParent: data.distanceToParent
+        distanceToParent: data.distanceToParent,
+        drawRadius: data.draw.radius
     })
 
     const internalObject = new Internal3DObject({
@@ -81,7 +84,7 @@ export default function build(data: SystemObjectData) {
     })
 }
 
-function relaxTorusPoints(points: number[], rad: number = 1) {
+function relaxRingPoints(points: number[], rad: number = 1) {
     for (let cur_i = 0; cur_i < points.length; cur_i += 3) {
         points[cur_i + 1] += randFloat(-rad, rad)           // y
         points[cur_i] += randFloat(-rad * 12.5, rad * 12.5)       // x

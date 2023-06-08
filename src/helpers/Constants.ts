@@ -3,8 +3,8 @@ import { Vector3, TextureLoader, Quaternion } from "three";
 const Constants = {
   DISTANCE_SCALE: 3000000,
   SIZE_SCALE: 10,
-  ROT_SCALE: 1,
-  ORB_SCALE: 1,
+  ORB_SCALE: 1000000,
+  ROT_SCALE: 10000,
   CAM_ROT_SPEED: Math.PI / 64,
 
   _time_scale: 1,

@@ -1,4 +1,4 @@
-import { BufferGeometry, Float32BufferAttribute, Group, Points, ShaderLib, ShaderMaterial } from "three";
+import { BufferGeometry, Group, Points, ShaderLib, ShaderMaterial } from "three";
 import { randFloat } from "three/src/math/MathUtils";
 import CelestialBase from "../Models/CelestialBase";
 import Internal3DObject from "../Models/Internal3DObject";
@@ -6,7 +6,6 @@ import { ParticleRing } from "../Models/ParticleRing";
 import { inSphere } from "../helpers/numericUtils";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
-import Constants from "../helpers/Constants";
 
 export default function build(data: SystemObjectData) {
   const material = new ShaderMaterial({

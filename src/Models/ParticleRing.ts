@@ -6,13 +6,11 @@ import { SystemObjectParams } from "../interfaces";
 import { relaxRingPoints } from "../Factories/ParticleRingFactory";
 
 export class ParticleRing extends SystemObject {
-  private _baseRadius: number;
   private _count: number;
   private _height: number;
 
   constructor(data: SystemObjectParams, count: number, height: number) {
     super(data);
-    this._baseRadius = this.data.distanceToParent / Constants.DISTANCE_SCALE
     this._count = count
     this._height = height
   }

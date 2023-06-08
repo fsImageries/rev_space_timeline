@@ -1,9 +1,8 @@
-import { BufferGeometry, Float32BufferAttribute, Group, Points, ShaderLib, ShaderMaterial } from "three";
+import { BufferGeometry, Group, Points, ShaderLib, ShaderMaterial } from "three";
 import { randFloat } from "three/src/math/MathUtils";
 import CelestialBase from "../Models/CelestialBase";
 import Internal3DObject from "../Models/Internal3DObject";
 import { ParticleRing } from "../Models/ParticleRing";
-import Constants from "../helpers/Constants";
 import { inSphere } from "../helpers/numericUtils";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
@@ -40,19 +39,19 @@ export default function build(data: SystemObjectData) {
 
   const geometry = new BufferGeometry();
   const points = new Points(geometry, material);
-  const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
+  // const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
 
-  let vertexs = [];
-  const base = 360 / data.draw.count;
-  for (let i = 0; i < data.draw.count; i++) {
-    const n = base * i;
-    const [x, y, z] = [Math.sin(n * (Math.PI / 180)) * radius, 0, Math.cos(n * (Math.PI / 180)) * radius];
-    vertexs.push(x, y, z);
-  }
+  // let vertexs = [];
+  // const base = 360 / data.draw.count;
+  // for (let i = 0; i < data.draw.count; i++) {
+  //   const n = base * i;
+  //   // const [x, y, z] = [Math.sin(n * (Math.PI / 180)), 0, Math.cos(n * (Math.PI / 180))];
+  //   const [x, y, z] = [Math.sin(n * (Math.PI / 180)) * radius, 0, Math.cos(n * (Math.PI / 180)) * radius];
+  //   vertexs.push(x, y, z);
+  // }
 
-  console.log(data);
-  vertexs = relaxRingPoints(vertexs, data.draw.height);
-  geometry.setAttribute("position", new Float32BufferAttribute(vertexs, 3));
+  // vertexs = relaxRingPoints(vertexs, data.draw.height);
+  // geometry.setAttribute("position", new Float32BufferAttribute(vertexs, 3));
 
   const parentGrp = new Group();
   parentGrp.add(points);
@@ -80,11 +79,11 @@ export default function build(data: SystemObjectData) {
 
   return new ParticleRing({
     data: celestialData,
-    object: internalObject
-  });
+    object: internalObject,
+  }, data.draw.count, data.draw.height);
 }
 
-function relaxRingPoints(points: number[], rad = 1) {
+export function relaxRingPoints(points: number[], rad = 1) {
   for (let cur_i = 0; cur_i < points.length; cur_i += 3) {
     points[cur_i + 1] += randFloat(-rad, rad); // y
     points[cur_i] += randFloat(-rad * 12.5, rad * 12.5); // x

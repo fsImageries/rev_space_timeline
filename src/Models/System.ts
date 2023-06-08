@@ -12,7 +12,7 @@ export class System {
 
   public topGrp: Group;
   public tree: SystemObject[];
-  private flat: SystemObject[];
+  private _flat: SystemObject[];
 
   public isSingleSun: boolean;
   public radius: number;
@@ -25,7 +25,7 @@ export class System {
 
     this.topGrp = new Group();
     this.tree.forEach((obj) => this.topGrp.add(obj.object.parentGrp));
-    this.flat = data.flat;
+    this._flat = data.flat;
     this.radius = this.getRadius();
     console.log(this.radius);
   }
@@ -42,19 +42,21 @@ export class System {
   }
 
   public getById(id: string): Sun | Planet | undefined {
-    return this.flat.reduce((acc, cur) => (acc.data.id === id ? acc : cur));
+    return this._flat.reduce((acc, cur) => (acc.data.id === id ? acc : cur));
   }
 
+  public get flat() { return this._flat }
+
   public oortCloud() {
-    return this.flat.reduce((acc, cur) => (acc.data.type === "oortcloud" ? acc : cur));
+    return this._flat.reduce((acc, cur) => (acc.data.type === "oortcloud" ? acc : cur));
   }
 
   public suns() {
-    return this.flat.filter((obj) => obj.data.type.includes("sun"));
+    return this._flat.filter((obj) => obj.data.type.includes("sun"));
   }
 
   public mainSequenceObjects() {
-    return this.flat.filter(
+    return this._flat.filter(
       (obj) => obj.data.type.includes("sun") || obj.data.type.includes("planet") || obj.data.type.includes("moon")
     );
   }

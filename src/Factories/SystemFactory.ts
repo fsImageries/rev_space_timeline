@@ -19,9 +19,6 @@ export default async function buildAsync(data: SystemData) {
   const flat = await buildObjects(data);
   const tree = connectSatellites(flat);
 
-  console.log(flat);
-  console.log(tree);
-
   return new System({ isSingleSun, name, tree, flat });
 }
 
@@ -36,7 +33,6 @@ async function buildObjects(data: SystemData) {
       }
     }
     if (!factory) {
-      console.log(obj);
       throw new Error(`Something horrible went wrong`);
     }
     objects.push(await factory(obj as SunData));

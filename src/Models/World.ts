@@ -134,7 +134,7 @@ export class World {
       this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-      let target = this.raycastTarget();
+      const target = this.raycastTarget();
       if (!target) {this.infoPanel.visible = false;return}
       const obj = this.curSystem.getById(getMasterGrp(target).userData["id"]);
       if (!obj) {this.infoPanel.visible = false;return}

@@ -11,8 +11,6 @@ export class Camera {
   private _active: THREE.PerspectiveCamera;
   public free: THREE.PerspectiveCamera;
   public third: THREE.PerspectiveCamera;
-
-  private _activeCtrl: Controls;
   public freeCtrl: Controls;
 
   private _isFree: boolean;
@@ -20,6 +18,9 @@ export class Camera {
 
   private _currentPosition: THREE.Vector3;
   private _currentLookat: THREE.Vector3;
+  private _dummyRotate: THREE.Object3D;
+  private _baseOffset: THREE.Vector3;
+  private _baseLookat: THREE.Vector3;
 
   constructor(canvas: HTMLCanvasElement, world: World) {
     this.free = new THREE.PerspectiveCamera(30, canvas.clientWidth / canvas.clientHeight, 0.1, 1e10);
@@ -31,19 +32,18 @@ export class Camera {
     this.freeCtrl = new CameraControls(this.free, world.renderer.domElement);
 
     this._active = this.free;
-    this._activeCtrl = this.freeCtrl;
     this._isFree = true;
 
     this._currentPosition = new THREE.Vector3();
     this._currentLookat = new THREE.Vector3();
+    this._dummyRotate = new THREE.Object3D();
+
+    this._baseOffset = new THREE.Vector3();
+    this._baseLookat = new THREE.Vector3();
   }
 
   public get active(): THREE.PerspectiveCamera {
     return this._active;
-  }
-
-  public get activeCtrl(): Controls {
-    return this._activeCtrl;
   }
 
   public get thirdTarget(): SystemObject {
@@ -54,42 +54,50 @@ export class Camera {
     return this._isFree;
   }
 
-  public idealOffset() {
-    const rad = this._thirdTarget.data.drawRadius;
-    const idealOffset = new THREE.Vector3(rad * 5, rad * 2, -rad * 6);
-    this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS);
-    this._thirdTarget.object.masterGrp.getWorldQuaternion(Constants.WORLD_QUAT);
-    idealOffset.applyQuaternion(Constants.WORLD_QUAT);
-    idealOffset.add(Constants.WORLD_POS);
-    return idealOffset;
+  public rotateThird(key: string) {
+    switch (key) {
+      case "arrowleft":
+        this._dummyRotate.rotateY(Constants.CAM_ROT_SPEED)
+        break;
+
+      case "arrowright":
+        this._dummyRotate.rotateY(-Constants.CAM_ROT_SPEED)
+        break
+
+      case "arrowup":
+        this._dummyRotate.rotateX(Constants.CAM_ROT_SPEED)
+        break
+
+      case "arrowdown":
+        this._dummyRotate.rotateX(-Constants.CAM_ROT_SPEED)
+        break
+    }
   }
 
-  public idealLookat() {
-    const rad = this._thirdTarget.data.drawRadius;
-    const idealLookat = new THREE.Vector3(0, rad / 2, rad);
+  public calculateTarget() {
     this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS);
     this._thirdTarget.object.masterGrp.getWorldQuaternion(Constants.WORLD_QUAT);
-    idealLookat.applyQuaternion(Constants.WORLD_QUAT);
-    idealLookat.add(Constants.WORLD_POS);
-    return idealLookat;
-  }
+    this._dummyRotate.getWorldQuaternion(Constants.WORLD_QUAT2);
 
-  public update(delta: number) {
-    const idealOffset = this.idealOffset();
-    const idealLookat = this.idealLookat();
+    const lookat = this._baseLookat.clone();
+    lookat.applyQuaternion(Constants.WORLD_QUAT);
+    lookat.add(Constants.WORLD_POS);
 
-    this._currentPosition.copy(idealOffset);
-    this._currentLookat.copy(idealLookat);
+    Constants.WORLD_QUAT.multiplyQuaternions(Constants.WORLD_QUAT, Constants.WORLD_QUAT2)
+    const offset = this._baseOffset.clone();
+    offset.applyQuaternion(Constants.WORLD_QUAT);
+    offset.add(Constants.WORLD_POS);
 
-    this.third.position.copy(this._currentPosition);
-    this.third.lookAt(this._currentLookat);
-
-    this.freeCtrl.update(delta);
+    return [lookat, offset]
   }
 
   public setFollowTarget(target: SystemObject) {
     this._thirdTarget = target;
-    console.log(this._thirdTarget.data.name);
+    this._dummyRotate.copy(target.object.masterGrp)
+
+    const rad = this._thirdTarget.data.drawRadius;
+    this._baseOffset = new THREE.Vector3(rad * 5, rad * 2, -rad * 6);
+    this._baseLookat = new THREE.Vector3(0, rad / 2, rad);
   }
 
   public third2Free() {
@@ -102,7 +110,6 @@ export class Camera {
 
   public swtich() {
     this._active = this.isFree ? this.third : this.free;
-    this._activeCtrl = this.freeCtrl; //? this.thirdCtrl : this.freeCtrl;
     this._isFree = !this.isFree;
   }
 
@@ -113,7 +120,23 @@ export class Camera {
 
   public activateFree() {
     this._active = this.free;
-    this._activeCtrl = this.freeCtrl;
     this._isFree = true;
+  }
+
+  public update(delta: number) {
+    const [lookat, offset] = this.calculateTarget()
+
+    if (Constants.ORB_SCALE >= 100000000) {
+      this._currentPosition.copy(offset);
+    } else {
+      const t = 1.0 - Math.pow(0.001, delta);
+      this._currentPosition.lerp(offset, t);
+    }
+    this._currentLookat.copy(lookat);
+
+    this.third.position.copy(this._currentPosition);
+    this.third.lookAt(this._currentLookat);
+
+    this.freeCtrl.update(delta);
   }
 }

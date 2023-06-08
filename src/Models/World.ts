@@ -145,6 +145,10 @@ export class World {
       } else if (this.infoPanel.visible) this.infoPanel.visible = false;
     };
 
+    const keyHandler = (e: KeyboardEvent) => {
+      this.cam.rotateThird(e.key.toLowerCase()) 
+    }
+
     let mousedown = false;
     const mouseDown = () => {
       mousedown = true;
@@ -164,6 +168,7 @@ export class World {
     window.addEventListener("mousedown", mouseDown);
     window.addEventListener("mouseup", mouseUp);
     window.addEventListener("mousemove", mouesMove);
+    window.addEventListener("keydown", keyHandler)
   }
 
   // World methods
@@ -208,8 +213,7 @@ export class World {
 
   public topView() {
     this.cam.activateFree();
-    this.cam.activeCtrl.setTarget(0, 0, 0, true);
-    console.log(this.curSystem.radius);
-    this.cam.activeCtrl.setPosition(0, this.curSystem.radius * 4, 0);
+    this.cam.freeCtrl.setTarget(0, 0, 0, true);
+    this.cam.freeCtrl.setPosition(0, this.curSystem.radius * 4, 0);
   }
 }

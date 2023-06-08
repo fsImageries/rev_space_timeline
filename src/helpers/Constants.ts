@@ -5,6 +5,7 @@ const Constants = {
   SIZE_SCALE: 10,
   ROT_SCALE: 1,
   ORB_SCALE: 1,
+  CAM_ROT_SPEED: Math.PI / 64,
 
   _time_scale: 1,
   get TIME_SCALE() {
@@ -21,7 +22,8 @@ const Constants = {
   WORLD_POS: new Vector3(),
   CAM_POS: new Vector3(),
   TEX_LOADER: new TextureLoader(),
-  WORLD_QUAT: new Quaternion()
+  WORLD_QUAT: new Quaternion(),
+  WORLD_QUAT2: new Quaternion(),
 };
 
 export default Constants;

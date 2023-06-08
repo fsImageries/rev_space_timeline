@@ -91,13 +91,13 @@ export class World {
     this.gui = new GUI({ title: "Settings", width: 300 });
     const worldFolder = this.gui.addFolder("World");
 
-    worldFolder
-      .add(Constants, "DISTANCE_SCALE")
-      .min(0)
-      .name("Distance scale")
-      .onChange(() => {
-        this.curSystem.init();
-      });
+    // worldFolder
+    //   .add(Constants, "DISTANCE_SCALE")
+    //   .min(0)
+    //   .name("Distance scale")
+    //   .onChange(() => {
+    //     this.curSystem.init();
+    //   });
     worldFolder
       .add(Constants, "TIME_SCALE")
       .min(0)

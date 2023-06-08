@@ -134,14 +134,23 @@ export class World {
       this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-      let target = this.raycastTarget();
+      const target = this.raycastTarget();
+      if (!target) {this.infoPanel.visible = false;return}
+      const obj = this.curSystem.getById(getMasterGrp(target).userData["id"]);
+      if (!obj) {this.infoPanel.visible = false;return}
+
+      if (obj.data.type == "sun") {
+        this.infoPanel.showAll(this.curSystem);
+        return
+      }
+      
       // console.log(target) // TODO react when something like glitterband is clicked
-      if (target && target.name.includes("_infoSprite")) {
-        target = getMasterGrp(target);
-        const obj = this.curSystem.getById(target.userData["id"]);
+      if (target.name.includes("_infoSprite")) {
         this.infoPanel.show(obj);
         return;
-      } else if (this.infoPanel.visible) this.infoPanel.visible = false;
+      }
+
+      if (this.infoPanel.visible) this.infoPanel.visible = false
     };
 
     const keyHandler = (e: KeyboardEvent) => {

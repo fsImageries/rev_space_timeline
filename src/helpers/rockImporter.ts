@@ -58,8 +58,6 @@ async function importMeshAsync(path: string) {
   return (await (
     await new GLTFLoader().loadAsync(path)
   ).scene.children[0]) as THREE.Mesh;
-  // console.log(wut)
-  // return (await new OBJLoader().loadAsync(path)).children[0] as THREE.Mesh
 }
 
 async function importTextureAsync(path: string) {

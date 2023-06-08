@@ -33,8 +33,11 @@ systems:
       radius: 100
     texts:
     - |-
-      2600
-      War between Demarchists and Conjoiners starts
+      2560-2600
+      Demarchists start to mine and pre-process metallic hydrogen
+    - |-
+      2605
+      James Bax is laid to rest by his daughter Antoinette Bax
 
   - name: yellowstone
     type: planet
@@ -99,8 +102,6 @@ systems:
       Outbreak of Conjoiner-Demarchist war around Yellowstone
       Establishment of Ferrisville Convention
 
-    
-    
   - name: marcosEye
     type: "moon"
     radius: 1737.4

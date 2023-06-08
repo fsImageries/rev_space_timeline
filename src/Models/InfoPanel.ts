@@ -1,3 +1,4 @@
+import { System } from "./System";
 import SystemObject from "./SystemObject";
 
 const NL_SEP = "\n• "
@@ -30,6 +31,22 @@ export class InfoPanel {
     this.writeTitle(obj.data.name, obj.data.parent || "null");
     if (obj.data.texts) this.writeText(obj.data.texts);
     this.visible = true;
+  }
+
+  showAll(system: System) {
+    const texts = system.flat.map(obj=>obj.data.texts).flat().filter(val=>val).sort((a:string, b:string) => {
+      const year1 = parseInt(this.getFirstYear(this.splitWord(a)[0]))
+      const year2 = parseInt(this.getFirstYear(this.splitWord(b)[0]))
+
+      return year1 - year2
+    })
+    
+    this.writeText(texts);
+    this.visible = true;
+  }
+
+  private getFirstYear(str: string) {
+    return str.match(/(\d+)\D/)[0]
   }
 
   private capitalize(str: string) {

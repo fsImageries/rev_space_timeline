@@ -109,10 +109,9 @@ export class World {
     worldFolder.add(Constants, "ROT_SCALE").min(0).name("Rotational speed");
     worldFolder.add(this, "topView").name("Top View");
     worldFolder.add(this.gridhelper, "visible").name("Grid visiblity");
-    worldFolder.add(Constants, "CELESTIAL_ORB").name("Main Orb Rotation");
+    worldFolder.add(Constants, "MAN_CELESTIAL_ORB").name("Force Orb Rot");
 
     this.infoPanel = new InfoPanel();
-
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
   }
 

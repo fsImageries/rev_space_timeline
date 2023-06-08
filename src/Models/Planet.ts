@@ -51,7 +51,7 @@ export class Planet extends SystemObject {
     const axisVal = world.delta * this.data.angularRotVel * Constants.ROT_SCALE;
     this.object.meshGrp.rotation.y -= axisVal;
 
-    if (Constants.CELESTIAL_ORB || this.data.type.includes("moon")) {
+    if ((Constants.CELESTIAL_ORB || Constants.MAN_CELESTIAL_ORB) || this.data.type.includes("moon")) {
       // Orbital Rotation
       // Needs deactivation if main planets should not move
       const orbVal = world.delta * this.data.angularOrbVel * Constants.ORB_SCALE;

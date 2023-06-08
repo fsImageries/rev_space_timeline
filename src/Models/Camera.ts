@@ -108,17 +108,14 @@ export class Camera {
     this.freeCtrl.setTarget(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
   }
 
-  public swtich() {
-    this._active = this.isFree ? this.third : this.free;
-    this._isFree = !this.isFree;
-  }
-
   public activateThird() {
+    Constants.CELESTIAL_ORB = true
     this._active = this.third;
     this._isFree = false;
   }
 
   public activateFree() {
+    Constants.CELESTIAL_ORB = false
     this._active = this.free;
     this._isFree = true;
   }

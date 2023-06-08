@@ -8,9 +8,7 @@ const Constants = {
   CAM_ROT_SPEED: Math.PI / 64,
 
   _time_scale: 1,
-  get TIME_SCALE() {
-    return this._time_scale;
-  },
+  get TIME_SCALE() { return this._time_scale; },
   set TIME_SCALE(v: number) {
     this.ROT_SCALE = v;
     this.ORB_SCALE = v;
@@ -18,6 +16,7 @@ const Constants = {
   },
 
   CELESTIAL_ORB: true,
+  MAN_CELESTIAL_ORB: false,
 
   WORLD_POS: new Vector3(),
   CAM_POS: new Vector3(),

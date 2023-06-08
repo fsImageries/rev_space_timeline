@@ -12,6 +12,7 @@ import Internal3DObject from "../Models/Internal3DObject";
 import Constants from "../helpers/Constants";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
+import { randFloat } from "three/src/math/MathUtils";
 
 export default function build(data: SystemObjectData) {
   const [mesh, atmo] = build_sphere_mesh_and_atmo(
@@ -71,6 +72,7 @@ export default function build(data: SystemObjectData) {
 
   if (data.draw.orbInvert) celestialData.invertAngularOrbVel();
 
+  parentGrp.rotation.y = randFloat(-Math.PI*randFloat(1,2), Math.PI*randFloat(1,2))
   const internalObject = new Internal3DObject({
     parentGrp,
     masterGrp,

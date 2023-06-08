@@ -1,5 +1,6 @@
 import SystemObject from "./SystemObject";
 
+const NL_SEP = "\n• "
 export class InfoPanel {
   public _parentPanel: HTMLDivElement;
   public _titlePanel: HTMLDivElement;
@@ -22,7 +23,7 @@ export class InfoPanel {
   }
   public set visible(value: boolean) {
     this._visible = value;
-    this._parentPanel.style.opacity = this._visible ? "1" : "0";
+    this._parentPanel.style.visibility = this._visible ? "visible" : "hidden";
   }
 
   public show(obj: SystemObject) {
@@ -52,8 +53,8 @@ export class InfoPanel {
 
   private writeText(texts: string[]) {
     texts = texts.map((t) => {
-      const [year, txt] = t.split("\n");
-      return `${year} - ${txt}`;
+      const line = t.split("\n");
+      return `${line[0]}${NL_SEP}${line.slice(1).join(NL_SEP)}`;
     });
     this._textPanel.textContent = texts.join("\n\r");
   }

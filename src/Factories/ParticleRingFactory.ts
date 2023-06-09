@@ -1,4 +1,4 @@
-import { BufferGeometry, Float32BufferAttribute, Group, Points, ShaderLib, ShaderMaterial } from "three";
+import { BufferGeometry, Float32BufferAttribute, Group, Object3D, Points, ShaderLib, ShaderMaterial } from "three";
 import CelestialBase from "../Classes/CelestialBase";
 import Internal3DObject from "../Classes/Internal3DObject";
 import { ParticleRing } from "../Models/ParticleRing";
@@ -8,9 +8,11 @@ import { SystemObjectData } from "../jsonInterfaces";
 
 import PWorker from "../workers/ParticleWorker?worker";
 
-export default function build(data: SystemObjectData) {
+export default async function build(data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`)
-  
+
+
+
   const material = new ShaderMaterial({
     transparent: true,
     depthWrite: false,
@@ -40,35 +42,30 @@ export default function build(data: SystemObjectData) {
         `
   });
 
-  const geometry = new BufferGeometry();
-  const points = new Points(geometry, material);
+  let points;
+  let parentGrp;
+  if (!data.draw.cache) {
+    const geometry = new BufferGeometry();
+    points = new Points(geometry, material);
 
-  const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
-  const worker = new PWorker()
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`)
-  worker.postMessage({type:data.type, radius, count:data.draw.count, height: data.draw.height})
-  worker.onmessage = (event) => {
-    Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`)
-    geometry.setAttribute("position", new Float32BufferAttribute(event.data, 3));
+    const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
+    const worker = new PWorker()
+    Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`)
+    worker.postMessage({ type: data.type, radius, count: data.draw.count, height: data.draw.height })
+    worker.onmessage = (event) => {
+      Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`)
+      geometry.setAttribute("position", new Float32BufferAttribute(event.data, 3));
+    }
+
+    parentGrp = new Group();
+    parentGrp.add(points);
+    parentGrp.name = `${data.name}_parentGrp`;
+    points.name = `${data.name}_masterGrp`;
+  } else {
+    [parentGrp, points] = await loadCache(data.draw.cache);
+    (points as Points).material = material;
   }
-  // const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
 
-  // let vertexs = [];
-  // const base = 360 / data.draw.count;
-  // for (let i = 0; i < data.draw.count; i++) {
-  //   const n = base * i;
-  //   // const [x, y, z] = [Math.sin(n * (Math.PI / 180)), 0, Math.cos(n * (Math.PI / 180))];
-  //   const [x, y, z] = [Math.sin(n * (Math.PI / 180)) * radius, 0, Math.cos(n * (Math.PI / 180)) * radius];
-  //   vertexs.push(x, y, z);
-  // }
-
-  // vertexs = relaxRingPoints(vertexs, data.draw.height);
-  // geometry.setAttribute("position", new Float32BufferAttribute(vertexs, 3));
-
-  const parentGrp = new Group();
-  parentGrp.add(points);
-  parentGrp.name = `${data.name}_parentGrp`;
-  points.name = `${data.name}_masterGrp`;
 
   const celestialData = new CelestialBase({
     id: uuidv4(),
@@ -89,11 +86,25 @@ export default function build(data: SystemObjectData) {
     masterGrp: points
   });
 
-  const ring =  new ParticleRing({
+  const ring = new ParticleRing({
     data: celestialData,
     object: internalObject,
   }, data.draw.count, data.draw.height);
   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
-  
+
   return ring
+}
+
+function loadCache(path:string): Promise<Object3D[]> {
+  return new Promise((resolve) => {
+    Constants.GLTF_LOADER.load(
+      path,
+      (gltf) => {
+        const points = gltf.scene.children[0]
+        const parentGrp = gltf.scene.children[0].children[0]
+
+        resolve([points, parentGrp])
+      }
+    )
+  });
 }

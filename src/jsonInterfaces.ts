@@ -1,5 +1,6 @@
 export interface DrawData {
   radius: number;
+  cache?: string,
   albedoPath?: string;
   normalPath?: string;
   glowColor?: string;

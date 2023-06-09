@@ -1,23 +1,11 @@
 import { LoadingManager, Quaternion, TextureLoader, Vector3 } from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
 const manager = new LoadingManager();
 
-manager.onStart = function ( url ) {
-	console.log( 'Started loading file: ' + url );
+manager.onError = function (url) {
+  console.error('There was an error loading ' + url);
 };
-
-manager.onLoad = function ( ) {
-	console.log( 'Loading complete!');
-};
-
-// manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-// 	console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-// };
-
-manager.onError = function ( url ) {
-	console.log( 'There was an error loading ' + url );
-};
-
 
 const Constants = {
   DISTANCE_SCALE: 100000,
@@ -37,10 +25,9 @@ const Constants = {
   CELESTIAL_ORB: true,
   MAN_CELESTIAL_ORB: false,
 
-  WORLD_POS: new Vector3(),
-  CAM_POS: new Vector3(),
+  GLTF_LOADER: new GLTFLoader(manager),
   TEX_LOADER: new TextureLoader(manager),
-  TEX_LOAD(path:string) {
+  TEX_LOAD(path: string) {
     __tex.push(path)
     return this.TEX_LOADER.load(path)
     // const map = this.TEX_LOADER.load(path)
@@ -49,6 +36,9 @@ const Constants = {
     // return tex
   },
   LOAD_MANAGER: manager,
+
+  WORLD_POS: new Vector3(),
+  CAM_POS: new Vector3(),
   WORLD_QUAT: new Quaternion(),
   WORLD_QUAT2: new Quaternion(),
 };

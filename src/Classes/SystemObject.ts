@@ -26,6 +26,10 @@ export default abstract class SystemObject {
     this.satellites?.forEach((child) => child.update(world, parent));
   }
 
+  public get drawRadius() {
+    return this.data.radius / Constants.SIZE_SCALE
+  }
+
   public get dist(): number {
     return this.data.distanceToParent ? this.data.distanceToParent / Constants.DISTANCE_SCALE : undefined;
   }

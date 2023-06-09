@@ -22,7 +22,7 @@ export class Startup {
 
         Constants.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {
             const val = (itemsLoaded / itemsTotal) * 100
-            console.log(url, " ", val)
+            console.debug(url, " ", val)
             progress.progress = val
         };
     }

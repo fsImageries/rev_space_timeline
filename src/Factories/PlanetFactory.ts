@@ -22,7 +22,7 @@ export default function build(data: SystemObjectData) {
     data.draw.glowIntensity,
     data.draw.albedoPath,
     data.draw.normalPath,
-    data.draw.radius,
+    data.radius / Constants.SIZE_SCALE,//data.draw.radius,
     data.name
   );
 
@@ -130,7 +130,9 @@ function build_sphere_mesh_and_atmo(
     side: THREE.BackSide,
     blending: THREE.AdditiveBlending,
     transparent: true,
-    depthWrite: false
+    depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -4
   });
 
   const atmo = new THREE.Mesh(sphereGeometry, atmoMat);

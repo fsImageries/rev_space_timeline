@@ -28,8 +28,8 @@ const randSpherePoint = (mult = 1) => {
 function relaxRingPoints(points: number[], rad = 1) {
   for (let cur_i = 0; cur_i < points.length; cur_i += 3) {
     points[cur_i + 1] += randFloat(-rad, rad); // y
-    points[cur_i] += randFloat(-rad * 12.5, rad * 12.5); // x
-    points[cur_i + 2] += randFloat(-rad * 9.5, rad * 9.5); // z
+    points[cur_i] += randFloat(-rad * 25, rad * 25); // x
+    points[cur_i + 2] += randFloat(-rad * 30, rad * 30); // z
     const cur = [points[cur_i], points[cur_i + 1], points[cur_i + 2]];
 
     for (let other_i = 0; other_i < points.length; other_i += 3) {

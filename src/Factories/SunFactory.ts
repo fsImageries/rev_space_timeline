@@ -22,7 +22,7 @@ export default function build(data: SunData) {
     fragmentShader: sunFrag
   });
 
-  const sphereGeometry = new SphereGeometry(data.draw.radius, 50, 50);
+  const sphereGeometry = new SphereGeometry(data.radius/Constants.SIZE_SCALE, 50, 50);
   const mesh = new Mesh(sphereGeometry, mat);
   mesh.name = `${data.name}_mesh`;
 

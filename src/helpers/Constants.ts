@@ -20,8 +20,8 @@ manager.onError = function ( url ) {
 
 
 const Constants = {
-  DISTANCE_SCALE: 3000000,
-  SIZE_SCALE: 10,
+  DISTANCE_SCALE: 100000,
+  SIZE_SCALE: 100,
   ORB_SCALE: 1000000,
   ROT_SCALE: 10000,
   CAM_ROT_SPEED: Math.PI / 64,

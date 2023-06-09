@@ -8,9 +8,6 @@ import { SystemObjectData } from "../jsonInterfaces";
 import PWorker from "../workers/ParticleWorker?worker"
 import Constants from "../helpers/Constants";
 
-// height?: number;
-// distanceEnd: number;
-// distanceToParent: number;
 
 export default async function buildAsync(data: SystemObjectData) {
   const material = new PointsMaterial({
@@ -23,7 +20,7 @@ export default async function buildAsync(data: SystemObjectData) {
 
   const worker = new PWorker()
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`)
-  worker.postMessage({type:data.type, distanceToParent:data.distanceToParent})
+  worker.postMessage({type:data.type, distanceToParent:data.distanceToParent, distScale:Constants.DISTANCE_SCALE})
   worker.onmessage = (event) => {
     Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`)
     geometry.setAttribute("position", new Float32BufferAttribute(event.data, 3));

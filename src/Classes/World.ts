@@ -68,6 +68,11 @@ export class World {
     backgroundImage.encoding = THREE.sRGBEncoding;
     this.scene.background = backgroundImage;
 
+    this.infoPanel = new InfoPanel();
+    this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
+  }
+
+  public initGui() {
     // Gui
     this.gui = new GUI({ title: "Settings", width: 300 });
     const worldFolder = this.gui.addFolder("World");
@@ -91,9 +96,6 @@ export class World {
     worldFolder.add(this, "topView").name("Top View");
     worldFolder.add(this.gridhelper, "visible").name("Grid visiblity");
     worldFolder.add(Constants, "MAN_CELESTIAL_ORB").name("Force Orb Rot");
-
-    this.infoPanel = new InfoPanel();
-    this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
   }
 
   public initListeners() {
@@ -116,15 +118,15 @@ export class World {
       this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
       const target = this.raycastTarget();
-      if (!target) {this.infoPanel.visible = false;return}
+      if (!target) { this.infoPanel.visible = false; return }
       const obj = this.curSystem.getById(getMasterGrp(target).userData["id"]);
-      if (!obj) {this.infoPanel.visible = false;return}
+      if (!obj) { this.infoPanel.visible = false; return }
 
       if (obj.data.type == "sun") {
         this.infoPanel.showAll(this.curSystem);
         return
       }
-      
+
       // console.log(target) // TODO react when something like glitterband is clicked
       if (target.name.includes("_infoSprite")) {
         this.infoPanel.show(obj);
@@ -135,7 +137,7 @@ export class World {
     };
 
     const keyHandler = (e: KeyboardEvent) => {
-      this.cam.rotateThird(e.key.toLowerCase()) 
+      this.cam.rotateThird(e.key.toLowerCase())
     }
 
     let mousedown = false;

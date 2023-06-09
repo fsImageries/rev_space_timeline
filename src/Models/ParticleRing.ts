@@ -8,7 +8,7 @@ export class ParticleRing extends SystemObject {
   // private _count: number;
   // private _height: number;
 
-  constructor(data: SystemObjectParams, count: number, height: number) {
+  constructor(data: SystemObjectParams, _count: number, _height: number) {
     super(data);
     // this._count = count
     // this._height = height

@@ -1,28 +1,33 @@
 import systemFactory from "../Factories/SystemFactory";
 import Constants from "../helpers/Constants";
 import { SystemData } from "../jsonInterfaces";
+import { ProgressPanel } from "./ProgressPanel";
 import { World } from "./World";
 
 export class Startup {
     world: World
 
     constructor() {
-        
-        Constants.LOAD_MANAGER.onLoad = () => {
+        const progress = new ProgressPanel()
+
+        progress.onclick = () => {
+            progress.visible = false
+            this.world.initGui()
             requestAnimationFrame((n) => World.eventLoop(n, this.world));
-            progress.style.display = "none"
-          }
-          
-        const progress = document.getElementById("progress") as HTMLProgressElement
-        Constants.LOAD_MANAGER.onProgress = ( url, itemsLoaded, itemsTotal ) => {
+        }
+
+        Constants.LOAD_MANAGER.onLoad = () => {
+            progress.startBtnvisible = true
+        }
+
+        Constants.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {
             const val = (itemsLoaded / itemsTotal) * 100
             console.log(url, " ", val)
-            // console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-            progress.value = val
+            progress.progress = val
         };
     }
-    
-    public async start(data:SystemData) {
+
+    public async start(data: SystemData) {
         const sys = await systemFactory(data);
         this.world = new World(sys);
         sys.initWorld(this.world);

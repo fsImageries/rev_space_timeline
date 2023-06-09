@@ -60,14 +60,15 @@ export class Planet extends SystemObject {
     this.object.masterGrp.getWorldPosition(Constants.WORLD_POS);
     world.cam.active.getWorldPosition(Constants.CAM_POS);
     const dist = Constants.WORLD_POS.distanceTo(Constants.CAM_POS);
+    const thresh = 100_000_000_00 / Constants.DISTANCE_SCALE
 
     if (!this.data.type.includes("moon")) {
       // Sprite scaling
       this.object.markerSprite.scale.setScalar(dist / 50);
       // Distance visibility
-      this.object.markerSprite.visible = dist > 10000 ? true : false;
+      this.object.markerSprite.visible = dist > thresh;
     }
-    this.object.meshGrp.visible = dist < 20000 ? true : false;
+    this.object.meshGrp.visible = dist < thresh*2;
 
     // Satellites Updates
     this.updateSatellites(world, parent);

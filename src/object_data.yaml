@@ -15,7 +15,7 @@ systems:
     highTemp: 5100 # TODO implement into new interfaces
     lowTemp: 1700 # TODO implement into new interfaces
     draw:
-      radius: 1000
+      radius: 100000
 
   - name: tangerineDream
     type: planet
@@ -41,7 +41,7 @@ systems:
 
   - name: yellowstone
     type: planet
-    radius: 8.6
+    radius: 5600
     rotationPeriod: 26
     orbitalPeriod: 2453000
     parent: epsilonEridani
@@ -52,7 +52,7 @@ systems:
       normalPath: "/epsilonEridani/ceres_normal_16k.png"
       glowColor: '0xf69f1f'
       glowIntensity: 0.25
-      radius: 8.6
+      radius: 100
     texts:
     - |-
       2090 – 2110
@@ -109,7 +109,7 @@ systems:
     orbitalPeriod: 6552
     parent: yellowstone
     tilt: 0
-    distanceToParent: 508440000
+    distanceToParent: 308440000
     draw:
       albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
       normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
@@ -130,12 +130,12 @@ systems:
     rotationPeriod: 
     orbitalPeriod: 62000
     parent: yellowstone
-    tilt: 0
-    distanceToParent: 750000000
+    tilt: 0          
+    distanceToParent: 550000000
     draw:
-      count: 10000
-      distDiv: 450000
-      height: 3
+      count: 1000
+      distDiv: 2500000000
+      height: 30
 
   - name: oortCloud
     type: oortcloud

@@ -1,4 +1,23 @@
-import { Vector3, TextureLoader, Quaternion } from "three";
+import { LoadingManager, Vector3, TextureLoader, Quaternion } from "three";
+
+const manager = new LoadingManager();
+
+// manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+// 	console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+// };
+
+manager.onLoad = function ( ) {
+	console.log( 'Loading complete!');
+};
+
+// manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+// 	console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+// };
+
+manager.onError = function ( url ) {
+	console.log( 'There was an error loading ' + url );
+};
+
 
 const Constants = {
   DISTANCE_SCALE: 3000000,
@@ -20,7 +39,8 @@ const Constants = {
 
   WORLD_POS: new Vector3(),
   CAM_POS: new Vector3(),
-  TEX_LOADER: new TextureLoader(),
+  TEX_LOADER: new TextureLoader(manager),
+  LOAD_MANAGER: manager,
   WORLD_QUAT: new Quaternion(),
   WORLD_QUAT2: new Quaternion(),
 };

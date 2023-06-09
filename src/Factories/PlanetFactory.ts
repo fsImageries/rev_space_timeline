@@ -15,6 +15,8 @@ import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
 import { randFloat } from "three/src/math/MathUtils";
 
 export default function build(data: SystemObjectData) {
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`)
+  
   const [mesh, atmo] = build_sphere_mesh_and_atmo(
     new THREE.Color(parseInt(data.draw.glowColor)),
     data.draw.glowIntensity,
@@ -84,10 +86,13 @@ export default function build(data: SystemObjectData) {
     infoSprite
   });
 
-  return new Planet({
+  const planet = new Planet({
     data: celestialData,
     object: internalObject
   });
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
+
+  return planet
 }
 
 function build_sphere_mesh_and_atmo(
@@ -98,10 +103,10 @@ function build_sphere_mesh_and_atmo(
   radius: number,
   name: string
 ) {
-  const albedo = new THREE.TextureLoader().load(albedoPath);
+  const albedo = Constants.TEX_LOADER.load(albedoPath);
   albedo.magFilter = THREE.NearestFilter;
 
-  const normal = new THREE.TextureLoader().load(normalPath);
+  const normal = Constants.TEX_LOADER.load(normalPath);
   normal.magFilter = THREE.NearestFilter;
 
   const sphereMaterial = new THREE.MeshPhongMaterial({

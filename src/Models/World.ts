@@ -81,8 +81,7 @@ export class World {
     this.scene.add(this.gridhelper);
 
     // Sky box
-    const textureLoader = new THREE.TextureLoader();
-    const backgroundImage = textureLoader.load("/starmap_8k.jpg");
+    const backgroundImage = Constants.TEX_LOADER.load("/starmap_8k.jpg");
     backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
     backgroundImage.encoding = THREE.sRGBEncoding;
     this.scene.background = backgroundImage;

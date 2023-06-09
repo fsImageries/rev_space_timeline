@@ -27,7 +27,6 @@ export class System {
     this.tree.forEach((obj) => this.topGrp.add(obj.object.parentGrp));
     this._flat = data.flat;
     this.radius = this.getRadius();
-    console.log(this.radius);
   }
 
   // public get allCelestialObjects(): CelestialObject[] {

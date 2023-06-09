@@ -133,7 +133,7 @@ systems:
     tilt: 0
     distanceToParent: 750000000
     draw:
-      count: 1000
+      count: 10000
       distDiv: 450000
       height: 3
 

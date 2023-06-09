@@ -6,8 +6,11 @@ import { ParticleRing } from "../Models/ParticleRing";
 import { inSphere } from "../helpers/numericUtils";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
+import Constants from "../helpers/Constants";
 
 export default function build(data: SystemObjectData) {
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`)
+  
   const material = new ShaderMaterial({
     transparent: true,
     depthWrite: false,
@@ -77,10 +80,13 @@ export default function build(data: SystemObjectData) {
     masterGrp: points
   });
 
-  return new ParticleRing({
+  const ring =  new ParticleRing({
     data: celestialData,
     object: internalObject,
   }, data.draw.count, data.draw.height);
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
+  
+  return ring
 }
 
 export function relaxRingPoints(points: number[], rad = 1) {

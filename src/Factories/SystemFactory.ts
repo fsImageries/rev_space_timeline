@@ -5,6 +5,7 @@ import oortFactoryAsync from "../Factories/OortFactory";
 import particleRingFactory from "../Factories/ParticleRingFactory";
 import { System } from "../Models/System";
 import SystemObject from "../Models/SystemObject";
+import Constants from "../helpers/Constants";
 
 const map = {
   sun: sunFactory,
@@ -14,12 +15,17 @@ const map = {
 };
 
 export default async function buildAsync(data: SystemData) {
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`)
+
   const name = data.name;
   const isSingleSun = data.isSingleSun;
   const flat = await buildObjects(data);
   const tree = connectSatellites(flat);
 
-  return new System({ isSingleSun, name, tree, flat });
+  const sys = new System({ isSingleSun, name, tree, flat });
+
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
+  return sys
 }
 
 async function buildObjects(data: SystemData) {
@@ -37,6 +43,7 @@ async function buildObjects(data: SystemData) {
     }
     objects.push(await factory(obj as SunData));
   }
+
   return objects;
 }
 

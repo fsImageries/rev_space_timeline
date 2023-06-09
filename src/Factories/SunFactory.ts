@@ -6,8 +6,11 @@ import { uuidv4 } from "../helpers/utils";
 import { SunData } from "../jsonInterfaces";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
+import Constants from "../helpers/Constants";
 
 export default function build(data: SunData) {
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`)
+
   const mat = new ShaderMaterial({
     uniforms: {
       time: { value: 1.0 },
@@ -55,8 +58,11 @@ export default function build(data: SunData) {
     mesh
   });
 
-  return new Sun({
+  const sun = new Sun({
     data: celestialData,
     object: internalObject
   });
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
+
+  return sun
 }

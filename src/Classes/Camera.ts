@@ -95,7 +95,7 @@ export class Camera {
     this._thirdTarget = target;
     this._dummyRotate.copy(target.object.masterGrp)
 
-    const rad = this._thirdTarget.data.drawRadius;
+    const rad = this._thirdTarget.drawRadius
     this._baseOffset = new THREE.Vector3(rad * 5, rad * 2, -rad * 6);
     this._baseLookat = new THREE.Vector3(0, rad / 2, rad);
   }

@@ -1,9 +1,13 @@
-import { BufferGeometry, Group, Points, PointsMaterial } from "three";
-import CelestialBase from "../Models/CelestialBase";
-import Internal3DObject from "../Models/Internal3DObject";
+import { BufferGeometry, Float32BufferAttribute, Group, Points, PointsMaterial } from "three";
+import CelestialBase from "../Classes/CelestialBase";
+import Internal3DObject from "../Classes/Internal3DObject";
 import Oort from "../Models/Oort";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
+
+import PWorker from "../workers/ParticleWorker?worker"
+import Constants from "../helpers/Constants";
+
 
 export default async function buildAsync(data: SystemObjectData) {
   const material = new PointsMaterial({
@@ -13,6 +17,14 @@ export default async function buildAsync(data: SystemObjectData) {
   });
   const geometry = new BufferGeometry();
   const points = new Points(geometry, material);
+
+  const worker = new PWorker()
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`)
+  worker.postMessage({type:data.type, distanceToParent:data.distanceToParent, distScale:Constants.DISTANCE_SCALE})
+  worker.onmessage = (event) => {
+    Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`)
+    geometry.setAttribute("position", new Float32BufferAttribute(event.data, 3));
+  }
 
   const parentGrp = new Group();
   parentGrp.add(points);

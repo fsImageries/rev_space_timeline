@@ -1,10 +1,6 @@
-import { Float32BufferAttribute, Points } from "three";
-import Constants from "../helpers/Constants";
-import { randSpherePointExcludes } from "../helpers/numericUtils";
+import SystemObject from "../Classes/SystemObject";
 import { SystemObjectParams } from "../interfaces";
-import SystemObject from "./SystemObject";
 
-const PNTCOUNT = 100_000;
 const RANGE = 6731900000000;
 
 export default class Oort extends SystemObject {
@@ -16,16 +12,16 @@ export default class Oort extends SystemObject {
   }
 
   public init() {
-    const range = (this.distanceEnd - this.data.distanceToParent) / Constants.DISTANCE_SCALE;
-    const distanceEnd = this.distanceEnd / Constants.DISTANCE_SCALE;
+    // const range = (this.distanceEnd - this.data.distanceToParent) / Constants.DISTANCE_SCALE;
+    // const distanceEnd = this.distanceEnd / Constants.DISTANCE_SCALE;
 
-    const vertexs = [];
-    for (let i = 0; i < PNTCOUNT; i++) {
-      const [x, y, z] = randSpherePointExcludes(distanceEnd, distanceEnd + range);
-      vertexs.push(x, y, z);
-    }
+    // const vertexs = [];
+    // for (let i = 0; i < PNTCOUNT; i++) {
+    //   const [x, y, z] = randSpherePointExcludes(distanceEnd, distanceEnd + range);
+    //   vertexs.push(x, y, z);
+    // }
 
-    (this.object.masterGrp as Points).geometry.setAttribute("position", new Float32BufferAttribute(vertexs, 3));
+    // (this.object.masterGrp as Points).geometry.setAttribute("position", new Float32BufferAttribute(vertexs, 3));
   }
 
   public update() {

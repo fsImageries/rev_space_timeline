@@ -1,4 +1,4 @@
-import { System } from "./System";
+import { System } from "../Models/System";
 import SystemObject from "./SystemObject";
 
 const NL_SEP = "\n• "
@@ -24,7 +24,9 @@ export class InfoPanel {
   }
   public set visible(value: boolean) {
     this._visible = value;
-    this._parentPanel.style.visibility = this._visible ? "visible" : "hidden";
+    const val = this._visible ? "visible" : "hidden"
+    this._parentPanel.style.setProperty( 'visibility', val, 'important' )
+    // this._parentPanel.style.visibility = this._visible ? "visible !important" : "hidden !important";
   }
 
   public show(obj: SystemObject) {

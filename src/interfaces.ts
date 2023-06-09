@@ -1,6 +1,6 @@
-import CelestialBase from "./Models/CelestialBase";
-import Internal3DObject2 from "./Models/Internal3DObject";
-import SystemObject from "./Models/SystemObject";
+import CelestialBase from "./Classes/CelestialBase";
+import Internal3DObject2 from "./Classes/Internal3DObject";
+import SystemObject from "./Classes/SystemObject";
 
 export interface RandStats {
   range: number;

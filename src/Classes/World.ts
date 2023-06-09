@@ -2,10 +2,10 @@ import GUI from "lil-gui";
 import * as THREE from "three";
 import Constants from "../helpers/Constants";
 import { getMasterGrp } from "../helpers/utils";
-import { resizeRendererToDisplaySize } from "./../helpers/utils";
+import { resizeRendererToDisplaySize } from "../helpers/utils";
 import { Camera } from "./Camera";
 import { InfoPanel } from "./InfoPanel";
-import { System } from "./System";
+import { System } from "../Models/System";
 
 let lastTime: number;
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
@@ -14,7 +14,6 @@ export class World {
   canvas: HTMLElement;
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
-  loadingManager: THREE.LoadingManager;
   clock: THREE.Clock;
   delta: number;
   gridhelper: THREE.GridHelper;
@@ -43,23 +42,6 @@ export class World {
     this.renderer.setClearColor(0x000000);
     this.scene = new THREE.Scene();
 
-    // Loading Manager
-    this.loadingManager = new THREE.LoadingManager();
-
-    this.loadingManager.onStart = () => {
-      console.log("loading started");
-    };
-    this.loadingManager.onProgress = (url, loaded, total) => {
-      console.log("loading in progress:");
-      console.log(`${url} -> ${loaded} / ${total}`);
-    };
-    this.loadingManager.onLoad = () => {
-      console.log("loaded!");
-    };
-    this.loadingManager.onError = () => {
-      console.log("❌ error while loading");
-    };
-
     this.cam = new Camera(this.canvas as HTMLCanvasElement, this);
 
     // Helper setup
@@ -81,12 +63,16 @@ export class World {
     this.scene.add(this.gridhelper);
 
     // Sky box
-    const textureLoader = new THREE.TextureLoader();
-    const backgroundImage = textureLoader.load("/starmap_8k.jpg");
+    const backgroundImage = Constants.TEX_LOAD("/starmap_8k.jpg");
     backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
     backgroundImage.encoding = THREE.sRGBEncoding;
     this.scene.background = backgroundImage;
 
+    this.infoPanel = new InfoPanel();
+    this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
+  }
+
+  public initGui() {
     // Gui
     this.gui = new GUI({ title: "Settings", width: 300 });
     const worldFolder = this.gui.addFolder("World");
@@ -110,9 +96,6 @@ export class World {
     worldFolder.add(this, "topView").name("Top View");
     worldFolder.add(this.gridhelper, "visible").name("Grid visiblity");
     worldFolder.add(Constants, "MAN_CELESTIAL_ORB").name("Force Orb Rot");
-
-    this.infoPanel = new InfoPanel();
-    this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
   }
 
   public initListeners() {
@@ -135,15 +118,15 @@ export class World {
       this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
       const target = this.raycastTarget();
-      if (!target) {this.infoPanel.visible = false;return}
+      if (!target) { this.infoPanel.visible = false; return }
       const obj = this.curSystem.getById(getMasterGrp(target).userData["id"]);
-      if (!obj) {this.infoPanel.visible = false;return}
+      if (!obj) { this.infoPanel.visible = false; return }
 
       if (obj.data.type == "sun") {
         this.infoPanel.showAll(this.curSystem);
         return
       }
-      
+
       // console.log(target) // TODO react when something like glitterband is clicked
       if (target.name.includes("_infoSprite")) {
         this.infoPanel.show(obj);
@@ -154,7 +137,7 @@ export class World {
     };
 
     const keyHandler = (e: KeyboardEvent) => {
-      this.cam.rotateThird(e.key.toLowerCase()) 
+      this.cam.rotateThird(e.key.toLowerCase())
     }
 
     let mousedown = false;

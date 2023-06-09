@@ -4,8 +4,8 @@ import { SystemParams } from "../interfaces";
 import Oort from "./Oort";
 import { Planet } from "./Planet";
 import { Sun } from "./Sun";
-import SystemObject from "./SystemObject";
-import { World } from "./World";
+import SystemObject from "../Classes/SystemObject";
+import { World } from "../Classes/World";
 
 export class System {
   public name: string;
@@ -27,7 +27,6 @@ export class System {
     this.tree.forEach((obj) => this.topGrp.add(obj.object.parentGrp));
     this._flat = data.flat;
     this.radius = this.getRadius();
-    console.log(this.radius);
   }
 
   // public get allCelestialObjects(): CelestialObject[] {

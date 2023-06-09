@@ -1,7 +1,7 @@
 import { Mesh, PointLight, ShaderMaterial } from "three";
 import { SystemObjectParams } from "../interfaces";
-import SystemObject from "./SystemObject";
-import { World } from "./World";
+import SystemObject from "../Classes/SystemObject";
+import { World } from "../Classes/World";
 
 export class Sun extends SystemObject {
   private light: PointLight;

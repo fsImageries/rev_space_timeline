@@ -1,6 +1,6 @@
 import Constants from "../helpers/Constants";
 import { SystemObjectParams } from "../interfaces";
-import CelestialBase from "./CelestialBase";
+import CelestialBase from "../Classes/CelestialBase";
 import Internal3DObject from "./Internal3DObject";
 import { World } from "./World";
 

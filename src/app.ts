@@ -1,26 +1,15 @@
-import { World } from "./Models/World";
+import { Startup } from "./Classes/Startup";
 import { SystemsData } from "./jsonInterfaces";
-import systemFactory from "./Factories/SystemFactory";
 import celestialData from "./object_data.yaml";
-import "./styles/baseStyle.css";
-import "./styles/infoPanel.css";
 
-new Promise((resolve) => {
-  resolve(null);
-}).then(async () => {
+
+window.onload = () => {
   const data = celestialData as SystemsData;
+  const start = new Startup()
 
-  const sys = await systemFactory(data.systems[0]);
-  const world = new World(sys);
-  sys.initWorld(world);
-
-  // const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
-  const obj = world.scene.getObjectByName("yellowstone_masterGrp");
-  // // const obj:any = null
-  const target = sys.getById(obj.userData["id"]);
-  // console.log(target)
-  world.cam.setFollowTarget(target);
-  world.cam.activateThird();
-
-  requestAnimationFrame((n) => World.eventLoop(n, world));
-});
+  new Promise((resolve) => {
+    resolve(null);
+  }).then(async () => {
+    await start.start(data.systems[0])
+  });
+}

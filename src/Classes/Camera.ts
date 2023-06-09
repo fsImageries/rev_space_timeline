@@ -1,6 +1,6 @@
 import CameraControls from "camera-controls";
 import * as THREE from "three";
-import SystemObject from "./SystemObject";
+import SystemObject from "../Classes/SystemObject";
 import { World } from "./World";
 import Constants from "../helpers/Constants";
 

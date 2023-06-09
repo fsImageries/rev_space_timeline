@@ -7,8 +7,8 @@ import { SystemObjectData } from "../jsonInterfaces";
 import infoSpriteFactory from "./InfoSpriteFactory";
 import build_orbit from "./OrbitFactory";
 
-import CelestialBase from "../Models/CelestialBase";
-import Internal3DObject from "../Models/Internal3DObject";
+import CelestialBase from "../Classes/CelestialBase";
+import Internal3DObject from "../Classes/Internal3DObject";
 import Constants from "../helpers/Constants";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
@@ -16,7 +16,7 @@ import { randFloat } from "three/src/math/MathUtils";
 
 export default function build(data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`)
-  
+
   const [mesh, atmo] = build_sphere_mesh_and_atmo(
     new THREE.Color(parseInt(data.draw.glowColor)),
     data.draw.glowIntensity,
@@ -51,7 +51,7 @@ export default function build(data: SystemObjectData) {
 
   let markerSprite;
   if (!data.type.includes("moon")) {
-    const map = Constants.TEX_LOADER.load("/diamond-solid.svg");
+    const map = Constants.TEX_LOAD("/diamond-solid.svg");
     const material = new THREE.SpriteMaterial({ map: map });
     markerSprite = new THREE.Sprite(material);
     markerSprite.position.y = data.draw.radius + data.draw.radius / 3;
@@ -103,10 +103,10 @@ function build_sphere_mesh_and_atmo(
   radius: number,
   name: string
 ) {
-  const albedo = Constants.TEX_LOADER.load(albedoPath);
+  const albedo = Constants.TEX_LOAD(albedoPath);
   albedo.magFilter = THREE.NearestFilter;
 
-  const normal = Constants.TEX_LOADER.load(normalPath);
+  const normal = Constants.TEX_LOAD(normalPath);
   normal.magFilter = THREE.NearestFilter;
 
   const sphereMaterial = new THREE.MeshPhongMaterial({

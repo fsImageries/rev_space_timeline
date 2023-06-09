@@ -1,34 +1,33 @@
 import * as THREE from "three";
-import { World } from "./World";
+import SystemObject from "../Classes/SystemObject";
+import { World } from "../Classes/World";
 import Constants from "../helpers/Constants";
-import SystemObject from "./SystemObject";
 import { SystemObjectParams } from "../interfaces";
-import { relaxRingPoints } from "../Factories/ParticleRingFactory";
 
 export class ParticleRing extends SystemObject {
-  private _count: number;
-  private _height: number;
+  // private _count: number;
+  // private _height: number;
 
   constructor(data: SystemObjectParams, count: number, height: number) {
     super(data);
-    this._count = count
-    this._height = height
+    // this._count = count
+    // this._height = height
   }
 
   public init(parent: SystemObject): void {
     // TODO really don't like this, but need help nonetheless
-    const radius = this.data.distanceToParent / Constants.DISTANCE_SCALE;
-    let vertexs = [];
-    const base = 360 / this._count;
-    for (let i = 0; i < this._count; i++) {
-      const n = base * i;
-      // const [x, y, z] = [Math.sin(n * (Math.PI / 180)), 0, Math.cos(n * (Math.PI / 180))];
-      const [x, y, z] = [Math.sin(n * (Math.PI / 180)) * radius, 0, Math.cos(n * (Math.PI / 180)) * radius];
-      vertexs.push(x, y, z);
-    }
+    // const radius = this.data.distanceToParent / Constants.DISTANCE_SCALE;
+    // let vertexs = [];
+    // const base = 360 / this._count;
+    // for (let i = 0; i < this._count; i++) {
+    //   const n = base * i;
+    //   // const [x, y, z] = [Math.sin(n * (Math.PI / 180)), 0, Math.cos(n * (Math.PI / 180))];
+    //   const [x, y, z] = [Math.sin(n * (Math.PI / 180)) * radius, 0, Math.cos(n * (Math.PI / 180)) * radius];
+    //   vertexs.push(x, y, z);
+    // }
 
-    vertexs = relaxRingPoints(vertexs, this._height);
-    (this.object.masterGrp as THREE.Points).geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertexs, 3));
+    // vertexs = relaxRingPoints(vertexs, this._height);
+    // (this.object.masterGrp as THREE.Points).geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertexs, 3));
 
     this.initSatellites(parent);
   }

@@ -1,6 +1,6 @@
 import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
-import CelestialBase from "../Models/CelestialBase";
-import Internal3DObject from "../Models/Internal3DObject";
+import CelestialBase from "../Classes/CelestialBase";
+import Internal3DObject from "../Classes/Internal3DObject";
 import { Sun } from "../Models/Sun";
 import { uuidv4 } from "../helpers/utils";
 import { SunData } from "../jsonInterfaces";

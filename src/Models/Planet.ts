@@ -1,8 +1,8 @@
 import { Mesh, ShaderMaterial, Vector3 } from "three";
 import Constants from "../helpers/Constants";
 import { SystemObjectParams } from "../interfaces";
-import SystemObject from "./SystemObject";
-import { World } from "./World";
+import SystemObject from "../Classes/SystemObject";
+import { World } from "../Classes/World";
 
 export class Planet extends SystemObject {
   constructor(data: SystemObjectParams) {

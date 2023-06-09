@@ -2,10 +2,10 @@ import GUI from "lil-gui";
 import * as THREE from "three";
 import Constants from "../helpers/Constants";
 import { getMasterGrp } from "../helpers/utils";
-import { resizeRendererToDisplaySize } from "./../helpers/utils";
+import { resizeRendererToDisplaySize } from "../helpers/utils";
 import { Camera } from "./Camera";
 import { InfoPanel } from "./InfoPanel";
-import { System } from "./System";
+import { System } from "../Models/System";
 
 let lastTime: number;
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
@@ -14,7 +14,6 @@ export class World {
   canvas: HTMLElement;
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
-  loadingManager: THREE.LoadingManager;
   clock: THREE.Clock;
   delta: number;
   gridhelper: THREE.GridHelper;
@@ -43,23 +42,6 @@ export class World {
     this.renderer.setClearColor(0x000000);
     this.scene = new THREE.Scene();
 
-    // Loading Manager
-    this.loadingManager = new THREE.LoadingManager();
-
-    this.loadingManager.onStart = () => {
-      console.log("loading started");
-    };
-    this.loadingManager.onProgress = (url, loaded, total) => {
-      console.log("loading in progress:");
-      console.log(`${url} -> ${loaded} / ${total}`);
-    };
-    this.loadingManager.onLoad = () => {
-      console.log("loaded!");
-    };
-    this.loadingManager.onError = () => {
-      console.log("❌ error while loading");
-    };
-
     this.cam = new Camera(this.canvas as HTMLCanvasElement, this);
 
     // Helper setup
@@ -81,7 +63,7 @@ export class World {
     this.scene.add(this.gridhelper);
 
     // Sky box
-    const backgroundImage = Constants.TEX_LOADER.load("/starmap_8k.jpg");
+    const backgroundImage = Constants.TEX_LOAD("/starmap_8k.jpg");
     backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
     backgroundImage.encoding = THREE.sRGBEncoding;
     this.scene.background = backgroundImage;

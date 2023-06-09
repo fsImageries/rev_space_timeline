@@ -1,12 +1,14 @@
-import { BufferGeometry, Group, Points, ShaderLib, ShaderMaterial } from "three";
+import { BufferGeometry, Float32BufferAttribute, Group, Points, ShaderLib, ShaderMaterial } from "three";
 import { randFloat } from "three/src/math/MathUtils";
-import CelestialBase from "../Models/CelestialBase";
-import Internal3DObject from "../Models/Internal3DObject";
+import CelestialBase from "../Classes/CelestialBase";
+import Internal3DObject from "../Classes/Internal3DObject";
 import { ParticleRing } from "../Models/ParticleRing";
 import { inSphere } from "../helpers/numericUtils";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
 import Constants from "../helpers/Constants";
+
+import PWorker from "../workers/ParticleWorker?worker"
 
 export default function build(data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`)
@@ -42,6 +44,15 @@ export default function build(data: SystemObjectData) {
 
   const geometry = new BufferGeometry();
   const points = new Points(geometry, material);
+
+  const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
+  const worker = new PWorker()
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`)
+  worker.postMessage({type:data.type, radius, count:data.draw.count, height: data.draw.height})
+  worker.onmessage = (event) => {
+    Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`)
+    geometry.setAttribute("position", new Float32BufferAttribute(event.data, 3));
+  }
   // const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
 
   // let vertexs = [];

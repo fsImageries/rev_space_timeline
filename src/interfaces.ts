@@ -1,4 +1,4 @@
-import CelestialBase from "./Models/CelestialBase";
+import CelestialBase from "./Classes/CelestialBase";
 import Internal3DObject2 from "./Models/Internal3DObject";
 import SystemObject from "./Models/SystemObject";
 

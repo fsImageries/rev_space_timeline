@@ -1,10 +1,10 @@
-import { LoadingManager, Vector3, TextureLoader, Quaternion } from "three";
+import { LoadingManager, Quaternion, TextureLoader, Vector3 } from "three";
 
 const manager = new LoadingManager();
 
-// manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
-// 	console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-// };
+manager.onStart = function ( url ) {
+	console.log( 'Started loading file: ' + url );
+};
 
 manager.onLoad = function ( ) {
 	console.log( 'Loading complete!');
@@ -40,9 +40,19 @@ const Constants = {
   WORLD_POS: new Vector3(),
   CAM_POS: new Vector3(),
   TEX_LOADER: new TextureLoader(manager),
+  TEX_LOAD(path:string) {
+    __tex.push(path)
+    return this.TEX_LOADER.load(path)
+    // const map = this.TEX_LOADER.load(path)
+    // const tex = new CanvasTexture(map)
+    // tex.needsUpdate = true
+    // return tex
+  },
   LOAD_MANAGER: manager,
   WORLD_QUAT: new Quaternion(),
   WORLD_QUAT2: new Quaternion(),
 };
+
+const __tex = []
 
 export default Constants;

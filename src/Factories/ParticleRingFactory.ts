@@ -1,14 +1,12 @@
 import { BufferGeometry, Float32BufferAttribute, Group, Points, ShaderLib, ShaderMaterial } from "three";
-import { randFloat } from "three/src/math/MathUtils";
 import CelestialBase from "../Classes/CelestialBase";
 import Internal3DObject from "../Classes/Internal3DObject";
 import { ParticleRing } from "../Models/ParticleRing";
-import { inSphere } from "../helpers/numericUtils";
+import Constants from "../helpers/Constants";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
-import Constants from "../helpers/Constants";
 
-import PWorker from "../workers/ParticleWorker?worker"
+import PWorker from "../workers/ParticleWorker?worker";
 
 export default function build(data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`)
@@ -98,22 +96,4 @@ export default function build(data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
   
   return ring
-}
-
-export function relaxRingPoints(points: number[], rad = 1) {
-  for (let cur_i = 0; cur_i < points.length; cur_i += 3) {
-    points[cur_i + 1] += randFloat(-rad, rad); // y
-    points[cur_i] += randFloat(-rad * 12.5, rad * 12.5); // x
-    points[cur_i + 2] += randFloat(-rad * 9.5, rad * 9.5); // z
-    const cur = [points[cur_i], points[cur_i + 1], points[cur_i + 2]];
-
-    for (let other_i = 0; other_i < points.length; other_i += 3) {
-      if (cur_i == other_i) continue;
-      const other = [points[other_i], points[other_i + 1], points[other_i + 2]];
-      if (inSphere(other, cur, rad)) {
-        points[other_i + 1] += randFloat(-rad, rad);
-      }
-    }
-  }
-  return points;
 }

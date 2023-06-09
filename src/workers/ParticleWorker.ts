@@ -1,56 +1,5 @@
-function randFloat( low:number, high:number ) {
-	return low + Math.random() * ( high - low );
-}
+import { randSpherePointExcludes, relaxRingPoints } from "../helpers/numericUtils";
 
-const inSphere = (pos: number[], spherePos: number[], rad: number) => {
-  const diff = spherePos.map((sp, idx) => sp - pos[idx]);
-  const dist = Math.sqrt(diff[0] ** 2 + diff[1] ** 2 + diff[2] ** 2);
-  return dist < rad;
-};
-
-const randSpherePoint = (mult = 1) => {
-  const u = Math.random();
-  const v = Math.random();
-  const theta = u * 2.0 * Math.PI;
-  const phi = Math.acos(2.0 * v - 1.0);
-  const r = Math.cbrt(Math.random());
-  const sinTheta = Math.sin(theta);
-  const cosTheta = Math.cos(theta);
-  const sinPhi = Math.sin(phi);
-  const cosPhi = Math.cos(phi);
-  const x = r * sinPhi * cosTheta;
-  const y = r * sinPhi * sinTheta;
-  const z = r * cosPhi;
-  // return {x: x, y: y, z: z};
-  return [x * mult, y * mult, z * mult];
-};
-
-function relaxRingPoints(points: number[], rad = 1) {
-  for (let cur_i = 0; cur_i < points.length; cur_i += 3) {
-    points[cur_i + 1] += randFloat(-rad, rad); // y
-    points[cur_i] += randFloat(-rad * 25, rad * 25); // x
-    points[cur_i + 2] += randFloat(-rad * 30, rad * 30); // z
-    const cur = [points[cur_i], points[cur_i + 1], points[cur_i + 2]];
-
-    for (let other_i = 0; other_i < points.length; other_i += 3) {
-      if (cur_i == other_i) continue;
-      const other = [points[other_i], points[other_i + 1], points[other_i + 2]];
-      if (inSphere(other, cur, rad)) {
-        points[other_i + 1] += randFloat(-rad, rad);
-      }
-    }
-  }
-  return points;
-}
-
-const randSpherePointExcludes = (r: number, mult = 1) => {
-  const base = [0, 0, 0];
-  let pnt = [0, 0, 0];
-  while (inSphere(pnt, base, r)) {
-    pnt = randSpherePoint(mult);
-  }
-  return pnt;
-};
 
 interface Data {
   type: string;

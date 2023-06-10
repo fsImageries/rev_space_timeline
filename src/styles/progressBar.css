@@ -18,7 +18,6 @@ a:active {
     padding: .5% 1%;
     line-height: 1rem;
     font-size: 85%;
-    /* white-space: break-spaces; */
     background-color: rgba(175, 184, 193, 0.2);
     border-radius: 6px;
 }
@@ -38,6 +37,12 @@ a:active {
 #loading .title {
     font-weight: bold;
     font-size: 2rem;
+}
+
+#titleArea .subTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 #titleArea,

@@ -41,7 +41,7 @@ export class InfoPanel {
   }
 
   public init(system:System) {
-    const parents = system.flat.filter(obj => obj.data.name in this._textMap)
+    const parents = system.flat.filter(obj => obj.data.name in this._textMap || obj.data.type == "sun")
     this._spriteManager.build(parents)
     this._spriteManager.init()
   }
@@ -50,6 +50,9 @@ export class InfoPanel {
     this.writeTitle(obj.data.name, obj.data.parent || "null");
     if (obj.data.name in this._textMap) {
       this.writeText(this._textMap[obj.data.name]);
+    }
+    else if (obj.data.type == "sun") {
+      this.writeText(this._fullTexts);
     }
     this.visible = true;
   }

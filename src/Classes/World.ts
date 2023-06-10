@@ -128,10 +128,10 @@ export class World {
       const obj = this.curSystem.getById(getMasterGrp(target).userData["id"]);
       if (!obj) { this.infoPanel.visible = false; return }
 
-      if (obj.data.type == "sun") {
-        this.infoPanel.showAll(this.curSystem);
-        return
-      }
+      // if (obj.data.type == "sun") {
+      //   this.infoPanel.showAll(this.curSystem);
+      //   return
+      // }
 
       // console.log(target) // TODO react when something like glitterband is clicked
       if (target.name.includes("_infoSprite")) {

@@ -45,7 +45,8 @@ export default function build(data: DrawData) {
                 gl_FragColor.a = 1.0 - vUv.y;
             }
         `,
-    transparent: true
+    transparent: true,
+    depthWrite: false
   });
 
   const line = new THREE.Line(geometry, material);

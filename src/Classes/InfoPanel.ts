@@ -1,6 +1,10 @@
 import { System } from "../Models/System";
+import { TextObject } from "../jsonInterfaces";
+import { InfoSpriteManager } from "./InfoSpriteManager";
 import SystemObject from "./SystemObject";
 
+
+type TextsMap = { [key: string]: string };
 const NL_SEP = "\n• "
 export class InfoPanel {
   public _parentPanel: HTMLDivElement;
@@ -10,8 +14,15 @@ export class InfoPanel {
   public _footerPanel: HTMLDivElement;
 
   private _visible: boolean;
+  private _fullTexts: string;
+  private _textMap: TextsMap;
+  private _spriteManager: InfoSpriteManager;
 
-  constructor() {
+  constructor(texts: TextObject[]) {
+    this.genTexts(texts)
+
+    this._spriteManager = new InfoSpriteManager()
+
     this._parentPanel = document.getElementById("parent") as HTMLDivElement;
     this._titlePanel = document.getElementById("title") as HTMLDivElement;
     this._titleSunPanel = document.getElementById("title_parent") as HTMLDivElement;
@@ -25,26 +36,51 @@ export class InfoPanel {
   public set visible(value: boolean) {
     this._visible = value;
     const val = this._visible ? "visible" : "hidden"
-    this._parentPanel.style.setProperty( 'visibility', val, 'important' )
+    this._parentPanel.style.setProperty('visibility', val, 'important')
     // this._parentPanel.style.visibility = this._visible ? "visible !important" : "hidden !important";
+  }
+
+  public init(system:System) {
+    const parents = system.flat.filter(obj => obj.data.name in this._textMap)
+    this._spriteManager.build(parents)
+    this._spriteManager.init()
   }
 
   public show(obj: SystemObject) {
     this.writeTitle(obj.data.name, obj.data.parent || "null");
-    if (obj.data.texts) this.writeText(obj.data.texts);
+    if (obj.data.name in this._textMap) {
+      this.writeText(this._textMap[obj.data.name]);
+    }
     this.visible = true;
   }
 
-  showAll(system: System) {
-    const texts = system.flat.map(obj=>obj.data.texts).flat().filter(val=>val).sort((a:string, b:string) => {
-      const year1 = parseInt(this.getFirstYear(this.splitWord(a)[0]))
-      const year2 = parseInt(this.getFirstYear(this.splitWord(b)[0]))
-
-      return year1 - year2
-    })
-    
-    this.writeText(texts);
+  public showAll(system: System) {
+    this.writeTitle(system.name, "")
+    this.writeText(this._fullTexts);
     this.visible = true;
+  }
+
+  private genTexts(texts: TextObject[]) {
+    // generate map from obj to texts
+    const map: TextsMap = {}
+    const formatted: string[][] = []
+    texts.forEach(obj => {
+      const val = this.formatTexts(obj.texts, false) as string[];
+      formatted.push(val)
+      map[obj.name] = val.join("\n\r")
+    })
+    this._textMap = map
+
+    // generate general text (all) 
+    const sorted = texts
+      .map(obj => this.formatTexts(obj.texts, false, this.capitalize(obj.name)))
+      .flat()
+      .sort((a: string, b: string) => {
+        const year1 = parseInt(this.getFirstYear(this.splitWord(a)[0]))
+        const year2 = parseInt(this.getFirstYear(this.splitWord(b)[0]))
+        return year1 - year2
+    })
+    this._fullTexts = sorted.join("\n\r");
   }
 
   private getFirstYear(str: string) {
@@ -65,16 +101,24 @@ export class InfoPanel {
       .join(" ");
   }
 
+  private formatTexts(texts: string[], join = true, infectName: boolean | string = false) {
+    texts = texts.map((t) => {
+      const line = t.split("\n");
+      if (infectName) {
+        line[0] = `${line[0]} (${infectName})`
+      }
+      return `${line[0]}${NL_SEP}${line.slice(1).join(NL_SEP)}`;
+    });
+    if (join) return texts.join("\n\r")
+    return texts
+  }
+
   private writeTitle(planetName: string, sunName: string) {
     this._titlePanel.textContent = this.toTitle(planetName);
     this._titleSunPanel.textContent = this.toTitle(sunName);
   }
 
-  private writeText(texts: string[]) {
-    texts = texts.map((t) => {
-      const line = t.split("\n");
-      return `${line[0]}${NL_SEP}${line.slice(1).join(NL_SEP)}`;
-    });
-    this._textPanel.textContent = texts.join("\n\r");
+  private writeText(text: string) {
+    this._textPanel.textContent = text;
   }
 }

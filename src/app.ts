@@ -1,6 +1,6 @@
 import { Startup } from "./Classes/Startup";
 import { SystemsData } from "./jsonInterfaces";
-import celestialData from "./object_data.yaml";
+import celestialData from "./data/object_data.yaml";
 
 
 window.onload = () => {

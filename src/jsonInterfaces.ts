@@ -22,10 +22,16 @@ export interface SystemsData {
   systems: SystemData[];
 }
 
+export interface TextObject {
+  name:string;
+  texts: string[];
+}
+
 export interface SystemData {
   name: string;
   isSingleSun: boolean;
   objects: SystemObjectData[];
+  texts: TextObject[];
 }
 
 export interface SystemObjectData {

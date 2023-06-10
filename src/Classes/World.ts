@@ -28,7 +28,7 @@ export class World {
   systems: System[];
   curSystem: System;
 
-  constructor(system: System) {
+  constructor(system: System, infoPanel: InfoPanel) {
     // Canvas, Renderer, Scene
     this.canvas = document.querySelector(`canvas#main`);
     this.renderer = new THREE.WebGLRenderer({
@@ -69,8 +69,11 @@ export class World {
     backgroundImage.encoding = THREE.sRGBEncoding;
     this.scene.background = backgroundImage;
 
-    this.infoPanel = new InfoPanel();
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
+
+    this.curSystem.initWorld(this)
+    this.infoPanel = infoPanel;
+    infoPanel.init(this.curSystem)
   }
 
   public initGui() {
@@ -115,6 +118,8 @@ export class World {
     };
 
     const clickHandler = (event: MouseEvent) => {
+      if ((event.target as HTMLElement).id.includes("startBtn")) return
+      
       this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 

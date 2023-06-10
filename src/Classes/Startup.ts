@@ -1,6 +1,7 @@
 import systemFactory from "../Factories/SystemFactory";
 import Constants from "../helpers/Constants";
 import { SystemData } from "../jsonInterfaces";
+import { InfoPanel } from "./InfoPanel";
 import { ProgressPanel } from "./ProgressPanel";
 import { World } from "./World";
 
@@ -28,9 +29,10 @@ export class Startup {
     }
 
     public async start(data: SystemData) {
+        const infoPanel = new InfoPanel(data.texts);
         const sys = await systemFactory(data);
-        this.world = new World(sys);
-        sys.initWorld(this.world);
+        this.world = new World(sys, infoPanel);
+        // sys.initWorld(this.world);
 
         // const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
         const obj = this.world.scene.getObjectByName("yellowstone_masterGrp");

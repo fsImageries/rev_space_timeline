@@ -20,13 +20,6 @@ export class Planet extends SystemObject {
     this.object.orbit.scale.multiplyScalar(this.dist);
     this.object.orbit.position.set(-base.x, -base.y, -base.z);
 
-    if (this.object.infoSprite) {
-      const side = this.object.orbit.scale.x > 0 ? -1 : 1;
-      const scale = this.drawRadius / 6.5;
-      this.object.infoSprite.scale.setScalar(scale);
-      this.object.infoSprite.position.copy(base).x += (this.drawRadius + scale) * side;
-    }
-
     this.initSatellites(parent);
 
     this.object.meshGrp.updateMatrixWorld();

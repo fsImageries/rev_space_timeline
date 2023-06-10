@@ -10,7 +10,6 @@ export default class Internal3DObject {
   public mesh: Object3D;
   public orbit: Object3D;
 
-  public infoSprite: Object3D;
   public markerSprite: Object3D;
 
   constructor(data: Internal3DObjectParams) {
@@ -22,7 +21,6 @@ export default class Internal3DObject {
     this.mesh = data.mesh;
     this.orbit = data.orbit;
 
-    this.infoSprite = data.infoSprite;
     this.markerSprite = data.markerSprite;
   }
 }

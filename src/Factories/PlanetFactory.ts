@@ -82,8 +82,7 @@ export default function build(data: SystemObjectData) {
     mesh,
     atmo,
     orbit,
-    markerSprite: markerSprite,
-    infoSprite
+    markerSprite: markerSprite
   });
 
   const planet = new Planet({

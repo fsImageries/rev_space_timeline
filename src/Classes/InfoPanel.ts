@@ -1,5 +1,6 @@
 import { System } from "../Models/System";
 import { TextObject } from "../jsonInterfaces";
+import { InfoSpriteManager } from "./InfoSpriteManager";
 import SystemObject from "./SystemObject";
 
 
@@ -15,9 +16,12 @@ export class InfoPanel {
   private _visible: boolean;
   private _fullTexts: string;
   private _textMap: TextsMap;
+  private _spriteManager: InfoSpriteManager;
 
   constructor(texts: TextObject[]) {
     this.genTexts(texts)
+
+    this._spriteManager = new InfoSpriteManager()
 
     this._parentPanel = document.getElementById("parent") as HTMLDivElement;
     this._titlePanel = document.getElementById("title") as HTMLDivElement;
@@ -34,6 +38,12 @@ export class InfoPanel {
     const val = this._visible ? "visible" : "hidden"
     this._parentPanel.style.setProperty('visibility', val, 'important')
     // this._parentPanel.style.visibility = this._visible ? "visible !important" : "hidden !important";
+  }
+
+  public init(system:System) {
+    const parents = system.flat.filter(obj => obj.data.name in this._textMap)
+    this._spriteManager.build(parents)
+    this._spriteManager.init()
   }
 
   public show(obj: SystemObject) {

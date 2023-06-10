@@ -31,13 +31,6 @@ systems:
       glowColor: '0xffffff'
       glowIntensity: 0.1
       radius: 100
-    texts:
-    - |-
-      2560-2600
-      Demarchists start to mine and pre-process metallic hydrogen
-    - |-
-      2605
-      James Bax is laid to rest by his daughter Antoinette Bax
 
   - name: yellowstone
     type: planet
@@ -53,6 +46,61 @@ systems:
       glowColor: '0xf69f1f'
       glowIntensity: 0.25
       radius: 100
+
+  - name: marcosEye
+    type: "moon"
+    radius: 1737.4
+    rotationPeriod: 6552
+    orbitalPeriod: 6552
+    parent: yellowstone
+    tilt: 0
+    distanceToParent: 308440000
+    draw:
+      albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
+      normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      radius: 1
+      orbInvert: true
+      orbLen: 45
+      showMarker: false # TODO Defaults to true
+      
+  - name: glitterband
+    type: particlering
+    radius: 
+    rotationPeriod: 
+    orbitalPeriod: 62000
+    parent: yellowstone
+    tilt: 0          
+    distanceToParent: 550000000
+    draw:
+      cache: "/epsilonEridani/glitterband.glb"
+      count: 1000
+      distDiv: 350000000
+      height: 30
+
+  - name: oortCloud
+    type: oortcloud
+    radius: 
+    rotationPeriod: 
+    orbitalPeriod: 62000
+    parent: epsilonEridani
+    tilt: 0
+    distanceToParent: 747990000000
+    draw:
+      radius: 2
+
+  texts:
+  - name: tangerineDream
+    texts:
+      - |-
+        2560-2600
+        Demarchists start to mine and pre-process metallic hydrogen
+      - |-
+        2605
+        James Bax is laid to rest by his daughter Antoinette Bax
+  
+  - name: yellowstone
     texts:
     - |-
       2090 – 2110
@@ -103,48 +151,7 @@ systems:
       Establishment of Ferrisville Convention
 
   - name: marcosEye
-    type: "moon"
-    radius: 1737.4
-    rotationPeriod: 6552
-    orbitalPeriod: 6552
-    parent: yellowstone
-    tilt: 0
-    distanceToParent: 308440000
-    draw:
-      albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
-      normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
-      glowColor: '0xffffff'
-      glowIntensity: 0.1
-      radius: 1
-      orbInvert: true
-      orbLen: 45
-      showMarker: false # TODO Defaults to true
     texts:
     - |-
       ≈2100
       Named in honour of Marco Ferris
-      
-  - name: glitterband
-    type: particlering
-    radius: 
-    rotationPeriod: 
-    orbitalPeriod: 62000
-    parent: yellowstone
-    tilt: 0          
-    distanceToParent: 550000000
-    draw:
-      cache: "/epsilonEridani/glitterband.glb"
-      count: 1000
-      distDiv: 350000000
-      height: 30
-
-  - name: oortCloud
-    type: oortcloud
-    radius: 
-    rotationPeriod: 
-    orbitalPeriod: 62000
-    parent: epsilonEridani
-    tilt: 0
-    distanceToParent: 747990000000
-    draw:
-      radius: 2

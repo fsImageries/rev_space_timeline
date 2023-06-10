@@ -28,7 +28,7 @@ export class World {
   systems: System[];
   curSystem: System;
 
-  constructor(system: System) {
+  constructor(system: System, infoPanel: InfoPanel) {
     // Canvas, Renderer, Scene
     this.canvas = document.querySelector(`canvas#main`);
     this.renderer = new THREE.WebGLRenderer({
@@ -69,8 +69,10 @@ export class World {
     backgroundImage.encoding = THREE.sRGBEncoding;
     this.scene.background = backgroundImage;
 
-    this.infoPanel = new InfoPanel();
+    this.infoPanel = infoPanel;
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
+
+    this.curSystem.initWorld(this)
   }
 
   public initGui() {

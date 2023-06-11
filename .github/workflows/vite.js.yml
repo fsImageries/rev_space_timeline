@@ -5,9 +5,9 @@ name: Basic Pipeline
 
 on:
   push:
-    branches: ["dev"] #[ "main", "dev" ]
+    branches: [ "main", "dev" ]
   pull_request:
-    branches: ["dev"] #[ "main", "dev" ]
+    branches: [ "main", "dev" ]
 
 env:
   BASE_DIR: basedir

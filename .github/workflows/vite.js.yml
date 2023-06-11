@@ -15,6 +15,11 @@ env:
 jobs:
   basic_check:
     runs-on: ubuntu-latest
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+      
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -47,6 +52,11 @@ jobs:
     needs: basic_check
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -78,6 +88,7 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          repository: 
           commit_message: Applied versioning
           branch: ${{ github.head_ref }}
 

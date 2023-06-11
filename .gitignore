@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# User stuff
+dev
+
 # 3D Files
 *.obj
 *.mtl

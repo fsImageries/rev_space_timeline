@@ -44,7 +44,9 @@ export class System {
     return this._flat.reduce((acc, cur) => (acc.data.id === id ? acc : cur));
   }
 
-  public get flat() { return this._flat }
+  public get flat() {
+    return this._flat;
+  }
 
   public oortCloud() {
     return this._flat.reduce((acc, cur) => (acc.data.type === "oortcloud" ? acc : cur));

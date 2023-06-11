@@ -35,7 +35,7 @@ export class World {
       canvas: this.canvas,
       antialias: true,
       alpha: true,
-      logarithmicDepthBuffer: true,
+      logarithmicDepthBuffer: true
     });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
@@ -71,9 +71,9 @@ export class World {
 
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
 
-    this.curSystem.initWorld(this)
+    this.curSystem.initWorld(this);
     this.infoPanel = infoPanel;
-    infoPanel.init(this.curSystem)
+    infoPanel.init(this.curSystem);
   }
 
   public initGui() {
@@ -118,15 +118,21 @@ export class World {
     };
 
     const clickHandler = (event: MouseEvent) => {
-      if ((event.target as HTMLElement).id.includes("startBtn")) return
-      
+      if ((event.target as HTMLElement).id.includes("startBtn")) return;
+
       this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
       const target = this.raycastTarget();
-      if (!target) { this.infoPanel.visible = false; return }
+      if (!target) {
+        this.infoPanel.visible = false;
+        return;
+      }
       const obj = this.curSystem.getById(getMasterGrp(target).userData["id"]);
-      if (!obj) { this.infoPanel.visible = false; return }
+      if (!obj) {
+        this.infoPanel.visible = false;
+        return;
+      }
 
       // if (obj.data.type == "sun") {
       //   this.infoPanel.showAll(this.curSystem);
@@ -139,12 +145,12 @@ export class World {
         return;
       }
 
-      if (this.infoPanel.visible) this.infoPanel.visible = false
+      if (this.infoPanel.visible) this.infoPanel.visible = false;
     };
 
     const keyHandler = (e: KeyboardEvent) => {
-      this.cam.rotateThird(e.key.toLowerCase())
-    }
+      this.cam.rotateThird(e.key.toLowerCase());
+    };
 
     let mousedown = false;
     const mouseDown = () => {
@@ -165,7 +171,7 @@ export class World {
     window.addEventListener("mousedown", mouseDown);
     window.addEventListener("mouseup", mouseUp);
     window.addEventListener("mousemove", mouesMove);
-    window.addEventListener("keydown", keyHandler)
+    window.addEventListener("keydown", keyHandler);
   }
 
   // World methods

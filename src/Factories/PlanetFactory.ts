@@ -15,14 +15,14 @@ import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
 import { randFloat } from "three/src/math/MathUtils";
 
 export default function build(data: SystemObjectData) {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`)
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
   const [mesh, atmo] = build_sphere_mesh_and_atmo(
     new THREE.Color(parseInt(data.draw.glowColor)),
     data.draw.glowIntensity,
     data.draw.albedoPath,
     data.draw.normalPath,
-    data.radius / Constants.SIZE_SCALE,//data.draw.radius,
+    data.radius / Constants.SIZE_SCALE, //data.draw.radius,
     data.name
   );
 
@@ -74,7 +74,7 @@ export default function build(data: SystemObjectData) {
 
   if (data.draw.orbInvert) celestialData.invertAngularOrbVel();
 
-  parentGrp.rotation.y = randFloat(-Math.PI*randFloat(1,2), Math.PI*randFloat(1,2))
+  parentGrp.rotation.y = randFloat(-Math.PI * randFloat(1, 2), Math.PI * randFloat(1, 2));
   const internalObject = new Internal3DObject({
     parentGrp,
     masterGrp,
@@ -89,9 +89,9 @@ export default function build(data: SystemObjectData) {
     data: celestialData,
     object: internalObject
   });
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
 
-  return planet
+  return planet;
 }
 
 function build_sphere_mesh_and_atmo(

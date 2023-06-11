@@ -1,6 +1,5 @@
 import { randSpherePointExcludes, relaxRingPoints } from "../helpers/numericUtils";
 
-
 interface Data {
   type: string;
   radius: number;
@@ -14,7 +13,7 @@ const PNTCOUNT = 100_000;
 const RANGE = 6731900000000;
 
 function oort(data: Data) {
-  const dist = (data.distanceToParent + RANGE)
+  const dist = data.distanceToParent + RANGE;
   const range = (dist - data.distanceToParent) / data.distScale;
   const distanceEnd = dist / data.distScale;
 
@@ -24,7 +23,7 @@ function oort(data: Data) {
     vertexs.push(x, y, z);
   }
 
-  return vertexs
+  return vertexs;
 }
 
 function ring(data: Data) {
@@ -38,7 +37,7 @@ function ring(data: Data) {
   }
 
   vertexs = relaxRingPoints(vertexs, data.height);
-  return vertexs
+  return vertexs;
 }
 
 onmessage = ({ data }) => {
@@ -48,10 +47,9 @@ onmessage = ({ data }) => {
       res = oort(data);
       break;
     case "particlering":
-      res = ring(data)
+      res = ring(data);
   }
 
   // const res = ring(event.data)
-  if (res)
-    postMessage(res)
-}
+  if (res) postMessage(res);
+};

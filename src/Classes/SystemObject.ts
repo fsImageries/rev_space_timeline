@@ -27,7 +27,7 @@ export default abstract class SystemObject {
   }
 
   public get drawRadius() {
-    return this.data.radius / Constants.SIZE_SCALE
+    return this.data.radius / Constants.SIZE_SCALE;
   }
 
   public get dist(): number {

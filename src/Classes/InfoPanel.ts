@@ -3,9 +3,8 @@ import { TextObject } from "../jsonInterfaces";
 import { InfoSpriteManager } from "./InfoSpriteManager";
 import SystemObject from "./SystemObject";
 
-
 type TextsMap = { [key: string]: string };
-const NL_SEP = "\n• "
+const NL_SEP = "\n• ";
 export class InfoPanel {
   public _parentPanel: HTMLDivElement;
   public _titlePanel: HTMLDivElement;
@@ -19,9 +18,9 @@ export class InfoPanel {
   private _spriteManager: InfoSpriteManager;
 
   constructor(texts: TextObject[]) {
-    this.genTexts(texts)
+    this.genTexts(texts);
 
-    this._spriteManager = new InfoSpriteManager()
+    this._spriteManager = new InfoSpriteManager();
 
     this._parentPanel = document.getElementById("parent") as HTMLDivElement;
     this._titlePanel = document.getElementById("title") as HTMLDivElement;
@@ -35,59 +34,58 @@ export class InfoPanel {
   }
   public set visible(value: boolean) {
     this._visible = value;
-    const val = this._visible ? "visible" : "hidden"
-    this._parentPanel.style.setProperty('visibility', val, 'important')
+    const val = this._visible ? "visible" : "hidden";
+    this._parentPanel.style.setProperty("visibility", val, "important");
     // this._parentPanel.style.visibility = this._visible ? "visible !important" : "hidden !important";
   }
 
-  public init(system:System) {
-    const parents = system.flat.filter(obj => obj.data.name in this._textMap || obj.data.type == "sun")
-    this._spriteManager.build(parents)
-    this._spriteManager.init()
+  public init(system: System) {
+    const parents = system.flat.filter((obj) => obj.data.name in this._textMap || obj.data.type == "sun");
+    this._spriteManager.build(parents);
+    this._spriteManager.init();
   }
 
   public show(obj: SystemObject) {
     this.writeTitle(obj.data.name, obj.data.parent || "null");
     if (obj.data.name in this._textMap) {
       this.writeText(this._textMap[obj.data.name]);
-    }
-    else if (obj.data.type == "sun") {
+    } else if (obj.data.type == "sun") {
       this.writeText(this._fullTexts);
     }
     this.visible = true;
   }
 
   public showAll(system: System) {
-    this.writeTitle(system.name, "")
+    this.writeTitle(system.name, "");
     this.writeText(this._fullTexts);
     this.visible = true;
   }
 
   private genTexts(texts: TextObject[]) {
     // generate map from obj to texts
-    const map: TextsMap = {}
-    const formatted: string[][] = []
-    texts.forEach(obj => {
+    const map: TextsMap = {};
+    const formatted: string[][] = [];
+    texts.forEach((obj) => {
       const val = this.formatTexts(obj.texts, false) as string[];
-      formatted.push(val)
-      map[obj.name] = val.join("\n\r")
-    })
-    this._textMap = map
+      formatted.push(val);
+      map[obj.name] = val.join("\n\r");
+    });
+    this._textMap = map;
 
-    // generate general text (all) 
+    // generate general text (all)
     const sorted = texts
-      .map(obj => this.formatTexts(obj.texts, false, this.capitalize(obj.name)))
+      .map((obj) => this.formatTexts(obj.texts, false, this.capitalize(obj.name)))
       .flat()
       .sort((a: string, b: string) => {
-        const year1 = parseInt(this.getFirstYear(this.splitWord(a)[0]))
-        const year2 = parseInt(this.getFirstYear(this.splitWord(b)[0]))
-        return year1 - year2
-    })
+        const year1 = parseInt(this.getFirstYear(this.splitWord(a)[0]));
+        const year2 = parseInt(this.getFirstYear(this.splitWord(b)[0]));
+        return year1 - year2;
+      });
     this._fullTexts = sorted.join("\n\r");
   }
 
   private getFirstYear(str: string) {
-    return str.match(/(\d+)\D/)[0]
+    return str.match(/(\d+)\D/)[0];
   }
 
   private capitalize(str: string) {
@@ -108,12 +106,12 @@ export class InfoPanel {
     texts = texts.map((t) => {
       const line = t.split("\n");
       if (infectName) {
-        line[0] = `${line[0]} (${infectName})`
+        line[0] = `${line[0]} (${infectName})`;
       }
       return `${line[0]}${NL_SEP}${line.slice(1).join(NL_SEP)}`;
     });
-    if (join) return texts.join("\n\r")
-    return texts
+    if (join) return texts.join("\n\r");
+    return texts;
   }
 
   private writeTitle(planetName: string, sunName: string) {

@@ -9,9 +9,7 @@ import { SystemObjectData } from "../jsonInterfaces";
 import PWorker from "../workers/ParticleWorker?worker";
 
 export default async function build(data: SystemObjectData) {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`)
-
-
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`);
 
   const material = new ShaderMaterial({
     transparent: true,
@@ -49,13 +47,13 @@ export default async function build(data: SystemObjectData) {
     points = new Points(geometry, material);
 
     const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
-    const worker = new PWorker()
-    Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`)
-    worker.postMessage({ type: data.type, radius, count: data.draw.count, height: data.draw.height })
+    const worker = new PWorker();
+    Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`);
+    worker.postMessage({ type: data.type, radius, count: data.draw.count, height: data.draw.height });
     worker.onmessage = (event) => {
-      Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`)
+      Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`);
       geometry.setAttribute("position", new Float32BufferAttribute(event.data, 3));
-    }
+    };
 
     parentGrp = new Group();
     parentGrp.add(points);
@@ -65,7 +63,6 @@ export default async function build(data: SystemObjectData) {
     [parentGrp, points] = await loadCache(data.draw.cache);
     (points as Points).material = material;
   }
-
 
   const celestialData = new CelestialBase({
     id: uuidv4(),
@@ -86,25 +83,26 @@ export default async function build(data: SystemObjectData) {
     masterGrp: points
   });
 
-  const ring = new ParticleRing({
-    data: celestialData,
-    object: internalObject,
-  }, data.draw.count, data.draw.height);
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
+  const ring = new ParticleRing(
+    {
+      data: celestialData,
+      object: internalObject
+    },
+    data.draw.count,
+    data.draw.height
+  );
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
 
-  return ring
+  return ring;
 }
 
-function loadCache(path:string): Promise<Object3D[]> {
+function loadCache(path: string): Promise<Object3D[]> {
   return new Promise((resolve) => {
-    Constants.GLTF_LOADER.load(
-      path,
-      (gltf) => {
-        const points = gltf.scene.children[0]
-        const parentGrp = gltf.scene.children[0].children[0]
+    Constants.GLTF_LOADER.load(path, (gltf) => {
+      const points = gltf.scene.children[0];
+      const parentGrp = gltf.scene.children[0].children[0];
 
-        resolve([points, parentGrp])
-      }
-    )
+      resolve([points, parentGrp]);
+    });
   });
 }

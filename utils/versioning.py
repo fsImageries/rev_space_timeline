@@ -15,6 +15,7 @@ def parse_args():
     parser.add_argument("-rdt", "--revert-del-tag", action="store_true", 
                         help="Revert the current commit and delete it's tag")
     parser.add_argument("-opr", "--on-pr", nargs='+', default=[], help="Enter the current version and the branch")
+    parser.add_argument("-inc", "--increment", type=str, help="Increment the package.json version manully")
 
     args = parser.parse_args()
     return args
@@ -105,6 +106,12 @@ def increment_by_branch(v:str, branch:str):
 
 PACKAGE_JSON = f"{os.environ['PROJS']}\\rev_space_timeline\\package.json"
 
+def increment(m:str):
+    v = get_version_from_json()
+    v = increment_version(v,m)
+    set_version_to_json(v)
+    print("[LOG] Version set successful")
+
 def increment_on_pr(v:str, target_branch):
     v = increment_by_branch(v, target_branch)
     set_gh_output("version", v)
@@ -164,3 +171,6 @@ if __name__ == "__main__":
     
     if args.revert_del_tag:
         revert_current_commit_and_version()
+
+    if args.increment:
+        increment(args.increment)

@@ -105,6 +105,7 @@ def increment_by_branch(v:str, branch:str):
 
 PACKAGE_JSON = f"{os.environ['PROJS']}\\rev_space_timeline\\package.json"
 
+
 def increment_on_pr(v:str, target_branch):
     v = increment_by_branch(v, target_branch)
     set_gh_output("version", v)

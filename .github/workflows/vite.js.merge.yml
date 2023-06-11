@@ -1,0 +1,53 @@
+name: Versioning CI
+
+on:
+  pull_request:
+    types: 
+      - closed
+    branches: [ "main", "dev" ]
+
+env:
+  BASE_DIR: basedir
+
+versioning:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          path: ${{ env.BASE_DIR }}
+
+      - name: package.json Info
+        id: info
+        uses: jaywcjlove/github-action-package@main
+      
+      - run: echo "old version - ${{ steps.info.outputs.version }}"
+
+      - name: Increment version
+        id: increment
+        run: python ${{ env.DEVOPS_DIR }}/utils/versioning.py -opr ${{ steps.info.outputs.version }} ${{ github.baseref }}
+        shell: sh
+
+      - name: package.json info
+        id: edit
+        uses: jaywcjlove/github-action-package@main
+        with:
+          data: |
+            {
+              "version": ${{ steps.increment.outputs.version }}
+            }
+      
+      - run: echo "new version - ${{ steps.info.outputs.version }}"
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          repository: 
+          commit_message: Applied versioning
+          branch: ${{ github.head_ref }}

@@ -26,8 +26,8 @@ systems:
     tilt: 45
     distanceToParent: 5086400000
     draw:
-      albedoPath: "/epsilonEridani/2k_jupiter.jpg"
-      normalPath: "/epsilonEridani/ceres_normal_16k.png"
+      albedoPath: "./epsilonEridani/2k_jupiter.jpg"
+      normalPath: "./epsilonEridani/ceres_normal_16k.png"
       glowColor: '0xffffff'
       glowIntensity: 0.1
       radius: 100
@@ -41,8 +41,8 @@ systems:
     tilt: 20
     distanceToParent: 59840000000
     draw:
-      albedoPath: "/epsilonEridani/2k_venus_surface.jpg"
-      normalPath: "/epsilonEridani/ceres_normal_16k.png"
+      albedoPath: "./epsilonEridani/2k_venus_surface.jpg"
+      normalPath: "./epsilonEridani/ceres_normal_16k.png"
       glowColor: '0xf69f1f'
       glowIntensity: 0.25
       radius: 100
@@ -56,8 +56,8 @@ systems:
     tilt: 0
     distanceToParent: 308440000
     draw:
-      albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
-      normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
+      albedoPath: "./epsilonEridani/marcosEye/moon_albedo.jpg"
+      normalPath: "./epsilonEridani/marcosEye/moon_normal.png"
       glowColor: '0xffffff'
       glowIntensity: 0.1
       radius: 1
@@ -74,7 +74,7 @@ systems:
     tilt: 0          
     distanceToParent: 550000000
     draw:
-      cache: "/epsilonEridani/glitterband.glb"
+      cache: "./epsilonEridani/glitterband.glb"
       count: 1000
       distDiv: 350000000
       height: 30

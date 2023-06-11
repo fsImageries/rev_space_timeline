@@ -57,20 +57,20 @@ export class Camera {
   public rotateThird(key: string) {
     switch (key) {
       case "arrowleft":
-        this._dummyRotate.rotateY(Constants.CAM_ROT_SPEED)
+        this._dummyRotate.rotateY(Constants.CAM_ROT_SPEED);
         break;
 
       case "arrowright":
-        this._dummyRotate.rotateY(-Constants.CAM_ROT_SPEED)
-        break
+        this._dummyRotate.rotateY(-Constants.CAM_ROT_SPEED);
+        break;
 
       case "arrowup":
-        this._dummyRotate.rotateX(Constants.CAM_ROT_SPEED)
-        break
+        this._dummyRotate.rotateX(Constants.CAM_ROT_SPEED);
+        break;
 
       case "arrowdown":
-        this._dummyRotate.rotateX(-Constants.CAM_ROT_SPEED)
-        break
+        this._dummyRotate.rotateX(-Constants.CAM_ROT_SPEED);
+        break;
     }
   }
 
@@ -83,19 +83,19 @@ export class Camera {
     lookat.applyQuaternion(Constants.WORLD_QUAT);
     lookat.add(Constants.WORLD_POS);
 
-    Constants.WORLD_QUAT.multiplyQuaternions(Constants.WORLD_QUAT, Constants.WORLD_QUAT2)
+    Constants.WORLD_QUAT.multiplyQuaternions(Constants.WORLD_QUAT, Constants.WORLD_QUAT2);
     const offset = this._baseOffset.clone();
     offset.applyQuaternion(Constants.WORLD_QUAT);
     offset.add(Constants.WORLD_POS);
 
-    return [lookat, offset]
+    return [lookat, offset];
   }
 
   public setFollowTarget(target: SystemObject) {
     this._thirdTarget = target;
-    this._dummyRotate.copy(target.object.masterGrp)
+    this._dummyRotate.copy(target.object.masterGrp);
 
-    const rad = this._thirdTarget.drawRadius
+    const rad = this._thirdTarget.drawRadius;
     this._baseOffset = new THREE.Vector3(rad * 5, rad * 2, -rad * 6);
     this._baseLookat = new THREE.Vector3(0, rad / 2, rad);
   }
@@ -109,19 +109,19 @@ export class Camera {
   }
 
   public activateThird() {
-    Constants.CELESTIAL_ORB = true
+    Constants.CELESTIAL_ORB = true;
     this._active = this.third;
     this._isFree = false;
   }
 
   public activateFree() {
-    Constants.CELESTIAL_ORB = false
+    Constants.CELESTIAL_ORB = false;
     this._active = this.free;
     this._isFree = true;
   }
 
   public update(delta: number) {
-    const [lookat, offset] = this.calculateTarget()
+    const [lookat, offset] = this.calculateTarget();
 
     if (Constants.ORB_SCALE >= 100000000) {
       this._currentPosition.copy(offset);

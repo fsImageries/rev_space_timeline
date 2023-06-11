@@ -9,7 +9,7 @@ import sunVert from "./../glsl/sun_vert.glsl?raw";
 import Constants from "../helpers/Constants";
 
 export default function build(data: SunData) {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`)
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
   const mat = new ShaderMaterial({
     uniforms: {
@@ -22,7 +22,7 @@ export default function build(data: SunData) {
     fragmentShader: sunFrag
   });
 
-  const sphereGeometry = new SphereGeometry(data.radius/Constants.SIZE_SCALE, 50, 50);
+  const sphereGeometry = new SphereGeometry(data.radius / Constants.SIZE_SCALE, 50, 50);
   const mesh = new Mesh(sphereGeometry, mat);
   mesh.name = `${data.name}_mesh`;
 
@@ -62,7 +62,7 @@ export default function build(data: SunData) {
     data: celestialData,
     object: internalObject
   });
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
 
-  return sun
+  return sun;
 }

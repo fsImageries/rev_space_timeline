@@ -9,14 +9,14 @@ import Constants from "../helpers/Constants";
 
 const map = {
   // TODO make to dynamic import on actual use
-  "sun": sunFactory,
+  sun: sunFactory,
   "planet;moon": planetFactory,
-  "particlering": particleRingFactory,
-  "oortcloud": oortFactoryAsync
+  particlering: particleRingFactory,
+  oortcloud: oortFactoryAsync
 };
 
 export default async function buildAsync(data: SystemData) {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`)
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
   const name = data.name;
   const isSingleSun = data.isSingleSun;
@@ -25,8 +25,8 @@ export default async function buildAsync(data: SystemData) {
 
   const sys = new System({ isSingleSun, name, tree, flat });
 
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
-  return sys
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
+  return sys;
 }
 
 async function buildObjects(data: SystemData) {

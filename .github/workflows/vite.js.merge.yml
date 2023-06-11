@@ -27,6 +27,8 @@ jobs:
       - name: package.json Info
         id: info
         uses: jaywcjlove/github-action-package@main
+        with:
+          path: ${{ env.DEVOPS_DIR }}/package.json
       
       - run: echo "old version - ${{ steps.info.outputs.version }}"
 
@@ -39,6 +41,7 @@ jobs:
         id: edit
         uses: jaywcjlove/github-action-package@main
         with:
+          path: ${{ env.DEVOPS_DIR }}/package.json
           data: |
             {
               "version": ${{ steps.increment.outputs.version }}

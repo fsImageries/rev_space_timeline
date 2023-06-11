@@ -5,15 +5,16 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
+
+env:
+  BASE_DIR: basedir
 
 jobs:
   basic_check:
-
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -35,3 +36,50 @@ jobs:
         
       - name: Test project
         run: npm run test
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Applied formatting changes
+          branch: ${{ github.head_ref }}
+  
+  versioning:
+    needs: basic_check
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          path: ${{ env.BASE_DIR }}
+
+      - name: package.json Info
+        id: info
+        uses: jaywcjlove/github-action-package@main
+      
+      - run: echo "old version - ${{ steps.info.outputs.version }}"
+
+      - name: Increment version
+        id: increment
+        run: python ${{ env.DEVOPS_DIR }}/utils/versioning.py -opr ${{ steps.info.outputs.version }} ${{ github.baseref }}
+        shell: sh
+
+      - name: package.json info
+        id: edit
+        uses: jaywcjlove/github-action-package@main
+        with:
+          data: |
+            {
+              "version": ${{ steps.increment.outputs.version }}
+            }
+      
+      - run: echo "new version - ${{ steps.info.outputs.version }}"
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Applied versioning
+          branch: ${{ github.head_ref }}
+
+
+

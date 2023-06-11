@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: ["dev"] #[ "main", "dev" ]
   pull_request:
-    branches: [ "main", "dev" ]
+    branches: ["dev"] #[ "main", "dev" ]
 
 env:
   BASE_DIR: basedir
@@ -16,9 +16,9 @@ jobs:
   basic_check:
     runs-on: ubuntu-latest
     permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository.
       contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
 
     steps:
       - name: Checkout repo
@@ -47,6 +47,13 @@ jobs:
         with:
           commit_message: Applied formatting changes
           branch: ${{ github.head_ref }}
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/dev'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
   
   
 

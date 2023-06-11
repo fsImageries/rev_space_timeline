@@ -10,12 +10,13 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Project versioning (because I can)')
 
     parser.add_argument('-s', "--set", type=str, help='A complete version string in this format <x.y.z-build>')
-    parser.add_argument("-cin", "--commit-inc", type=str, 
+    parser.add_argument("-cinc", "--commit-inc", type=str, 
                         help="Commit increment Message- the commit message, increments version after commit")
     parser.add_argument("-rdt", "--revert-del-tag", action="store_true", 
                         help="Revert the current commit and delete it's tag")
     parser.add_argument("-opr", "--on-pr", nargs='+', default=[], help="Enter the current version and the branch")
     parser.add_argument("-inc", "--increment", type=str, help="Increment the package.json version manully")
+    parser.add_argument("-ainc", "--auto-increment", action="store_true", help="Let the code decide how to increment the current version")
 
     args = parser.parse_args()
     return args
@@ -84,7 +85,14 @@ idx_map = {
 def increment_version(v:str, mode:str):
     (nums, build) = parse_version(v)
     mode = mode.lower()
-    nums[idx_map[mode]] += 1
+    
+    if mode == "m":
+        nums = [nums[0]+1, 0, 0]
+    elif mode == "mi":
+        nums = [nums[0], nums[1]+1, 0]
+    elif mode == "f":
+        nums = [nums[0], nums[1], nums[2]+1]
+
     return f"{nums[0]}.{nums[1]}.{nums[2]}-{build}"
 
 def update_build(v:str, build:str):
@@ -112,6 +120,14 @@ def increment(m:str):
     set_version_to_json(v)
     print("[LOG] Version set successful")
 
+def auto_increment_by_branch():
+    branch = get_head_branch_name().stdout.strip()
+    old_v = get_version_from_json()
+    new_v = increment_by_branch(old_v, branch)
+    log = f"[LOG] {branch}\n[LOG] {old_v} -> {new_v}"
+    print(log)
+    return new_v
+
 def increment_on_pr(v:str, target_branch):
     v = increment_by_branch(v, target_branch)
     set_gh_output("version", v)
@@ -136,12 +152,8 @@ def set_version_to_json(v:str):
         json.dump(data, f, indent=4)
         f.truncate() 
 
-def inrement_after_commit(commit_msg:str):
-    branch = get_head_branch_name().stdout.strip()
-    old_v = get_version_from_json()
-    new_v = increment_by_branch(old_v, branch)
-    log = f"[LOG] {branch}\n[LOG] {old_v} -> {new_v}"
-    print(log)
+def inrement_before_commit(commit_msg:str):
+    new_v =auto_increment_by_branch()
 
     set_version_to_json(new_v)
     print("[LOG] Version set successful")
@@ -167,10 +179,16 @@ if __name__ == "__main__":
 
     if args.commit_inc:
         msg = args.commit_inc
-        inrement_after_commit(args.commit_inc)
+        inrement_before_commit(args.commit_inc)
     
     if args.revert_del_tag:
         revert_current_commit_and_version()
 
     if args.increment:
         increment(args.increment)
+
+    if args.auto_increment:
+        new_v = auto_increment_by_branch()
+        set_version_to_json(v)
+        print("[LOG] Version set successful")
+        

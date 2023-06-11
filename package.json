@@ -6,7 +6,7 @@
     },
     "name": "revelation-space-timeline",
     "private": true,
-    "version": "0.2.4-mvp",
+    "version": "0.2.2-mvp",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -14,7 +14,8 @@
         "preview": "vite preview",
         "test": "vitest",
         "lint": "eslint . --ext .ts",
-        "pretty": "prettier --config .prettierrc src/**/*.ts --write"
+        "pretty": "prettier --config .prettierrc src/**/*.ts --write",
+        "vcommit": "python ./utils/versioning.py -cinc "
     },
     "devDependencies": {
         "@modyfi/vite-plugin-yaml": "^1.0.4",

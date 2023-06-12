@@ -112,12 +112,12 @@ export default async function build(data: SystemObjectData) {
     const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
     const worker = new PWorker();
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`);
-    worker.postMessage({ type: data.type, radius, count: data.draw.count, height: data.draw.height });
+    worker.postMessage({ type: data.type, radius, count: data.draw.count, height: data.draw.height, genColor: data.draw.genColor });
     worker.onmessage = (event) => {
       Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`);
-        const [verts, colors] = event.data
-        geometry.setAttribute("position", new Float32BufferAttribute(verts, 3));
-        geometry.setAttribute("color", new Float32BufferAttribute(colors, 3));
+        geometry.setAttribute("position", new Float32BufferAttribute(event.data[0], 3));
+        if (event.data.length > 1)
+        geometry.setAttribute("color", new Float32BufferAttribute(event.data[1], 3));
     };
 
     // parentGrp = new Group();

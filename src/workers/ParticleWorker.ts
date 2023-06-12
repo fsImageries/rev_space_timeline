@@ -9,6 +9,7 @@ interface Data {
   height?: number;
   distanceToParent: number;
   distScale: number;
+  genColor?: boolean
 }
 
 const PNTCOUNT = 100_000;
@@ -47,11 +48,14 @@ function ring(data: Data) {
     vertexs.push(x, y, z);
 
     // color.setHSL(i / data.count, 1.0, .5)
+    if (data.genColor)
     colors.push(...genCol([color.r, color.g, color.b]))
   }
 
   vertexs = relaxRingPoints(vertexs, data.height);
-  return [vertexs, colors];
+  console.log("Worker:", colors.length == vertexs.length)
+  const res = data.genColor ? [vertexs, colors] : [vertexs]
+  return res;
 }
 
 onmessage = ({ data }) => {

@@ -22,7 +22,7 @@ export default async function buildAsync(data: SystemObjectData) {
   worker.postMessage({ type: data.type, distanceToParent: data.distanceToParent, distScale: Constants.DISTANCE_SCALE });
   worker.onmessage = (event) => {
     Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`);
-    geometry.setAttribute("position", new Float32BufferAttribute(event.data, 3));
+    geometry.setAttribute("position", new Float32BufferAttribute(event.data[0], 3));
   };
 
   const parentGrp = new Group();

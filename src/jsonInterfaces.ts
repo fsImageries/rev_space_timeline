@@ -11,6 +11,7 @@ export interface DrawData {
   height?: number;
   orbInvert?: boolean;
   orbLen?: number;
+  genColor?: number;
 }
 
 export interface SunData extends SystemObjectData {

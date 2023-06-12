@@ -76,8 +76,9 @@ systems:
     draw:
       cache: "./epsilonEridani/glitterband.glb"
       count: 1000
-      distDiv: 350000000
-      height: 30
+      distDiv: 3000000000
+      height: 40
+      genColor: true
 
   - name: oortCloud
     type: oortcloud

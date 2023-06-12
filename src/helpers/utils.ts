@@ -37,21 +37,21 @@ export function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
   return needResize;
 }
 
-function save(blob: Blob, filename: string) {
-  const link = document.createElement('a');
-  link.style.display = 'none';
-  document.body.appendChild(link); // Firefox workaround, see #6594
+// function save(blob: Blob, filename: string) {
+//   const link = document.createElement('a');
+//   link.style.display = 'none';
+//   document.body.appendChild(link); // Firefox workaround, see #6594
 
-  link.href = URL.createObjectURL(blob);
-  link.download = filename;
-  link.click();
+//   link.href = URL.createObjectURL(blob);
+//   link.download = filename;
+//   link.click();
 
-  document.body.removeChild(link)
-}
+//   document.body.removeChild(link)
+// }
 
-function saveArrayBuffer(buffer: ArrayBuffer, filename: string) {
-  save(new Blob([buffer], { type: 'application/octet-stream' }), filename);
-}
+// function saveArrayBuffer(buffer: ArrayBuffer, filename: string) {
+//   save(new Blob([buffer], { type: 'application/octet-stream' }), filename);
+// }
 
 // export function exportGLTF(input: THREE.Object3D) {
 //   console.log("Starting to save incoming input: ", input.name || input.type)

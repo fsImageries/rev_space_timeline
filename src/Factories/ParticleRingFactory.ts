@@ -1,4 +1,4 @@
-import { BufferGeometry, Float32BufferAttribute, Group, Object3D, Points, ShaderLib, ShaderMaterial } from "three";
+import { AdditiveBlending, BufferGeometry, Float32BufferAttribute, Group, Points, ShaderMaterial } from "three";
 import CelestialBase from "../Classes/CelestialBase";
 import Internal3DObject from "../Classes/Internal3DObject";
 import { ParticleRing } from "../Models/ParticleRing";
@@ -12,7 +12,10 @@ export default async function build(data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`);
 
   const material = new ShaderMaterial({
+    blending: AdditiveBlending,
+    // depthTest: false,
     transparent: true,
+    vertexColors: true,
     depthWrite: false,
     uniforms: {
       dist: { value: 1.0 },
@@ -21,16 +24,72 @@ export default async function build(data: SystemObjectData) {
       scale: { value: 1 },
       color: { value: [1, 1, 1] }
     },
-    vertexShader: ShaderLib.points.vertexShader,
+    vertexShader: `
+    uniform float size;
+    uniform float scale;
+
+    #include <common>
+    #include <color_pars_vertex>
+    #include <fog_pars_vertex>
+    #include <morphtarget_pars_vertex>
+    #include <logdepthbuf_pars_vertex>
+    #include <clipping_planes_pars_vertex>
+
+    #ifdef USE_POINTS_UV
+
+      varying vec2 vUv;
+      uniform mat3 uvTransform;
+
+    #endif
+
+    // varying vec3 vColor;
+
+    void main() {
+      vColor = color;
+
+      #ifdef USE_POINTS_UV
+
+        vUv = ( uvTransform * vec3( uv, 1 ) ).xy;
+
+      #endif
+
+      #include <color_vertex>
+      #include <morphcolor_vertex>
+      #include <begin_vertex>
+      #include <morphtarget_vertex>
+      #include <project_vertex>
+
+      gl_PointSize = size;
+
+      #ifdef USE_SIZEATTENUATION
+
+        bool isPerspective = isPerspectiveMatrix( projectionMatrix );
+
+        if ( isPerspective ) gl_PointSize *= ( scale / - mvPosition.z );
+
+      #endif
+
+      #include <logdepthbuf_vertex>
+      #include <clipping_planes_vertex>
+      #include <worldpos_vertex>
+      #include <fog_vertex>
+    }
+    `,
     fragmentShader: `
-        uniform vec3 color;
+        float rand(vec2 co){
+          return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+        }
+
+        // uniform vec3 color;
         uniform float dist;
         uniform float dist_div;
+
+        varying vec3 vColor;
 
         void main() {
             vec2 xy = gl_PointCoord.xy - vec2(0.5);
             float ll = length(xy);
-            gl_FragColor = vec4(color, step(ll, 0.5));
+            gl_FragColor = vec4(vColor, step(ll, 0.5));
 
             float falloff = dist_div / (dist * dist);
             // float falloff = 1.0;
@@ -40,27 +99,33 @@ export default async function build(data: SystemObjectData) {
         `
   });
 
-  let points;
-  let parentGrp;
+  let points:Points;
+  let parentGrp: Group;
   if (!data.draw.cache) {
     const geometry = new BufferGeometry();
     points = new Points(geometry, material);
-
+    parentGrp = new Group();
+    parentGrp.add(points);
+    parentGrp.name = `${data.name}_parentGrp`;
+    points.name = `${data.name}_masterGrp`;
+    
     const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
     const worker = new PWorker();
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`);
     worker.postMessage({ type: data.type, radius, count: data.draw.count, height: data.draw.height });
     worker.onmessage = (event) => {
       Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`);
-      geometry.setAttribute("position", new Float32BufferAttribute(event.data, 3));
+        const [verts, colors] = event.data
+        geometry.setAttribute("position", new Float32BufferAttribute(verts, 3));
+        geometry.setAttribute("color", new Float32BufferAttribute(colors, 3));
     };
 
-    parentGrp = new Group();
-    parentGrp.add(points);
-    parentGrp.name = `${data.name}_parentGrp`;
-    points.name = `${data.name}_masterGrp`;
+    // parentGrp = new Group();
+    // parentGrp.add(points);
+    // parentGrp.name = `${data.name}_parentGrp`;
+    // points.name = `${data.name}_masterGrp`;
   } else {
-    [parentGrp, points] = await loadCache(data.draw.cache);
+    [points, parentGrp] = await loadCache(data.draw.cache);
     (points as Points).material = material;
   }
 
@@ -96,11 +161,11 @@ export default async function build(data: SystemObjectData) {
   return ring;
 }
 
-function loadCache(path: string): Promise<Object3D[]> {
+function loadCache(path: string): Promise<[Points,Group]> {
   return new Promise((resolve) => {
     Constants.GLTF_LOADER.load(path, (gltf) => {
-      const points = gltf.scene.children[0];
-      const parentGrp = gltf.scene.children[0].children[0];
+      const parentGrp = gltf.scene.children[0] as Group;
+      const points = gltf.scene.children[0].children[0] as Points;
 
       resolve([points, parentGrp]);
     });

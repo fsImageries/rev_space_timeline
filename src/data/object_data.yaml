@@ -75,9 +75,9 @@ systems:
     distanceToParent: 550000000
     draw:
       cache: "./epsilonEridani/glitterband.glb"
-      count: 1000
+      count: 10000
       distDiv: 350000000
-      height: 30
+      height: 40
 
   - name: oortCloud
     type: oortcloud

@@ -69,5 +69,4 @@ export function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 //     },
 //     { binary: true }
 //   );
-
 // }

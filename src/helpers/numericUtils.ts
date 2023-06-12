@@ -42,18 +42,18 @@ export const randSpherePoint = (mult = 1) => {
   return [x * mult, y * mult, z * mult];
 };
 
-export function relaxRingPoints(points: number[], rad = 1) {
+export function relaxRingPoints(points: number[], height:number, end = 1, mult = 1) {
   for (let cur_i = 0; cur_i < points.length; cur_i += 3) {
-    points[cur_i + 1] += randFloat(-rad, rad); // y
-    points[cur_i] += randFloat(-rad * 27.5, rad * 32.5); // x
-    points[cur_i + 2] += randFloat(-rad * 32.5, rad * 27.5); // z
+    points[cur_i + 1] += randFloat(-mult * height , mult * height); // y
+    points[cur_i] += randFloat(-mult * 27.5  * end, mult * 32.5 * end); // x
+    points[cur_i + 2] += randFloat(-mult * 32.5 * end, mult * 27.5 * end); // z
     const cur = [points[cur_i], points[cur_i + 1], points[cur_i + 2]];
 
     for (let other_i = 0; other_i < points.length; other_i += 3) {
       if (cur_i == other_i) continue;
       const other = [points[other_i], points[other_i + 1], points[other_i + 2]];
-      if (inSphere(other, cur, rad)) {
-        points[other_i + 1] += randFloat(-rad, rad);
+      if (inSphere(other, cur, mult)) {
+        points[other_i + 1] += randFloat(-mult, mult);
       }
     }
   }

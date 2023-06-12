@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { GLTFExporter } from "three/examples/jsm/exporters/gltfExporter"
 
 export function getMasterGrp(target: THREE.Object3D) {
   if (!(target.parent instanceof THREE.Scene) && !target.name.includes("_masterGrp")) {
@@ -34,4 +35,39 @@ export function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
     renderer.setSize(width, height, false);
   }
   return needResize;
+}
+
+function save(blob: Blob, filename: string) {
+  const link = document.createElement('a');
+  link.style.display = 'none';
+  document.body.appendChild(link); // Firefox workaround, see #6594
+
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+
+  document.body.removeChild(link)
+}
+
+function saveArrayBuffer(buffer: ArrayBuffer, filename: string) {
+  save(new Blob([buffer], { type: 'application/octet-stream' }), filename);
+}
+
+export function exportGLTF(input: THREE.Object3D) {
+  console.log("Starting to save incoming input: ", input.name || input.type)
+  const gltfExporter = new GLTFExporter();
+
+  gltfExporter.parse(
+    input,
+    function (result) {
+      if (result instanceof ArrayBuffer) {
+        saveArrayBuffer(result, 'scene.glb');
+      }
+    },
+    function (error) {
+      console.log('An error happened during parsing', error);
+    },
+    { binary: true }
+  );
+
 }

@@ -99,7 +99,7 @@ export default async function build(data: SystemObjectData) {
         `
   });
 
-  let points:Points;
+  let points: Points;
   let parentGrp: Group;
   if (!data.draw.cache) {
     const geometry = new BufferGeometry();
@@ -108,16 +108,21 @@ export default async function build(data: SystemObjectData) {
     parentGrp.add(points);
     parentGrp.name = `${data.name}_parentGrp`;
     points.name = `${data.name}_masterGrp`;
-    
+
     const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
     const worker = new PWorker();
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`);
-    worker.postMessage({ type: data.type, radius, count: data.draw.count, height: data.draw.height, genColor: data.draw.genColor });
+    worker.postMessage({
+      type: data.type,
+      radius,
+      count: data.draw.count,
+      height: data.draw.height,
+      genColor: data.draw.genColor
+    });
     worker.onmessage = (event) => {
       Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`);
-        geometry.setAttribute("position", new Float32BufferAttribute(event.data[0], 3));
-        if (event.data.length > 1)
-        geometry.setAttribute("color", new Float32BufferAttribute(event.data[1], 3));
+      geometry.setAttribute("position", new Float32BufferAttribute(event.data[0], 3));
+      if (event.data.length > 1) geometry.setAttribute("color", new Float32BufferAttribute(event.data[1], 3));
     };
 
     // parentGrp = new Group();
@@ -161,7 +166,7 @@ export default async function build(data: SystemObjectData) {
   return ring;
 }
 
-function loadCache(path: string): Promise<[Points,Group]> {
+function loadCache(path: string): Promise<[Points, Group]> {
   return new Promise((resolve) => {
     Constants.GLTF_LOADER.load(path, (gltf) => {
       const parentGrp = gltf.scene.children[0] as Group;

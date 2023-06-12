@@ -56,7 +56,7 @@ export class World {
     this.raycaster = new THREE.Raycaster();
 
     // Init methods
-    this.initListeners();
+    // this.initListeners();
 
     this.gridhelper = new THREE.GridHelper(100, 100, "teal", "darkgray");
     this.gridhelper.scale.setScalar(10000);
@@ -128,6 +128,7 @@ export class World {
         this.infoPanel.visible = false;
         return;
       }
+
       const obj = this.curSystem.getById(getMasterGrp(target).userData["id"]);
       if (!obj) {
         this.infoPanel.visible = false;

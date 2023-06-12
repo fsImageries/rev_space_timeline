@@ -14,6 +14,7 @@ export class Startup {
     progress.onclick = () => {
       progress.visible = false;
       this.world.initGui();
+      this.world.initListeners();
       requestAnimationFrame((n) => World.eventLoop(n, this.world));
     };
 

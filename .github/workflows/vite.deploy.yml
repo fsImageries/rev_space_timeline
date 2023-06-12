@@ -1,0 +1,6 @@
+
+name: basic-deploy
+
+on:
+  pull_request:
+    branches: [ "dev" ]

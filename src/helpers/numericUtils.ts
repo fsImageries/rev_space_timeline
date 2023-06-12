@@ -42,7 +42,7 @@ export const randSpherePoint = (mult = 1) => {
   return [x * mult, y * mult, z * mult];
 };
 
-export function relaxRingPoints(points: number[], height:number, end:number = 1, mult = 1) {
+export function relaxRingPoints(points: number[], height:number, end = 1, mult = 1) {
   for (let cur_i = 0; cur_i < points.length; cur_i += 3) {
     points[cur_i + 1] += randFloat(-mult * height , mult * height); // y
     points[cur_i] += randFloat(-mult * 27.5  * end, mult * 32.5 * end); // x

@@ -86,10 +86,28 @@ systems:
     rotationPeriod: 
     orbitalPeriod: 62000
     parent: epsilonEridani
-    tilt: 0
-    distanceToParent: 747990000000
+    tilt: 0          #1220000000000
+    distanceToParent: 19920000000000
     draw:
+      # cache: "./epsilonEridani/oortcloud.glb"
       radius: 2
+
+  - name: kuiperBelt
+    type: particlering
+    radius: 
+    rotationPeriod: 
+    orbitalPeriod: 752000000
+    parent: epsilonEridani
+    tilt: 0
+    distanceToParent: 748793612000
+    draw:
+      cache: "./epsilonEridani/kuiperbelt.glb"
+      end: 100000
+      count: 1000
+      distDiv: 100000000000
+      height: 400000
+      pointShader: true
+      orbInvert: true
 
   texts:
   - name: tangerineDream

@@ -10,9 +10,10 @@ interface Data {
   distanceToParent: number;
   distScale: number;
   genColor?: boolean;
+  end?:number;
 }
 
-const PNTCOUNT = 100_000;
+const PNTCOUNT = 10000;
 const RANGE = 6731900000000;
 const C1 = 0.01;
 const C2 = 0.5;
@@ -51,8 +52,7 @@ function ring(data: Data) {
     if (data.genColor) colors.push(...genCol([color.r, color.g, color.b]));
   }
 
-  vertexs = relaxRingPoints(vertexs, data.height);
-  console.log("Worker:", colors.length == vertexs.length);
+  vertexs = relaxRingPoints(vertexs, data.height, data.end);
   const res = data.genColor ? [vertexs, colors] : [vertexs];
   return res;
 }

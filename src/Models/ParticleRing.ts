@@ -37,7 +37,8 @@ export class ParticleRing extends SystemObject {
     world.cam.active.getWorldPosition(Constants.CAM_POS);
     this.object.parentGrp.getWorldPosition(Constants.WORLD_POS);
     const dist = Constants.CAM_POS.distanceTo(Constants.WORLD_POS);
-    ((this.object.masterGrp as THREE.Mesh).material as THREE.ShaderMaterial).uniforms.dist.value = dist;
+    const m = ((this.object.masterGrp as THREE.Mesh).material as THREE.ShaderMaterial)
+    if ("uniforms" in m && "dist" in m.uniforms) m.uniforms.dist.value = dist;
 
     // Orbit Rot
     const axisVal = world.delta * this.data.angularOrbVel * Constants.ORB_SCALE;

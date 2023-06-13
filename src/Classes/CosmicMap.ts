@@ -25,6 +25,8 @@ let OBJ_MAT = new THREE.LineBasicMaterial({
     transparent: true,
     opacity: .075
 })
+
+const dummyQuat = new THREE.Object3D().getWorldQuaternion(Constants.WORLD_QUAT).clone()
 export class CosmicMap extends System {
 
     constructor(data: SystemParams) {
@@ -73,6 +75,20 @@ export class CosmicMap extends System {
         const p1 = o1.object.masterGrp.getWorldPosition(Constants.WORLD_POS).clone()
         const p2 = o2.object.masterGrp.getWorldPosition(Constants.WORLD_POS)
         return CosmicMap.buildLine(p1, p2, OBJ_MAT)
+    }
+
+    static buildNameTag(sun:Sun, xOff:number) {
+        const base = sun.object.masterGrp.getWorldPosition(Constants.WORLD_POS)
+        base.x -= xOff
+
+        const txt = new Text()
+        txt.text = sun.data.name
+        txt.fontSize = 50
+        txt.color = 0xffffff
+        txt.rotateY(Math.PI*.85)
+        txt.position.copy(base)
+        txt.position.y += 25
+        return txt
     }
 
     static buildLyRings(sol:Sun) {
@@ -143,6 +159,11 @@ export class CosmicMap extends System {
         sol.object.parentGrp.add(CosmicMap.buildDiskLine(eeridani, {x:1000, y:300, rotY:Math.PI * 2.1}))
         sol.object.parentGrp.add(CosmicMap.buildDiskLine(peridani, {x:1200, y:2000, rotY:Math.PI * -1.9 * -1}))
         sol.object.parentGrp.add(CosmicMap.buildDiskLine(pavonis, {x:750, y:2150, rotY:Math.PI / 2 * -1}))
+
+        map.topGrp.add(CosmicMap.buildNameTag(sol, 25))
+        map.topGrp.add(CosmicMap.buildNameTag(eeridani, 25))
+        map.topGrp.add(CosmicMap.buildNameTag(peridani, 25))
+        map.topGrp.add(CosmicMap.buildNameTag(pavonis, 25))
 
         sol.object.parentGrp.add(CosmicMap.buildObjectLine(eeridani, peridani))
         sol.object.parentGrp.add(CosmicMap.buildObjectLine(eeridani, pavonis))

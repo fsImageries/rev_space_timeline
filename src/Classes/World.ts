@@ -28,7 +28,7 @@ export class World {
   systems: System[];
   curSystem: System;
 
-  constructor(system: System, infoPanel: InfoPanel) {
+  constructor(infoPanel: InfoPanel) {
     // Canvas, Renderer, Scene
     this.canvas = document.querySelector(`canvas#main`);
     this.renderer = new THREE.WebGLRenderer({
@@ -49,8 +49,8 @@ export class World {
     this.clock = new THREE.Clock();
     this.delta = 0;
 
-    this.curSystem = system;
-    this.systems = [system];
+    // this.curSystem = system;
+    this.systems = [];
 
     this.clickPointer = new THREE.Vector2(Infinity, Infinity);
     this.raycaster = new THREE.Raycaster();
@@ -71,9 +71,16 @@ export class World {
 
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
 
-    this.curSystem.initWorld(this);
+    // this.curSystem.initWorld(this);
     this.infoPanel = infoPanel;
-    infoPanel.init(this.curSystem);
+    // infoPanel.init(this.curSystem);
+  }
+
+  public initSys(system:System) {
+    this.curSystem = system;
+    this.curSystem.initWorld(this)
+    this.infoPanel.init(this.curSystem);
+    this.systems.push(system)
   }
 
   public initGui() {

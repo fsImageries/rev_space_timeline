@@ -46,7 +46,7 @@ export class Camera {
     return this._active;
   }
 
-  public get thirdTarget(): SystemObject {
+  public get thirdTarget(): SystemObject | undefined {
     return this._thirdTarget;
   }
 
@@ -121,18 +121,21 @@ export class Camera {
   }
 
   public update(delta: number) {
-    const [lookat, offset] = this.calculateTarget();
+    // console.log(!!this._thirdTarget)
+    if (this._thirdTarget) {
+      const [lookat, offset] = this.calculateTarget();
 
-    if (Constants.ORB_SCALE >= 100000000) {
-      this._currentPosition.copy(offset);
-    } else {
-      const t = 1.0 - Math.pow(0.001, delta);
-      this._currentPosition.lerp(offset, t);
+      if (Constants.ORB_SCALE >= 100000000) {
+        this._currentPosition.copy(offset);
+      } else {
+        const t = 1.0 - Math.pow(0.001, delta);
+        this._currentPosition.lerp(offset, t);
+      }
+      this._currentLookat.copy(lookat);
+
+      this.third.position.copy(this._currentPosition);
+      this.third.lookAt(this._currentLookat);
     }
-    this._currentLookat.copy(lookat);
-
-    this.third.position.copy(this._currentPosition);
-    this.third.lookAt(this._currentLookat);
 
     this.freeCtrl.update(delta);
   }

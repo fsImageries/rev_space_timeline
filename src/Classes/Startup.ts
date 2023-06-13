@@ -1,6 +1,7 @@
 import systemFactory from "../Factories/SystemFactory";
 import Constants from "../helpers/Constants";
 import { SystemData } from "../jsonInterfaces";
+import { CosmicMap } from "./CosmicMap";
 import { InfoPanel } from "./InfoPanel";
 import { ProgressPanel } from "./ProgressPanel";
 import { World } from "./World";
@@ -30,17 +31,20 @@ export class Startup {
   }
 
   public async start(data: SystemData) {
-    const infoPanel = new InfoPanel(data.texts);
-    const sys = await systemFactory(data);
-    this.world = new World(sys, infoPanel);
-    // sys.initWorld(this.world);
+    // const infoPanel = new InfoPanel(data.texts);
+    const infoPanel = new InfoPanel([]);
+    // const sys = await systemFactory(data);
+    this.world = new World(infoPanel);
+    const sys = CosmicMap.build()
+    this.world.initSys(sys)
 
-    // const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
-    const obj = this.world.scene.getObjectByName("yellowstone_masterGrp");
+    // // const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
+    // const obj = this.world.scene.getObjectByName("yellowstone_masterGrp");
     // // const obj:any = null
-    const target = sys.getById(obj.userData["id"]);
-    // console.log(target)
-    this.world.cam.setFollowTarget(target);
-    this.world.cam.activateThird();
+    // const target = sys.getById(obj.userData["id"]);
+    // // // console.log(target)
+    // this.world.cam.setFollowTarget(target);
+    // this.world.cam.activateThird();
+    // this.world.cam.activateFree()
   }
 }

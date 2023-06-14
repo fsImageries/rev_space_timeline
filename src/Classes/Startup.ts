@@ -1,4 +1,4 @@
-import systemFactory from "../Factories/SystemFactory";
+// import systemFactory from "../Factories/SystemFactory";
 import Constants from "../helpers/Constants";
 import { SystemData } from "../jsonInterfaces";
 import { CosmicMap } from "./CosmicMap";
@@ -30,7 +30,7 @@ export class Startup {
     };
   }
 
-  public async start(data: SystemData) {
+  public async start(_data: SystemData) {
     // const infoPanel = new InfoPanel(data.texts);
     const infoPanel = new InfoPanel([]);
     // const sys = await systemFactory(data);

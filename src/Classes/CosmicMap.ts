@@ -9,13 +9,13 @@ import sunFactory from "../Factories/SunFactory";
 import Constants from "../helpers/Constants";
 
 
-let LEN_MAT = new THREE.LineBasicMaterial({
+const LEN_MAT = new THREE.LineBasicMaterial({
     color: "#ffffff",
     transparent: true,
     opacity: .2
 })
 
-let OBJ_MAT = new THREE.LineBasicMaterial({
+const OBJ_MAT = new THREE.LineBasicMaterial({
     color: "#ffffff",
     transparent: true,
     opacity: .075

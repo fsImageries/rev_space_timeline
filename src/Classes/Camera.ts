@@ -1,12 +1,10 @@
-import CameraControls from "camera-controls";
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import SystemObject from "../Classes/SystemObject";
-import { World } from "./World";
 import Constants from "../helpers/Constants";
-// import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
+import { World } from "./World";
 
-CameraControls.install({ THREE: THREE });
-type Controls = CameraControls;
+type Controls = OrbitControls;
 
 export class Camera {
   private _active: THREE.PerspectiveCamera;
@@ -30,8 +28,10 @@ export class Camera {
     this.free.position.set(0, 0, -10000);
     this.third.position.set(0, 0, -10000);
 
-    // this.freeCtrl = new OrbitControls(this.free, world.renderer.domElement)
-    this.freeCtrl = new CameraControls(this.free, world.renderer.domElement);
+    this.freeCtrl = new OrbitControls(this.free, world.renderer.domElement)
+    this.freeCtrl.enableDamping = true
+    this.freeCtrl.dampingFactor = .5
+    // this.freeCtrl = new CameraControls(this.free, world.renderer.domElement);
 
     this._active = this.free;
     this._isFree = true;
@@ -104,10 +104,12 @@ export class Camera {
 
   public third2Free() {
     this.third.getWorldPosition(Constants.WORLD_POS);
-    this.freeCtrl.setPosition(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
+    this.free.position.set(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z)
+    // this.freeCtrl.setPosition(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
 
     this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS);
-    this.freeCtrl.setTarget(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
+    // this.freeCtrl.setTarget(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
+    this.freeCtrl.target.set(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z)
   }
 
   public activateThird() {
@@ -123,7 +125,6 @@ export class Camera {
   }
 
   public update(delta: number) {
-    // console.log(!!this._thirdTarget)
     if (this._thirdTarget) {
       const [lookat, offset] = this.calculateTarget();
 
@@ -139,6 +140,6 @@ export class Camera {
       this.third.lookAt(this._currentLookat);
     }
 
-    this.freeCtrl.update(delta);
+    this.freeCtrl.update();
   }
 }

@@ -12,15 +12,19 @@ export class Startup {
   constructor() {
     const progress = new ProgressPanel();
 
-    progress.onclick = () => {
+    // progress.onclick = () => {
+    //   progress.visible = false;
+    //   this.world.initGui();
+    //   this.world.initListeners();
+    //   requestAnimationFrame((n) => World.eventLoop(n, this.world));
+    // };
+
+    Constants.LOAD_MANAGER.onLoad = () => {
       progress.visible = false;
+      (this.world.curSystem as CosmicMap).textOpacity = 1
       this.world.initGui();
       this.world.initListeners();
       requestAnimationFrame((n) => World.eventLoop(n, this.world));
-    };
-
-    Constants.LOAD_MANAGER.onLoad = () => {
-      progress.startBtnvisible = true;
     };
 
     Constants.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {

@@ -20,7 +20,8 @@ export class Startup {
     // };
 
     Constants.LOAD_MANAGER.onLoad = () => {
-      progress.visible = false
+      progress.visible = false;
+      (this.world.curSystem as CosmicMap).textOpacity = 1
       this.world.initGui();
       this.world.initListeners();
       requestAnimationFrame((n) => World.eventLoop(n, this.world));

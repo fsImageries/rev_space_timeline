@@ -114,7 +114,7 @@ export class World {
 
     this.gui.close()
 
-    this.cam.free.position.set(0, 2117.999902022348, -9175.846962935977)
+    this.cam.free.position.set(0, 2117.999902022348, -10175.846962935977)
     this.cam.freeCtrl.update()
   }
 

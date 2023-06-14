@@ -4,9 +4,10 @@ import { Sun } from "../Models/Sun";
 import { System } from "../Models/System";
 import { SystemParams } from "../interfaces";
 
-import { DEG2RAD } from "three/src/math/MathUtils";
+import { DEG2RAD, clamp, mapLinear } from "three/src/math/MathUtils";
 import sunFactory from "../Factories/SunFactory";
 import Constants from "../helpers/Constants";
+import { World } from "./World";
 
 
 const LEN_MAT = new THREE.LineBasicMaterial({
@@ -24,10 +25,33 @@ const OBJ_MAT = new THREE.LineBasicMaterial({
 const GEOM = new THREE.BufferGeometry()
 const LEN_VERTS: THREE.Vector3[] = []
 const OBJ_VERTS: THREE.Vector3[] = []
+const ORIGIN = new THREE.Vector3(0,0,0)
 export class CosmicMap extends System {
+    private _mainArea:HTMLElement;
 
     constructor(data: SystemParams) {
         super(data);
+        this._mainArea = document.getElementById("cosmicMapTItle")
+        this._mainArea.ontransitionend = (e) => {
+            const v = (e.target as HTMLElement).style.visibility;
+            (e.target as HTMLElement).style.visibility = v == "visible" ? "hidden" : "visible"
+        }
+    }
+
+    public set textOpacity(value:number) {
+        this._mainArea.style.opacity = value.toString()
+        this._mainArea.style.visibility = value <= 0 ? "hidden" : "visible"
+    }
+
+    public update(world: World): void {
+        super.update(world)
+        let dist = world.cam.active.position.distanceTo(ORIGIN)
+        // console.log(dist)
+        dist = clamp(dist, 8000, 10000)
+        dist = mapLinear(dist, 8000, 10000, 0, 1)
+        // console.log(dist)
+        if (this.textOpacity != dist)
+        this.textOpacity = dist
     }
 
     static buildSun(data: {

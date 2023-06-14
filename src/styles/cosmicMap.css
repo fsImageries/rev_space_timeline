@@ -9,6 +9,9 @@
     flex-direction: column;
     gap: 2vh;
     margin: 5%;
+    opacity: 0;
+    pointer-events: none;
+    /* transition: opacity 259ms ease-in-out; */
 }
 
 #cosmicMapTItle .titleArea .title {
@@ -24,7 +27,8 @@
 }
 
 #cosmicMapTItle .textArea {
+    pointer-events: auto;
     font-size: small;
-    /* min-height: fit-content; */
-    width: 100%;
+    min-width: 40%;
+    width: fit-content;
 }

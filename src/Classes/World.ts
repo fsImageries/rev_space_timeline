@@ -109,8 +109,11 @@ export class World {
     worldFolder.add(Constants, "MAN_CELESTIAL_ORB").name("Force Orb Rot");
     worldFolder.add(this, "logCamera").name("Log Camera")
 
-    this.cam.freeCtrl.setPosition(0, 2117.999902022348, -9175.846962935977)
-    this.cam.freeCtrl.update(this.delta)
+    // this.cam.freeCtrl.setPosition(0, 2117.999902022348, -9175.846962935977)
+    // this.cam.freeCtrl.update(this.delta)
+
+    this.cam.free.position.set(0, 2117.999902022348, -9175.846962935977)
+    this.cam.freeCtrl.update()
   }
 
   public logCamera() {
@@ -229,7 +232,10 @@ export class World {
 
   public topView() {
     this.cam.activateFree();
-    this.cam.freeCtrl.setTarget(0, 0, 0, true);
-    this.cam.freeCtrl.setPosition(0, this.curSystem.radius * 4, 0);
+    // this.cam.freeCtrl.setTarget(0, 0, 0, true);
+    // this.cam.freeCtrl.setPosition(0, this.curSystem.radius * 4, 0);
+
+    this.cam.freeCtrl.target.set(0, 0, 0);
+    this.cam.free.position.set(0, this.curSystem.radius * 4, 0);
   }
 }

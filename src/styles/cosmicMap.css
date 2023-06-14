@@ -1,0 +1,30 @@
+#cosmicMapTItle {
+    width: 90vw;
+    position: absolute;
+    bottom: 0;
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2vh;
+    margin: 5%;
+}
+
+#cosmicMapTItle .titleArea .title {
+    /* opacity: .495492; */
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+#cosmicMapTItle .titleArea .subTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#cosmicMapTItle .textArea {
+    font-size: small;
+    /* min-height: fit-content; */
+    width: 100%;
+}

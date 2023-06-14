@@ -30,6 +30,7 @@ canvas {
   width: 100%;
   outline: none;
   
+  background-color: black;
   /* background: rgb(34, 193, 195); */
   /* background: linear-gradient(
     0deg,

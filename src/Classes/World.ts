@@ -112,6 +112,8 @@ export class World {
     // this.cam.freeCtrl.setPosition(0, 2117.999902022348, -9175.846962935977)
     // this.cam.freeCtrl.update(this.delta)
 
+    this.gui.close()
+
     this.cam.free.position.set(0, 2117.999902022348, -9175.846962935977)
     this.cam.freeCtrl.update()
   }

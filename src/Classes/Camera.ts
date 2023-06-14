@@ -5,7 +5,7 @@ import { World } from "./World";
 import Constants from "../helpers/Constants";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
 
-CameraControls.install({ THREE: THREE });
+// CameraControls.install({ THREE: THREE });
 type Controls = OrbitControls;
 
 export class Camera {

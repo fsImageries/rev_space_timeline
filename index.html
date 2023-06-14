@@ -10,20 +10,18 @@
   <link rel="stylesheet" href="./src/styles/baseStyle.css">
   <link rel="stylesheet" href="./src/styles/progressBar.css">
   <link rel="stylesheet" href="./src/styles/infoPanel.css">
+  <link rel="stylesheet" href="./src/styles/cosmicMap.css">
 </head>
 
 <body>
   <canvas id="main"></canvas>
   <div id="loading">
-    <div id="titleArea">
-      <div class="title">Revelation Space - Timeline</div>
-      <div class="subTitle"><span>by Alastair Reynolds</span><span>(Beware of Spoilers)</span></div>
-    </div>
     <div id="progressArea">
+      <span class="loading">Loading<span>.</span><span>.</span><span>.</span></span>
       <progress id="progress" aria-label="Loading/Processing assets" value="0" max="100"></progress>
       <button id="startBtn">Start</button>
     </div>
-    <div id="titleArea2">
+    <!-- <div id="titleArea2">
       <span class="text">
         Texts are sourced from the books and<br>
         <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/revelation-space-universe-timeline/">
@@ -42,7 +40,36 @@
           github.com/fsImageries/rev_space_timeline</a>
         </code><br>
       </span>
-    </div>
+    </div> -->
+  </div>
+
+  <div id="cosmicMapTItle">
+      <div class="titleArea">
+        <span class="title">Revelation Space - Timeline</span>
+        <span class="subTitle"><span>by Alastair Reynolds</span><span>(Beware of Spoilers)</span></span>
+      </div>
+      <div class="textArea">
+        Texts are sourced from the books and<br>
+        <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/revelation-space-universe-timeline/">
+            alastairreynolds.com</a>
+          </code><br>
+        <code><a target="_blank" href="https://revelationspace.fandom.com/wiki/Revelation_Space_Wiki">
+          revelationspace.fandom.com</a>
+        </code><br>
+        <code><a target="_blank" href="https://wikipedia.org/wiki/Revelation_Space_series">
+          wikipedia.org/wiki/Revelation_Space_series</a>
+        </code><br><br>
+        
+        Revelation Space Map:<br>
+        <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/map-of-the-rs-universe/">
+          alastairreynolds.com/rs-universe/map-of-the-rs-universe</a>
+        </code><br>
+
+        <br>Source code:<br>
+        <code><a target="_blank" href="https://github.com/fsImageries/rev_space_timeline">
+          github.com/fsImageries/rev_space_timeline</a>
+        </code><br>
+      </div>
   </div>
 
   <div id="parent" class="lil-gui allow-touch-styles root autoPlace">

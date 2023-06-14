@@ -151,11 +151,6 @@ export class World {
         return;
       }
 
-      // if (obj.data.type == "sun") {
-      //   this.infoPanel.showAll(this.curSystem);
-      //   return
-      // }
-
       // console.log(target) // TODO react when something like glitterband is clicked
       if (target.name.includes("_infoSprite")) {
         this.infoPanel.show(obj);
@@ -201,11 +196,12 @@ export class World {
 
     this.curSystem.update(this);
     this.cam.update(this.delta);
+    this.renderer.clear()
     this.renderer.render(this.scene, this.cam.active);
   }
 
   static eventLoop(now: number, world: World) {
-    window.requestAnimationFrame((n: number) => World.eventLoop(n, world));
+    requestAnimationFrame((n: number) => World.eventLoop(n, world));
 
     // delta time
     if (!lastTime) {

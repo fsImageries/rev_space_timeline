@@ -21,6 +21,9 @@ let OBJ_MAT = new THREE.LineBasicMaterial({
     opacity: .075
 })
 
+const GEOM = new THREE.BufferGeometry()
+const LEN_VERTS: THREE.Vector3[] = []
+const OBJ_VERTS: THREE.Vector3[] = []
 export class CosmicMap extends System {
 
     constructor(data: SystemParams) {
@@ -31,7 +34,9 @@ export class CosmicMap extends System {
         name: string,
         radius: number,
         hTemp: number,
-        lTemp: number
+        lTemp: number,
+        isSimple?: boolean,
+        color?: THREE.ColorRepresentation
     }) {
         return sunFactory({
             name: data.name,
@@ -44,14 +49,16 @@ export class CosmicMap extends System {
             distanceToParent: 1,
             tilt: 0,
             parent: "",
-            draw: { radius: 1 }
+            draw: { radius: 1 },
+            isSimple: data.isSimple,
+            color: data.color,
+            disableLight: true
         })
     }
 
-    static buildLine(p1: THREE.Vector3, p2: THREE.Vector3, mat: THREE.Material) {
-        const geom = new THREE.BufferGeometry()
-        geom.setFromPoints([p1, p2])
-        return new THREE.Line(geom, mat)
+    static buildLine(p1: THREE.Vector3, p2: THREE.Vector3, len?:boolean) {
+        const arr = len ? LEN_VERTS : OBJ_VERTS
+        arr.push(p1.clone(), p2.clone())
     }
 
     static buildDiskLine(sun: Sun, data: { x: number, y: number, rotY: number }) {
@@ -62,13 +69,13 @@ export class CosmicMap extends System {
         sun.object.masterGrp.getWorldPosition(Constants.WORLD_POS)
         const diskPnt = Constants.WORLD_POS.clone()
         diskPnt.y += data.y;
-        return CosmicMap.buildLine(Constants.WORLD_POS.clone(), diskPnt, LEN_MAT)
+        return CosmicMap.buildLine(Constants.WORLD_POS.clone(), diskPnt, true)
     }
 
     static buildObjectLine(o1: Sun, o2: Sun) {
         const p1 = o1.object.masterGrp.getWorldPosition(Constants.WORLD_POS).clone()
         const p2 = o2.object.masterGrp.getWorldPosition(Constants.WORLD_POS)
-        return CosmicMap.buildLine(p1, p2, OBJ_MAT)
+        return CosmicMap.buildLine(p1, p2, false)
     }
 
     static buildNameTag(sun: Sun, xOff: number) {
@@ -133,13 +140,14 @@ export class CosmicMap extends System {
         sol.object.masterGrp.add(ly15)
     }
 
-    static setupSun(system: System, sol: Sun, sun: Sun, diskData: { x: number, y: number, rotY: number }) {
-        sol.object.parentGrp.add(CosmicMap.buildDiskLine(sun, diskData))
+    static setupSun(system: System, sun: Sun, diskData: { x: number, y: number, rotY: number }) {
+        CosmicMap.buildDiskLine(sun, diskData)
         system.topGrp.add(CosmicMap.buildNameTag(sun, 25))
     }
 
-    static connectSuns(sol: Sun, sun: Sun, connects: Sun[]) {
-        connects.forEach(c => sol.object.parentGrp.add(CosmicMap.buildObjectLine(sun, c)))
+    static connectSuns(sun: Sun, connects: Sun[]) {
+        // connects.forEach(c => sol.object.parentGrp.add(CosmicMap.buildObjectLine(sun, c)))
+        connects.forEach(c => CosmicMap.buildObjectLine(sun, c))
     }
 
     static build() {
@@ -147,24 +155,25 @@ export class CosmicMap extends System {
         CosmicMap.buildLyRings(sol)
 
         const source = [
-            { name: "epsilonEridani", radius: 2200, hTemp: 5000, lTemp: 4000 },
-            { name: "pEridani", radius: 2200, hTemp: 5100, lTemp: 1500 },
-            { name: "deltaPavonis", radius: 3600, hTemp: 7000, lTemp: 3000 },
-            { name: "lacaille9352", radius: 2000, hTemp: 4000, lTemp: 3000 },
-            { name: "luyten726-8", radius: 500, hTemp: 2000, lTemp: 900 },
-            { name: "ross248", radius: 1000, hTemp: 2000, lTemp: 900 },
-            { name: "61cygni", radius: 2000, hTemp: 3000, lTemp: 500 },
-            { name: "lalande21185", radius: 1250, hTemp: 3000, lTemp: 500 },
-            { name: "gliese687", radius: 1560, hTemp: 3000, lTemp: 500 },
-            { name: "groombridge1618", radius: 1450, hTemp: 5000, lTemp: 500 },
-            { name: "107piscium", radius: 3000, hTemp: 10000, lTemp: 500 },
+            { isSimple: false, color: "red", name: "epsilonEridani", radius: 2200, hTemp: 5000, lTemp: 4000 },
+            { isSimple: false, color: "red", name: "pEridani", radius: 2200, hTemp: 5100, lTemp: 1500 },
+            { isSimple: false, color: "red", name: "deltaPavonis", radius: 3600, hTemp: 7000, lTemp: 3000 },
+            { isSimple: false, color: "red", name: "lacaille9352", radius: 2000, hTemp: 4000, lTemp: 3000 },
+            { isSimple: false, color: "red", name: "luyten726-8", radius: 500, hTemp: 2000, lTemp: 900 },
+            { isSimple: false, color: "red", name: "ross248", radius: 1000, hTemp: 2000, lTemp: 900 },
+            { isSimple: false, color: "red", name: "61cygni", radius: 2000, hTemp: 3000, lTemp: 500 },
+            { isSimple: false, color: "red", name: "lalande21185", radius: 1250, hTemp: 3000, lTemp: 500 },
+            { isSimple: false, color: "red", name: "gliese687", radius: 1560, hTemp: 3000, lTemp: 500 },
+            { isSimple: false, color: "red", name: "groombridge1618", radius: 1450, hTemp: 5000, lTemp: 500 },
+            { isSimple: false, color: "red", name: "107piscium", radius: 3000, hTemp: 10000, lTemp: 500 },
         ]
 
         const suns = source.map(d => CosmicMap.buildSun(d))
 
+        const sunss = [sol, ...suns]
         const params = {
-            tree: [sol, ...suns],
-            flat: [sol, ...suns],
+            tree: sunss,
+            flat: sunss,
             isSingleSun: true,
             name: "cosmicMap",
         }
@@ -185,15 +194,29 @@ export class CosmicMap extends System {
             { x: 2222, y: -1200, rotY: Math.PI * -.1 },
         ]
 
-        data.forEach((d, idx) => CosmicMap.setupSun(map, sol, suns[idx], d))
+        data.forEach((d, idx) => CosmicMap.setupSun(map, suns[idx], d))
 
-        CosmicMap.connectSuns(sol, sol, suns.filter(s => ["ross248", "61cygni"].includes(s.data.name)))
-        CosmicMap.connectSuns(sol, suns.reduce((a, c) => a.data.name == "pEridani" ? a : c), suns.filter(s => ["deltaPavonis"].includes(s.data.name)))
+        CosmicMap.connectSuns(sol, suns.filter(s => ["ross248", "61cygni"].includes(s.data.name)))
+        CosmicMap.connectSuns(suns.reduce((a, c) => a.data.name == "pEridani" ? a : c), suns.filter(s => ["deltaPavonis"].includes(s.data.name)))
         CosmicMap.connectSuns(
-            sol,
             suns.reduce((a, c) => a.data.name == "epsilonEridani" ? a : c),
             suns.filter(s => ["pEridani", "deltaPavonis", "61cygni", "107piscium"].includes(s.data.name))
         )
+
+        GEOM.setFromPoints(LEN_VERTS)
+        sol.object.parentGrp.add(new THREE.LineSegments(GEOM.clone(), LEN_MAT))
+
+        GEOM.setFromPoints(OBJ_VERTS)
+        sol.object.parentGrp.add(new THREE.LineSegments(GEOM, OBJ_MAT))
+
+        const light = new THREE.PointLight("#ffffff", 1, 1000);
+        light.castShadow = true;
+        light.shadow.radius = 4;
+        light.shadow.camera.near = 0.5;
+        light.shadow.camera.far = 100000;
+        light.shadow.mapSize.width = 2048;
+        light.shadow.mapSize.height = 2048;
+        map.topGrp.add(light)
 
         return map
     }

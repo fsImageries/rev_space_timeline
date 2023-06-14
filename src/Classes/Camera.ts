@@ -3,6 +3,7 @@ import * as THREE from "three";
 import SystemObject from "../Classes/SystemObject";
 import { World } from "./World";
 import Constants from "../helpers/Constants";
+// import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
 
 CameraControls.install({ THREE: THREE });
 type Controls = CameraControls;
@@ -29,6 +30,7 @@ export class Camera {
     this.free.position.set(0, 0, -10000);
     this.third.position.set(0, 0, -10000);
 
+    // this.freeCtrl = new OrbitControls(this.free, world.renderer.domElement)
     this.freeCtrl = new CameraControls(this.free, world.renderer.domElement);
 
     this._active = this.free;

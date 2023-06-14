@@ -1,3 +1,5 @@
+import { ColorRepresentation } from "three";
+
 export interface DrawData {
   radius: number;
   cache?: string,
@@ -19,6 +21,9 @@ export interface DrawData {
 export interface SunData extends SystemObjectData {
   highTemp: number;
   lowTemp: number;
+  isSimple?: boolean;
+  color?: ColorRepresentation;
+  disableLight?: boolean;
 }
 
 export interface SystemsData {

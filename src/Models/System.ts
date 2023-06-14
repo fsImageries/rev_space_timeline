@@ -29,10 +29,6 @@ export class System {
     this.radius = this.getRadius();
   }
 
-  // public get allCelestialObjects(): CelestialObject[] {
-  //     return this._allCelestialObjects;
-  // }
-
   private getRadius() {
     return this.mainSequenceObjects().reduce((acc, cur) => {
       const n = acc.dist > cur.dist ? acc : cur;

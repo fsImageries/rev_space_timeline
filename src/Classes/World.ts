@@ -28,7 +28,7 @@ export class World {
   systems: System[];
   curSystem: System;
 
-  constructor(system: System, infoPanel: InfoPanel) {
+  constructor(infoPanel: InfoPanel) {
     // Canvas, Renderer, Scene
     this.canvas = document.querySelector(`canvas#main`);
     this.renderer = new THREE.WebGLRenderer({
@@ -49,8 +49,8 @@ export class World {
     this.clock = new THREE.Clock();
     this.delta = 0;
 
-    this.curSystem = system;
-    this.systems = [system];
+    // this.curSystem = system;
+    this.systems = [];
 
     this.clickPointer = new THREE.Vector2(Infinity, Infinity);
     this.raycaster = new THREE.Raycaster();
@@ -71,9 +71,16 @@ export class World {
 
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
 
-    this.curSystem.initWorld(this);
+    // this.curSystem.initWorld(this);
     this.infoPanel = infoPanel;
-    infoPanel.init(this.curSystem);
+    // infoPanel.init(this.curSystem);
+  }
+
+  public initSys(system:System) {
+    this.curSystem = system;
+    this.curSystem.initWorld(this)
+    this.infoPanel.init(this.curSystem);
+    this.systems.push(system)
   }
 
   public initGui() {
@@ -100,6 +107,15 @@ export class World {
     worldFolder.add(this, "topView").name("Top View");
     worldFolder.add(this.gridhelper, "visible").name("Grid visiblity");
     worldFolder.add(Constants, "MAN_CELESTIAL_ORB").name("Force Orb Rot");
+    worldFolder.add(this, "logCamera").name("Log Camera")
+
+    this.cam.freeCtrl.setPosition(0, 2117.999902022348, -9175.846962935977)
+    this.cam.freeCtrl.update(this.delta)
+  }
+
+  public logCamera() {
+    console.log(this.cam.active.position)
+    console.log(this.cam.active.rotation)
   }
 
   public initListeners() {
@@ -134,11 +150,6 @@ export class World {
         this.infoPanel.visible = false;
         return;
       }
-
-      // if (obj.data.type == "sun") {
-      //   this.infoPanel.showAll(this.curSystem);
-      //   return
-      // }
 
       // console.log(target) // TODO react when something like glitterband is clicked
       if (target.name.includes("_infoSprite")) {
@@ -185,11 +196,12 @@ export class World {
 
     this.curSystem.update(this);
     this.cam.update(this.delta);
+    this.renderer.clear()
     this.renderer.render(this.scene, this.cam.active);
   }
 
   static eventLoop(now: number, world: World) {
-    window.requestAnimationFrame((n: number) => World.eventLoop(n, world));
+    requestAnimationFrame((n: number) => World.eventLoop(n, world));
 
     // delta time
     if (!lastTime) {

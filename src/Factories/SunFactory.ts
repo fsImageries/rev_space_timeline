@@ -1,4 +1,4 @@
-import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
+import { Group, Mesh, ShaderMaterial, SphereGeometry, MeshBasicMaterial, MeshPhongMaterial, MeshLambertMaterial } from "three";
 import CelestialBase from "../Classes/CelestialBase";
 import Internal3DObject from "../Classes/Internal3DObject";
 import { Sun } from "../Models/Sun";
@@ -21,6 +21,13 @@ export default function build(data: SunData) {
     vertexShader: sunVert,
     fragmentShader: sunFrag
   });
+
+  // const mat = new MeshLambertMaterial({
+  //   color: 0xffffff,
+  //   emissive: 0x1f2f3f,
+  //   emissiveIntensity: 100
+  // })
+  
 
   const sphereGeometry = new SphereGeometry(data.radius / Constants.SIZE_SCALE, 50, 50);
   const mesh = new Mesh(sphereGeometry, mat);

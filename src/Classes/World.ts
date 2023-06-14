@@ -109,10 +109,8 @@ export class World {
     worldFolder.add(Constants, "MAN_CELESTIAL_ORB").name("Force Orb Rot");
     worldFolder.add(this, "logCamera").name("Log Camera")
 
-    this.cam.freeCtrl.setPosition(109.07138535220146, 2117.999902022348, -8175.846962935977)
+    this.cam.freeCtrl.setPosition(0, 2117.999902022348, -9175.846962935977)
     this.cam.freeCtrl.update(this.delta)
-    // this.cam.free.updateMatrixWorld()
-    // this.cam.freeCtrl.update(this.delta)
   }
 
   public logCamera() {

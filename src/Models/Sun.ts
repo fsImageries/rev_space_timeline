@@ -29,7 +29,7 @@ export class Sun extends SystemObject {
   }
 
   public update(world: World) {
-    ((this.object.mesh as Mesh).material as ShaderMaterial).uniforms.time.value += 0.05;
+    // ((this.object.mesh as Mesh).material as ShaderMaterial).uniforms.time.value += 0.05;
     this.updateSatellites(world, this);
   }
 }

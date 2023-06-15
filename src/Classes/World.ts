@@ -1,12 +1,11 @@
 import GUI from "lil-gui";
 import * as THREE from "three";
+import { System } from "../Models/System";
 import Constants from "../helpers/Constants";
-import { getMasterGrp } from "../helpers/utils";
 import { resizeRendererToDisplaySize } from "../helpers/utils";
 import { Camera } from "./Camera";
-import { InfoPanel } from "./InfoPanel";
-import { System } from "../Models/System";
 import { ClickManager } from "./ClickManager";
+import { InfoPanel } from "./InfoPanel";
 
 let lastTime: number;
 const requiredElapsed = 1000 / 60; // desired interval is 60fps

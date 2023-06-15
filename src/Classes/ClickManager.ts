@@ -1,8 +1,7 @@
 import { Object3D, Raycaster, Vector2 } from "three";
-import { World } from "./World";
 import { getMasterGrp } from "../helpers/utils";
-import { Sun } from "../Models/Sun";
 import SystemObject from "./SystemObject";
+import { World } from "./World";
 
 export class ClickManager {
     private _mousePointer: Vector2;
@@ -58,13 +57,13 @@ export class ClickManager {
         this._mousePointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
     }
 
-    private checkRaycast() {
+    private checkRaycast(): [SystemObject, Object3D] | undefined {
         const evTarget = this.raycast()
-        if (!evTarget) return
+        if (!evTarget) return undefined
         const target = this.getMasterGroup(evTarget)
-        if (!target) return
+        if (!target) return undefined
         const obj = this._world.curSystem.getById(target.userData["id"])
-        if (!obj) return
+        if (!obj) return undefined
         return [obj, evTarget]
     }
 

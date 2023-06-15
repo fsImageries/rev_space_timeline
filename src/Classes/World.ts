@@ -1,11 +1,11 @@
 import GUI from "lil-gui";
 import * as THREE from "three";
+import { System } from "../Models/System";
 import Constants from "../helpers/Constants";
-import { getMasterGrp } from "../helpers/utils";
 import { resizeRendererToDisplaySize } from "../helpers/utils";
 import { Camera } from "./Camera";
+import { ClickManager } from "./ClickManager";
 import { InfoPanel } from "./InfoPanel";
-import { System } from "../Models/System";
 
 let lastTime: number;
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
@@ -21,6 +21,7 @@ export class World {
 
   gui: GUI;
   infoPanel: InfoPanel;
+  clickManager: ClickManager;
 
   clickPointer: THREE.Vector2;
   raycaster: THREE.Raycaster;
@@ -74,6 +75,7 @@ export class World {
     // this.curSystem.initWorld(this);
     this.infoPanel = infoPanel;
     // infoPanel.init(this.curSystem);
+    this.clickManager = new ClickManager(this)
   }
 
   public initSys(system:System) {
@@ -109,11 +111,9 @@ export class World {
     worldFolder.add(Constants, "MAN_CELESTIAL_ORB").name("Force Orb Rot");
     worldFolder.add(this, "logCamera").name("Log Camera")
 
-    // this.cam.freeCtrl.setPosition(0, 2117.999902022348, -9175.846962935977)
-    // this.cam.freeCtrl.update(this.delta)
-
     this.gui.close()
 
+    // TODO decouple this and put it into the system on startup
     this.cam.free.position.set(0, 2117.999902022348, -10175.846962935977)
     this.cam.freeCtrl.update()
   }
@@ -124,47 +124,6 @@ export class World {
   }
 
   public initListeners() {
-    const dblclickHandler = (event: MouseEvent) => {
-      this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-      this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      let target = this.raycastTarget();
-      if (!target) return;
-      target = getMasterGrp(target);
-      const obj = this.curSystem.getById(target.userData["id"]);
-      if (!obj) return;
-      this.cam.setFollowTarget(obj);
-      this.cam.activateThird();
-      this.cam.third2Free();
-    };
-
-    const clickHandler = (event: MouseEvent) => {
-      if ((event.target as HTMLElement).id.includes("startBtn")) return;
-
-      this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-      this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      const target = this.raycastTarget();
-      if (!target) {
-        this.infoPanel.visible = false;
-        return;
-      }
-
-      const obj = this.curSystem.getById(getMasterGrp(target).userData["id"]);
-      if (!obj) {
-        this.infoPanel.visible = false;
-        return;
-      }
-
-      // console.log(target) // TODO react when something like glitterband is clicked
-      if (target.name.includes("_infoSprite")) {
-        this.infoPanel.show(obj);
-        return;
-      }
-
-      if (this.infoPanel.visible) this.infoPanel.visible = false;
-    };
-
     const keyHandler = (e: KeyboardEvent) => {
       this.cam.rotateThird(e.key.toLowerCase());
     };
@@ -183,8 +142,6 @@ export class World {
       }
     };
 
-    window.addEventListener("dblclick", dblclickHandler);
-    window.addEventListener("click", clickHandler);
     window.addEventListener("mousedown", mouseDown);
     window.addEventListener("mouseup", mouseUp);
     window.addEventListener("mousemove", mouesMove);
@@ -222,16 +179,6 @@ export class World {
   }
 
   // Helper methods
-  public raycastTarget() {
-    this.raycaster.setFromCamera(this.clickPointer, this.cam.active);
-    const intersects = this.raycaster.intersectObjects(this.curSystem.topGrp.children);
-    this.clickPointer.set(Infinity, Infinity);
-
-    if (intersects.length === 0) return undefined;
-
-    return intersects[0].object;
-  }
-
   public topView() {
     this.cam.activateFree();
     // this.cam.freeCtrl.setTarget(0, 0, 0, true);

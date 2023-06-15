@@ -24,6 +24,7 @@ export class Startup {
       (this.world.curSystem as CosmicMap).textOpacity = 1
       this.world.initGui();
       this.world.initListeners();
+      this.world.clickManager.initListeners()
       requestAnimationFrame((n) => World.eventLoop(n, this.world));
     };
 

@@ -25,9 +25,71 @@ const OBJ_MAT = new THREE.LineBasicMaterial({
 const GEOM = new THREE.BufferGeometry()
 const LEN_VERTS: THREE.Vector3[] = []
 const OBJ_VERTS: THREE.Vector3[] = []
-const ORIGIN = new THREE.Vector3(0,0,0)
+const ORIGIN = new THREE.Vector3(0, 0, 0)
+
+const SOURCES = [
+    {
+        isSimple: false, color: "red", name: "Epsilon Eridani", radius: 2200, hTemp: 5000, lTemp: 4000,
+        texts: ["Yellowstone [GRUBS]", "- Marcos Eye", "Tangerine Dream", "Conjoiner Nest", "- Conjoiner Comet"],
+    },
+    {
+        isSimple: false, color: "red", name: "p Eridani", radius: 2200, hTemp: 5100, lTemp: 1500,
+        texts: ["Ararat [PATTERN JUGGLERS, NESTBUILDERS]"],
+    },
+    {
+        isSimple: false, color: "red", name: "Delta Pavonis", radius: 3600, hTemp: 7000, lTemp: 3000,
+        texts: ["Resurgam [AMARATIN]", "Hades [HADES MATRIX CIVILISATION]", "- Cerberus [INHIBITORS, AMARATIN, CERBERUS CIVILISATION]", "ROC"]
+    },
+    {
+        isSimple: false, color: "red", name: "Lacaille 9352", radius: 2000, hTemp: 4000, lTemp: 3000,
+        texts: ["Fand"]
+    },
+    {
+        isSimple: false, color: "red", name: "Luyten 726-8", radius: 500, hTemp: 2000, lTemp: 900,
+        texts: ["Luyten 726-8 Cometary Halo"]
+    },
+    {
+        isSimple: false, color: "red", name: "Ross 248", radius: 1000, hTemp: 2000, lTemp: 900,
+        texts: ["Diadem"]
+    },
+    {
+        isSimple: false, color: "red", name: "61 Cygni", radius: 2000, hTemp: 3000, lTemp: 500,
+        texts: ["Sky's Edge"]
+    },
+    {
+        isSimple: false, color: "red", name: "Lalande 21185", radius: 1250, hTemp: 3000, lTemp: 500,
+        texts: ["Zion"]
+    },
+    {
+        isSimple: false, color: "red", name: "Gliese 687", radius: 1560, hTemp: 3000, lTemp: 500,
+        texts: ["Haven"]
+    },
+    {
+        isSimple: false, color: "red", name: "Groombridge 1618", radius: 1450, hTemp: 5000, lTemp: 500,
+        texts: ["Turquoise [PATTERN JUGGLERS]"]
+    },
+    {
+        isSimple: false, color: "red", name: "107 Piscium", radius: 3000, hTemp: 10000, lTemp: 500,
+        texts: ["Haldora [SHADOWS]", "- Hela [SCUTTLERS, NESTBUILDERS(?)]"]
+    },
+]
+
+const TRANFORM_DATA = [
+    { x: 1000, y: 300, rotY: Math.PI * 2.1, textsHeight: 250 },
+    { x: 1200, y: 2000, rotY: Math.PI * -1.9 * -1, textsHeight: 60 },
+    { x: 750, y: 2150, rotY: Math.PI / 2 * -1, textsHeight: 175 },
+    { x: 1000, y: 800, rotY: Math.PI * 1.65, textsHeight: 60 },
+    { x: 800, y: 500, rotY: Math.PI * 1.9, textsHeight: 60 },
+    { x: 834, y: -800, rotY: Math.PI * 1.72, textsHeight: 60 },
+    { x: 626, y: -1000, rotY: Math.PI * 1.578, textsHeight: 80 },
+    { x: 550, y: -800, rotY: Math.PI * .75, textsHeight: 70 },
+    { x: 400, y: -1900, rotY: Math.PI * 1.3, textsHeight: 70 },
+    { x: 857, y: -1734, rotY: Math.PI * .689, textsHeight: -70 },
+    { x: 2222, y: -1200, rotY: Math.PI * -.1, textsHeight: 125 },
+]
+
 export class CosmicMap extends System {
-    private _mainArea:HTMLElement;
+    private _mainArea: HTMLElement;
 
     constructor(data: SystemParams) {
         super(data);
@@ -38,7 +100,7 @@ export class CosmicMap extends System {
         }
     }
 
-    public set textOpacity(value:number) {
+    public set textOpacity(value: number) {
         this._mainArea.style.opacity = value.toString()
         this._mainArea.style.visibility = value <= 0 ? "hidden" : "visible"
     }
@@ -51,7 +113,7 @@ export class CosmicMap extends System {
         dist = mapLinear(dist, 8000, 10000, 0, 1)
         // console.log(dist)
         if (this.textOpacity != dist)
-        this.textOpacity = dist
+            this.textOpacity = dist
     }
 
     static buildSun(data: {
@@ -60,7 +122,8 @@ export class CosmicMap extends System {
         hTemp: number,
         lTemp: number,
         isSimple?: boolean,
-        color?: THREE.ColorRepresentation
+        color?: THREE.ColorRepresentation,
+        texts?: string[]
     }) {
         return sunFactory({
             name: data.name,
@@ -76,11 +139,12 @@ export class CosmicMap extends System {
             draw: { radius: 1 },
             isSimple: data.isSimple,
             color: data.color,
-            disableLight: true
+            disableLight: true,
+            texts: data.texts
         })
     }
 
-    static buildLine(p1: THREE.Vector3, p2: THREE.Vector3, len?:boolean) {
+    static buildLine(p1: THREE.Vector3, p2: THREE.Vector3, len?: boolean) {
         const arr = len ? LEN_VERTS : OBJ_VERTS
         arr.push(p1.clone(), p2.clone())
     }
@@ -102,17 +166,19 @@ export class CosmicMap extends System {
         return CosmicMap.buildLine(p1, p2, false)
     }
 
-    static buildNameTag(sun: Sun, xOff: number) {
+    static buildNameTag(sun: Sun, xOff: number, yOff = 25, text?: string, fontSize = 50, rot?: number, opacity?: number) {
         const base = sun.object.masterGrp.getWorldPosition(Constants.WORLD_POS)
         base.x -= xOff
 
         const txt = new Text()
-        txt.text = sun.data.name
-        txt.fontSize = 50
+        txt.text = text != undefined ? text : sun.data.name
+        txt.fontSize = fontSize
         txt.color = 0xffffff
-        txt.rotateY(Math.PI * .85)
+        txt.rotateY(rot != undefined ? rot : Math.PI * .85)
         txt.position.copy(base)
-        txt.position.y += 25
+        txt.position.y += yOff
+        txt.fillOpacity = opacity != undefined ? opacity : 1;
+        txt.font = "./Open_Sans/static/OpenSans-Light.ttf"
         return txt
     }
 
@@ -164,9 +230,10 @@ export class CosmicMap extends System {
         sol.object.masterGrp.add(ly15)
     }
 
-    static setupSun(system: System, sun: Sun, diskData: { x: number, y: number, rotY: number }) {
-        CosmicMap.buildDiskLine(sun, diskData)
+    static setupSun(system: System, sun: Sun, data: { x: number, y: number, rotY: number, textsHeight?: number }) {
+        CosmicMap.buildDiskLine(sun, data)
         system.topGrp.add(CosmicMap.buildNameTag(sun, 25))
+        system.topGrp.add(CosmicMap.buildNameTag(sun, 10, data.textsHeight != undefined ? data.textsHeight : 250, sun.data.texts.join("\n"), 27.5, Math.PI, .35))
     }
 
     static connectSuns(sun: Sun, connects: Sun[]) {
@@ -175,24 +242,10 @@ export class CosmicMap extends System {
     }
 
     static build() {
-        const sol = CosmicMap.buildSun({ name: "sol", radius: 3000, hTemp: 7100, lTemp: 3100 })
+        const sol = CosmicMap.buildSun({ name: "Sol", radius: 3000, hTemp: 7100, lTemp: 3100 })
         CosmicMap.buildLyRings(sol)
 
-        const source = [
-            { isSimple: false, color: "red", name: "epsilonEridani", radius: 2200, hTemp: 5000, lTemp: 4000 },
-            { isSimple: false, color: "red", name: "pEridani", radius: 2200, hTemp: 5100, lTemp: 1500 },
-            { isSimple: false, color: "red", name: "deltaPavonis", radius: 3600, hTemp: 7000, lTemp: 3000 },
-            { isSimple: false, color: "red", name: "lacaille9352", radius: 2000, hTemp: 4000, lTemp: 3000 },
-            { isSimple: false, color: "red", name: "luyten726-8", radius: 500, hTemp: 2000, lTemp: 900 },
-            { isSimple: false, color: "red", name: "ross248", radius: 1000, hTemp: 2000, lTemp: 900 },
-            { isSimple: false, color: "red", name: "61cygni", radius: 2000, hTemp: 3000, lTemp: 500 },
-            { isSimple: false, color: "red", name: "lalande21185", radius: 1250, hTemp: 3000, lTemp: 500 },
-            { isSimple: false, color: "red", name: "gliese687", radius: 1560, hTemp: 3000, lTemp: 500 },
-            { isSimple: false, color: "red", name: "groombridge1618", radius: 1450, hTemp: 5000, lTemp: 500 },
-            { isSimple: false, color: "red", name: "107piscium", radius: 3000, hTemp: 10000, lTemp: 500 },
-        ]
-
-        const suns = source.map(d => CosmicMap.buildSun(d))
+        const suns = SOURCES.map(d => CosmicMap.buildSun(d))
 
         const sunss = [sol, ...suns]
         const params = {
@@ -203,22 +256,9 @@ export class CosmicMap extends System {
         }
         const map = new CosmicMap(params)
         map.topGrp.add(CosmicMap.buildNameTag(sol, 25))
+        map.topGrp.add(CosmicMap.buildNameTag(sol, -25, -50, ["Earth", "- Moon", "Mars", "- Phobos", "Europa"].join("\n"), 27.5, Math.PI, .35))
 
-        const data = [
-            { x: 1000, y: 300, rotY: Math.PI * 2.1 },
-            { x: 1200, y: 2000, rotY: Math.PI * -1.9 * -1 },
-            { x: 750, y: 2150, rotY: Math.PI / 2 * -1 },
-            { x: 1000, y: 800, rotY: Math.PI * 1.65 },
-            { x: 800, y: 500, rotY: Math.PI * 1.9 },
-            { x: 834, y: -800, rotY: Math.PI * 1.72 },
-            { x: 626, y: -1000, rotY: Math.PI * 1.578 },
-            { x: 550, y: -800, rotY: Math.PI * .75 },
-            { x: 400, y: -1900, rotY: Math.PI * 1.3 },
-            { x: 857, y: -1734, rotY: Math.PI * .689 },
-            { x: 2222, y: -1200, rotY: Math.PI * -.1 },
-        ]
-
-        data.forEach((d, idx) => CosmicMap.setupSun(map, suns[idx], d))
+        TRANFORM_DATA.forEach((d, idx) => CosmicMap.setupSun(map, suns[idx], d))
 
         CosmicMap.connectSuns(sol, suns.filter(s => ["ross248", "61cygni"].includes(s.data.name)))
         CosmicMap.connectSuns(suns.reduce((a, c) => a.data.name == "pEridani" ? a : c), suns.filter(s => ["deltaPavonis"].includes(s.data.name)))

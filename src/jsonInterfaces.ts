@@ -55,4 +55,5 @@ export interface SystemObjectData {
   // lowTemp: 1700 # TODO implement into new interfaces
   draw: DrawData;
   texts?: string[];
+  displayInfo?: boolean;
 }

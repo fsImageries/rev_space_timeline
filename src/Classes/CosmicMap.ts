@@ -138,7 +138,8 @@ export class CosmicMap extends System {
             isSimple: data.isSimple,
             color: data.color,
             disableLight: true,
-            texts: data.texts
+            texts: data.texts,
+            displayInfo: false
         })
     }
 

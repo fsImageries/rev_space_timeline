@@ -40,7 +40,8 @@ export class InfoPanel {
   }
 
   public init(system: System) {
-    const parents = system.flat.filter((obj) => obj.data.name in this._textMap || obj.data.type == "sun");
+    const parents = system.flat.filter((obj) => (obj.data.name in this._textMap || obj.data.type == "sun") && obj.object.displayInfo);
+    if (parents.length == 0) return
     this._spriteManager.build(parents);
     this._spriteManager.init();
   }

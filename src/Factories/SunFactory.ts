@@ -13,25 +13,6 @@ const GEOM = new SphereGeometry(1, 20, 20);
 let SH_MAT:ShaderMaterial;
 let MS_MAT:MeshBasicMaterial;
 
-const getMat = (data:SunData) => {
-  if (data.isSimple) {
-    if (MS_MAT) return MS_MAT
-    return new MeshBasicMaterial({
-      color: data.color ? data.color : 0xffffff,
-    })
-  }
-  if (SH_MAT) return SH_MAT
-  return new ShaderMaterial({
-    uniforms: {
-      time: { value: 1.0 },
-      scale: { value: 2.5 },
-      highTemp: { value: data.highTemp },
-      lowTemp: { value: data.lowTemp }
-    },
-    vertexShader: sunVert,
-    fragmentShader: sunFrag
-  })
-}
 export default function build(data: SunData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
@@ -70,7 +51,8 @@ export default function build(data: SunData) {
     parentGrp,
     masterGrp,
     meshGrp,
-    mesh
+    mesh,
+    displayInfo: data.displayInfo
   });
 
   const sun = new Sun({
@@ -80,4 +62,24 @@ export default function build(data: SunData) {
   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
 
   return sun;
+}
+
+const getMat = (data:SunData) => {
+  if (data.isSimple) {
+    if (MS_MAT) return MS_MAT
+    return new MeshBasicMaterial({
+      color: data.color ? data.color : 0xffffff,
+    })
+  }
+  if (SH_MAT) return SH_MAT
+  return new ShaderMaterial({
+    uniforms: {
+      time: { value: 1.0 },
+      scale: { value: 2.5 },
+      highTemp: { value: data.highTemp },
+      lowTemp: { value: data.lowTemp }
+    },
+    vertexShader: sunVert,
+    fragmentShader: sunFrag
+  })
 }

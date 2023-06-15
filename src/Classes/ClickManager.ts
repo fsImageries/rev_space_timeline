@@ -36,6 +36,11 @@ export class ClickManager {
             return;
         }
 
+        if (target.name.includes("_view")) {
+            console.log(`view ${target.name.replace('_view', '')} system`)
+            return;
+        }
+
         if (this._world.infoPanel.visible) this._world.infoPanel.visible = false;
     }
     private dblclickHandler(e:MouseEvent) {

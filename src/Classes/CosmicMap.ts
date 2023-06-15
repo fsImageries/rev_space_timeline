@@ -108,10 +108,8 @@ export class CosmicMap extends System {
     public update(world: World): void {
         super.update(world)
         let dist = world.cam.active.position.distanceTo(ORIGIN)
-        // console.log(dist)
         dist = clamp(dist, 8000, 10000)
         dist = mapLinear(dist, 8000, 10000, 0, 1)
-        // console.log(dist)
         if (this.textOpacity != dist)
             this.textOpacity = dist
     }
@@ -260,11 +258,11 @@ export class CosmicMap extends System {
 
         TRANFORM_DATA.forEach((d, idx) => CosmicMap.setupSun(map, suns[idx], d))
 
-        CosmicMap.connectSuns(sol, suns.filter(s => ["ross248", "61cygni"].includes(s.data.name)))
-        CosmicMap.connectSuns(suns.reduce((a, c) => a.data.name == "pEridani" ? a : c), suns.filter(s => ["deltaPavonis"].includes(s.data.name)))
+        CosmicMap.connectSuns(sol, suns.filter(s => ["Ross 248", "61 Cygni"].includes(s.data.name)))
+        CosmicMap.connectSuns(suns.reduce((a, c) => a.data.name == "p Eridani" ? a : c), suns.filter(s => ["Delta Pavonis"].includes(s.data.name)))
         CosmicMap.connectSuns(
-            suns.reduce((a, c) => a.data.name == "epsilonEridani" ? a : c),
-            suns.filter(s => ["pEridani", "deltaPavonis", "61cygni", "107piscium"].includes(s.data.name))
+            suns.reduce((a, c) => a.data.name == "Epsilon Eridani" ? a : c),
+            suns.filter(s => ["p Eridani", "Delta Pavonis", "61 Cygni", "107 Piscium"].includes(s.data.name))
         )
 
         GEOM.setFromPoints(LEN_VERTS)

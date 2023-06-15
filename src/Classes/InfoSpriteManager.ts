@@ -1,5 +1,5 @@
 import { Sprite } from "three";
-import infoSpriteFactory from "../Factories/InfoSpriteFactory";
+import infoSpriteFactory from "../Factories/SpriteFactory";
 import SystemObject from "../Classes/SystemObject";
 
 export class InfoSpriteManager {

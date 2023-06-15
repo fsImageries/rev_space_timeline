@@ -4,7 +4,7 @@ import { Text } from "troika-three-text";
 import { Planet } from "../Models/Planet";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
-import infoSpriteFactory from "./InfoSpriteFactory";
+import infoSpriteFactory from "./SpriteFactory";
 import build_orbit from "./OrbitFactory";
 
 import CelestialBase from "../Classes/CelestialBase";

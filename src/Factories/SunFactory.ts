@@ -16,7 +16,6 @@ let MS_MAT:MeshBasicMaterial;
 export default function build(data: SunData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
-
   const mat = getMat(data)
   const mesh = new Mesh(GEOM, mat);
   mesh.scale.setScalar(data.radius / Constants.SIZE_SCALE)

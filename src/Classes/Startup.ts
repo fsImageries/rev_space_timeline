@@ -36,6 +36,7 @@ export class Startup {
   }
 
   public async start(_data: SystemData) {
+    Constants.LOAD_MANAGER.itemStart(`://startup`);
     // const infoPanel = new InfoPanel(data.texts);
     const infoPanel = new InfoPanel([]);
     // const sys = await systemFactory(data);
@@ -51,5 +52,7 @@ export class Startup {
     // this.world.cam.setFollowTarget(target);
     // this.world.cam.activateThird();
     // this.world.cam.activateFree()
+
+    Constants.LOAD_MANAGER.itemEnd(`://startup`);
   }
 }

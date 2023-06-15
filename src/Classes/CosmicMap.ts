@@ -6,6 +6,7 @@ import { SystemParams } from "../interfaces";
 
 import { DEG2RAD, clamp, mapLinear } from "three/src/math/MathUtils";
 import sunFactory from "../Factories/SunFactory";
+import spriteFactory from "../Factories/SpriteFactory"
 import Constants from "../helpers/Constants";
 import { World } from "./World";
 
@@ -90,6 +91,7 @@ const TRANFORM_DATA = [
 
 export class CosmicMap extends System {
     private _mainArea: HTMLElement;
+    private _viewSprites: THREE.Sprite[];
 
     constructor(data: SystemParams) {
         super(data);
@@ -98,6 +100,7 @@ export class CosmicMap extends System {
             const v = (e.target as HTMLElement).style.visibility;
             (e.target as HTMLElement).style.visibility = v == "visible" ? "hidden" : "visible"
         }
+        this._viewSprites = []
     }
 
     public set textOpacity(value: number) {
@@ -112,6 +115,14 @@ export class CosmicMap extends System {
         dist = mapLinear(dist, 8000, 10000, 0, 1)
         if (this.textOpacity != dist)
             this.textOpacity = dist
+        
+        this._viewSprites.forEach(sp => {
+            sp.getWorldPosition(Constants.WORLD_POS)
+            dist = world.cam.active.position.distanceTo(Constants.WORLD_POS)
+            dist = clamp(dist, 400, 500)
+            dist = mapLinear(dist, 400, 500, 1, 0)
+            sp.material.opacity = dist
+        })
     }
 
     static buildSun(data: {
@@ -256,6 +267,16 @@ export class CosmicMap extends System {
         const map = new CosmicMap(params)
         map.topGrp.add(CosmicMap.buildNameTag(sol, 25))
         map.topGrp.add(CosmicMap.buildNameTag(sol, -25, -50, ["Earth", "- Moon", "Mars", "- Phobos", "Europa"].join("\n"), 27.5, Math.PI, .35))
+
+        suns.forEach(s => {
+            const sprite = spriteFactory("./eye-solid.svg")
+            const rad = s.drawRadius * 1.15
+            sprite.position.x += rad
+            sprite.scale.setScalar(s.drawRadius * .3)
+            sprite.name = `${s.data.name}_view`
+            s.object.masterGrp.add(sprite)
+            map._viewSprites.push(sprite)
+        })
 
         TRANFORM_DATA.forEach((d, idx) => CosmicMap.setupSun(map, suns[idx], d))
 

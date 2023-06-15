@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Constants from "../helpers/Constants";
 
-export default function build(path:string = "./circle-info-solid.svg") {
+export default function build(path = "./circle-info-solid.svg") {
   // Create Sprite
   const map = Constants.TEX_LOAD(path);
   const material = new THREE.SpriteMaterial({ map: map, transparent:true });

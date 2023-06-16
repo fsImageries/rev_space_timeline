@@ -18,19 +18,28 @@ export class Startup {
     //   requestAnimationFrame((n) => World.eventLoop(n, this.world));
     // };
 
+    let handle:number;
+
     Constants.LOAD_MANAGER.onLoad = () => {
       progress.visible = false;
+      progress.value = 0;
       (this.world.curSystem as CosmicMap).textOpacity = 1
       this.world.initGui();
       this.world.initListeners();
       this.world.clickManager.initListeners()
-      requestAnimationFrame((n) => World.eventLoop(n, this.world));
+      handle = requestAnimationFrame((n) => World.eventLoop(n, this.world));
     };
+
+    Constants.LOAD_MANAGER.onStart = () => {
+      console.log("feuert ", handle)
+      progress.visible = true;
+      if (handle) cancelAnimationFrame(handle)
+    }
 
     Constants.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {
       const val = (itemsLoaded / itemsTotal) * 100;
       console.debug(url, " ", val);
-      progress.progress = val;
+      progress.value = val;
     };
   }
 
@@ -42,6 +51,7 @@ export class Startup {
     this.world = new World(infoPanel);
     const sys = CosmicMap.build()
     this.world.initSys(sys, {freeCam:true, texts:[]})
+    this.world.scene.add(sys.topGrp)
 
     // // const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
     // const obj = this.world.scene.getObjectByName("yellowstone_masterGrp");

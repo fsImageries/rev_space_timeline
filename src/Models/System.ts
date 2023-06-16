@@ -61,16 +61,9 @@ export class System {
     );
   }
 
-  public init() {
-    this.radius = this.getRadius();
-    const lightRadius = (this.oortCloud() as Oort).distanceEnd / Constants.DISTANCE_SCALE;
-    (this.suns() as Sun[]).forEach((sun) => (sun.lightRadius = lightRadius));
-    this.tree.forEach((obj) => obj.init());
-  }
-
   public initWorld(world: World, freeCam=false) {
     this.init();
-    world.scene.add(this.topGrp);
+    // world.scene.add(this.topGrp);
 
     const obj = this._flat.find(obj => obj.data.name == this.startTarget);
     if (!obj) return
@@ -78,6 +71,13 @@ export class System {
     freeCam ?
     world.cam.activateFree() :
     world.cam.activateThird();
+  }
+
+  public init() {
+    this.radius = this.getRadius();
+    const lightRadius = (this.oortCloud() as Oort).distanceEnd / Constants.DISTANCE_SCALE;
+    (this.suns() as Sun[]).forEach((sun) => (sun.lightRadius = lightRadius));
+    this.tree.forEach((obj) => obj.init());
   }
 
   public update(world: World) {

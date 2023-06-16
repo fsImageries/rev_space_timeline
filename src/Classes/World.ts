@@ -155,15 +155,21 @@ export class World {
   }
 
   public async switchSystem(name: string) {
+    
+    // Constants.LOAD_MANAGER.itemStart(`${name}_initialization`)
+    
     const found = this.systems.find(([s,_]) => s.name == name)
-    this.scene.remove(this.curSystem.topGrp)
+    const old = this.curSystem
     if (!found) {
       const d = DATA.systems.find(s => s.name == name)
       if (d)
       this.initSys(await systemFactoryAsync(d), {freeCam: d.freeCam, texts: d.texts})
-      return
-    }
-    this.initSys(found[0], {freeCam: false, texts: found[1]})
+    } else this.initSys(found[0], {freeCam: false, texts: found[1]})
+
+    this.scene.remove(old.topGrp)
+    this.scene.add(this.curSystem.topGrp);
+
+    // Constants.LOAD_MANAGER.itemEnd(`${name}_initialization`)
 }
 
   // World methods

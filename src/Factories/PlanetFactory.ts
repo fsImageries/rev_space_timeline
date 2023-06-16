@@ -41,16 +41,6 @@ export default function build(data: SystemObjectData) {
   const orbit = build_orbit(data.draw);
   masterGrp.add(orbit);
 
-  // TODO remove this and texts from object_data
-  // let infoSprite;
-  // if (data.texts) {
-  //   infoSprite = Constants.SPRITE_LOAD();
-  //   infoSprite.name = `${data.name}_infoSprite`;
-  //   parentGrp.add(infoSprite);
-  // }
-
-  if (data.name == "marcosEye") {console.log(orbit)}
-
   let markerSprite;
   if (!data.type.includes("moon")) {
     const map = Constants.TEX_LOAD("./diamond-solid.svg");

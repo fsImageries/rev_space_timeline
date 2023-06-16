@@ -31,8 +31,8 @@ const Constants = {
   GLTF_LOADER: new GLTFLoader(manager),
   TEX_LOADER: new TextureLoader(manager),
   TEX_LOAD(path: string) {
-    __tex.push(path);
-    return this.TEX_LOADER.load(path);
+    if (!(path in __tex)) __tex[path] = this.TEX_LOADER.load(path);
+    return __tex[path];
     // const map = this.TEX_LOADER.load(path)
     // const tex = new CanvasTexture(map)
     // tex.needsUpdate = true
@@ -48,6 +48,6 @@ const Constants = {
   HOME_BTN: document.getElementById("home")
 };
 
-const __tex = [];
+const __tex: { [key: string]: THREE.Texture } = {};
 
 export default Constants;

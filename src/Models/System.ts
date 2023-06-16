@@ -16,6 +16,7 @@ export class System {
 
   public isSingleSun: boolean;
   public radius: number;
+  public startTarget: string;
 
   constructor(data: SystemParams) {
     this.tree = data.tree;
@@ -27,6 +28,8 @@ export class System {
     this.tree.forEach((obj) => this.topGrp.add(obj.object.parentGrp));
     this._flat = data.flat;
     this.radius = this.getRadius();
+
+    this.startTarget = data.startTarget;
   }
 
   private getRadius() {
@@ -65,9 +68,16 @@ export class System {
     this.tree.forEach((obj) => obj.init());
   }
 
-  public initWorld(world: World) {
+  public initWorld(world: World, freeCam=false) {
     this.init();
     world.scene.add(this.topGrp);
+
+    const obj = this._flat.find(obj => obj.data.name == this.startTarget);
+    if (!obj) return
+    world.cam.setFollowTarget(obj);
+    freeCam ?
+    world.cam.activateFree() :
+    world.cam.activateThird();
   }
 
   public update(world: World) {

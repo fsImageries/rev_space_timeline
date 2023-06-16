@@ -19,7 +19,12 @@ export class ClickManager {
         window.addEventListener("click", this.clickHandler.bind(this));
     }
 
-    private clickHandler(e:MouseEvent) {
+    private async clickHandler(e:MouseEvent) {
+        if ((e.target as HTMLElement).id == "home") {
+            await this._world.switchSystem("cosmicMap")
+            return
+        } 
+
         this.updateMousePointer(e)
         const res = this.checkRaycast()
         if (!res) {
@@ -37,7 +42,7 @@ export class ClickManager {
         }
 
         if (target.name.includes("_view")) {
-            console.log(`view ${target.name.replace('_view', '')} system`)
+            await this._world.switchSystem(target.name.replace('_view', ''))
             return;
         }
 

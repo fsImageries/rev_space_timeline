@@ -39,8 +39,10 @@ export class InfoPanel {
     // this._parentPanel.style.visibility = this._visible ? "visible !important" : "hidden !important";
   }
 
-  public init(system: System) {
+  public init(system: System, texts:TextObject[]) {
+    this.genTexts(texts)
     const parents = system.flat.filter((obj) => (obj.data.name in this._textMap || obj.data.type == "sun") && obj.object.displayInfo);
+    // console.log(system.flat)
     if (parents.length == 0) return
     this._spriteManager.build(parents);
     this._spriteManager.init();

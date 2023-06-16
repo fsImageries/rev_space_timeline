@@ -17,6 +17,7 @@ export class Planet extends SystemObject {
     this.object.masterGrp.userData["id"] = this.data.id;
     this.object.masterGrp.traverse((child) => (child.userData["id"] = this.data.id));
 
+    if (this.object.orbit.scale.x == 1)
     this.object.orbit.scale.multiplyScalar(this.dist);
     this.object.orbit.position.set(-base.x, -base.y, -base.z);
 

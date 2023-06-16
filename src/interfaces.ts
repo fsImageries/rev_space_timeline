@@ -47,4 +47,5 @@ export interface SystemParams {
   flat: SystemObject[];
   name: string;
   isSingleSun: boolean;
+  startTarget:string;
 }

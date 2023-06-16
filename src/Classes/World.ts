@@ -1,12 +1,16 @@
 import GUI from "lil-gui";
 import * as THREE from "three";
+import systemFactoryAsync from "../Factories/SystemFactory";
 import { System } from "../Models/System";
+import celestialData from "../data/object_data.yaml";
 import Constants from "../helpers/Constants";
 import { resizeRendererToDisplaySize } from "../helpers/utils";
+import { SystemsData, TextObject } from "../jsonInterfaces";
 import { Camera } from "./Camera";
 import { ClickManager } from "./ClickManager";
 import { InfoPanel } from "./InfoPanel";
 
+const DATA = celestialData as SystemsData;
 let lastTime: number;
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 
@@ -26,7 +30,7 @@ export class World {
   clickPointer: THREE.Vector2;
   raycaster: THREE.Raycaster;
 
-  systems: System[];
+  systems: [System, TextObject[]][];
   curSystem: System;
 
   constructor(infoPanel: InfoPanel) {
@@ -78,11 +82,13 @@ export class World {
     this.clickManager = new ClickManager(this)
   }
 
-  public initSys(system:System) {
+  public initSys(system:System, data:{freeCam:boolean, texts:TextObject[]}) {
     this.curSystem = system;
-    this.curSystem.initWorld(this)
-    this.infoPanel.init(this.curSystem);
-    this.systems.push(system)
+    this.curSystem.initWorld(this, data.freeCam)
+    this.infoPanel.init(this.curSystem, data.texts);
+    Constants.HOME_BTN.style.visibility = system.name == "cosmicMap" ? "hidden": "visible";
+    if (!this.systems.find(sys => sys[0].name == system.name))
+    this.systems.push([system, data.texts])
   }
 
   public initGui() {
@@ -147,6 +153,18 @@ export class World {
     window.addEventListener("mousemove", mouesMove);
     window.addEventListener("keydown", keyHandler);
   }
+
+  public async switchSystem(name: string) {
+    const found = this.systems.find(([s,_]) => s.name == name)
+    this.scene.remove(this.curSystem.topGrp)
+    if (!found) {
+      const d = DATA.systems.find(s => s.name == name)
+      if (d)
+      this.initSys(await systemFactoryAsync(d), {freeCam: d.freeCam, texts: d.texts})
+      return
+    }
+    this.initSys(found[0], {freeCam: false, texts: found[1]})
+}
 
   // World methods
   public update() {

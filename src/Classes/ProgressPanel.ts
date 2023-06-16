@@ -31,7 +31,7 @@ export class ProgressPanel {
     this._startBtn.style.visibility = value ? "visible" : "hidden";
   }
 
-  public set progress(value: number) {
+  public set value(value: number) {
     this._progress.value = value;
   }
 }

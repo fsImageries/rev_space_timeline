@@ -1,14 +1,43 @@
-import { Startup } from "./Classes/Startup";
+import { CosmicMap } from "./Classes/CosmicMap";
+import { InfoPanel } from "./Classes/InfoPanel";
+import { ProgressPanel } from "./Classes/ProgressPanel";
+import { World } from "./Classes/World";
+import Constants from "./helpers/Constants";
 
 document.title = `${document.title} (${APP_VERSION})`
 document.getElementById("version").innerText = `v${APP_VERSION}`
 
 window.onload = () => {
-  const start = new Startup()
+  const progress = new ProgressPanel();
 
-  new Promise((resolve) => {
-    resolve(null);
-  }).then(async () => {
-    await start.start()
-  });
+  let handle: number;
+
+  Constants.LOAD_MANAGER.onLoad = () => {
+    progress.visible = false;
+    progress.value = 0;
+    (world.curSystem as CosmicMap).textOpacity = 1
+    world.initGui();
+    world.initListeners();
+    world.clickManager.initListeners()
+    handle = requestAnimationFrame((n) => World.eventLoop(n, world));
+  };
+
+  Constants.LOAD_MANAGER.onStart = () => {
+    progress.visible = true;
+    if (handle) cancelAnimationFrame(handle)
+  }
+
+  Constants.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {
+    const val = (itemsLoaded / itemsTotal) * 100;
+    console.debug(url, " ", val);
+    progress.value = val;
+  };
+
+  Constants.LOAD_MANAGER.itemStart(`://startup`);
+  const infoPanel = new InfoPanel([]);
+  const world = new World(infoPanel);
+  const sys = CosmicMap.build()
+  world.initSys(sys, { freeCam: true, texts: [] })
+  world.scene.add(sys.topGrp)
+  Constants.LOAD_MANAGER.itemEnd(`://startup`);
 }

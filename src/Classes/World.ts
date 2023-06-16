@@ -82,13 +82,13 @@ export class World {
     this.clickManager = new ClickManager(this)
   }
 
-  public initSys(system:System, data:{freeCam:boolean, texts:TextObject[]}) {
+  public initSys(system: System, data: { freeCam: boolean, texts: TextObject[] }) {
     this.curSystem = system;
     this.curSystem.initWorld(this, data.freeCam)
     this.infoPanel.init(this.curSystem, data.texts);
-    Constants.HOME_BTN.style.visibility = system.name == "cosmicMap" ? "hidden": "visible";
+    Constants.HOME_BTN.style.visibility = system.name == "cosmicMap" ? "hidden" : "visible";
     if (!this.systems.find(sys => sys[0].name == system.name))
-    this.systems.push([system, data.texts])
+      this.systems.push([system, data.texts])
   }
 
   public initGui() {
@@ -155,18 +155,18 @@ export class World {
   }
 
   public async switchSystem(name: string) {
-    const found = this.systems.find(([s,_]) => s.name == name)
-    this.scene.remove(this.curSystem.topGrp)
+    const found = this.systems.find(([s, _]) => s.name == name)
+    const old = this.curSystem
     if (!found) {
       const d = DATA.systems.find(s => s.name == name)
       if (d)
-      this.initSys(await systemFactoryAsync(d), {freeCam: d.freeCam, texts: d.texts})
-      return
-    }
-    this.initSys(found[0], {freeCam: false, texts: found[1]})
-}
+        this.initSys(await systemFactoryAsync(d), { freeCam: d.freeCam, texts: d.texts })
+    } else this.initSys(found[0], { freeCam: false, texts: found[1] })
 
-  // World methods
+    this.scene.remove(old.topGrp)
+    this.scene.add(this.curSystem.topGrp);
+  }
+
   public update() {
     if (resizeRendererToDisplaySize(this.renderer)) {
       const canvas = this.renderer.domElement;

@@ -129,31 +129,6 @@ export class World {
     console.log(this.cam.active.rotation)
   }
 
-  public initListeners() {
-    const keyHandler = (e: KeyboardEvent) => {
-      this.cam.rotateThird(e.key.toLowerCase());
-    };
-
-    let mousedown = false;
-    const mouseDown = () => {
-      mousedown = true;
-    };
-    const mouseUp = () => {
-      mousedown = false;
-    };
-    const mouesMove = (e: MouseEvent) => {
-      if (mousedown && e.altKey && !this.cam.isFree) {
-        this.cam.third2Free();
-        this.cam.activateFree();
-      }
-    };
-
-    window.addEventListener("mousedown", mouseDown);
-    window.addEventListener("mouseup", mouseUp);
-    window.addEventListener("mousemove", mouesMove);
-    window.addEventListener("keydown", keyHandler);
-  }
-
   public async switchSystem(name: string) {
     const found = this.systems.find(([s, _]) => s.name == name)
     const old = this.curSystem

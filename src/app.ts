@@ -17,7 +17,7 @@ window.onload = () => {
     progress.value = 0;
     (world.curSystem as CosmicMap).textOpacity = 1
     world.initGui();
-    world.initListeners();
+    world.cam.initListeners();
     world.clickManager.initListeners()
     handle = requestAnimationFrame((n) => World.eventLoop(n, world));
   };

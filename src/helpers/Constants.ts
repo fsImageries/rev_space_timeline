@@ -1,4 +1,4 @@
-import { LoadingManager, Quaternion, TextureLoader, Vector3 } from "three";
+import { LoadingManager, Quaternion, Sprite, SpriteMaterial, Texture, TextureLoader, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const manager = new LoadingManager();
@@ -33,10 +33,11 @@ const Constants = {
   TEX_LOAD(path: string) {
     if (!(path in __tex)) __tex[path] = this.TEX_LOADER.load(path);
     return __tex[path];
-    // const map = this.TEX_LOADER.load(path)
-    // const tex = new CanvasTexture(map)
-    // tex.needsUpdate = true
-    // return tex
+  },
+  SPRITE_LOAD(path = "./circle-info-solid.svg") {
+    const map = this.TEX_LOAD(path)
+    const mat = new SpriteMaterial({ map: map, transparent:true });
+    return new Sprite(mat)
   },
   LOAD_MANAGER: manager,
 
@@ -48,6 +49,6 @@ const Constants = {
   HOME_BTN: document.getElementById("home")
 };
 
-const __tex: { [key: string]: THREE.Texture } = {};
+const __tex: { [key: string]: Texture } = {};
 
 export default Constants;

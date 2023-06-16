@@ -6,7 +6,6 @@ import { SystemParams } from "../interfaces";
 
 import { DEG2RAD, clamp, mapLinear } from "three/src/math/MathUtils";
 import sunFactory from "../Factories/SunFactory";
-import spriteFactory from "../Factories/SpriteFactory"
 import Constants from "../helpers/Constants";
 import { World } from "./World";
 
@@ -271,7 +270,7 @@ export class CosmicMap extends System {
         map.topGrp.add(CosmicMap.buildNameTag(sol, -25, -50, ["Earth", "- Moon", "Mars", "- Phobos", "Europa"].join("\n"), 27.5, Math.PI, .35))
 
         suns.forEach(s => {
-            const sprite = spriteFactory("./eye-solid.svg")
+            const sprite = Constants.SPRITE_LOAD("./eye-solid.svg")
             const rad = s.drawRadius * 1.15
             sprite.position.x += rad
             sprite.scale.setScalar(s.drawRadius * .3)

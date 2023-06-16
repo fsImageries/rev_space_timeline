@@ -35,14 +35,14 @@ export class Startup {
     };
   }
 
-  public async start(_data: SystemData) {
+  public async start(data: SystemData) {
     Constants.LOAD_MANAGER.itemStart(`://startup`);
     // const infoPanel = new InfoPanel(data.texts);
     const infoPanel = new InfoPanel([]);
     // const sys = await systemFactory(data);
     this.world = new World(infoPanel);
     const sys = CosmicMap.build()
-    this.world.initSys(sys)
+    this.world.initSys(sys, {freeCam:true, texts:[]})
 
     // // const obj = world.scene.getObjectByName("tangerineDream_masterGrp")
     // const obj = this.world.scene.getObjectByName("yellowstone_masterGrp");

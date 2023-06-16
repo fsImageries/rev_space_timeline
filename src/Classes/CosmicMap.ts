@@ -30,7 +30,7 @@ const ORIGIN = new THREE.Vector3(0, 0, 0)
 
 const SOURCES = [
     {
-        isSimple: false, color: "red", name: "Epsilon Eridani", radius: 2200, hTemp: 5000, lTemp: 4000,
+        isSimple: false, color: "red", name: "epsilonEridani", radius: 2200, hTemp: 5000, lTemp: 4000,
         texts: ["Yellowstone [GRUBS]", "- Marcos Eye", "Tangerine Dream", "Conjoiner Nest", "- Conjoiner Comet"],
     },
     {
@@ -263,6 +263,7 @@ export class CosmicMap extends System {
             flat: sunss,
             isSingleSun: true,
             name: "cosmicMap",
+            startTarget: "Sol"
         }
         const map = new CosmicMap(params)
         map.topGrp.add(CosmicMap.buildNameTag(sol, 25))

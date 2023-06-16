@@ -40,6 +40,9 @@ export interface SystemData {
   isSingleSun: boolean;
   objects: SystemObjectData[];
   texts: TextObject[];
+  
+  startTarget:string;
+  freeCam:boolean;
 }
 
 export interface SystemObjectData {

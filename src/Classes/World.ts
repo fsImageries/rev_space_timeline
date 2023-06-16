@@ -6,7 +6,11 @@ import { resizeRendererToDisplaySize } from "../helpers/utils";
 import { Camera } from "./Camera";
 import { ClickManager } from "./ClickManager";
 import { InfoPanel } from "./InfoPanel";
+import celestialData from "../data/object_data.yaml";
+import { SystemData, SystemsData, TextObject } from "../jsonInterfaces";
+import systemFactoryAsync from "../Factories/SystemFactory";
 
+const DATA = celestialData as SystemsData;
 let lastTime: number;
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 
@@ -78,10 +82,10 @@ export class World {
     this.clickManager = new ClickManager(this)
   }
 
-  public initSys(system:System) {
+  public initSys(system:System, data:{freeCam:boolean, texts:TextObject[]}) {
     this.curSystem = system;
-    this.curSystem.initWorld(this)
-    this.infoPanel.init(this.curSystem);
+    this.curSystem.initWorld(this, data.freeCam)
+    this.infoPanel.init(this.curSystem, data.texts);
     this.systems.push(system)
   }
 
@@ -147,6 +151,20 @@ export class World {
     window.addEventListener("mousemove", mouesMove);
     window.addEventListener("keydown", keyHandler);
   }
+
+  public async switchSystem(name: string) {
+    const found = this.systems.find(s => s.name == name)
+    if (!found) {
+      const d = DATA.systems.find(s => s.name == name)
+      this.scene.remove(this.curSystem.topGrp)
+      this.initSys(await systemFactoryAsync(d), {freeCam: d.freeCam, texts: d.texts})
+      // this.scene.add(this.curSystem.topGrp)
+      // this.systems.push(this.curSystem)
+      // console.log(this.curSystem)
+      return
+    }
+    this.curSystem = found
+}
 
   // World methods
   public update() {

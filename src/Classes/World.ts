@@ -1,14 +1,14 @@
 import GUI from "lil-gui";
 import * as THREE from "three";
+import systemFactoryAsync from "../Factories/SystemFactory";
 import { System } from "../Models/System";
+import celestialData from "../data/object_data.yaml";
 import Constants from "../helpers/Constants";
 import { resizeRendererToDisplaySize } from "../helpers/utils";
+import { SystemsData, TextObject } from "../jsonInterfaces";
 import { Camera } from "./Camera";
 import { ClickManager } from "./ClickManager";
 import { InfoPanel } from "./InfoPanel";
-import celestialData from "../data/object_data.yaml";
-import { SystemData, SystemsData, TextObject } from "../jsonInterfaces";
-import systemFactoryAsync from "../Factories/SystemFactory";
 
 const DATA = celestialData as SystemsData;
 let lastTime: number;

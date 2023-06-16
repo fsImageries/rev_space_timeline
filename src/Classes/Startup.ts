@@ -1,6 +1,5 @@
 // import systemFactory from "../Factories/SystemFactory";
 import Constants from "../helpers/Constants";
-import { SystemData } from "../jsonInterfaces";
 import { CosmicMap } from "./CosmicMap";
 import { InfoPanel } from "./InfoPanel";
 import { ProgressPanel } from "./ProgressPanel";
@@ -35,7 +34,7 @@ export class Startup {
     };
   }
 
-  public async start(data: SystemData) {
+  public async start() {
     Constants.LOAD_MANAGER.itemStart(`://startup`);
     // const infoPanel = new InfoPanel(data.texts);
     const infoPanel = new InfoPanel([]);

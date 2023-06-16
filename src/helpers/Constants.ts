@@ -7,6 +7,7 @@ manager.onError = function (url) {
   console.error("There was an error loading " + url);
 };
 
+
 const Constants = {
   DISTANCE_SCALE: 100000,
   SIZE_SCALE: 100,
@@ -42,7 +43,9 @@ const Constants = {
   WORLD_POS: new Vector3(),
   CAM_POS: new Vector3(),
   WORLD_QUAT: new Quaternion(),
-  WORLD_QUAT2: new Quaternion()
+  WORLD_QUAT2: new Quaternion(),
+
+  HOME_BTN: document.getElementById("home")
 };
 
 const __tex = [];

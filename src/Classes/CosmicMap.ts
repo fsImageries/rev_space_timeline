@@ -95,6 +95,7 @@ export class CosmicMap extends System {
 
     constructor(data: SystemParams) {
         super(data);
+        this.name = "cosmicMap"
         this._mainArea = document.getElementById("cosmicMapTItle")
         this._mainArea.ontransitionend = (e) => {
             const v = (e.target as HTMLElement).style.visibility;

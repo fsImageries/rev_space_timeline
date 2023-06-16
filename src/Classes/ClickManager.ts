@@ -20,6 +20,11 @@ export class ClickManager {
     }
 
     private async clickHandler(e:MouseEvent) {
+        if ((e.target as HTMLElement).id == "home") {
+            await this._world.switchSystem("cosmicMap")
+            return
+        } 
+
         this.updateMousePointer(e)
         const res = this.checkRaycast()
         if (!res) {

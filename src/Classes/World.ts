@@ -30,7 +30,7 @@ export class World {
   clickPointer: THREE.Vector2;
   raycaster: THREE.Raycaster;
 
-  systems: System[];
+  systems: [System, TextObject[]][];
   curSystem: System;
 
   constructor(infoPanel: InfoPanel) {
@@ -86,7 +86,9 @@ export class World {
     this.curSystem = system;
     this.curSystem.initWorld(this, data.freeCam)
     this.infoPanel.init(this.curSystem, data.texts);
-    this.systems.push(system)
+    Constants.HOME_BTN.style.visibility = system.name == "cosmicMap" ? "hidden": "visible";
+    if (!this.systems.find(sys => sys[0].name == system.name))
+    this.systems.push([system, data.texts])
   }
 
   public initGui() {
@@ -153,17 +155,15 @@ export class World {
   }
 
   public async switchSystem(name: string) {
-    const found = this.systems.find(s => s.name == name)
+    const found = this.systems.find(([s,_]) => s.name == name)
+    this.scene.remove(this.curSystem.topGrp)
     if (!found) {
       const d = DATA.systems.find(s => s.name == name)
-      this.scene.remove(this.curSystem.topGrp)
+      if (d)
       this.initSys(await systemFactoryAsync(d), {freeCam: d.freeCam, texts: d.texts})
-      // this.scene.add(this.curSystem.topGrp)
-      // this.systems.push(this.curSystem)
-      // console.log(this.curSystem)
       return
     }
-    this.curSystem = found
+    this.initSys(found[0], {freeCam: false, texts: found[1]})
 }
 
   // World methods

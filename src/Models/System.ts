@@ -74,7 +74,6 @@ export class System {
 
     const obj = this._flat.find(obj => obj.data.name == this.startTarget);
     if (!obj) return
-    console.log(obj)
     world.cam.setFollowTarget(obj);
     freeCam ?
     world.cam.activateFree() :

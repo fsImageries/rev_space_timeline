@@ -103,13 +103,45 @@ export class Camera {
   }
 
   public third2Free() {
-    this.third.getWorldPosition(Constants.WORLD_POS);
-    this.free.position.set(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z)
-    // this.freeCtrl.setPosition(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
-
     this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS);
-    // this.freeCtrl.setTarget(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
     this.freeCtrl.target.set(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z)
+
+    this.third.getWorldPosition(this.free.position);
+    this.third.getWorldQuaternion(this.free.quaternion)
+  }
+
+  public initListeners() {
+    const keyHandler = (e: KeyboardEvent) => {
+      this.rotateThird(e.key.toLowerCase());
+    };
+
+    let mousedown = false;
+    const mouseDown = () => {
+      mousedown = true;
+    };
+    const mouseUp = () => {
+      mousedown = false;
+    };
+    const wheel = () => {
+      // if (mousedown && e.altKey && !this.isFree) {
+      if (!this.isFree) {  
+        this.third2Free();
+        this.activateFree();
+      }
+    };
+
+    const mouseMove = () => {
+      if (mousedown && !this.isFree) {
+        this.third2Free();
+        this.activateFree();
+      }
+    };
+
+    window.addEventListener("mousedown", mouseDown);
+    window.addEventListener("mouseup", mouseUp);
+    window.addEventListener("mousemove", mouseMove);
+    window.addEventListener("wheel", wheel);
+    window.addEventListener("keydown", keyHandler);
   }
 
   public activateThird() {

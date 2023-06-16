@@ -1,13 +1,13 @@
 import { Sprite } from "three";
-import infoSpriteFactory from "../Factories/SpriteFactory";
 import SystemObject from "../Classes/SystemObject";
+import Constants from "../helpers/Constants";
 
 export class InfoSpriteManager {
   private _sprites: [Sprite, SystemObject][];
 
   public build(parents: SystemObject[]) {
     this._sprites = parents.map((obj) => {
-      const infoSprite = infoSpriteFactory();
+      const infoSprite = Constants.SPRITE_LOAD();
       infoSprite.name = `${obj.data.name}_infoSprite`;
       obj.object.parentGrp.add(infoSprite);
       return [infoSprite, obj];

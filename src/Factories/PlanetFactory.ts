@@ -4,15 +4,14 @@ import { Text } from "troika-three-text";
 import { Planet } from "../Models/Planet";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
-import infoSpriteFactory from "./SpriteFactory";
 import build_orbit from "./OrbitFactory";
 
+import { randFloat } from "three/src/math/MathUtils";
 import CelestialBase from "../Classes/CelestialBase";
 import Internal3DObject from "../Classes/Internal3DObject";
 import Constants from "../helpers/Constants";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
-import { randFloat } from "three/src/math/MathUtils";
 
 export default function build(data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
@@ -41,13 +40,6 @@ export default function build(data: SystemObjectData) {
 
   const orbit = build_orbit(data.draw);
   masterGrp.add(orbit);
-
-  let infoSprite;
-  if (data.texts) {
-    infoSprite = infoSpriteFactory();
-    infoSprite.name = `${data.name}_infoSprite`;
-    parentGrp.add(infoSprite);
-  }
 
   let markerSprite;
   if (!data.type.includes("moon")) {

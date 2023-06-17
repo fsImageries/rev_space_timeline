@@ -1,6 +1,4 @@
 import { CosmicMap } from "./Classes/CosmicMap";
-import { InfoPanel } from "./Classes/InfoPanel";
-import { ProgressPanel } from "./Classes/ProgressPanel";
 import { World } from "./Classes/World";
 import Constants from "./helpers/Constants";
 
@@ -8,9 +6,7 @@ document.title = `${document.title} (${APP_VERSION})`
 document.getElementById("version").innerText = `v${APP_VERSION}`
 
 window.onload = () => {
-  const progress = new ProgressPanel();
-
-  let handle: number;
+  const progress = Constants.UIMANAGER.progressPanel
 
   Constants.LOAD_MANAGER.onLoad = () => {
     progress.visible = false;
@@ -19,12 +15,12 @@ window.onload = () => {
     world.initGui();
     world.cam.initListeners();
     world.clickManager.initListeners()
-    handle = requestAnimationFrame((n) => World.eventLoop(n, world));
+    World.eventLoop(0, world)
+    // Constants.UIMANAGER.cornerButton.forwardVisible = true
   };
 
   Constants.LOAD_MANAGER.onStart = () => {
     progress.visible = true;
-    if (handle) cancelAnimationFrame(handle)
   }
 
   Constants.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {
@@ -34,8 +30,7 @@ window.onload = () => {
   };
 
   Constants.LOAD_MANAGER.itemStart(`://startup`);
-  const infoPanel = new InfoPanel([]);
-  const world = new World(infoPanel);
+  const world = new World();
   const sys = CosmicMap.build()
   world.initSys(sys, { freeCam: true, texts: [] })
   world.scene.add(sys.topGrp)

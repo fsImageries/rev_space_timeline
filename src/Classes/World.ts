@@ -8,7 +8,6 @@ import { resizeRendererToDisplaySize } from "../helpers/utils";
 import { SystemsData, TextObject } from "../jsonInterfaces";
 import { Camera } from "./Camera";
 import { ClickManager } from "./ClickManager";
-import { InfoPanel } from "./InfoPanel";
 
 const DATA = celestialData as SystemsData;
 let lastTime: number;
@@ -24,7 +23,6 @@ export class World {
   cam: Camera;
 
   gui: GUI;
-  infoPanel: InfoPanel;
   clickManager: ClickManager;
 
   clickPointer: THREE.Vector2;
@@ -33,7 +31,9 @@ export class World {
   systems: [System, TextObject[]][];
   curSystem: System;
 
-  constructor(infoPanel: InfoPanel) {
+  stop:boolean;
+
+  constructor() {
     // Canvas, Renderer, Scene
     this.canvas = document.querySelector(`canvas#main`);
     this.renderer = new THREE.WebGLRenderer({
@@ -53,6 +53,7 @@ export class World {
     // Helper setup
     this.clock = new THREE.Clock();
     this.delta = 0;
+    this.stop = false;
 
     // this.curSystem = system;
     this.systems = [];
@@ -77,7 +78,6 @@ export class World {
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
 
     // this.curSystem.initWorld(this);
-    this.infoPanel = infoPanel;
     // infoPanel.init(this.curSystem);
     this.clickManager = new ClickManager(this);
   }
@@ -85,8 +85,8 @@ export class World {
   public initSys(system: System, data: { freeCam: boolean; texts: TextObject[] }) {
     this.curSystem = system;
     this.curSystem.initWorld(this, data.freeCam);
-    this.infoPanel.init(this.curSystem, data.texts);
-    Constants.HOME_BTN.style.visibility = system.name == "cosmicMap" ? "hidden" : "visible";
+    Constants.UIMANAGER.infoPanel.init(this.curSystem, data.texts);
+    Constants.UIMANAGER.homeBtn.style.visibility = system.name == "cosmicMap" ? "hidden" : "visible";
     if (!this.systems.find((sys) => sys[0].name == system.name)) this.systems.push([system, data.texts]);
   }
 
@@ -138,6 +138,11 @@ export class World {
 
     this.scene.remove(old.topGrp);
     this.scene.add(this.curSystem.topGrp);
+    this.stop = false
+    this.cam.stopWheel = true
+
+     // wheel event fires after switch and destroys the floating animation, so we disable it
+    setTimeout(() => {this.cam.stopWheel=false}, 1500)
   }
 
   public update() {
@@ -154,19 +159,21 @@ export class World {
   }
 
   static eventLoop(now: number, world: World) {
-    requestAnimationFrame((n: number) => World.eventLoop(n, world));
-
+    
     // delta time
     if (!lastTime) {
       lastTime = now;
     }
     const elapsed = now - lastTime;
     world.delta = world.clock.getDelta();
-
+    
     if (elapsed > requiredElapsed) {
       world.update();
       lastTime = now;
     }
+
+    if (!world.stop)
+    requestAnimationFrame((n: number) => World.eventLoop(n, world));
   }
 
   // Helper methods

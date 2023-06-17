@@ -114,7 +114,7 @@ function getMaterial(data: SystemObjectData) {
   });
 }
 
-export default async function build(data: SystemObjectData) {
+export default async function buildAsync(data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`);
 
   const material = getMaterial(data);

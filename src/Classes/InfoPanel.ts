@@ -17,9 +17,7 @@ export class InfoPanel {
   private _textMap: TextsMap;
   private _spriteManager: InfoSpriteManager;
 
-  constructor(texts: TextObject[]) {
-    this.genTexts(texts);
-
+  constructor() {
     this._spriteManager = new InfoSpriteManager();
 
     this._parentPanel = document.getElementById("parent") as HTMLDivElement;

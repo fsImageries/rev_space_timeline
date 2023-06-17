@@ -2,6 +2,7 @@ import { Object3D, Raycaster, Vector2 } from "three";
 import { getMasterGrp } from "../helpers/utils";
 import SystemObject from "./SystemObject";
 import { World } from "./World";
+import Constants from "../helpers/Constants";
 
 export class ClickManager {
   private _mousePointer: Vector2;
@@ -20,15 +21,21 @@ export class ClickManager {
   }
 
   private async clickHandler(e: MouseEvent) {
-    if ((e.target as HTMLElement).id == "home") {
+    const evTarget = e.target as HTMLElement
+    if (evTarget.id == "home") {
       await this._world.switchSystem("cosmicMap");
       return;
+    }
+
+    if (Constants.UIMANAGER.cornerButton.icons.find(el => el.id == evTarget.id)) {
+      await Constants.UIMANAGER.cornerButton.clickHandler(evTarget, this._world)
+      return
     }
 
     this.updateMousePointer(e);
     const res = this.checkRaycast();
     if (!res) {
-      if (this._world.infoPanel.visible) this._world.infoPanel.visible = false;
+      if (Constants.UIMANAGER.infoPanel.visible) Constants.UIMANAGER.infoPanel.visible = false;
       return;
     }
 
@@ -36,7 +43,7 @@ export class ClickManager {
 
     // console.log(target) // TODO react when something like glitterband is clicked
     if (target.name.includes("_infoSprite")) {
-      this._world.infoPanel.show(obj);
+      Constants.UIMANAGER.infoPanel.show(obj);
       return;
     }
 
@@ -45,7 +52,7 @@ export class ClickManager {
       return;
     }
 
-    if (this._world.infoPanel.visible) this._world.infoPanel.visible = false;
+    if (Constants.UIMANAGER.infoPanel.visible) Constants.UIMANAGER.infoPanel.visible = false;
   }
   private dblclickHandler(e: MouseEvent) {
     this.updateMousePointer(e);

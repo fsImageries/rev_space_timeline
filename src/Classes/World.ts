@@ -8,7 +8,6 @@ import { resizeRendererToDisplaySize } from "../helpers/utils";
 import { SystemsData, TextObject } from "../jsonInterfaces";
 import { Camera } from "./Camera";
 import { ClickManager } from "./ClickManager";
-import { InfoPanel } from "./InfoPanel";
 
 const DATA = celestialData as SystemsData;
 let lastTime: number;
@@ -24,7 +23,6 @@ export class World {
   cam: Camera;
 
   gui: GUI;
-  infoPanel: InfoPanel;
   clickManager: ClickManager;
 
   clickPointer: THREE.Vector2;
@@ -35,7 +33,7 @@ export class World {
 
   stop:boolean;
 
-  constructor(infoPanel: InfoPanel) {
+  constructor() {
     // Canvas, Renderer, Scene
     this.canvas = document.querySelector(`canvas#main`);
     this.renderer = new THREE.WebGLRenderer({
@@ -80,7 +78,6 @@ export class World {
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
 
     // this.curSystem.initWorld(this);
-    this.infoPanel = infoPanel;
     // infoPanel.init(this.curSystem);
     this.clickManager = new ClickManager(this);
   }
@@ -88,8 +85,8 @@ export class World {
   public initSys(system: System, data: { freeCam: boolean; texts: TextObject[] }) {
     this.curSystem = system;
     this.curSystem.initWorld(this, data.freeCam);
-    this.infoPanel.init(this.curSystem, data.texts);
-    Constants.HOME_BTN.style.visibility = system.name == "cosmicMap" ? "hidden" : "visible";
+    Constants.UIMANAGER.infoPanel.init(this.curSystem, data.texts);
+    Constants.UIMANAGER.homeBtn.style.visibility = system.name == "cosmicMap" ? "hidden" : "visible";
     if (!this.systems.find((sys) => sys[0].name == system.name)) this.systems.push([system, data.texts]);
   }
 

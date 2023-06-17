@@ -8,6 +8,7 @@ import { DEG2RAD, clamp, mapLinear } from "three/src/math/MathUtils";
 import sunFactory from "../Factories/SunFactory";
 import Constants from "../helpers/Constants";
 import { World } from "./World";
+import SystemObject from "./SystemObject";
 
 const LEN_MAT = new THREE.LineBasicMaterial({
   color: "#ffffff",
@@ -148,6 +149,7 @@ const TRANFORM_DATA = [
 ];
 
 const MAX_RAD = SOURCES.reduce((acc, cur) => acc.radius > cur.radius ? acc : cur).radius / Constants.SIZE_SCALE
+let LAST_HIT: SystemObject
 
 export class CosmicMap extends System {
   private _mainArea: HTMLElement;
@@ -186,13 +188,30 @@ export class CosmicMap extends System {
 
     world.raycaster.setFromCamera(new THREE.Vector2(0, 0), world.cam.active);
     const intersects = world.raycaster.intersectObjects(world.curSystem.topGrp.children);
-    if (intersects.length != 0 && intersects[0].distance < MAX_RAD * 3) {
+    const mult = 16
+
+    if (intersects.length != 0) {
       const closest = intersects[0]
-      const obj = this.getById(closest.object.userData["id"])
-      if (obj && closest.distance < obj.drawRadius * 3) {
-        world.stop = true
-        world.switchSystem(obj.data.name)
+
+      let obj: SystemObject
+      if (LAST_HIT && (closest.object.userData["id"] === LAST_HIT.data.id)) {
+        obj = LAST_HIT
       }
+      else {
+        obj = this.getById(closest.object.userData["id"])
+        LAST_HIT = obj
+      }
+      if (!obj) return
+      const [start, end] = [obj.drawRadius * (mult * .5), obj.drawRadius * mult]
+      dist = clamp(closest.distance, start, end);
+      dist = mapLinear(dist, start, end, 1, 0);
+      const action = () => {
+        Constants.UIMANAGER.cornerButton.forwardTarget = obj.data.name
+        return Constants.UIMANAGER.cornerButton.switch("forward")
+      }
+      dist ?
+        action() :
+        Constants.UIMANAGER.cornerButton.switch("help")
     }
   }
 
@@ -364,16 +383,6 @@ export class CosmicMap extends System {
         0.35
       )
     );
-
-    suns.forEach((s) => {
-      const sprite = Constants.SPRITE_LOAD("./eye-solid.svg");
-      const rad = s.drawRadius * 1.15;
-      sprite.position.x += rad;
-      sprite.scale.setScalar(s.drawRadius * 0.3);
-      sprite.name = `${s.data.name}_view`;
-      s.object.masterGrp.add(sprite);
-      map._viewSprites.push(sprite);
-    });
 
     TRANFORM_DATA.forEach((d, idx) => CosmicMap.setupSun(map, suns[idx], d));
 

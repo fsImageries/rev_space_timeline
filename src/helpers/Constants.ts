@@ -1,5 +1,6 @@
 import { LoadingManager, Quaternion, Sprite, SpriteMaterial, Texture, TextureLoader, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { UIManager } from "../Classes/UIManager";
 
 const manager = new LoadingManager();
 
@@ -39,13 +40,13 @@ const Constants = {
     return new Sprite(mat);
   },
   LOAD_MANAGER: manager,
+  UIMANAGER: new UIManager(),
 
   WORLD_POS: new Vector3(),
   CAM_POS: new Vector3(),
   WORLD_QUAT: new Quaternion(),
   WORLD_QUAT2: new Quaternion(),
 
-  HOME_BTN: document.getElementById("home")
 };
 
 const __tex: { [key: string]: Texture } = {};

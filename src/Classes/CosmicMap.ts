@@ -147,6 +147,8 @@ const TRANFORM_DATA = [
   { x: 2222, y: -1200, rotY: Math.PI * -0.1, textsHeight: 125 }
 ];
 
+const MAX_RAD = SOURCES.reduce((acc, cur) => acc.radius > cur.radius ? acc : cur).radius / Constants.SIZE_SCALE
+
 export class CosmicMap extends System {
   private _mainArea: HTMLElement;
   private _viewSprites: THREE.Sprite[];
@@ -181,6 +183,17 @@ export class CosmicMap extends System {
       dist = mapLinear(dist, 400, 500, 1, 0);
       sp.material.opacity = dist;
     });
+
+    world.raycaster.setFromCamera(new THREE.Vector2(0, 0), world.cam.active);
+    const intersects = world.raycaster.intersectObjects(world.curSystem.topGrp.children);
+    if (intersects.length != 0 && intersects[0].distance < MAX_RAD * 3) {
+      const closest = intersects[0]
+      const obj = this.getById(closest.object.userData["id"])
+      if (obj && closest.distance < obj.drawRadius * 3) {
+        world.stop = true
+        world.switchSystem(obj.data.name)
+      }
+    }
   }
 
   static buildSun(data: {

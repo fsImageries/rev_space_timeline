@@ -10,8 +10,6 @@ document.getElementById("version").innerText = `v${APP_VERSION}`
 window.onload = () => {
   const progress = new ProgressPanel();
 
-  let handle: number;
-
   Constants.LOAD_MANAGER.onLoad = () => {
     progress.visible = false;
     progress.value = 0;
@@ -19,12 +17,11 @@ window.onload = () => {
     world.initGui();
     world.cam.initListeners();
     world.clickManager.initListeners()
-    handle = requestAnimationFrame((n) => World.eventLoop(n, world));
+    World.eventLoop(0, world)
   };
 
   Constants.LOAD_MANAGER.onStart = () => {
     progress.visible = true;
-    if (handle) cancelAnimationFrame(handle)
   }
 
   Constants.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {

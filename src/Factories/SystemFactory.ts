@@ -1,8 +1,8 @@
 import planetFactory from "../Factories/PlanetFactory";
 import sunFactory from "../Factories/SunFactory";
 import { SunData, SystemData } from "../jsonInterfaces";
-import oortFactoryAsync from "../Factories/OortFactory";
-import particleRingFactory from "../Factories/ParticleRingFactory";
+import oortFactory from "../Factories/OortFactory";
+import particleRingFactoryAsync from "../Factories/ParticleRingFactory";
 import { System } from "../Models/System";
 import SystemObject from "../Classes/SystemObject";
 import Constants from "../helpers/Constants";
@@ -11,8 +11,8 @@ const map = {
   // TODO make to dynamic import on actual use
   sun: sunFactory,
   "planet;moon": planetFactory,
-  particlering: particleRingFactory,
-  oortcloud: oortFactoryAsync
+  particlering: particleRingFactoryAsync,
+  oortcloud: oortFactory
 };
 
 export default async function buildAsync(data: SystemData) {

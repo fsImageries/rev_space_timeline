@@ -46,6 +46,7 @@ export default function build(data: SystemObjectData) {
     const map = Constants.TEX_LOAD("./diamond-solid.svg");
     const material = new THREE.SpriteMaterial({ map: map });
     markerSprite = new THREE.Sprite(material);
+    markerSprite.name = `${data.name}_markerSprite`
     markerSprite.position.y = data.draw.radius + data.draw.radius / 3;
     masterGrp.add(markerSprite);
   }

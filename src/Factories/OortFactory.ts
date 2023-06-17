@@ -8,7 +8,7 @@ import { SystemObjectData } from "../jsonInterfaces";
 import PWorker from "../workers/ParticleWorker?worker";
 import Constants from "../helpers/Constants";
 
-export default async function buildAsync(data: SystemObjectData) {
+export default function build(data: SystemObjectData) {
   const material = new PointsMaterial({
     color: "white",
     opacity: 0.2,

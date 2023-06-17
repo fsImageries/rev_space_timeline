@@ -10,7 +10,7 @@ interface Data {
   distanceToParent: number;
   distScale: number;
   genColor?: boolean;
-  end?:number;
+  end?: number;
 }
 
 const PNTCOUNT = 10000;

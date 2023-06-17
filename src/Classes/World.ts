@@ -79,16 +79,15 @@ export class World {
     // this.curSystem.initWorld(this);
     this.infoPanel = infoPanel;
     // infoPanel.init(this.curSystem);
-    this.clickManager = new ClickManager(this)
+    this.clickManager = new ClickManager(this);
   }
 
-  public initSys(system: System, data: { freeCam: boolean, texts: TextObject[] }) {
+  public initSys(system: System, data: { freeCam: boolean; texts: TextObject[] }) {
     this.curSystem = system;
-    this.curSystem.initWorld(this, data.freeCam)
+    this.curSystem.initWorld(this, data.freeCam);
     this.infoPanel.init(this.curSystem, data.texts);
     Constants.HOME_BTN.style.visibility = system.name == "cosmicMap" ? "hidden" : "visible";
-    if (!this.systems.find(sys => sys[0].name == system.name))
-      this.systems.push([system, data.texts])
+    if (!this.systems.find((sys) => sys[0].name == system.name)) this.systems.push([system, data.texts]);
   }
 
   public initGui() {
@@ -115,30 +114,29 @@ export class World {
     worldFolder.add(this, "topView").name("Top View");
     worldFolder.add(this.gridhelper, "visible").name("Grid visiblity");
     worldFolder.add(Constants, "MAN_CELESTIAL_ORB").name("Force Orb Rot");
-    worldFolder.add(this, "logCamera").name("Log Camera")
+    worldFolder.add(this, "logCamera").name("Log Camera");
 
-    this.gui.close()
+    this.gui.close();
 
     // TODO decouple this and put it into the system on startup
-    this.cam.free.position.set(0, 2117.999902022348, -10175.846962935977)
-    this.cam.freeCtrl.update()
+    this.cam.free.position.set(0, 2117.999902022348, -10175.846962935977);
+    this.cam.freeCtrl.update();
   }
 
   public logCamera() {
-    console.log(this.cam.active.position)
-    console.log(this.cam.active.rotation)
+    console.log(this.cam.active.position);
+    console.log(this.cam.active.rotation);
   }
 
   public async switchSystem(name: string) {
-    const found = this.systems.find(([s, _]) => s.name == name)
-    const old = this.curSystem
+    const found = this.systems.find(([s, _]) => s.name == name);
+    const old = this.curSystem;
     if (!found) {
-      const d = DATA.systems.find(s => s.name == name)
-      if (d)
-        this.initSys(await systemFactoryAsync(d), { freeCam: d.freeCam, texts: d.texts })
-    } else this.initSys(found[0], { freeCam: false, texts: found[1] })
+      const d = DATA.systems.find((s) => s.name == name);
+      if (d) this.initSys(await systemFactoryAsync(d), { freeCam: d.freeCam, texts: d.texts });
+    } else this.initSys(found[0], { freeCam: false, texts: found[1] });
 
-    this.scene.remove(old.topGrp)
+    this.scene.remove(old.topGrp);
     this.scene.add(this.curSystem.topGrp);
   }
 
@@ -151,7 +149,7 @@ export class World {
 
     this.curSystem.update(this);
     this.cam.update(this.delta);
-    this.renderer.clear()
+    this.renderer.clear();
     this.renderer.render(this.scene, this.cam.active);
   }
 

@@ -1,4 +1,12 @@
-import { AdditiveBlending, BufferGeometry, Float32BufferAttribute, Group, Points, PointsMaterial, ShaderMaterial } from "three";
+import {
+  AdditiveBlending,
+  BufferGeometry,
+  Float32BufferAttribute,
+  Group,
+  Points,
+  PointsMaterial,
+  ShaderMaterial
+} from "three";
 import CelestialBase from "../Classes/CelestialBase";
 import Internal3DObject from "../Classes/Internal3DObject";
 import { ParticleRing } from "../Models/ParticleRing";
@@ -8,7 +16,7 @@ import { SystemObjectData } from "../jsonInterfaces";
 
 import PWorker from "../workers/ParticleWorker?worker";
 
-function getMaterial(data: SystemObjectData){
+function getMaterial(data: SystemObjectData) {
   if (!data.draw.pointShader) {
     return new ShaderMaterial({
       blending: AdditiveBlending,
@@ -100,17 +108,16 @@ function getMaterial(data: SystemObjectData){
   }
   return new PointsMaterial({
     color: "white",
-    opacity: .4,
+    opacity: 0.4,
     transparent: true,
     depthWrite: false
-  }); 
-
+  });
 }
 
 export default async function build(data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`);
 
-  const material = getMaterial(data)
+  const material = getMaterial(data);
 
   let points: Points;
   let parentGrp: Group;
@@ -158,7 +165,7 @@ export default async function build(data: SystemObjectData) {
     drawRadius: data.draw.radius
   });
 
-  if (data.draw.orbInvert) celestialData.invertAngularOrbVel()
+  if (data.draw.orbInvert) celestialData.invertAngularOrbVel();
 
   const internalObject = new Internal3DObject({
     parentGrp,

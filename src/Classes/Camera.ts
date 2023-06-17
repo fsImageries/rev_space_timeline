@@ -28,9 +28,9 @@ export class Camera {
     this.free.position.set(0, 0, -10000);
     this.third.position.set(0, 0, -10000);
 
-    this.freeCtrl = new OrbitControls(this.free, world.renderer.domElement)
-    this.freeCtrl.enableDamping = true
-    this.freeCtrl.dampingFactor = .5
+    this.freeCtrl = new OrbitControls(this.free, world.renderer.domElement);
+    this.freeCtrl.enableDamping = true;
+    this.freeCtrl.dampingFactor = 0.5;
     // this.freeCtrl = new CameraControls(this.free, world.renderer.domElement);
 
     this._active = this.free;
@@ -104,10 +104,10 @@ export class Camera {
 
   public third2Free() {
     this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS);
-    this.freeCtrl.target.set(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z)
+    this.freeCtrl.target.set(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
 
     this.third.getWorldPosition(this.free.position);
-    this.third.getWorldQuaternion(this.free.quaternion)
+    this.third.getWorldQuaternion(this.free.quaternion);
   }
 
   public initListeners() {
@@ -124,7 +124,7 @@ export class Camera {
     };
     const wheel = () => {
       // if (mousedown && e.altKey && !this.isFree) {
-      if (!this.isFree) {  
+      if (!this.isFree) {
         this.third2Free();
         this.activateFree();
       }

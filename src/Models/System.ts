@@ -61,16 +61,14 @@ export class System {
     );
   }
 
-  public initWorld(world: World, freeCam=false) {
+  public initWorld(world: World, freeCam = false) {
     this.init();
     // world.scene.add(this.topGrp);
 
-    const obj = this._flat.find(obj => obj.data.name == this.startTarget);
-    if (!obj) return
+    const obj = this._flat.find((obj) => obj.data.name == this.startTarget);
+    if (!obj) return;
     world.cam.setFollowTarget(obj);
-    freeCam ?
-    world.cam.activateFree() :
-    world.cam.activateThird();
+    freeCam ? world.cam.activateFree() : world.cam.activateThird();
   }
 
   public init() {

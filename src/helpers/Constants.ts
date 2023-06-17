@@ -7,7 +7,6 @@ manager.onError = function (url) {
   console.error("There was an error loading " + url);
 };
 
-
 const Constants = {
   DISTANCE_SCALE: 100000,
   SIZE_SCALE: 100,
@@ -35,9 +34,9 @@ const Constants = {
     return __tex[path];
   },
   SPRITE_LOAD(path = "./circle-info-solid.svg") {
-    const map = this.TEX_LOAD(path)
-    const mat = new SpriteMaterial({ map: map, transparent:true });
-    return new Sprite(mat)
+    const map = this.TEX_LOAD(path);
+    const mat = new SpriteMaterial({ map: map, transparent: true });
+    return new Sprite(mat);
   },
   LOAD_MANAGER: manager,
 

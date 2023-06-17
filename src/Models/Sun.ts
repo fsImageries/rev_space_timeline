@@ -8,11 +8,11 @@ export class Sun extends SystemObject {
   public lightRadius: number;
   private disableLight: boolean;
 
-  constructor(data: SystemObjectParams, disableLight?:boolean) {
+  constructor(data: SystemObjectParams, disableLight?: boolean) {
     super(data);
 
     // TODO implement coloring on yaml level
-    this.disableLight = disableLight
+    this.disableLight = disableLight;
     if (!disableLight) {
       this.lightRadius = 1;
       this.light = new PointLight("#ffffff", 1, this.lightRadius);
@@ -28,14 +28,13 @@ export class Sun extends SystemObject {
 
   public init() {
     this.object.masterGrp.traverse((child) => (child.userData["id"] = this.data.id));
-    if (!this.disableLight)
-    this.light.distance = this.lightRadius;
+    if (!this.disableLight) this.light.distance = this.lightRadius;
     this.initSatellites(this);
   }
 
   public update(world: World) {
     if ("uniforms" in ((this.object.mesh as Mesh).material as ShaderMaterial))
-    ((this.object.mesh as Mesh).material as ShaderMaterial).uniforms.time.value += 0.001; // 0.05 TODO build property per object
+      ((this.object.mesh as Mesh).material as ShaderMaterial).uniforms.time.value += 0.001; // 0.05 TODO build property per object
     this.updateSatellites(world, this);
   }
 }

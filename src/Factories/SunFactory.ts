@@ -10,15 +10,15 @@ import sunVert from "./../glsl/sun_vert.glsl?raw";
 
 const GEOM = new SphereGeometry(1, 20, 20);
 
-let SH_MAT:ShaderMaterial;
-let MS_MAT:MeshBasicMaterial;
+let SH_MAT: ShaderMaterial;
+let MS_MAT: MeshBasicMaterial;
 
 export default function build(data: SunData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
-  const mat = getMat(data)
+  const mat = getMat(data);
   const mesh = new Mesh(GEOM, mat);
-  mesh.scale.setScalar(data.radius / Constants.SIZE_SCALE)
+  mesh.scale.setScalar(data.radius / Constants.SIZE_SCALE);
   mesh.name = `${data.name}_mesh`;
 
   const meshGrp = new Group();
@@ -54,23 +54,26 @@ export default function build(data: SunData) {
     displayInfo: data.displayInfo
   });
 
-  const sun = new Sun({
-    data: celestialData,
-    object: internalObject,
-  }, data.disableLight);
+  const sun = new Sun(
+    {
+      data: celestialData,
+      object: internalObject
+    },
+    data.disableLight
+  );
   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
 
   return sun;
 }
 
-const getMat = (data:SunData) => {
+const getMat = (data: SunData) => {
   if (data.isSimple) {
-    if (MS_MAT) return MS_MAT
+    if (MS_MAT) return MS_MAT;
     return new MeshBasicMaterial({
-      color: data.color ? data.color : 0xffffff,
-    })
+      color: data.color ? data.color : 0xffffff
+    });
   }
-  if (SH_MAT) return SH_MAT
+  if (SH_MAT) return SH_MAT;
   return new ShaderMaterial({
     uniforms: {
       time: { value: 1.0 },
@@ -80,5 +83,5 @@ const getMat = (data:SunData) => {
     },
     vertexShader: sunVert,
     fragmentShader: sunFrag
-  })
-}
+  });
+};

@@ -23,7 +23,7 @@ export default async function buildAsync(data: SystemData) {
   const flat = await buildObjects(data);
   const tree = connectSatellites(flat);
 
-  const sys = new System({ isSingleSun, name, tree, flat, startTarget:data.startTarget });
+  const sys = new System({ isSingleSun, name, tree, flat, startTarget: data.startTarget });
 
   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
   return sys;

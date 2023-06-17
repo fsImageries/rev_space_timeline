@@ -148,7 +148,6 @@ const TRANFORM_DATA = [
   { x: 2222, y: -1200, rotY: Math.PI * -0.1, textsHeight: 125 }
 ];
 
-const MAX_RAD = SOURCES.reduce((acc, cur) => acc.radius > cur.radius ? acc : cur).radius / Constants.SIZE_SCALE
 let LAST_HIT: SystemObject
 
 export class CosmicMap extends System {

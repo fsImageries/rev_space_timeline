@@ -47,12 +47,13 @@ class CornerButton {
         switch (target.id) {
             case "help":
                 break
-            case "forward":
+            case "forward":{
                 const sysName = target.getAttribute("data-target")
                 if (!sysName) return
                 console.log(sysName)
                 await world.switchSystem(sysName)
                 break
+            }
         }
     }
 

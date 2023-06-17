@@ -21,15 +21,15 @@ export class ClickManager {
   }
 
   private async clickHandler(e: MouseEvent) {
-    const evTarget = e.target as HTMLElement
+    const evTarget = e.target as HTMLElement;
     if (evTarget.id == "home") {
       await this._world.switchSystem("cosmicMap");
       return;
     }
 
-    if (Constants.UIMANAGER.cornerButton.icons.find(el => el.id == evTarget.id)) {
-      await Constants.UIMANAGER.cornerButton.clickHandler(evTarget, this._world)
-      return
+    if (Constants.UIMANAGER.cornerButton.icons.find((el) => el.id == evTarget.id)) {
+      await Constants.UIMANAGER.cornerButton.clickHandler(evTarget, this._world);
+      return;
     }
 
     this.updateMousePointer(e);

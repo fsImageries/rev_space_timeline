@@ -31,7 +31,7 @@ export class World {
   systems: [System, TextObject[]][];
   curSystem: System;
 
-  stop:boolean;
+  stop: boolean;
 
   constructor() {
     // Canvas, Renderer, Scene
@@ -138,11 +138,13 @@ export class World {
 
     this.scene.remove(old.topGrp);
     this.scene.add(this.curSystem.topGrp);
-    this.stop = false
-    this.cam.stopWheel = true
+    this.stop = false;
+    this.cam.stopWheel = true;
 
-     // wheel event fires after switch and destroys the floating animation, so we disable it
-    setTimeout(() => {this.cam.stopWheel=false}, 1500)
+    // wheel event fires after switch and destroys the floating animation, so we disable it
+    setTimeout(() => {
+      this.cam.stopWheel = false;
+    }, 1500);
   }
 
   public update() {
@@ -159,21 +161,19 @@ export class World {
   }
 
   static eventLoop(now: number, world: World) {
-    
     // delta time
     if (!lastTime) {
       lastTime = now;
     }
     const elapsed = now - lastTime;
     world.delta = world.clock.getDelta();
-    
+
     if (elapsed > requiredElapsed) {
       world.update();
       lastTime = now;
     }
 
-    if (!world.stop)
-    requestAnimationFrame((n: number) => World.eventLoop(n, world));
+    if (!world.stop) requestAnimationFrame((n: number) => World.eventLoop(n, world));
   }
 
   // Helper methods

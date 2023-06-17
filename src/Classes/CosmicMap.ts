@@ -148,7 +148,7 @@ const TRANFORM_DATA = [
   { x: 2222, y: -1200, rotY: Math.PI * -0.1, textsHeight: 125 }
 ];
 
-let LAST_HIT: SystemObject
+let LAST_HIT: SystemObject;
 
 export class CosmicMap extends System {
   private _mainArea: HTMLElement;
@@ -187,30 +187,27 @@ export class CosmicMap extends System {
 
     world.raycaster.setFromCamera(new THREE.Vector2(0, 0), world.cam.active);
     const intersects = world.raycaster.intersectObjects(world.curSystem.topGrp.children);
-    const mult = 16
+    const mult = 16;
 
     if (intersects.length != 0) {
-      const closest = intersects[0]
+      const closest = intersects[0];
 
-      let obj: SystemObject
-      if (LAST_HIT && (closest.object.userData["id"] === LAST_HIT.data.id)) {
-        obj = LAST_HIT
+      let obj: SystemObject;
+      if (LAST_HIT && closest.object.userData["id"] === LAST_HIT.data.id) {
+        obj = LAST_HIT;
+      } else {
+        obj = this.getById(closest.object.userData["id"]);
+        LAST_HIT = obj;
       }
-      else {
-        obj = this.getById(closest.object.userData["id"])
-        LAST_HIT = obj
-      }
-      if (!obj) return
-      const [start, end] = [obj.drawRadius * (mult * .5), obj.drawRadius * mult]
+      if (!obj) return;
+      const [start, end] = [obj.drawRadius * (mult * 0.5), obj.drawRadius * mult];
       dist = clamp(closest.distance, start, end);
       dist = mapLinear(dist, start, end, 1, 0);
       const action = () => {
-        Constants.UIMANAGER.cornerButton.forwardTarget = obj.data.name
-        return Constants.UIMANAGER.cornerButton.switch("forward")
-      }
-      dist ?
-        action() :
-        Constants.UIMANAGER.cornerButton.switch("help")
+        Constants.UIMANAGER.cornerButton.forwardTarget = obj.data.name;
+        return Constants.UIMANAGER.cornerButton.switch("forward");
+      };
+      dist ? action() : Constants.UIMANAGER.cornerButton.switch("help");
     }
   }
 

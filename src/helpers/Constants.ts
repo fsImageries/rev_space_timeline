@@ -45,8 +45,7 @@ const Constants = {
   WORLD_POS: new Vector3(),
   CAM_POS: new Vector3(),
   WORLD_QUAT: new Quaternion(),
-  WORLD_QUAT2: new Quaternion(),
-
+  WORLD_QUAT2: new Quaternion()
 };
 
 const __tex: { [key: string]: Texture } = {};

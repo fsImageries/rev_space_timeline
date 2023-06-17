@@ -172,10 +172,14 @@ progress::-webkit-progress-bar {
     background: rgb(32, 33, 36);
 }
 
-#startBtn {
-    display: none;
+#switchBtn {
+    position: absolute;
+    bottom: -10%;
+    left: 0;
+    transition: bottom 2s ease-in-out;
+    /* display: none; */
     font-family: 'Segoe UI', Tahoma, sans-serif;
-    visibility: hidden;
+    /* visibility: hidden; */
     background: rgb(32, 33, 36);
     border: 1px solid rgb(95, 99, 104);
     float: none;

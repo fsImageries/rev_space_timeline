@@ -176,7 +176,7 @@ export class CosmicMap extends System {
         return CosmicMap.buildLine(p1, p2, false)
     }
 
-    static buildNameTag(sun: Sun, xOff: number, yOff = 25, text?: string, fontSize = 50, rot?: number, opacity?: number) {
+    static buildText(sun: Sun, xOff: number, yOff = 25, text?: string, fontSize = 50, rot?: number, opacity?: number) {
         const base = sun.object.masterGrp.getWorldPosition(Constants.WORLD_POS)
         base.x -= xOff
 
@@ -189,6 +189,7 @@ export class CosmicMap extends System {
         txt.position.y += yOff
         txt.fillOpacity = opacity != undefined ? opacity : 1;
         txt.font = "./Open_Sans/static/OpenSans-Light.ttf"
+        txt.name = `${sun.data.name}_text`
         return txt
     }
 
@@ -242,8 +243,8 @@ export class CosmicMap extends System {
 
     static setupSun(system: System, sun: Sun, data: { x: number, y: number, rotY: number, textsHeight?: number }) {
         CosmicMap.buildDiskLine(sun, data)
-        system.topGrp.add(CosmicMap.buildNameTag(sun, 25))
-        system.topGrp.add(CosmicMap.buildNameTag(sun, 10, data.textsHeight != undefined ? data.textsHeight : 250, sun.data.texts.join("\n"), 27.5, Math.PI, .35))
+        system.topGrp.add(CosmicMap.buildText(sun, 25))
+        system.topGrp.add(CosmicMap.buildText(sun, 10, data.textsHeight != undefined ? data.textsHeight : 250, sun.data.texts.join("\n"), 27.5, Math.PI, .35))
     }
 
     static connectSuns(sun: Sun, connects: Sun[]) {
@@ -266,8 +267,8 @@ export class CosmicMap extends System {
             startTarget: "Sol"
         }
         const map = new CosmicMap(params)
-        map.topGrp.add(CosmicMap.buildNameTag(sol, 25))
-        map.topGrp.add(CosmicMap.buildNameTag(sol, -25, -50, ["Earth", "- Moon", "Mars", "- Phobos", "Europa"].join("\n"), 27.5, Math.PI, .35))
+        map.topGrp.add(CosmicMap.buildText(sol, 25))
+        map.topGrp.add(CosmicMap.buildText(sol, -25, -50, ["Earth", "- Moon", "Mars", "- Phobos", "Europa"].join("\n"), 27.5, Math.PI, .35))
 
         suns.forEach(s => {
             const sprite = Constants.SPRITE_LOAD("./eye-solid.svg")

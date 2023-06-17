@@ -33,9 +33,6 @@ jobs:
       - name: Lint project
         run: npm run lint
 
-      - name: Prettify project
-        run: npm run pretty
-
       - name: Build project
         run: npm run build
         

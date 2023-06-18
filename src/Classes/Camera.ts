@@ -128,8 +128,8 @@ export class Camera {
     };
     const wheel = () => {
       if (!this.zoomed) {
-        Constants.UIMANAGER.zoomVisible = false
-        this.zoomed = true
+        Constants.UIMANAGER.zoomVisible = false;
+        this.zoomed = true;
       }
 
       if (!this.isFree && !this.stopWheel) {

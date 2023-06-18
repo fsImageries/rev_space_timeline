@@ -136,7 +136,7 @@ export class World {
     this.scene.remove(old.topGrp);
     this.scene.add(this.curSystem.topGrp);
     this.cam.stopWheel = true;
-    Constants.UIMANAGER.cornerButton.switch("help")
+    Constants.UIMANAGER.cornerButton.switch("help");
 
     // wheel event fires after switch and destroys the floating animation, so we disable it
     setTimeout(() => {

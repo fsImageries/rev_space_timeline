@@ -176,13 +176,11 @@ export class CosmicMap extends System {
     dist = clamp(dist, 8000, 10000);
     dist = mapLinear(dist, 8000, 10000, 0, 1);
     if (this.textOpacity != dist) this.textOpacity = dist;
-    
-    dist ?
-      Constants.UIMANAGER.cornerButton.hideCurrent() :
-      Constants.UIMANAGER.cornerButton.showCurrent()
 
-    if (dist == 1) this._textArea.style.pointerEvents = "auto"
-    else this._textArea.style.pointerEvents = "none"
+    dist ? Constants.UIMANAGER.cornerButton.hideCurrent() : Constants.UIMANAGER.cornerButton.showCurrent();
+
+    if (dist == 1) this._textArea.style.pointerEvents = "auto";
+    else this._textArea.style.pointerEvents = "none";
 
     world.raycaster.setFromCamera(new THREE.Vector2(0, 0), world.cam.active);
     const intersects = world.raycaster.intersectObjects(world.curSystem.topGrp.children);

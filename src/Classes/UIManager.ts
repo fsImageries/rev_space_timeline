@@ -10,18 +10,17 @@ export class UIManager {
   public homeBtn: HTMLElement;
   public zoomElement: HTMLElement;
 
-
   constructor() {
     this.infoPanel = new InfoPanel();
     this.progressPanel = new ProgressPanel();
 
     this.cornerButton = new CornerButton();
     this.homeBtn = document.getElementById("home");
-    this.zoomElement = document.getElementById("zoomArea")
+    this.zoomElement = document.getElementById("zoomArea");
   }
 
   public set zoomVisible(value: boolean) {
-    this.zoomElement.style.visibility = value ? "visible" : "hidden"
+    this.zoomElement.style.visibility = value ? "visible" : "hidden";
   }
 }
 
@@ -64,8 +63,12 @@ class CornerButton {
     elem.style.translate = "-5vw";
   }
 
-  public showCurrent() {this.show(this.cur)}
-  public hideCurrent() {this.hide(this.cur)}
+  public showCurrent() {
+    this.show(this.cur);
+  }
+  public hideCurrent() {
+    this.hide(this.cur);
+  }
 
   public set forwardTarget(value: string) {
     if (this._tar == value) return;

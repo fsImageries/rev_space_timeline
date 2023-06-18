@@ -28,7 +28,7 @@ export class ClickManager {
     }
 
     // TODO not firing
-    const cornerEl = Constants.UIMANAGER.cornerButton.icons.find((el) => evTarget.id.includes(el.id))
+    const cornerEl = Constants.UIMANAGER.cornerButton.icons.find((el) => evTarget.id.includes(el.id));
     if (cornerEl) {
       await Constants.UIMANAGER.cornerButton.clickHandler(cornerEl, this._world);
       return;

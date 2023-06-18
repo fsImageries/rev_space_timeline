@@ -103,6 +103,7 @@ code {
 }
 
 #loading {
+    user-select: none;
     width: 90vw;
     position: absolute;
     bottom: 10%;

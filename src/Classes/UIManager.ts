@@ -5,23 +5,23 @@ import { World } from "./World";
 export class UIManager {
   public infoPanel: InfoPanel;
   public progressPanel: ProgressPanel;
+  public cornerButton: CornerButton;
 
   public homeBtn: HTMLElement;
-  public switchBtn: HTMLButtonElement;
+  public zoomElement: HTMLElement;
 
-  public cornerButton: CornerButton;
 
   constructor() {
     this.infoPanel = new InfoPanel();
     this.progressPanel = new ProgressPanel();
 
     this.cornerButton = new CornerButton();
-    this.switchBtn = document.getElementById("switchBtn") as HTMLButtonElement;
     this.homeBtn = document.getElementById("home");
+    this.zoomElement = document.getElementById("zoomArea")
   }
 
-  public set switchBtnShow(value: boolean) {
-    this.switchBtn.style.opacity = value ? "1" : "0";
+  public set zoomVisible(value: boolean) {
+    this.zoomElement.style.visibility = value ? "visible" : "hidden"
   }
 }
 
@@ -36,10 +36,10 @@ class CornerButton {
 
   constructor() {
     const icons: HTMLElement[] = [];
-    for (const i of document.getElementsByClassName("cornerImg")) icons.push(i as HTMLElement);
+    for (const i of document.getElementsByClassName("cornerBtn")) icons.push(i as HTMLElement);
     this.icons = icons;
     this.cur = icons.find((el) => el.id == "help");
-    this.show(this.cur);
+    // this.show(this.cur);
   }
 
   public async clickHandler(target: HTMLElement, world: World) {
@@ -64,6 +64,9 @@ class CornerButton {
     elem.style.translate = "-5vw";
   }
 
+  public showCurrent() {this.show(this.cur)}
+  public hideCurrent() {this.hide(this.cur)}
+
   public set forwardTarget(value: string) {
     if (this._tar == value) return;
     this._tar = value;
@@ -74,9 +77,6 @@ class CornerButton {
   public switch(tar: string) {
     if (this.cur.id == tar) return;
     const target = this.icons.find((el) => el.id == tar);
-
-    // console.log(options)
-    // if (tar === "forward") target.setAttribute("data-target", options.target)
 
     this.hide(this.cur);
     this.show(target);

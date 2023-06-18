@@ -22,6 +22,7 @@ export class Camera {
   private _baseLookat: THREE.Vector3;
 
   public stopWheel?: boolean;
+  public zoomed?: boolean;
 
   constructor(canvas: HTMLCanvasElement, world: World) {
     this.free = new THREE.PerspectiveCamera(30, canvas.clientWidth / canvas.clientHeight, 0.1, 1e10);
@@ -126,6 +127,11 @@ export class Camera {
       mousedown = false;
     };
     const wheel = () => {
+      if (!this.zoomed) {
+        Constants.UIMANAGER.zoomVisible = false
+        this.zoomed = true
+      }
+
       if (!this.isFree && !this.stopWheel) {
         this.third2Free();
         this.activateFree();

@@ -27,8 +27,10 @@ export class ClickManager {
       return;
     }
 
-    if (Constants.UIMANAGER.cornerButton.icons.find((el) => el.id == evTarget.id)) {
-      await Constants.UIMANAGER.cornerButton.clickHandler(evTarget, this._world);
+    // TODO not firing
+    const cornerEl = Constants.UIMANAGER.cornerButton.icons.find((el) => evTarget.id.includes(el.id))
+    if (cornerEl) {
+      await Constants.UIMANAGER.cornerButton.clickHandler(cornerEl, this._world);
       return;
     }
 

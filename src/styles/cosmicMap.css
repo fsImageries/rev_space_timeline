@@ -1,6 +1,7 @@
 
 
 #cosmicMapTItle {
+    user-select: none;
     width: 90vw;
     position: absolute;
     bottom: 0;
@@ -34,4 +35,85 @@
     font-size: small;
     min-width: 40%;
     width: fit-content;
+}
+
+#zoom {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2%;
+}
+
+
+#zoomArea {
+    visibility: hidden;
+}
+
+#zoomTxt {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: lighter;
+    font-size: .75rem;
+    animation: animate-opacity 2s infinite;
+}
+
+/* stole from:
+https://codepen.io/vlt_dev/pen/NWMNzpE 
+*/
+.arrow {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transform: rotate(180deg);
+    cursor: pointer;
+}
+
+.arrow span {
+    display: block;
+    --size: .5vw;
+    width: var(--size);
+    height: var(--size);
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+    transform: rotate(45deg);
+    margin: -5px;
+    animation: animate 2s infinite;
+}
+
+.arrow span:nth-child(2) {
+    animation-delay: -0.2s;
+}
+
+.arrow span:nth-child(3) {
+    animation-delay: -0.4s;
+}
+
+@keyframes animate {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) translate(-20px, -20px);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(20px, 20px);
+    }
+}
+
+@keyframes animate-opacity {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.65;
+    }
+    100% {
+        opacity: 0;
+    }
 }

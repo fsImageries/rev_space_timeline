@@ -15,8 +15,8 @@ window.onload = () => {
     world.initGui();
     world.cam.initListeners();
     world.clickManager.initListeners()
+    if (!world.cam.zoomed) Constants.UIMANAGER.zoomVisible = true
     World.eventLoop(0, world)
-    // Constants.UIMANAGER.cornerButton.forwardVisible = true
   };
 
   Constants.LOAD_MANAGER.onStart = () => {

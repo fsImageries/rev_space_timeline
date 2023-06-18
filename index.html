@@ -17,8 +17,20 @@
 <body>
   <canvas id="main"></canvas>
 
-  <!-- <button id="switchBtn">Swtich?</button> -->
   <img id="home" src="./house-solid.svg" alt="Home-button">
+  <img id="help" class="cornerImg" src="./question-solid.svg" alt="Help-button">
+  <img id="forward" data-target="" class="cornerImg" src="./forward-solid.svg" alt="Switch-button">
+
+  <div id="zoomArea">
+    <span id="zoomTxt">Zoom</span>
+    <div id="zoomArrow" class="arrow">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <!-- <img id="zoom" src="./angles-up-solid.svg" alt="Zoom-icon"> -->
+
   <div id="loading">
     <div id="progressArea">
       <span class="loading">Loading<span>.</span><span>.</span><span>.</span></span>
@@ -27,37 +39,32 @@
   </div>
 
   <div id="cosmicMapTItle">
-      <div class="titleArea">
-        <span class="title">Revelation Space - Timeline</span>
-        <span class="subTitle"><span>by Alastair Reynolds</span><span>(Beware of Spoilers)</span></span>
-      </div>
-      <div class="textArea">
-        Texts are sourced from the books and<br>
-        <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/revelation-space-universe-timeline/">
+    <div class="titleArea">
+      <span class="title">Revelation Space - Timeline</span>
+      <span class="subTitle"><span>by Alastair Reynolds</span><span>(Beware of Spoilers)</span></span>
+    </div>
+    <div class="textArea">
+      Texts are sourced from the books and<br>
+      <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/revelation-space-universe-timeline/">
             alastairreynolds.com</a>
           </code><br>
-        <code><a target="_blank" href="https://revelationspace.fandom.com/wiki/Revelation_Space_Wiki">
+      <code><a target="_blank" href="https://revelationspace.fandom.com/wiki/Revelation_Space_Wiki">
           revelationspace.fandom.com</a>
         </code><br>
-        <code><a target="_blank" href="https://wikipedia.org/wiki/Revelation_Space_series">
+      <code><a target="_blank" href="https://wikipedia.org/wiki/Revelation_Space_series">
           wikipedia.org/wiki/Revelation_Space_series</a>
         </code><br>
-        
-        Revelation Space Map:<br>
-        <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/map-of-the-rs-universe/">
+
+      Revelation Space Map:<br>
+      <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/map-of-the-rs-universe/">
           alastairreynolds.com/rs-universe/map-of-the-rs-universe</a>
         </code><br>
-        
-        Source code:<br>
-        <code><a target="_blank" href="https://github.com/fsImageries/rev_space_timeline">
+
+      Source code:<br>
+      <code><a target="_blank" href="https://github.com/fsImageries/rev_space_timeline">
           github.com/fsImageries/rev_space_timeline</a>
         </code><br>
-      </div>
-  </div>
-
-  <img id="help" class="cornerImg" src="./question-solid.svg" alt="Help-button">
-  <img id="forward" data-target="" class="cornerImg" src="./forward-solid.svg" alt="Switch-button">
-  <div id="cornerBtn">
+    </div>
   </div>
 
   <div id="parent" class="lil-gui allow-touch-styles root autoPlace">
@@ -73,7 +80,7 @@
     </div>
   </div>
   <script type="module" src="/src/app.ts"></script>
-  
+
   <code id="version" class="version"></code>
 </body>
 

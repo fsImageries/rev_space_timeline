@@ -152,7 +152,6 @@ let LAST_HIT: SystemObject;
 
 export class CosmicMap extends System {
   private _mainArea: HTMLElement;
-  private _viewSprites: THREE.Sprite[];
 
   constructor(data: SystemParams) {
     super(data);
@@ -162,7 +161,6 @@ export class CosmicMap extends System {
       const v = (e.target as HTMLElement).style.visibility;
       (e.target as HTMLElement).style.visibility = v == "visible" ? "hidden" : "visible";
     };
-    this._viewSprites = [];
   }
 
   public set textOpacity(value: number) {
@@ -176,14 +174,10 @@ export class CosmicMap extends System {
     dist = clamp(dist, 8000, 10000);
     dist = mapLinear(dist, 8000, 10000, 0, 1);
     if (this.textOpacity != dist) this.textOpacity = dist;
-
-    this._viewSprites.forEach((sp) => {
-      sp.getWorldPosition(Constants.WORLD_POS);
-      dist = world.cam.active.position.distanceTo(Constants.WORLD_POS);
-      dist = clamp(dist, 400, 500);
-      dist = mapLinear(dist, 400, 500, 1, 0);
-      sp.material.opacity = dist;
-    });
+    
+    dist ?
+    Constants.UIMANAGER.cornerButton.hideCurrent() :
+    Constants.UIMANAGER.cornerButton.showCurrent()
 
     world.raycaster.setFromCamera(new THREE.Vector2(0, 0), world.cam.active);
     const intersects = world.raycaster.intersectObjects(world.curSystem.topGrp.children);

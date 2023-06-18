@@ -152,11 +152,13 @@ let LAST_HIT: SystemObject;
 
 export class CosmicMap extends System {
   private _mainArea: HTMLElement;
+  private _textArea: HTMLElement;
 
   constructor(data: SystemParams) {
     super(data);
     this.name = "cosmicMap";
     this._mainArea = document.getElementById("cosmicMapTItle");
+    this._textArea = document.getElementById("cosmicTextArea");
     this._mainArea.ontransitionend = (e) => {
       const v = (e.target as HTMLElement).style.visibility;
       (e.target as HTMLElement).style.visibility = v == "visible" ? "hidden" : "visible";
@@ -176,8 +178,11 @@ export class CosmicMap extends System {
     if (this.textOpacity != dist) this.textOpacity = dist;
     
     dist ?
-    Constants.UIMANAGER.cornerButton.hideCurrent() :
-    Constants.UIMANAGER.cornerButton.showCurrent()
+      Constants.UIMANAGER.cornerButton.hideCurrent() :
+      Constants.UIMANAGER.cornerButton.showCurrent()
+
+    if (dist == 1) this._textArea.style.pointerEvents = "auto"
+    else this._textArea.style.pointerEvents = "none"
 
     world.raycaster.setFromCamera(new THREE.Vector2(0, 0), world.cam.active);
     const intersects = world.raycaster.intersectObjects(world.curSystem.topGrp.children);

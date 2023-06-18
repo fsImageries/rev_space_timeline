@@ -31,18 +31,10 @@
 }
 
 #cosmicMapTItle .textArea {
-    pointer-events: auto;
+    pointer-events: none;
     font-size: small;
     min-width: 40%;
     width: fit-content;
-}
-
-#zoom {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2%;
 }
 
 

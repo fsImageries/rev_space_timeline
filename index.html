@@ -18,8 +18,17 @@
   <canvas id="main"></canvas>
 
   <img id="home" src="./house-solid.svg" alt="Home-button">
-  <img id="help" class="cornerImg" src="./question-solid.svg" alt="Help-button">
-  <img id="forward" data-target="" class="cornerImg" src="./forward-solid.svg" alt="Switch-button">
+  <!-- <img id="help" class="cornerImg" src="./question-solid.svg" alt="Help-button"> -->
+  <div id="help" class="cornerBtn tooltip" data-target="">
+    <img class="cornerImg help" src="./question-solid.svg" alt="Help-button">
+    <span class="tooltip-text">See all functionality</span>
+  </div>
+
+  <div id="forward" class="cornerBtn tooltip" data-target="">
+    <img class="cornerImg forward" src="./forward-solid.svg" alt="Switch-system-button">
+    <span class="tooltip-text">Switch system</span>
+  </div>
+  <!-- <img id="forward" data-target="" class="cornerImg" src="./forward-solid.svg" alt="Switch-button"> -->
 
   <div id="zoomArea">
     <span id="zoomTxt">Zoom</span>
@@ -29,7 +38,6 @@
       <span></span>
     </div>
   </div>
-  <!-- <img id="zoom" src="./angles-up-solid.svg" alt="Zoom-icon"> -->
 
   <div id="loading">
     <div id="progressArea">
@@ -43,7 +51,7 @@
       <span class="title">Revelation Space - Timeline</span>
       <span class="subTitle"><span>by Alastair Reynolds</span><span>(Beware of Spoilers)</span></span>
     </div>
-    <div class="textArea">
+    <div id="cosmicTextArea" class="textArea">
       Texts are sourced from the books and<br>
       <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/revelation-space-universe-timeline/">
             alastairreynolds.com</a>

@@ -36,7 +36,7 @@ class CornerButton {
 
   constructor() {
     const icons: HTMLElement[] = [];
-    for (const i of document.getElementsByClassName("cornerImg")) icons.push(i as HTMLElement);
+    for (const i of document.getElementsByClassName("cornerBtn")) icons.push(i as HTMLElement);
     this.icons = icons;
     this.cur = icons.find((el) => el.id == "help");
     // this.show(this.cur);

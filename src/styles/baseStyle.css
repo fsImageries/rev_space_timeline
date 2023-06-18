@@ -59,3 +59,7 @@ h1 {
   margin: 1%;
   user-select: none;
 }
+
+img {
+  cursor: pointer;
+}

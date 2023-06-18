@@ -31,8 +31,6 @@ export class World {
   systems: [System, TextObject[]][];
   curSystem: System;
 
-  stop: boolean;
-
   constructor() {
     // Canvas, Renderer, Scene
     this.canvas = document.querySelector(`canvas#main`);
@@ -53,7 +51,6 @@ export class World {
     // Helper setup
     this.clock = new THREE.Clock();
     this.delta = 0;
-    this.stop = false;
 
     // this.curSystem = system;
     this.systems = [];
@@ -138,8 +135,8 @@ export class World {
 
     this.scene.remove(old.topGrp);
     this.scene.add(this.curSystem.topGrp);
-    this.stop = false;
     this.cam.stopWheel = true;
+    Constants.UIMANAGER.cornerButton.switch("help")
 
     // wheel event fires after switch and destroys the floating animation, so we disable it
     setTimeout(() => {
@@ -173,7 +170,7 @@ export class World {
       lastTime = now;
     }
 
-    if (!world.stop) requestAnimationFrame((n: number) => World.eventLoop(n, world));
+    requestAnimationFrame((n: number) => World.eventLoop(n, world));
   }
 
   // Helper methods

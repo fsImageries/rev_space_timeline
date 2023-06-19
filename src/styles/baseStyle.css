@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700;800&display=swap');
 
 :root {
+  --gray: rgb(32, 33, 36);
+  --gray-high: rgb(72, 73, 76);
   font-family: 'Open Sans', sans-serif;
   /* font-family: Inter, Avenir, Helvetica, Arial, sans-serif; */
   font-size: 16px;
@@ -33,16 +35,6 @@ canvas {
   height: 100%;
   width: 100%;
   outline: none;
-  
-  background-color: black;
-  /* background: rgb(34, 193, 195); */
-  /* background: linear-gradient(
-    0deg,
-    rgb(8, 163, 166) 0%,
-    rgba(79, 166, 167, 0.849) 8%,
-    rgba(61, 79, 94, 0.885) 40%,
-    rgb(17, 19, 23)
-  ); */
 }
 
 h1 {

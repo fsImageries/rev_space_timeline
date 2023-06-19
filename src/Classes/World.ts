@@ -12,7 +12,6 @@ import { ClickManager } from "./ClickManager";
 const DATA = celestialData as SystemsData;
 let lastTime: number;
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
-
 export class World {
   canvas: HTMLElement;
   renderer: THREE.WebGLRenderer;
@@ -30,6 +29,8 @@ export class World {
 
   systems: [System, TextObject[]][];
   curSystem: System;
+
+  firstLoad: boolean
 
   constructor() {
     // Canvas, Renderer, Scene
@@ -59,7 +60,6 @@ export class World {
     this.raycaster = new THREE.Raycaster();
 
     // Init methods
-    // this.initListeners();
 
     this.gridhelper = new THREE.GridHelper(100, 100, "teal", "darkgray");
     this.gridhelper.scale.setScalar(10000);

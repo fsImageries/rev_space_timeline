@@ -3,7 +3,7 @@ systems:
 - name: epsilonEridani
   isSingleSun: true
 
-  startTarget: yellowstone  # determines which object should be targeted when the system is loaded
+  startTarget: epsilonEridani  # determines which object should be targeted when the system is loaded
   freeCam: false            # determine if the scene should start in freeCam mode
 
   objects:

@@ -30,7 +30,7 @@ export class World {
   systems: [System, TextObject[]][];
   curSystem: System;
 
-  firstLoad: boolean
+  firstLoad: boolean;
 
   constructor() {
     // Canvas, Renderer, Scene
@@ -80,7 +80,7 @@ export class World {
     this.curSystem = system;
     this.curSystem.initWorld(this, data.freeCam);
     Constants.UIMANAGER.infoPanel.init(this.curSystem, data.texts);
-    Constants.UIMANAGER.infoPanel.writeFullTimeline(system)
+    Constants.UIMANAGER.infoPanel.writeFullTimeline(system);
     Constants.UIMANAGER.homeBtn.style.visibility = system.name == "cosmicMap" ? "hidden" : "visible";
     if (!this.systems.find((sys) => sys[0].name == system.name)) this.systems.push([system, data.texts]);
   }

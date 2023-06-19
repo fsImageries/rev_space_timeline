@@ -37,7 +37,7 @@ export class ClickManager {
     const res = this.checkRaycast();
     if (!res) {
       if (!Constants.UIMANAGER.infoPanel.panel.contains(evTarget) && Constants.UIMANAGER.infoPanel.visible)
-      Constants.UIMANAGER.infoPanel.visible = false;
+        Constants.UIMANAGER.infoPanel.visible = false;
       return;
     }
 

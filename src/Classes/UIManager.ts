@@ -45,7 +45,7 @@ class CornerButton {
   public async clickHandler(target: HTMLElement, world: World) {
     switch (target.id) {
       case "help":
-        Constants.UIMANAGER.infoPanel.updateContent(Constants.UIMANAGER.infoPanel.help, true)
+        Constants.UIMANAGER.infoPanel.updateContent(Constants.UIMANAGER.infoPanel.help, true);
         break;
       case "forward": {
         const sysName = target.getAttribute("data-target");

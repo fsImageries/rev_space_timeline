@@ -7,83 +7,81 @@ type TextsMap = { [key: string]: string };
 const NL_SEP = "<br>• ";
 
 export class InfoPanel {
-  public panel: HTMLElement
+  public panel: HTMLElement;
 
-  public titleMain: HTMLElement
-  public titleSub: HTMLElement
+  public titleMain: HTMLElement;
+  public titleSub: HTMLElement;
 
-  public content: HTMLElement
-  public timeline: HTMLElement
-  public help: HTMLElement
+  public content: HTMLElement;
+  public timeline: HTMLElement;
+  public help: HTMLElement;
 
-  public nav: HTMLElement
-  public navIcos: HTMLElement[]
+  public nav: HTMLElement;
+  public navIcos: HTMLElement[];
 
   private _spriteManager: InfoSpriteManager;
   private _textMap: { [key: string]: string };
-  private _fullText: string
+  private _fullText: string;
   private _visible: boolean;
 
-  private _curContent: HTMLElement
-  private _curHighlight: HTMLElement
+  private _curContent: HTMLElement;
+  private _curHighlight: HTMLElement;
 
   constructor() {
-    this.panel = document.getElementById("infoPanel")
-    this.titleMain = document.getElementById("infoPanelMain")
-    this.titleSub = document.getElementById("infoPanelSub")
+    this.panel = document.getElementById("infoPanel");
+    this.titleMain = document.getElementById("infoPanelMain");
+    this.titleSub = document.getElementById("infoPanelSub");
 
-    this.content = document.getElementById("infoPanelContent")
-    this.timeline = document.getElementById("infoPanelTimeline")
-    this.help = document.getElementById("infoPanelHelp")
+    this.content = document.getElementById("infoPanelContent");
+    this.timeline = document.getElementById("infoPanelTimeline");
+    this.help = document.getElementById("infoPanelHelp");
 
-    this.nav = document.getElementById("infoPanelNav")
-    const icos = []
+    this.nav = document.getElementById("infoPanelNav");
+    const icos = [];
 
     for (const ico of this.nav.children) {
-      icos.push(ico as HTMLElement)
+      icos.push(ico as HTMLElement);
       ico.addEventListener("click", (e) => {
-        const id = (e.target as HTMLElement).getAttribute("data-id")
-        this.updateContent(id)
-      })
+        const id = (e.target as HTMLElement).getAttribute("data-id");
+        this.updateContent(id);
+      });
     }
 
-    this.navIcos = icos
+    this.navIcos = icos;
 
-    this._spriteManager = new InfoSpriteManager()
-    this._visible = false
-    this._curContent = this.help
-    this._curHighlight = this.navIcos.find(el => el.id.toLowerCase().includes("help"))
+    this._spriteManager = new InfoSpriteManager();
+    this._visible = false;
+    this._curContent = this.help;
+    this._curHighlight = this.navIcos.find((el) => el.id.toLowerCase().includes("help"));
   }
 
-  public updateContent(elem: string | HTMLElement, switchVisible=false) {
-    if (typeof elem === "string") elem = document.getElementById(elem)
+  public updateContent(elem: string | HTMLElement, switchVisible = false) {
+    if (typeof elem === "string") elem = document.getElementById(elem);
     if (this._curContent != elem) {
-      this._curContent = elem
-      this._curHighlight = this.navIcos.find(el => el.id.includes(this._curContent.id))
+      this._curContent = elem;
+      this._curHighlight = this.navIcos.find((el) => el.id.includes(this._curContent.id));
     }
-    this.switchContent()
-    this.switchNavHighlight()
-    if (switchVisible) this.visible = !this.visible
+    this.switchContent();
+    this.switchNavHighlight();
+    if (switchVisible) this.visible = !this.visible;
   }
 
   private switchNavHighlight() {
-    this.navIcos.forEach(el => el.classList.remove("hover"))
-    this._curHighlight.classList.add("hover")
+    this.navIcos.forEach((el) => el.classList.remove("hover"));
+    this._curHighlight.classList.add("hover");
   }
 
   private switchContent() {
-    this._curContent.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
+    this._curContent.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
   }
 
   public set visible(value: boolean) {
-    this._visible = value
-    value ?
-      this.panel.style.left = "0vw" :
-      this.panel.style.left = "-55vw"
+    this._visible = value;
+    value ? (this.panel.style.left = "0vw") : (this.panel.style.left = "-55vw");
   }
 
   public get visible() {
-    return this._visible
+    return this._visible;
   }
 
   public showTimeline(obj: SystemObject) {
@@ -92,19 +90,19 @@ export class InfoPanel {
     this.writeTitle(obj.data.name, obj.data.parent || "Local Group");
     if (obj.data.name in this._textMap) {
       this.writeTimelineText(this._textMap[obj.data.name]);
-      return
+      return;
     }
 
     // TODO implement system to select a general info and produce text for suns
     if (obj.data.type == "sun") {
-      this.writeTimelineText(this._fullText)
-      return
+      this.writeTimelineText(this._fullText);
+      return;
     }
   }
 
-  public writeFullTimeline(obj:System) {
+  public writeFullTimeline(obj: System) {
     this.writeTitle(obj.name, "Local Group");
-    this.writeTimelineText(this._fullText)
+    this.writeTimelineText(this._fullText);
   }
 
   public init(system: System, texts: TextObject[]) {
@@ -150,7 +148,6 @@ export class InfoPanel {
     this.timeline.innerHTML = text;
   }
 }
-
 
 // String helpers
 function getFirstYear(str: string) {

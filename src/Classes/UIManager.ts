@@ -1,3 +1,4 @@
+import Constants from "../helpers/Constants";
 import { InfoPanel } from "./InfoPanel";
 import { ProgressPanel } from "./ProgressPanel";
 import { World } from "./World";
@@ -44,11 +45,11 @@ class CornerButton {
   public async clickHandler(target: HTMLElement, world: World) {
     switch (target.id) {
       case "help":
+        Constants.UIMANAGER.infoPanel.updateContent(Constants.UIMANAGER.infoPanel.help, true)
         break;
       case "forward": {
         const sysName = target.getAttribute("data-target");
         if (!sysName) return;
-        console.log(sysName);
         await world.switchSystem(sysName);
         break;
       }

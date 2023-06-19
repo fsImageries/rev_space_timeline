@@ -27,7 +27,6 @@ export class ClickManager {
       return;
     }
 
-    // TODO not firing
     const cornerEl = Constants.UIMANAGER.cornerButton.icons.find((el) => evTarget.id.includes(el.id));
     if (cornerEl) {
       await Constants.UIMANAGER.cornerButton.clickHandler(cornerEl, this._world);
@@ -37,7 +36,8 @@ export class ClickManager {
     this.updateMousePointer(e);
     const res = this.checkRaycast();
     if (!res) {
-      if (Constants.UIMANAGER.infoPanel.visible) Constants.UIMANAGER.infoPanel.visible = false;
+      if (!Constants.UIMANAGER.infoPanel.panel.contains(evTarget) && Constants.UIMANAGER.infoPanel.visible)
+      Constants.UIMANAGER.infoPanel.visible = false;
       return;
     }
 
@@ -45,7 +45,7 @@ export class ClickManager {
 
     // console.log(target) // TODO react when something like glitterband is clicked
     if (target.name.includes("_infoSprite")) {
-      Constants.UIMANAGER.infoPanel.show(obj);
+      Constants.UIMANAGER.infoPanel.showTimeline(obj);
       return;
     }
 
@@ -56,6 +56,7 @@ export class ClickManager {
 
     if (Constants.UIMANAGER.infoPanel.visible) Constants.UIMANAGER.infoPanel.visible = false;
   }
+
   private dblclickHandler(e: MouseEvent) {
     this.updateMousePointer(e);
     const evTarget = this.raycast();

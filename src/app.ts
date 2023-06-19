@@ -11,10 +11,7 @@ window.onload = () => {
   Constants.LOAD_MANAGER.onLoad = () => {
     progress.visible = false;
     progress.value = 0;
-    (world.curSystem as CosmicMap).textOpacity = 1
-    world.initGui();
-    world.cam.initListeners();
-    world.clickManager.initListeners()
+    // (world.curSystem as CosmicMap).textOpacity = 1
     if (!world.cam.zoomed) Constants.UIMANAGER.zoomVisible = true
     World.eventLoop(0, world)
   };
@@ -31,6 +28,9 @@ window.onload = () => {
 
   Constants.LOAD_MANAGER.itemStart(`://startup`);
   const world = new World();
+  world.initGui();
+  world.cam.initListeners();
+  world.clickManager.initListeners()
   const sys = CosmicMap.build()
   world.initSys(sys, { freeCam: true, texts: [] })
   world.scene.add(sys.topGrp)

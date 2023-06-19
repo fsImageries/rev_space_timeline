@@ -89,7 +89,7 @@ export class InfoPanel {
   public showTimeline(obj: SystemObject) {
     this.visible = true;
 
-    this.writeTitle(obj.data.name, obj.data.parent || "null");
+    this.writeTitle(obj.data.name, obj.data.parent || "Local Group");
     if (obj.data.name in this._textMap) {
       this.writeTimelineText(this._textMap[obj.data.name]);
       return
@@ -97,10 +97,16 @@ export class InfoPanel {
 
     // TODO implement system to select a general info and produce text for suns
     if (obj.data.type == "sun") {
-      this.writeTimelineText(this._fullText);
+      this.writeTimelineText(this._fullText)
       return
     }
   }
+
+  public writeFullTimeline(obj:System) {
+    this.writeTitle(obj.name, "Local Group");
+    this.writeTimelineText(this._fullText)
+  }
+
   public init(system: System, texts: TextObject[]) {
     this.genTexts(texts);
     const parents = system.flat.filter(

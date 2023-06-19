@@ -73,9 +73,6 @@ export class World {
     this.scene.background = backgroundImage;
 
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
-
-    // this.curSystem.initWorld(this);
-    // infoPanel.init(this.curSystem);
     this.clickManager = new ClickManager(this);
   }
 
@@ -83,6 +80,7 @@ export class World {
     this.curSystem = system;
     this.curSystem.initWorld(this, data.freeCam);
     Constants.UIMANAGER.infoPanel.init(this.curSystem, data.texts);
+    Constants.UIMANAGER.infoPanel.writeFullTimeline(system)
     Constants.UIMANAGER.homeBtn.style.visibility = system.name == "cosmicMap" ? "hidden" : "visible";
     if (!this.systems.find((sys) => sys[0].name == system.name)) this.systems.push([system, data.texts]);
   }

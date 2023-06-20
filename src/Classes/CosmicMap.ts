@@ -365,7 +365,7 @@ export class CosmicMap extends System {
       startTarget: "sol"
     };
     const map = new CosmicMap(params);
-    map.topGrp.add(CosmicMap.buildText(sol, 25));
+    map.topGrp.add(CosmicMap.buildText(sol, 30));
     map.topGrp.add(
       CosmicMap.buildText(
         sol,

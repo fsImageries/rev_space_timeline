@@ -91,7 +91,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "61cygni",
+    name: "61Cygni",
     radius: 2000,
     hTemp: 3000,
     lTemp: 500,
@@ -127,7 +127,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "107piscium",
+    name: "107Piscium",
     radius: 3000,
     hTemp: 10000,
     lTemp: 500,

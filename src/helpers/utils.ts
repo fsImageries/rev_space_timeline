@@ -73,6 +73,11 @@ export function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 
 
 // String helpers
+
+
+const TITLE_REG = /(?<Front>^.*)(?<Back>[A-Z]\w.+)/
+const NUMTITLE_REG = /(?<Front>[A-Za-z]+)?(?<Digits>[0-9*#+-]+)(?<Back>[A-Za-z]+)?/
+
 export function getFirstYear(str: string) {
   return str.match(/(\d+)\D/)[0];
 }
@@ -86,6 +91,14 @@ export function splitWord(str: string) {
 }
 
 export function toTitle(str: string) {
+  let match = str.match(NUMTITLE_REG)
+  if (!match) match = str.match(TITLE_REG)
+  if (!match) return capitalize(str)
+
+  let idx = 1
+  if (match[idx] == undefined) idx += 1
+  return `${match[idx].length == 1 ? match[idx] : capitalize(match[idx])} ${match[idx+1]}`
+
   return splitWord(str)
     .map((s) => capitalize(s))
     .join(" ");

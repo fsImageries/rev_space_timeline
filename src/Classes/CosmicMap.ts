@@ -9,6 +9,7 @@ import sunFactory from "../Factories/SunFactory";
 import Constants from "../helpers/Constants";
 import { World } from "./World";
 import SystemObject from "./SystemObject";
+import { toTitle } from "../helpers/utils";
 
 const LEN_MAT = new THREE.LineBasicMaterial({
   color: "#ffffff",
@@ -40,7 +41,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "p Eridani",
+    name: "pEridani",
     radius: 2200,
     hTemp: 5100,
     lTemp: 1500,
@@ -49,7 +50,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "Delta Pavonis",
+    name: "deltaPavonis",
     radius: 3600,
     hTemp: 7000,
     lTemp: 3000,
@@ -63,7 +64,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "Lacaille 9352",
+    name: "lacaille9352",
     radius: 2000,
     hTemp: 4000,
     lTemp: 3000,
@@ -72,7 +73,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "Luyten 726-8",
+    name: "luyten726-8",
     radius: 500,
     hTemp: 2000,
     lTemp: 900,
@@ -81,7 +82,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "Ross 248",
+    name: "ross248",
     radius: 1000,
     hTemp: 2000,
     lTemp: 900,
@@ -90,7 +91,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "61 Cygni",
+    name: "61Cygni",
     radius: 2000,
     hTemp: 3000,
     lTemp: 500,
@@ -99,7 +100,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "Lalande 21185",
+    name: "lalande21185",
     radius: 1250,
     hTemp: 3000,
     lTemp: 500,
@@ -108,7 +109,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "Gliese 687",
+    name: "gliese687",
     radius: 1560,
     hTemp: 3000,
     lTemp: 500,
@@ -117,7 +118,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "Groombridge 1618",
+    name: "groombridge1618",
     radius: 1450,
     hTemp: 5000,
     lTemp: 500,
@@ -126,7 +127,7 @@ const SOURCES = [
   {
     isSimple: false,
     color: "red",
-    name: "107 Piscium",
+    name: "107Piscium",
     radius: 3000,
     hTemp: 10000,
     lTemp: 500,
@@ -202,7 +203,7 @@ export class CosmicMap extends System {
       dist = mapLinear(dist, start, end, 1, 0);
       const action = () => {
         Constants.UIMANAGER.cornerButton.forwardTarget = obj.data.name;
-        return Constants.UIMANAGER.cornerButton.switch("forward");
+        Constants.UIMANAGER.cornerButton.switch("forward");
       };
       dist ? action() : Constants.UIMANAGER.cornerButton.switch("help");
     }
@@ -264,7 +265,7 @@ export class CosmicMap extends System {
     base.x -= xOff;
 
     const txt = new Text();
-    txt.text = text != undefined ? text : sun.data.name;
+    txt.text = text != undefined ? text : toTitle(sun.data.name);
     txt.fontSize = fontSize;
     txt.color = 0xffffff;
     txt.rotateY(rot != undefined ? rot : Math.PI * 0.85);
@@ -330,7 +331,7 @@ export class CosmicMap extends System {
 
   static setupSun(system: System, sun: Sun, data: { x: number; y: number; rotY: number; textsHeight?: number }) {
     CosmicMap.buildDiskLine(sun, data);
-    system.topGrp.add(CosmicMap.buildText(sun, 25));
+    system.topGrp.add(CosmicMap.buildText(sun, 30));
     system.topGrp.add(
       CosmicMap.buildText(
         sun,
@@ -350,7 +351,7 @@ export class CosmicMap extends System {
   }
 
   static build() {
-    const sol = CosmicMap.buildSun({ name: "Sol", radius: 3000, hTemp: 7100, lTemp: 3100 });
+    const sol = CosmicMap.buildSun({ name: "sol", radius: 3000, hTemp: 7100, lTemp: 3100 });
     CosmicMap.buildLyRings(sol);
 
     const suns = SOURCES.map((d) => CosmicMap.buildSun(d));

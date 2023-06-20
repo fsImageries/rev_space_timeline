@@ -8,6 +8,9 @@ uniform float lowTemp;
 
 uniform float time;
 
+#include <common>
+#include <logdepthbuf_pars_fragment>
+
 //  Noise fnunctions are taken from here:
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
@@ -124,6 +127,7 @@ const int octaves = 4;
 
 //  star rendering heavily borrows from the tips here: https://www.seedofandromeda.com/blogs/51-procedural-star-rendering
 void main( void ) {
+  #include <logdepthbuf_fragment>
 
   float noiseBase = (noise(vTexCoord3D , .40, 0.7)+1.0)/2.0;
 
@@ -193,6 +197,7 @@ void main( void ) {
     float(bbucket5) * 255.0;
 
   gl_FragColor = vec4(vec3(r/255.0, g/255.0, b/255.0), 1.0);
-
+  // gl_FragColor = vec4(.0);
+  gl_FragColor.a = 1.0;
 
   }

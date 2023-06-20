@@ -8,9 +8,8 @@ import { SunData } from "../jsonInterfaces";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
 
-const GEOM = new SphereGeometry(1, 20, 20);
+const GEOM = new SphereGeometry(1, 30, 30);
 
-let SH_MAT: ShaderMaterial;
 let MS_MAT: MeshBasicMaterial;
 
 export default function build(data: SunData) {
@@ -73,7 +72,7 @@ const getMat = (data: SunData) => {
       color: data.color ? data.color : 0xffffff
     });
   }
-  if (SH_MAT) return SH_MAT;
+  // if (SH_MAT) return SH_MAT;
   return new ShaderMaterial({
     uniforms: {
       time: { value: 1.0 },
@@ -82,6 +81,9 @@ const getMat = (data: SunData) => {
       lowTemp: { value: data.lowTemp }
     },
     vertexShader: sunVert,
-    fragmentShader: sunFrag
+    fragmentShader: sunFrag,
+    depthWrite: true,
+    depthTest: true,
+    transparent: false
   });
 };

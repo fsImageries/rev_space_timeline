@@ -1,10 +1,10 @@
 import { System } from "../Models/System";
+import { capitalize, formatTexts, getFirstYear, splitWord, toTitle } from "../helpers/utils";
 import { TextObject } from "../jsonInterfaces";
 import { InfoSpriteManager } from "./InfoSpriteManager";
 import SystemObject from "./SystemObject";
 
 type TextsMap = { [key: string]: string };
-const NL_SEP = "<br>• ";
 
 export class InfoPanel {
   public panel: HTMLElement;
@@ -147,34 +147,4 @@ export class InfoPanel {
   private writeTimelineText(text: string) {
     this.timeline.innerHTML = text;
   }
-}
-
-// String helpers
-function getFirstYear(str: string) {
-  return str.match(/(\d+)\D/)[0];
-}
-
-function capitalize(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function splitWord(str: string) {
-  return str.split(/(?=[A-Z])/);
-}
-
-function toTitle(str: string) {
-  return splitWord(str)
-    .map((s) => capitalize(s))
-    .join(" ");
-}
-
-function formatTexts(texts: string[], join = true, infectName: boolean | string = false) {
-  texts = texts.map((t, i) => {
-    const line = t.split("\n");
-    if (infectName) {
-      line[0] = `${line[0]} <span class="year" style="font-size:.8rem; font-weight: normal;">(${infectName})</span>`;
-    }
-    return `${i != 0 && !join ? "<br>" : ""}<span class="year">${line[0]}</span>${NL_SEP}${line.slice(1).join(NL_SEP)}`;
-  });
-  return texts;
 }

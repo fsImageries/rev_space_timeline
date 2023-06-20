@@ -129,7 +129,9 @@ export class World {
     if (!found) {
       const d = DATA.systems.find((s) => s.name == name);
       if (d) this.initSys(await systemFactoryAsync(d), { freeCam: d.freeCam, texts: d.texts });
-    } else this.initSys(found[0], { freeCam: false, texts: found[1] });
+    }
+    // TODO inject text for cosmic map somehow
+    else this.initSys(found[0], { freeCam: false, texts: found[1] });
 
     this.scene.remove(old.topGrp);
     this.scene.add(this.curSystem.topGrp);

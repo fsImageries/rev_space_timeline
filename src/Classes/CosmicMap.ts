@@ -362,7 +362,7 @@ export class CosmicMap extends System {
       flat: sunss,
       isSingleSun: true,
       name: "cosmicMap",
-      startTarget: "Sol"
+      startTarget: "sol"
     };
     const map = new CosmicMap(params);
     map.topGrp.add(CosmicMap.buildText(sol, 25));

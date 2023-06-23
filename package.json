@@ -12,7 +12,7 @@
         "dev": "vite",
         "build": "tsc && vite build --base=./",
         "preview": "vite preview",
-        "test": "vitest",
+        "test": "vitest --run",
         "lint": "eslint . --ext .ts",
         "pretty": "prettier --config .prettierrc src/**/*.ts --write",
         "vcommit": "python ./utils/versioning.py -cinc "

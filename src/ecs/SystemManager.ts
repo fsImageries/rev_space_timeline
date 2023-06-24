@@ -18,7 +18,7 @@ export class SystemManager {
     }
 
     private executeSystem(system:System, delta:number, time:number) {
-        let startTime = performance.now();
+        const startTime = performance.now();
         system.execute(delta, time);
         system.executeTime = performance.now() - startTime;
     }

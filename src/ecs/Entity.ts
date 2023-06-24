@@ -1,6 +1,7 @@
 import { Component, ComponentConstructor, ComponentSchema } from "./Component";
 import { EntityComponentManager } from "./EntityComponentManager";
 
+/* eslint-disable @typescript-eslint/no-explicit-any*/
 export class Entity {
     constructor(
         public ecManager: EntityComponentManager,

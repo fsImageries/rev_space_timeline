@@ -7,15 +7,21 @@ export class RotComponent extends Component<{ rot: number }> { }
 
 export class RadiusMultSystem extends System {
     static queries = [RadiusComponent]
-    execute(): void {}
+    execute(): void {
+        // do something
+    }
 }
 
 export class RotSystem extends System {
     static queries = [RotComponent]
-    execute(): void {}
+    execute(): void {
+        // do something
+    }
 }
 
 export class RotRadSystem extends System {
     static queries = [RotComponent, RadiusComponent]
-    execute(): void {}
+    execute(): void {
+        // do something
+    }
 }

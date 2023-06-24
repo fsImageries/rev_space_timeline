@@ -7,7 +7,6 @@ import { RadiusComponent, RadiusMultSystem, RotComponent, RotRadSystem, RotSyste
 describe("EntityComponentManager test", () => {
     it("instantiate subclass", () => {
         // Arrange
-        const world = new World()
         // Act
         const act = () => new EntityComponentManager()
         // Assert

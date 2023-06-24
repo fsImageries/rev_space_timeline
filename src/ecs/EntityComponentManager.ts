@@ -12,6 +12,7 @@ export class EntityComponentManager {
         this.entities = []
     }
 
+    /* eslint-disable @typescript-eslint/no-explicit-any*/
     public getQuery(id: string, components: ComponentConstructor<any, any>[]) {
         if (!(id in this.queries)) this.queries[id] = { componentIDs: components.map(c => c.typeID), entities: [] }
         return this.queries[id].entities
@@ -45,23 +46,4 @@ export class EntityComponentManager {
 
         return this
     }
-}
-
-
-// Stolen from:
-// https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
-/**
- * Returns a hash code from a string
- * @param  {String} str The string to hash.
- * @return {Number}    A 32bit integer
- * @see http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
- */
-export function hashCode(str: string): number {
-    let hash = 0;
-    for (let i = 0, len = str.length; i < len; i++) {
-        let chr = str.charCodeAt(i);
-        hash = (hash << 5) - hash + chr;
-        hash |= 0; // Convert to 32bit integer
-    }
-    return hash;
 }

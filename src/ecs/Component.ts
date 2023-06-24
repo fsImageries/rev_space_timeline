@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any*/
 export type ComponentSchema = {
     [propName: string]: any;
 };
 
 export abstract class Component<T extends ComponentSchema> {
     static typeID: string;
-    static isTag: boolean = true
+    static isTag = true
 
     public instanceID: string;
 

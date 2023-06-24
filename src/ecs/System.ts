@@ -1,8 +1,8 @@
 import { ComponentConstructor } from "./Component";
 import { Entity } from "./Entity";
-import { hashCode } from "./EntityComponentManager";
 import { World } from "./World";
 
+/* eslint-disable @typescript-eslint/no-explicit-any*/
 export type SystemQuery = ComponentConstructor<any, any>
 export type SystemQueries = SystemQuery[];
 
@@ -35,9 +35,4 @@ export interface SystemConstructor<T extends System> {
     queries: SystemQueries;
     getName(): string;
     new(...args: any): T;
-}
-
-export function queryKey(components: SystemQueries | string[]) {
-    if (components.length === 0) return -1
-    return hashCode(components.map(c => typeof(c) === "string" ? c : (c as SystemQuery).typeID).join("::"))
 }

@@ -15,4 +15,8 @@ export class Entity {
         this.ecManager.addEntityComponent(this, component, data)
         return this
     }
+
+    public getComponent<T extends ComponentSchema, C extends Component<T>>(component: ComponentConstructor<T,C>) {
+        return this.components[component.typeID]
+    }
 }

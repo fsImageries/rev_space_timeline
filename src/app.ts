@@ -1,4 +1,4 @@
-import { Mesh, MeshBasicMaterial, MeshNormalMaterial, SphereGeometry } from "three";
+import { Mesh, MeshNormalMaterial, SphereGeometry } from "three";
 import { CameraComponent, MeshComponent, RenderComponent, SceneComponent } from "./baseclasses/CommonComponents";
 import { RenderSystem } from "./baseclasses/CommonSystems";
 import { World } from "./ecs/World";
@@ -32,8 +32,8 @@ world.ecManager
     .createEntity()
     .addComponent(CameraComponent, CameraComponent.setup(world))
 
-const mesh = world.ecManager.entities.find(e => e.getComponent(MeshComponent)).components[MeshComponent.typeID].data.mesh
-const scene = world.ecManager.entities.find(e => e.getComponent(SceneComponent)).components[SceneComponent.typeID].data.scene
+const mesh = world.ecManager.entities.find(e => e.getComponent(MeshComponent))?.components[MeshComponent.typeID].data.mesh
+const scene = world.ecManager.entities.find(e => e.getComponent(SceneComponent))?.components[SceneComponent.typeID].data.scene
 scene.add(mesh)
 console.log(scene.children)
 
@@ -41,6 +41,8 @@ console.log(scene.children)
 const rcomp = world.ecManager.entities.find(e => e.getComponent(RenderComponent))
 const scomp = world.ecManager.entities.find(e => e.getComponent(SceneComponent))
 const ccomp = world.ecManager.entities.find(e => e.getComponent(CameraComponent))
+
+if (!(rcomp && scomp && ccomp)) throw new Error()
 
 world.ecManager.queries[RenderSystem.typeID].entities.push(rcomp, scomp, ccomp)
 console.log(world.ecManager.queries[RenderSystem.typeID])

@@ -1,36 +1,36 @@
-import Constants from "../helpers/Constants";
-import { SystemObjectParams } from "../interfaces";
-import CelestialBase from "../Classes/CelestialBase";
-import Internal3DObject from "./Internal3DObject";
-import { World } from "./World";
+// import Constants from "../helpers/Constants";
+// import { SystemObjectParams } from "../interfaces";
+// import CelestialBase from "../Classes/CelestialBase";
+// import Internal3DObject from "./Internal3DObject";
+// import { World } from "./World";
 
-export default abstract class SystemObject {
-  public data: CelestialBase;
-  public object: Internal3DObject;
-  public satellites?: SystemObject[];
+// export default abstract class SystemObject {
+//   public data: CelestialBase;
+//   public object: Internal3DObject;
+//   public satellites?: SystemObject[];
 
-  constructor(data: SystemObjectParams) {
-    this.data = data.data;
-    this.object = data.object;
-    this.satellites = data.satellites;
-  }
+//   constructor(data: SystemObjectParams) {
+//     this.data = data.data;
+//     this.object = data.object;
+//     this.satellites = data.satellites;
+//   }
 
-  abstract init(parent?: SystemObject): void;
-  abstract update(world: World, parent?: SystemObject): void;
+//   abstract init(parent?: SystemObject): void;
+//   abstract update(world: World, parent?: SystemObject): void;
 
-  initSatellites(parent?: SystemObject) {
-    this.satellites?.forEach((child) => child.init(parent));
-  }
+//   initSatellites(parent?: SystemObject) {
+//     this.satellites?.forEach((child) => child.init(parent));
+//   }
 
-  updateSatellites(world: World, parent?: SystemObject) {
-    this.satellites?.forEach((child) => child.update(world, parent));
-  }
+//   updateSatellites(world: World, parent?: SystemObject) {
+//     this.satellites?.forEach((child) => child.update(world, parent));
+//   }
 
-  public get drawRadius() {
-    return this.data.radius / Constants.SIZE_SCALE;
-  }
+//   public get drawRadius() {
+//     return this.data.radius / Constants.SIZE_SCALE;
+//   }
 
-  public get dist(): number {
-    return this.data.distanceToParent ? this.data.distanceToParent / Constants.DISTANCE_SCALE : undefined;
-  }
-}
+//   public get dist(): number {
+//     return this.data.distanceToParent ? this.data.distanceToParent / Constants.DISTANCE_SCALE : undefined;
+//   }
+// }

@@ -1,4 +1,4 @@
-import { AmbientLight, Camera, Mesh, PCFSoftShadowMap, PerspectiveCamera, PointLight, Scene, WebGLRenderer } from "three";
+import { AmbientLight, Camera, Mesh, PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { Component } from "../ecs/Component";
 import { World } from "../ecs/World";
 
@@ -33,7 +33,7 @@ export class SceneComponent extends Component<SceneComponentData> {
     static setup(): SceneComponentData {
         const scene = new Scene()
         const l = new AmbientLight("#ffffff",1)
-        l.position.y = 100
+        // l.position.y = 100
         scene.add(l)
         return { scene }
     }

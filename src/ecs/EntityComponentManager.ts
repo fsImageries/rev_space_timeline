@@ -39,7 +39,7 @@ export class EntityComponentManager {
         for (const id in this.queries) {
             const q = this.queries[id]
             const cIds = q.componentIDs
-            if (!q.entities.includes(entity) && cIds.every(i => (entity as Entity).componentTypes.includes(i))) {
+            if (cIds.length != 0 && !q.entities.includes(entity) && cIds.every(i => (entity as Entity).componentTypes.includes(i))) {
                 q.entities.push(entity)
             }
         }

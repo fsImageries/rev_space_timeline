@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { EntityComponentManager } from '../src/ecs/EntityComponentManager';
 import { World } from '../src/ecs/World';
-import { RadiusComponent, RadiusMultSystem, RotComponent, RotRadSystem, RotSystem } from './samples';
+import { RadiusComponent, RadiusMultSystem, RenderSystem, RotComponent, RotRadSystem, RotSystem } from './samples';
 
 
 describe("EntityComponentManager test", () => {
@@ -59,6 +59,32 @@ describe("EntityComponentManager test", () => {
         expect(man.entities[0].components[1]).to.be.instanceOf(RotComponent, `Should be instance of ${RotComponent.name}`)
         expect(man.entities[0].components[0].data).to.be.equal(data, "Data should be equal to source data")
         expect(man.entities[0].components[1].data).to.be.equal(data2, "Data should be equal to source data")
+    })
+
+    it("system with empty query should have no entites", () => {
+        // Arrange
+        const world = new World()
+        const man = world.ecManager
+        const sys = world.sysManager
+        const data = { real: 555, draw: 5.5 }
+        
+        sys.registerSystem(RenderSystem)
+        const key = RenderSystem.typeID
+
+        // Act
+        man.createEntity()
+        .addComponent(RadiusComponent, data)
+
+        // Assert
+        const queryEntities = man.queries[key].entities
+        const entities = sys.systems[0].entities
+
+        console.log(key)
+        console.log(man.queries)
+        expect(man.queries[key]).not.be.equal(undefined, "Query should return the query object for the added system's key")
+        expect(queryEntities.length).to.be.equal(0, "Query entities should be len(0)")
+        expect(queryEntities).toBe(entities)
+        expect(queryEntities[0]).toBe(entities[0])
     })
 
     it("query should update", () => {

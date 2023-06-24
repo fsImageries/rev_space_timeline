@@ -1,5 +1,5 @@
 import { Component } from "../src/ecs/Component";
-import { System, SystemQueries } from "../src/ecs/System";
+import { System } from "../src/ecs/System";
 
 export class RadiusComponent extends Component<{ real: number, draw: number }> { }
 

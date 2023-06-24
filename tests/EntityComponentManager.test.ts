@@ -1,8 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { SystemManager } from "../src/ecs/SystemManager"
-import { RadiusComponent, RadiusMultSystem, RotSystem, RotComponent, RotRadSystem } from './samples';
-import { World } from '../src/ecs/World';
+import { describe, expect, it } from 'vitest';
 import { EntityComponentManager } from '../src/ecs/EntityComponentManager';
+import { World } from '../src/ecs/World';
+import { RadiusComponent, RadiusMultSystem, RotComponent, RotRadSystem, RotSystem } from './samples';
 
 
 describe("EntityComponentManager test", () => {

@@ -1,7 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { SystemManager } from "../src/ecs/SystemManager"
-import { RadiusComponent, RadiusMultSystem } from './samples';
+import { describe, expect, it } from 'vitest';
 import { World } from '../src/ecs/World';
+import { RadiusMultSystem } from './samples';
 
 
 describe("SystemManager test", () => {

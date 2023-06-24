@@ -1,18 +1,13 @@
 import { Component, ComponentConstructor, ComponentSchema } from "./Component"
 import { Entity } from "./Entity"
-import { queryKey } from "./System"
-
-type ComponentQueries = { [propName: number]: Entity[] }
 
 type Query = { [systemID: string]: { componentIDs: string[], entities: Entity[] } }
 
 export class EntityComponentManager {
-    // private queryMap: {[propName:string[]]: number}
     public queries: Query
     public entities: Entity[]
 
     constructor() {
-
         this.queries = {}
         this.entities = []
     }

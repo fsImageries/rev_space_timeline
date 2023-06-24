@@ -44,7 +44,7 @@ jobs:
     needs: basic_check
     permissions:
       contents: write
-    if: github.ref == 'refs/heads/dev' && (github.event_name == 'push' || github.event.pull_request.merged == true)
+    if: (github.event_name == 'push' || github.event.pull_request.merged == true)
 
     steps:
       - name: Checkout repo

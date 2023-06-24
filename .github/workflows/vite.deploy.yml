@@ -3,9 +3,9 @@ name: basic-deploy
 
 on:
   push:
-      branches: [ "dev" ]
+      branches: [ "main" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "main" ]
     types: [ closed ]
 
 
@@ -35,7 +35,7 @@ jobs:
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/dev' && (github.event_name == 'push' || github.event.pull_request.merged == true)
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true)
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist

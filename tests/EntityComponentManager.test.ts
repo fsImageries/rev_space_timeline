@@ -35,9 +35,9 @@ describe("EntityComponentManager test", () => {
         
         // Assert
         expect(man.entities.length).to.be.equal(1, `Entries should be len(1) after adding but they are len(${man.entities.length})`)
-        expect(man.entities[0].components.length).to.be.equal(1, `Components of entry should be len(1) after adding but they are len(${man.entities.length})`)
-        expect(man.entities[0].components[0]).to.be.instanceOf(RadiusComponent, `Should be instance of ${RadiusComponent.name}`)
-        expect(man.entities[0].components[0].data).to.be.equal(data, "Data should be equal to source data")
+        expect(Object.keys(man.entities[0].components).length).to.be.equal(1, `Components of entry should be len(1) after adding but they are len(${man.entities.length})`)
+        expect(man.entities[0].components[RadiusComponent.typeID]).to.be.instanceOf(RadiusComponent, `Should be instance of ${RadiusComponent.name}`)
+        expect(man.entities[0].components[RadiusComponent.typeID].data).to.be.equal(data, "Data should be equal to source data")
     })
 
     it("add multiple components to entity", () => {
@@ -54,11 +54,11 @@ describe("EntityComponentManager test", () => {
         
         // Assert
         expect(man.entities.length).to.be.equal(1, `Entries should be len(1) after adding but they are len(${man.entities.length})`)
-        expect(man.entities[0].components.length).to.be.equal(2, `Components of entry should be len(2) after adding but they are len(${man.entities.length})`)
-        expect(man.entities[0].components[0]).to.be.instanceOf(RadiusComponent, `Should be instance of ${RadiusComponent.name}`)
-        expect(man.entities[0].components[1]).to.be.instanceOf(RotComponent, `Should be instance of ${RotComponent.name}`)
-        expect(man.entities[0].components[0].data).to.be.equal(data, "Data should be equal to source data")
-        expect(man.entities[0].components[1].data).to.be.equal(data2, "Data should be equal to source data")
+        expect(Object.keys(man.entities[0].components).length).to.be.equal(2, `Components of entry should be len(2) after adding but they are len(${man.entities.length})`)
+        expect(man.entities[0].components[RadiusComponent.typeID]).to.be.instanceOf(RadiusComponent, `Should be instance of ${RadiusComponent.name}`)
+        expect(man.entities[0].components[RotComponent.typeID]).to.be.instanceOf(RotComponent, `Should be instance of ${RotComponent.name}`)
+        expect(man.entities[0].components[RadiusComponent.typeID].data).to.be.equal(data, "Data should be equal to source data")
+        expect(man.entities[0].components[RotComponent.typeID].data).to.be.equal(data2, "Data should be equal to source data")
     })
 
     it("system with empty query should have no entites", () => {
@@ -79,8 +79,6 @@ describe("EntityComponentManager test", () => {
         const queryEntities = man.queries[key].entities
         const entities = sys.systems[0].entities
 
-        console.log(key)
-        console.log(man.queries)
         expect(man.queries[key]).not.be.equal(undefined, "Query should return the query object for the added system's key")
         expect(queryEntities.length).to.be.equal(0, "Query entities should be len(0)")
         expect(queryEntities).toBe(entities)

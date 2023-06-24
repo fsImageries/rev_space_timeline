@@ -1,4 +1,4 @@
-import { Camera, Mesh, PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { AmbientLight, Camera, Mesh, PCFSoftShadowMap, PerspectiveCamera, PointLight, Scene, WebGLRenderer } from "three";
 import { Component } from "../ecs/Component";
 import { World } from "../ecs/World";
 
@@ -24,17 +24,26 @@ export class RenderComponent extends Component<RenderComponentData> {
         return { renderer}
     }
 }
+RenderComponent.typeID = crypto.randomUUID()
+
 
 export interface SceneComponentData {scene: Scene};
 export class SceneComponent extends Component<SceneComponentData> { 
-    
+
     static setup(): SceneComponentData {
-        return { scene: new Scene()}
+        const scene = new Scene()
+        const l = new AmbientLight("#ffffff",1)
+        l.position.y = 100
+        scene.add(l)
+        return { scene }
     }
 }
+SceneComponent.typeID = crypto.randomUUID()
+
 
 export interface MeshComponentData {mesh: Mesh};
 export class MeshComponent extends Component<MeshComponentData> { }
+MeshComponent.typeID = crypto.randomUUID()
 
 
 export interface CameraComponentData {active: Camera, /*freeCtrl: OrbitControls */};
@@ -42,10 +51,11 @@ export class CameraComponent extends Component<CameraComponentData> {
 
     static setup(world:World): CameraComponentData {
         const cam = new PerspectiveCamera(30, world.canvas.clientWidth / world.canvas.clientHeight, 0.1, 1e12)
-        cam.position.z = -100
+        cam.position.z =  100
         return {
             active: cam,
             // freeCtrl: new OrbitControls(new PerspectiveCamera(), )
         }
     }
  }
+ CameraComponent.typeID = crypto.randomUUID()

@@ -23,6 +23,11 @@ export abstract class System {
         this.entities = world.ecManager.getQuery(that.typeID, that.queries)
     }
 
+    public query() {
+        const that = (this.constructor as typeof System)
+        this.entities = this.world.ecManager.getQuery(that.typeID, that.queries)
+    }
+
     abstract execute(delta: number, time: number): void;
 
     static getName() {

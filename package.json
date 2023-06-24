@@ -6,7 +6,7 @@
     },
     "name": "revelation-space-timeline",
     "private": true,
-    "version": "0.3.1-supa-alpha",
+    "version": "0.3.2-supa-",
     "type": "module",
     "scripts": {
         "dev": "vite",

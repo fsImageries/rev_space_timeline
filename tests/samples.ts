@@ -1,5 +1,5 @@
 import { Component } from "../src/ecs/Component";
-import { System } from "../src/ecs/System";
+import { System, SystemQueries } from "../src/ecs/System";
 
 export class RadiusComponent extends Component<{ real: number, draw: number }> { }
 
@@ -10,7 +10,12 @@ export class RadiusMultSystem extends System {
     execute(): void {}
 }
 
-export class Rot5System extends System {
+export class RotSystem extends System {
     static queries = [RotComponent]
+    execute(): void {}
+}
+
+export class RotRadSystem extends System {
+    static queries = [RotComponent, RadiusComponent]
     execute(): void {}
 }

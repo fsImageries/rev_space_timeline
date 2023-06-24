@@ -8,20 +8,19 @@ export type SystemQueries = SystemQuery[];
 
 export abstract class System {
     static queries: SystemQueries
+    static typeID: string;
 
     public world: World;
     public entities: Entity[]
     public enabled: boolean
     public executeTime: number;
-    public key: number;
 
     constructor(world: World) {
         const that = (this.constructor as typeof System)
         this.world = world
         this.enabled = true
         this.executeTime = -1
-        this.key = queryKey(that.queries)
-        this.entities = world.ecManager.getQuery(this.key)
+        this.entities = world.ecManager.getQuery(that.typeID, that.queries)
     }
 
     abstract execute(delta: number, time: number): void;
@@ -32,6 +31,7 @@ export abstract class System {
 }
 
 export interface SystemConstructor<T extends System> {
+    typeID: string;
     queries: SystemQueries;
     getName(): string;
     new(...args: any): T;

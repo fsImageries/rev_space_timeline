@@ -4,18 +4,22 @@ import { queryKey } from "./System"
 
 type ComponentQueries = { [propName: number]: Entity[] }
 
+type Query = { [systemID: string]: { componentIDs: string[], entities: Entity[] } }
+
 export class EntityComponentManager {
-    public queries: ComponentQueries
+    // private queryMap: {[propName:string[]]: number}
+    public queries: Query
     public entities: Entity[]
 
     constructor() {
+
         this.queries = {}
         this.entities = []
     }
 
-    public getQuery(key: number) {
-        if (!(key in this.queries)) this.queries[key] = []
-        return this.queries[key]
+    public getQuery(id: string, components: ComponentConstructor<any, any>[]) {
+        if (!(id in this.queries)) this.queries[id] = { componentIDs: components.map(c => c.typeID), entities: [] }
+        return this.queries[id].entities
     }
 
     public createEntity() {
@@ -24,32 +28,25 @@ export class EntityComponentManager {
         return entity
     }
 
-    public addEntityComponent<T extends ComponentSchema, C extends Component<T>>(entity: Entity | string, component: ComponentConstructor<T, C>, data:T) {
-        // We assume that all queries are exclusive \
-        // means the matches need to be 1 to 1 to match an entity to an system
- 
-        // if (!component.typeID) component.typeID = crypto.randomUUID()
+    public addEntityComponent<T extends ComponentSchema, C extends Component<T>>(entity: Entity | string, component: ComponentConstructor<T, C>, data: T) {
+        if (!component.typeID) component.typeID = crypto.randomUUID()
         const typeID = component.typeID
 
         entity = typeof entity === "string" ? this.entities.find(e => e.id === entity) as Entity : entity
         if (entity.componentTypes.includes(typeID)) return this// Component already exists
-
-        // Check if entity was added somewhere before, \
-        // remove it from there because exclusivity will be broken on the next lines
-        const oldKey = queryKey(entity.componentTypes)
-        if (oldKey in this.queries && this.queries[oldKey].includes(entity)) {
-            const query = this.queries[oldKey]
-            const index = query.indexOf(entity)
-            if (index > -1) query.splice(index, 1)
-        }
 
         const c = new component(data)
         entity.components.push(c)
         entity.componentTypes.push(typeID)
 
         // check if entity needs to be put into query
-        const newKey = queryKey(entity.componentTypes)
-        if (newKey in this.queries && !this.queries[newKey].includes(entity)) this.queries[newKey].push(entity)
+        for (const id in this.queries) {
+            const q = this.queries[id]
+            const cIds = q.componentIDs
+            if (!q.entities.includes(entity) && cIds.every(i => (entity as Entity).componentTypes.includes(i))) {
+                q.entities.push(entity)
+            }
+        }
 
         return this
     }

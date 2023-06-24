@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { SystemManager } from "../src/ecs/SystemManager"
-import { RadiusComponent, RadiusMultSystem, RotComponent } from './samples';
+import { RadiusComponent, RadiusMultSystem, RotSystem, RotComponent, RotRadSystem } from './samples';
 import { World } from '../src/ecs/World';
 import { EntityComponentManager } from '../src/ecs/EntityComponentManager';
 
@@ -69,19 +69,111 @@ describe("EntityComponentManager test", () => {
         const man = world.ecManager
         const sys = world.sysManager
         const data = { real: 555, draw: 5.5 }
-
+        
         sys.registerSystem(RadiusMultSystem)
+        const key = RadiusMultSystem.typeID
 
         // Act
         man.createEntity()
         .addComponent(RadiusComponent, data)
 
         // Assert
-        const queries = man.queries[sys.systems[0].key]
+        const queryEntities = man.queries[key].entities
         const entities = sys.systems[0].entities
 
-        expect(() => man.queries[sys.systems[0].key]).not.toThrowError("Query should return the query object for the added system's key")
-        expect(queries).toBe(entities)
-        expect(queries[0]).toBe(entities[0])
+        expect(man.queries[key]).not.be.equal(undefined, "Query should return the query object for the added system's key")
+        expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
+        expect(queryEntities).toBe(entities)
+        expect(queryEntities[0]).toBe(entities[0])
+    })
+
+    it("multi system query should update", () => {
+        // Arrange
+        const world = new World()
+        const man = world.ecManager
+        const sys = world.sysManager
+        const data = { real: 555, draw: 5.5 }
+        const data2 = { rot: 180 }
+
+        sys.registerSystem(RadiusMultSystem)
+        sys.registerSystem(RotSystem)
+        sys.registerSystem(RotRadSystem)
+
+        const key0 = RadiusMultSystem.typeID
+        const key1 = RotSystem.typeID
+        const key2 = RotRadSystem.typeID
+        const keys = [key0, key1, key2]
+
+        // Act
+        man.createEntity()
+        .addComponent(RadiusComponent, data)
+        .addComponent(RotComponent, data2)
+
+        // Assert
+        expect(new Set(keys).size).to.be.equal(keys.length, "Keys shouldn't be duplicated.")
+        
+        expect(man.queries[key0]).not.be.equal(undefined, "Query should return the query object for the added system's key")
+        expect(man.queries[key1]).not.be.equal(undefined, "Query should return the query object for the added system's key")
+        expect(man.queries[key2]).not.be.equal(undefined, "Query should return the query object for the added system's key")
+        
+        
+        let queryEntities = man.queries[key0].entities
+        let entities = sys.systems[0].entities
+        expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
+        expect(queryEntities).toBe(entities)
+        expect(queryEntities[0]).toBe(entities[0])
+
+        queryEntities = man.queries[key1].entities
+        entities = sys.systems[1].entities
+        expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
+        expect(queryEntities).toBe(entities)
+        expect(queryEntities[0]).toBe(entities[0])
+
+        queryEntities = man.queries[key2].entities
+        entities = sys.systems[2].entities
+        expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
+        expect(queryEntities).toBe(entities)
+        expect(queryEntities[0]).toBe(entities[0])
+    })
+
+    it("multi system, multi entity query should update", () => {
+        // Arrange
+        const world = new World()
+        const man = world.ecManager
+        const sys = world.sysManager
+        const data = { real: 555, draw: 5.5 }
+        const data2 = { rot: 180 }
+
+        sys.registerSystem(RadiusMultSystem)
+        sys.registerSystem(RotSystem)
+        sys.registerSystem(RotRadSystem)
+
+        const key0 = RadiusMultSystem.typeID    // n = 2
+        const key1 = RotSystem.typeID           // n = 1
+        const key2 = RotRadSystem.typeID        // n = 1
+
+        // Act
+        man.createEntity()
+        .addComponent(RadiusComponent, data)
+
+        man.createEntity()
+        .addComponent(RadiusComponent, data)
+        .addComponent(RotComponent, data2)
+
+        // Assert
+        let queryEntities = man.queries[key0].entities
+        let entities = sys.systems[0].entities
+        expect(queryEntities.length).to.be.equal(2, "Query entities should be len(2)")
+        expect(queryEntities).toBe(entities)
+
+        queryEntities = man.queries[key1].entities
+        entities = sys.systems[1].entities
+        expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
+        expect(queryEntities).toBe(entities)
+
+        queryEntities = man.queries[key2].entities
+        entities = sys.systems[2].entities
+        expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
+        expect(queryEntities).toBe(entities)
     })
 })

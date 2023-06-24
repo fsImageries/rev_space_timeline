@@ -29,6 +29,7 @@ export class SystemManager {
             return this;
         }
 
+        SystemClass.typeID = crypto.randomUUID()
         const sys = new SystemClass(this.world)
         this.systems.push(sys)
         return this

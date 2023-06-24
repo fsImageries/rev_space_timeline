@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 export type ComponentSchema = {
-    [propName: string]: any;
+  [propName: string]: any;
 };
 
 export abstract class Component<T extends ComponentSchema> {
-    static typeID: string;
-    static isTag = true
+  static typeID: string;
+  static isTag = true;
 
-    public instanceID: string;
+  public instanceID: string;
 
-    constructor(public data: T) {
-        this.instanceID = crypto.randomUUID();
-    }
+  constructor(public data: T) {
+    this.instanceID = crypto.randomUUID();
+  }
 }
 
 export class TagComponent<T extends ComponentSchema> extends Component<T> {
-    static isTag = false
+  static isTag = false;
 }
 
 export interface ComponentConstructor<T extends ComponentSchema, C extends Component<T>> {
-    typeID: string
-    isTag: boolean;
-    new(data: T): C;
+  typeID: string;
+  isTag: boolean;
+  new (data: T): C;
 }

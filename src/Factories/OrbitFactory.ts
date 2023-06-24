@@ -28,7 +28,7 @@
 //     vertexShader: `
 //             uniform vec3 bboxMin;
 //             uniform vec3 bboxMax;
-        
+
 //             varying vec2 vUv;
 
 //             void main() {
@@ -38,7 +38,7 @@
 //         `,
 //     fragmentShader: `
 //             varying vec2 vUv;
-            
+
 //             void main() {
 //                 vec4 col = vec4(mix(vec3(1), vec3(0), vUv.y), 1);
 //                 gl_FragColor = vec4(1);

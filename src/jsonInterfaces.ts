@@ -2,7 +2,7 @@ import { ColorRepresentation } from "three";
 
 export interface DrawData {
   radius: number;
-  cache?: string,
+  cache?: string;
   albedoPath?: string;
   normalPath?: string;
   glowColor?: string;
@@ -31,7 +31,7 @@ export interface SystemsData {
 }
 
 export interface TextObject {
-  name:string;
+  name: string;
   texts: string[];
 }
 
@@ -40,9 +40,9 @@ export interface SystemData {
   isSingleSun: boolean;
   objects: SystemObjectData[];
   texts: TextObject[];
-  
-  startTarget:string;
-  freeCam:boolean;
+
+  startTarget: string;
+  freeCam: boolean;
 }
 
 export interface SystemObjectData {

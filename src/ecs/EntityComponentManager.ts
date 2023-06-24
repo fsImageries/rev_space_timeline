@@ -28,13 +28,14 @@ export class EntityComponentManager {
         // We assume that all queries are exclusive \
         // means the matches need to be 1 to 1 to match an entity to an system
  
-        if (!component.typeID) component.typeID = crypto.randomUUID()
+        // if (!component.typeID) component.typeID = crypto.randomUUID()
         const typeID = component.typeID
 
         entity = typeof entity === "string" ? this.entities.find(e => e.id === entity) as Entity : entity
         if (entity.componentTypes.includes(typeID)) return this// Component already exists
 
-        // Check if entity was added somewhere before, and check if still valid
+        // Check if entity was added somewhere before, \
+        // remove it from there because exclusivity will be broken on the next lines
         const oldKey = queryKey(entity.componentTypes)
         if (oldKey in this.queries && this.queries[oldKey].includes(entity)) {
             const query = this.queries[oldKey]
@@ -46,7 +47,7 @@ export class EntityComponentManager {
         entity.components.push(c)
         entity.componentTypes.push(typeID)
 
-        // TODO check if entity needs to be put into query
+        // check if entity needs to be put into query
         const newKey = queryKey(entity.componentTypes)
         if (newKey in this.queries && !this.queries[newKey].includes(entity)) this.queries[newKey].push(entity)
 
@@ -63,7 +64,7 @@ export class EntityComponentManager {
  * @return {Number}    A 32bit integer
  * @see http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
  */
-export function hashCode(str: string) {
+export function hashCode(str: string): number {
     let hash = 0;
     for (let i = 0, len = str.length; i < len; i++) {
         let chr = str.charCodeAt(i);

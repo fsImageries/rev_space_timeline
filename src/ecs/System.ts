@@ -1,4 +1,4 @@
-import { Component, ComponentConstructor } from "./Component"
+import { ComponentConstructor } from "./Component";
 import { Entity } from "./Entity";
 import { hashCode } from "./EntityComponentManager";
 import { World } from "./World";
@@ -10,7 +10,7 @@ export abstract class System {
     static queries: SystemQueries
 
     public world: World;
-    public components: Entity[]
+    public entities: Entity[]
     public enabled: boolean
     public executeTime: number;
     public key: number;
@@ -21,7 +21,7 @@ export abstract class System {
         this.enabled = true
         this.executeTime = -1
         this.key = queryKey(that.queries)
-        this.components = world.ecManager.getQuery(this.key)
+        this.entities = world.ecManager.getQuery(this.key)
     }
 
     abstract execute(delta: number, time: number): void;

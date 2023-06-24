@@ -3,7 +3,7 @@ export type ComponentSchema = {
 };
 
 export abstract class Component<T extends ComponentSchema> {
-    static typeID: string
+    static typeID: string = crypto.randomUUID()
     static isTag: boolean = true
 
     public instanceID: string;

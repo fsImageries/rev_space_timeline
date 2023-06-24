@@ -7,9 +7,8 @@ import { World } from '../src/ecs/World';
 describe("SystemManager test", () => {
     it("instantiate subclass", () => {
         // Arrange
-        const world = new World()
         // Act
-        const act = () => new SystemManager(world)
+        const act = () => new World()
         // Assert
         expect(act).not.toThrowError("Extended System couldn't be instantiated")
     })
@@ -17,7 +16,7 @@ describe("SystemManager test", () => {
     it("register component", () => {
         // Arrange
         const world = new World()
-        const manager = new SystemManager(world)
+        const manager = world.sysManager
         // Act
         manager.registerSystem(RadiusMultSystem)
         // Assert
@@ -28,7 +27,7 @@ describe("SystemManager test", () => {
     it("unregister component", () => {
         // Arrange
         const world = new World()
-        const manager = new SystemManager(world)
+        const manager = world.sysManager
         manager.registerSystem(RadiusMultSystem)
         // Act
         manager.unregisterSystem(RadiusMultSystem)

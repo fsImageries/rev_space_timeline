@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { RadiusComponent } from './samples';
-
 
 describe("Component test", () => {
     it("instantiate subclass", () => {

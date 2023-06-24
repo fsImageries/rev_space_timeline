@@ -1,13 +1,39 @@
 import { describe, it, expect } from 'vitest';
 import { SystemManager } from "../src/ecs/SystemManager"
+import { RadiusComponent, RadiusMultSystem } from './samples';
+import { World } from '../src/ecs/World';
 
 
-describe("System test", () => {
+describe("SystemManager test", () => {
     it("instantiate subclass", () => {
         // Arrange
+        const world = new World()
         // Act
-        const act = () => new SystemManager("")
+        const act = () => new SystemManager(world)
         // Assert
         expect(act).not.toThrowError("Extended System couldn't be instantiated")
+    })
+
+    it("register component", () => {
+        // Arrange
+        const world = new World()
+        const manager = new SystemManager(world)
+        // Act
+        manager.registerSystem(RadiusMultSystem)
+        // Assert
+        expect(manager.systems.length).to.be.equal(1, `Manager systems should be len(1) after registering but is len(${manager.systems.length})`)
+        expect(manager.getSystem(RadiusMultSystem)).not.be.undefined
+    })
+
+    it("unregister component", () => {
+        // Arrange
+        const world = new World()
+        const manager = new SystemManager(world)
+        manager.registerSystem(RadiusMultSystem)
+        // Act
+        manager.unregisterSystem(RadiusMultSystem)
+        // Assert
+        expect(manager.systems.length).to.be.equal(0, `Manager systems should be len(0) after unregistering but is len(${manager.systems.length})`)
+        expect(manager.getSystem(RadiusMultSystem)).be.undefined
     })
 })

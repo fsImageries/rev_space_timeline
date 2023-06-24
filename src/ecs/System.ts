@@ -1,20 +1,27 @@
 import { Component, ComponentConstructor } from "./Component"
+import { Entity } from "./Entity";
+import { hashCode } from "./EntityComponentManager";
+import { World } from "./World";
 
-type SystemQueries = ComponentConstructor<any, any>[];
+export type SystemQuery = ComponentConstructor<any, any>
+export type SystemQueries = SystemQuery[];
 
 export abstract class System {
     static queries: SystemQueries
 
-    public world: any;
-    public components: Component<any>[][]
+    public world: World;
+    public components: Entity[]
     public enabled: boolean
     public executeTime: number;
+    public key: number;
 
-    constructor(world: any) {
+    constructor(world: World) {
+        const that = (this.constructor as typeof System)
         this.world = world
-        this.components = [] // TODO need to implement query function
         this.enabled = true
         this.executeTime = -1
+        this.key = queryKey(that.queries)
+        this.components = world.ecManager.getQuery(this.key)
     }
 
     abstract execute(delta: number, time: number): void;
@@ -26,15 +33,11 @@ export abstract class System {
 
 export interface SystemConstructor<T extends System> {
     queries: SystemQueries;
-    getName():string;
+    getName(): string;
     new(...args: any): T;
 }
 
-
-// class Render extends System {
-//     execute(delta: number, time: number): void {
-//         this.components.forEach(([motion, vector]) => {
-//             motion.data.x
-//         })
-//     }
-// }
+export function queryKey(components: SystemQueries | string[]) {
+    if (components.length === 0) return -1
+    return hashCode(components.map(c => typeof(c) === "string" ? c : (c as SystemQuery).typeID).join("::"))
+}

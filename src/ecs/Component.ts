@@ -3,10 +3,15 @@ export type ComponentSchema = {
 };
 
 export abstract class Component<T extends ComponentSchema> {
-    static typeID: number
+    static typeID: string
     static isTag: boolean = true
 
-    constructor(public data: T) {}
+    public instanceID: string;
+
+    constructor(public data: T) {
+        this.instanceID = crypto.randomUUID();
+        (this.constructor as typeof Component).typeID = crypto.randomUUID();
+    }
 }
 
 export class TagComponent<T extends ComponentSchema> extends Component<T> {
@@ -14,15 +19,7 @@ export class TagComponent<T extends ComponentSchema> extends Component<T> {
 }
 
 export interface ComponentConstructor<T extends ComponentSchema, C extends Component<T>> {
+    typeID: string
     isTag: boolean;
     new(data: T): C;
 }
-
-// class Some extends Component {}
-// Some.isTag = false
-// Some.schema = {x: 1}
-
-// const s:ComponentConstructor<Some> = Some
-// const s2 = new s({schema: {}, isTag:false})
-
-// console.log(s.schema, s.isTag)

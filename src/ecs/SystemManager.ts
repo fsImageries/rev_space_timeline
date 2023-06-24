@@ -1,24 +1,13 @@
 import { System, SystemConstructor } from "./System";
+import { World } from "./World";
 
 export class SystemManager {
     public systems: System[];
-    public world: any;
+    public world: World;
 
-    constructor(world: any) {
+    constructor(world: World) {
         this.systems = []
         this.world = world
-
-        // class Render extends System {
-        //     execute(delta: number, time: number): void {
-        //         this.components.forEach(([motion, vector]) => {
-        //             motion.data.x
-        //         })
-        //     }
-        // }
-
-        // // const r = new Render(world, 2)
-        // this.registerSystem(Render)
-        // this.unregisterSystem(Render)
     }
 
     public execute(delta:number, time: number) {

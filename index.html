@@ -10,57 +10,118 @@
   <link rel="stylesheet" href="./src/styles/baseStyle.css">
   <link rel="stylesheet" href="./src/styles/progressBar.css">
   <link rel="stylesheet" href="./src/styles/infoPanel.css">
-
+  <link rel="stylesheet" href="./src/styles/cosmicMap.css">
+  <link rel="stylesheet" href="./src/styles/cornerBtn.css">
 </head>
 
 <body>
   <canvas id="main"></canvas>
+
+  <img id="home" src="./house-solid.svg" alt="Home-button">
+  <div id="help" class="cornerBtn tooltip" data-target="">
+    <img id="helpImg" class="cornerImg help" src="./question-solid.svg" alt="Help-button">
+    <span class="tooltip-text">See all functionality</span>
+  </div>
+
+  <div id="forward" class="cornerBtn tooltip" data-target="">
+    <img id="forwardImg" class="cornerImg forward" src="./forward-solid.svg" alt="Switch-system-button">
+    <span class="tooltip-text">Switch system</span>
+  </div>
+
+  <div id="zoomArea">
+    <span id="zoomTxt">Zoom</span>
+    <div id="zoomArrow" class="arrow">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
   <div id="loading">
-    <div id="titleArea">
-      <div class="title">Revelation Space - Timeline</div>
-      <div class="subTitle"><span>by Alastair Reynolds</span><span>(Beware of Spoilers)</span></div>
-    </div>
     <div id="progressArea">
+      <span class="loading">Loading<span>.</span><span>.</span><span>.</span></span>
       <progress id="progress" aria-label="Loading/Processing assets" value="0" max="100"></progress>
-      <button id="startBtn">Start</button>
     </div>
-    <div id="titleArea2">
-      <span class="text">
-        Texts are sourced from the books and<br>
-        <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/revelation-space-universe-timeline/">
+  </div>
+
+  <div id="cosmicMapTItle">
+    <div class="titleArea">
+      <span class="title">Revelation Space - Timeline</span>
+      <span class="subTitle"><span>by Alastair Reynolds</span><span>(Beware of Spoilers)</span></span>
+    </div>
+    <div id="cosmicTextArea" class="textArea">
+      Texts are sourced from the books and<br>
+      <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/revelation-space-universe-timeline/">
             alastairreynolds.com</a>
           </code><br>
-        <code><a target="_blank" href="https://revelationspace.fandom.com/wiki/Revelation_Space_Wiki">
+      <code><a target="_blank" href="https://revelationspace.fandom.com/wiki/Revelation_Space_Wiki">
           revelationspace.fandom.com</a>
         </code><br>
-        <code><a target="_blank" href="https://wikipedia.org/wiki/Revelation_Space_series">
+      <code><a target="_blank" href="https://wikipedia.org/wiki/Revelation_Space_series">
           wikipedia.org/wiki/Revelation_Space_series</a>
         </code><br>
 
+      Revelation Space Map:<br>
+      <code><a target="_blank" href="https://www.alastairreynolds.com/rs-universe/map-of-the-rs-universe/">
+          alastairreynolds.com/rs-universe/map-of-the-rs-universe</a>
+        </code><br>
 
-        <br>Source code:<br>
-        <code><a target="_blank" href="https://github.com/fsImageries/rev_space_timeline">
+      Source code:<br>
+      <code><a target="_blank" href="https://github.com/fsImageries/rev_space_timeline">
           github.com/fsImageries/rev_space_timeline</a>
         </code><br>
-      </span>
-    </div>
-    <!-- <button id="startBtn">Start</button> -->
-  </div>
-
-
-  <div id="parent" class="lil-gui allow-touch-styles root autoPlace">
-    <div id="child" class="lil-gui">
-      <div id="title_div" class="lil-gui">
-        <div id="title" class="lil-gui"></div>
-        <div id="title_sep" class="lil-gui">-</div>
-        <div id="title_parent" class="lil-gui"></div>
-      </div>
-      <div id="text" class="lil-gui">
-      </div>
-      <!-- <div id="footer" class="lil-gui">x: 0.23 y: 1.25 z: 12.1</div> -->
     </div>
   </div>
+
+  <div id="infoPanel">
+    <div class="title">
+      <span id="infoPanelMain" class="main"></span>
+      <span id="infoPanelSub" class="sub"></span>
+    </div>
+
+    <div id="infoPanelContent" class="content">
+      <div id="infoPanelTimeline" class="timeline">
+       
+      </div>
+      <div id="infoPanelHelp" class="help">
+        <div class="item">
+          <code class="itemFunc">Scroll/Wheel</code>
+          <span>Scroll to zoom through the scene.</span>
+        </div>
+
+        <div class="item">
+          <code class="itemFunc">Click + Mousemove</code>
+          <span>Click and move mouse to pan around.</span>
+        </div>
+
+        <div class="item">
+          <code class="itemFunc">Dbl Click</code>
+          <span>Double click an object to auto zoom to it.</span>
+        </div>
+
+        <div class="item">
+          <code class="itemFunc">Hold AltGr + Mousemove</code>
+          <span>Hold AltGr to move the focus point.</span>
+        </div>
+
+        <div class="item">
+          <code class="itemFunc">Click <img id="forwardImg" class="cornerImg forward" src="./forward-solid.svg" alt="Switch-system-button"></code>
+          <span>Switch to the nearest solar system.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="infoPanelNav" class="nav">
+      <img id="infoPanelTimelineIco" class="timelineIcon" data-id="infoPanelTimeline" src="./timeline-solid.svg">
+      <img id="infoPanelHelpIco" class="helpIcon" data-id="infoPanelHelp" src="./question-solid.svg">
+      <!-- <img class="settingsIcon" src="./sliders-solid.svg"> -->
+    </div>
+  </div>
+
   <script type="module" src="/src/app.ts"></script>
+
+  <code id="version" class="version"></code>
 </body>
+
 
 </html>

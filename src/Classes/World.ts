@@ -1,15 +1,17 @@
 import GUI from "lil-gui";
 import * as THREE from "three";
-import Constants from "../helpers/Constants";
-import { getMasterGrp } from "../helpers/utils";
-import { resizeRendererToDisplaySize } from "../helpers/utils";
-import { Camera } from "./Camera";
-import { InfoPanel } from "./InfoPanel";
+import systemFactoryAsync from "../Factories/SystemFactory";
 import { System } from "../Models/System";
+import celestialData from "../data/object_data.yaml";
+import Constants from "../helpers/Constants";
+import { resizeRendererToDisplaySize } from "../helpers/utils";
+import { SystemsData, TextObject } from "../jsonInterfaces";
+import { Camera } from "./Camera";
+import { ClickManager } from "./ClickManager";
 
+const DATA = celestialData as SystemsData;
 let lastTime: number;
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
-
 export class World {
   canvas: HTMLElement;
   renderer: THREE.WebGLRenderer;
@@ -20,22 +22,24 @@ export class World {
   cam: Camera;
 
   gui: GUI;
-  infoPanel: InfoPanel;
+  clickManager: ClickManager;
 
   clickPointer: THREE.Vector2;
   raycaster: THREE.Raycaster;
 
-  systems: System[];
+  systems: [System, TextObject[]][];
   curSystem: System;
 
-  constructor(system: System, infoPanel: InfoPanel) {
+  firstLoad: boolean;
+
+  constructor() {
     // Canvas, Renderer, Scene
     this.canvas = document.querySelector(`canvas#main`);
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       antialias: true,
       alpha: true,
-      logarithmicDepthBuffer: true,
+      logarithmicDepthBuffer: true
     });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
@@ -49,14 +53,13 @@ export class World {
     this.clock = new THREE.Clock();
     this.delta = 0;
 
-    this.curSystem = system;
-    this.systems = [system];
+    // this.curSystem = system;
+    this.systems = [];
 
     this.clickPointer = new THREE.Vector2(Infinity, Infinity);
     this.raycaster = new THREE.Raycaster();
 
     // Init methods
-    this.initListeners();
 
     this.gridhelper = new THREE.GridHelper(100, 100, "teal", "darkgray");
     this.gridhelper.scale.setScalar(10000);
@@ -64,16 +67,22 @@ export class World {
     this.scene.add(this.gridhelper);
 
     // Sky box
-    const backgroundImage = Constants.TEX_LOAD("/starmap_8k.jpg");
+    const backgroundImage = Constants.TEX_LOAD("./starmap_8k.jpg");
     backgroundImage.mapping = THREE.EquirectangularReflectionMapping;
     backgroundImage.encoding = THREE.sRGBEncoding;
     this.scene.background = backgroundImage;
 
     this.scene.add(new THREE.AmbientLight("#ffffff", 0.03));
+    this.clickManager = new ClickManager(this);
+  }
 
-    this.curSystem.initWorld(this)
-    this.infoPanel = infoPanel;
-    infoPanel.init(this.curSystem)
+  public initSys(system: System, data: { freeCam: boolean; texts: TextObject[] }) {
+    this.curSystem = system;
+    this.curSystem.initWorld(this, data.freeCam);
+    Constants.UIMANAGER.infoPanel.init(this.curSystem, data.texts);
+    Constants.UIMANAGER.infoPanel.writeFullTimeline(system);
+    Constants.UIMANAGER.homeBtn.style.visibility = system.name == "cosmicMap" ? "hidden" : "visible";
+    if (!this.systems.find((sys) => sys[0].name == system.name)) this.systems.push([system, data.texts]);
   }
 
   public initGui() {
@@ -100,75 +109,41 @@ export class World {
     worldFolder.add(this, "topView").name("Top View");
     worldFolder.add(this.gridhelper, "visible").name("Grid visiblity");
     worldFolder.add(Constants, "MAN_CELESTIAL_ORB").name("Force Orb Rot");
+    worldFolder.add(this, "logCamera").name("Log Camera");
+
+    this.gui.close();
+
+    // TODO decouple this and put it into the system on startup
+    this.cam.free.position.set(0, 2117.999902022348, -10175.846962935977);
+    this.cam.freeCtrl.update();
   }
 
-  public initListeners() {
-    const dblclickHandler = (event: MouseEvent) => {
-      this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-      this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  public logCamera() {
+    console.log(this.cam.active.position);
+    console.log(this.cam.active.rotation);
+  }
 
-      let target = this.raycastTarget();
-      if (!target) return;
-      target = getMasterGrp(target);
-      const obj = this.curSystem.getById(target.userData["id"]);
-      if (!obj) return;
-      this.cam.setFollowTarget(obj);
-      this.cam.activateThird();
-      this.cam.third2Free();
-    };
-
-    const clickHandler = (event: MouseEvent) => {
-      if ((event.target as HTMLElement).id.includes("startBtn")) return
-      
-      this.clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-      this.clickPointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      const target = this.raycastTarget();
-      if (!target) { this.infoPanel.visible = false; return }
-      const obj = this.curSystem.getById(getMasterGrp(target).userData["id"]);
-      if (!obj) { this.infoPanel.visible = false; return }
-
-      // if (obj.data.type == "sun") {
-      //   this.infoPanel.showAll(this.curSystem);
-      //   return
-      // }
-
-      // console.log(target) // TODO react when something like glitterband is clicked
-      if (target.name.includes("_infoSprite")) {
-        this.infoPanel.show(obj);
-        return;
-      }
-
-      if (this.infoPanel.visible) this.infoPanel.visible = false
-    };
-
-    const keyHandler = (e: KeyboardEvent) => {
-      this.cam.rotateThird(e.key.toLowerCase())
+  public async switchSystem(name: string) {
+    const found = this.systems.find(([s, _]) => s.name == name);
+    const old = this.curSystem;
+    if (!found) {
+      const d = DATA.systems.find((s) => s.name == name);
+      if (d) this.initSys(await systemFactoryAsync(d), { freeCam: d.freeCam, texts: d.texts });
     }
+    // TODO inject text for cosmic map somehow
+    else this.initSys(found[0], { freeCam: false, texts: found[1] });
 
-    let mousedown = false;
-    const mouseDown = () => {
-      mousedown = true;
-    };
-    const mouseUp = () => {
-      mousedown = false;
-    };
-    const mouesMove = (e: MouseEvent) => {
-      if (mousedown && e.altKey && !this.cam.isFree) {
-        this.cam.third2Free();
-        this.cam.activateFree();
-      }
-    };
+    this.scene.remove(old.topGrp);
+    this.scene.add(this.curSystem.topGrp);
+    this.cam.stopWheel = true;
+    Constants.UIMANAGER.cornerButton.switch("help");
 
-    window.addEventListener("dblclick", dblclickHandler);
-    window.addEventListener("click", clickHandler);
-    window.addEventListener("mousedown", mouseDown);
-    window.addEventListener("mouseup", mouseUp);
-    window.addEventListener("mousemove", mouesMove);
-    window.addEventListener("keydown", keyHandler)
+    // wheel event fires after switch and destroys the floating animation, so we disable it
+    setTimeout(() => {
+      this.cam.stopWheel = false;
+    }, 1500);
   }
 
-  // World methods
   public update() {
     if (resizeRendererToDisplaySize(this.renderer)) {
       const canvas = this.renderer.domElement;
@@ -178,12 +153,11 @@ export class World {
 
     this.curSystem.update(this);
     this.cam.update(this.delta);
+    this.renderer.clear();
     this.renderer.render(this.scene, this.cam.active);
   }
 
   static eventLoop(now: number, world: World) {
-    window.requestAnimationFrame((n: number) => World.eventLoop(n, world));
-
     // delta time
     if (!lastTime) {
       lastTime = now;
@@ -195,22 +169,17 @@ export class World {
       world.update();
       lastTime = now;
     }
+
+    requestAnimationFrame((n: number) => World.eventLoop(n, world));
   }
 
   // Helper methods
-  public raycastTarget() {
-    this.raycaster.setFromCamera(this.clickPointer, this.cam.active);
-    const intersects = this.raycaster.intersectObjects(this.curSystem.topGrp.children);
-    this.clickPointer.set(Infinity, Infinity);
-
-    if (intersects.length === 0) return undefined;
-
-    return intersects[0].object;
-  }
-
   public topView() {
     this.cam.activateFree();
-    this.cam.freeCtrl.setTarget(0, 0, 0, true);
-    this.cam.freeCtrl.setPosition(0, this.curSystem.radius * 4, 0);
+    // this.cam.freeCtrl.setTarget(0, 0, 0, true);
+    // this.cam.freeCtrl.setPosition(0, this.curSystem.radius * 4, 0);
+
+    this.cam.freeCtrl.target.set(0, 0, 0);
+    this.cam.free.position.set(0, this.curSystem.radius * 4, 0);
   }
 }

@@ -1,11 +1,10 @@
-import CameraControls from "camera-controls";
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import SystemObject from "../Classes/SystemObject";
-import { World } from "./World";
 import Constants from "../helpers/Constants";
+import { World } from "./World";
 
-CameraControls.install({ THREE: THREE });
-type Controls = CameraControls;
+type Controls = OrbitControls;
 
 export class Camera {
   private _active: THREE.PerspectiveCamera;
@@ -22,6 +21,9 @@ export class Camera {
   private _baseOffset: THREE.Vector3;
   private _baseLookat: THREE.Vector3;
 
+  public stopWheel?: boolean;
+  public zoomed?: boolean;
+
   constructor(canvas: HTMLCanvasElement, world: World) {
     this.free = new THREE.PerspectiveCamera(30, canvas.clientWidth / canvas.clientHeight, 0.1, 1e10);
     this.third = new THREE.PerspectiveCamera(55, canvas.clientWidth / canvas.clientHeight, 0.1, 1e10);
@@ -29,7 +31,10 @@ export class Camera {
     this.free.position.set(0, 0, -10000);
     this.third.position.set(0, 0, -10000);
 
-    this.freeCtrl = new CameraControls(this.free, world.renderer.domElement);
+    this.freeCtrl = new OrbitControls(this.free, world.renderer.domElement);
+    this.freeCtrl.enableDamping = true;
+    this.freeCtrl.dampingFactor = 0.5;
+    // this.freeCtrl = new CameraControls(this.free, world.renderer.domElement);
 
     this._active = this.free;
     this._isFree = true;
@@ -46,7 +51,7 @@ export class Camera {
     return this._active;
   }
 
-  public get thirdTarget(): SystemObject {
+  public get thirdTarget(): SystemObject | undefined {
     return this._thirdTarget;
   }
 
@@ -57,20 +62,20 @@ export class Camera {
   public rotateThird(key: string) {
     switch (key) {
       case "arrowleft":
-        this._dummyRotate.rotateY(Constants.CAM_ROT_SPEED)
+        this._dummyRotate.rotateY(Constants.CAM_ROT_SPEED);
         break;
 
       case "arrowright":
-        this._dummyRotate.rotateY(-Constants.CAM_ROT_SPEED)
-        break
+        this._dummyRotate.rotateY(-Constants.CAM_ROT_SPEED);
+        break;
 
       case "arrowup":
-        this._dummyRotate.rotateX(Constants.CAM_ROT_SPEED)
-        break
+        this._dummyRotate.rotateX(Constants.CAM_ROT_SPEED);
+        break;
 
       case "arrowdown":
-        this._dummyRotate.rotateX(-Constants.CAM_ROT_SPEED)
-        break
+        this._dummyRotate.rotateX(-Constants.CAM_ROT_SPEED);
+        break;
     }
   }
 
@@ -83,57 +88,98 @@ export class Camera {
     lookat.applyQuaternion(Constants.WORLD_QUAT);
     lookat.add(Constants.WORLD_POS);
 
-    Constants.WORLD_QUAT.multiplyQuaternions(Constants.WORLD_QUAT, Constants.WORLD_QUAT2)
+    Constants.WORLD_QUAT.multiplyQuaternions(Constants.WORLD_QUAT, Constants.WORLD_QUAT2);
     const offset = this._baseOffset.clone();
     offset.applyQuaternion(Constants.WORLD_QUAT);
     offset.add(Constants.WORLD_POS);
 
-    return [lookat, offset]
+    return [lookat, offset];
   }
 
   public setFollowTarget(target: SystemObject) {
     this._thirdTarget = target;
-    this._dummyRotate.copy(target.object.masterGrp)
+    this._dummyRotate.copy(target.object.masterGrp);
 
-    const rad = this._thirdTarget.drawRadius
+    const rad = this._thirdTarget.drawRadius;
     this._baseOffset = new THREE.Vector3(rad * 5, rad * 2, -rad * 6);
     this._baseLookat = new THREE.Vector3(0, rad / 2, rad);
   }
 
   public third2Free() {
-    this.third.getWorldPosition(Constants.WORLD_POS);
-    this.freeCtrl.setPosition(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
-
     this._thirdTarget.object.masterGrp.getWorldPosition(Constants.WORLD_POS);
-    this.freeCtrl.setTarget(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
+    this.freeCtrl.target.set(Constants.WORLD_POS.x, Constants.WORLD_POS.y, Constants.WORLD_POS.z);
+
+    this.third.getWorldPosition(this.free.position);
+    this.third.getWorldQuaternion(this.free.quaternion);
+  }
+
+  public initListeners() {
+    const keyHandler = (e: KeyboardEvent) => {
+      this.rotateThird(e.key.toLowerCase());
+    };
+
+    let mousedown = false;
+    const mouseDown = () => {
+      this.stopWheel = false;
+      mousedown = true;
+    };
+    const mouseUp = () => {
+      mousedown = false;
+    };
+    const wheel = () => {
+      if (!this.zoomed) {
+        Constants.UIMANAGER.zoomVisible = false;
+        this.zoomed = true;
+      }
+
+      if (!this.isFree && !this.stopWheel) {
+        this.third2Free();
+        this.activateFree();
+      }
+    };
+
+    const mouseMove = () => {
+      if (mousedown && !this.isFree) {
+        this.third2Free();
+        this.activateFree();
+      }
+    };
+
+    window.addEventListener("mousedown", mouseDown);
+    window.addEventListener("mouseup", mouseUp);
+    window.addEventListener("mousemove", mouseMove);
+    window.addEventListener("wheel", wheel);
+    window.addEventListener("keydown", keyHandler);
   }
 
   public activateThird() {
-    Constants.CELESTIAL_ORB = true
+    Constants.CELESTIAL_ORB = true;
     this._active = this.third;
     this._isFree = false;
   }
 
   public activateFree() {
-    Constants.CELESTIAL_ORB = false
+    Constants.CELESTIAL_ORB = false;
     this._active = this.free;
     this._isFree = true;
   }
 
   public update(delta: number) {
-    const [lookat, offset] = this.calculateTarget()
+    if (this._thirdTarget) {
+      const [lookat, offset] = this.calculateTarget();
 
-    if (Constants.ORB_SCALE >= 100000000) {
-      this._currentPosition.copy(offset);
-    } else {
-      const t = 1.0 - Math.pow(0.001, delta);
-      this._currentPosition.lerp(offset, t);
+      if (Constants.ORB_SCALE >= 100000000) {
+        this._currentPosition.copy(offset);
+      } else {
+        const t = 1.0 - Math.pow(0.001, delta);
+        this._currentPosition.lerp(offset, t);
+      }
+      this._currentLookat.copy(lookat);
+
+      this.third.position.copy(this._currentPosition);
+      this.third.lookAt(this._currentLookat);
     }
-    this._currentLookat.copy(lookat);
 
-    this.third.position.copy(this._currentPosition);
-    this.third.lookAt(this._currentLookat);
-
-    this.freeCtrl.update(delta);
+    this.freeCtrl.update();
   }
 }

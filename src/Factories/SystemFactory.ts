@@ -1,32 +1,32 @@
 import planetFactory from "../Factories/PlanetFactory";
 import sunFactory from "../Factories/SunFactory";
 import { SunData, SystemData } from "../jsonInterfaces";
-import oortFactoryAsync from "../Factories/OortFactory";
-import particleRingFactory from "../Factories/ParticleRingFactory";
+import oortFactory from "../Factories/OortFactory";
+import particleRingFactoryAsync from "../Factories/ParticleRingFactory";
 import { System } from "../Models/System";
 import SystemObject from "../Classes/SystemObject";
 import Constants from "../helpers/Constants";
 
 const map = {
   // TODO make to dynamic import on actual use
-  "sun": sunFactory,
+  sun: sunFactory,
   "planet;moon": planetFactory,
-  "particlering": particleRingFactory,
-  "oortcloud": oortFactoryAsync
+  particlering: particleRingFactoryAsync,
+  oortcloud: oortFactory
 };
 
 export default async function buildAsync(data: SystemData) {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`)
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
   const name = data.name;
   const isSingleSun = data.isSingleSun;
   const flat = await buildObjects(data);
   const tree = connectSatellites(flat);
 
-  const sys = new System({ isSingleSun, name, tree, flat });
+  const sys = new System({ isSingleSun, name, tree, flat, startTarget: data.startTarget });
 
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
-  return sys
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
+  return sys;
 }
 
 async function buildObjects(data: SystemData) {

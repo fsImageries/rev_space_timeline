@@ -3,6 +3,9 @@ systems:
 - name: epsilonEridani
   isSingleSun: true
 
+  startTarget: yellowstone  # determines which object should be targeted when the system is loaded
+  freeCam: false            # determine if the scene should start in freeCam mode (Cosmic Map starts in freemode)
+
   objects:
   - name: epsilonEridani
     type: sun
@@ -26,8 +29,8 @@ systems:
     tilt: 45
     distanceToParent: 5086400000
     draw:
-      albedoPath: "/epsilonEridani/2k_jupiter.jpg"
-      normalPath: "/epsilonEridani/ceres_normal_16k.png"
+      albedoPath: "./epsilonEridani/2k_jupiter.jpg"
+      normalPath: "./epsilonEridani/ceres_normal_16k.png"
       glowColor: '0xffffff'
       glowIntensity: 0.1
       radius: 100
@@ -41,8 +44,8 @@ systems:
     tilt: 20
     distanceToParent: 59840000000
     draw:
-      albedoPath: "/epsilonEridani/2k_venus_surface.jpg"
-      normalPath: "/epsilonEridani/ceres_normal_16k.png"
+      albedoPath: "./epsilonEridani/2k_venus_surface.jpg"
+      normalPath: "./epsilonEridani/ceres_normal_16k.png"
       glowColor: '0xf69f1f'
       glowIntensity: 0.25
       radius: 100
@@ -56,8 +59,8 @@ systems:
     tilt: 0
     distanceToParent: 308440000
     draw:
-      albedoPath: "/epsilonEridani/marcosEye/moon_albedo.jpg"
-      normalPath: "/epsilonEridani/marcosEye/moon_normal.png"
+      albedoPath: "./epsilonEridani/marcosEye/moon_albedo.jpg"
+      normalPath: "./epsilonEridani/marcosEye/moon_normal.png"
       glowColor: '0xffffff'
       glowIntensity: 0.1
       radius: 1
@@ -74,10 +77,11 @@ systems:
     tilt: 0          
     distanceToParent: 550000000
     draw:
-      cache: "/epsilonEridani/glitterband.glb"
+      cache: "./epsilonEridani/glitterband.glb"
       count: 1000
-      distDiv: 350000000
-      height: 30
+      distDiv: 3000000000
+      height: 40
+      genColor: true
 
   - name: oortCloud
     type: oortcloud
@@ -85,10 +89,28 @@ systems:
     rotationPeriod: 
     orbitalPeriod: 62000
     parent: epsilonEridani
-    tilt: 0
-    distanceToParent: 747990000000
+    tilt: 0          #1220000000000
+    distanceToParent: 19920000000000
     draw:
+      # cache: "./epsilonEridani/oortcloud.glb"
       radius: 2
+
+  - name: kuiperBelt
+    type: particlering
+    radius: 
+    rotationPeriod: 
+    orbitalPeriod: 752000000
+    parent: epsilonEridani
+    tilt: 0
+    distanceToParent: 748793612000
+    draw:
+      cache: "./epsilonEridani/kuiperbelt.glb"
+      end: 100000
+      count: 1000
+      distDiv: 100000000000
+      height: 400000
+      pointShader: true
+      orbInvert: true
 
   texts:
   - name: tangerineDream

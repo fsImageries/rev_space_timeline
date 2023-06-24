@@ -12,6 +12,8 @@ export default class Internal3DObject {
 
   public markerSprite: Object3D;
 
+  public displayInfo: boolean;
+
   constructor(data: Internal3DObjectParams) {
     this.parentGrp = data.parentGrp;
     this.masterGrp = data.masterGrp;
@@ -22,5 +24,6 @@ export default class Internal3DObject {
     this.orbit = data.orbit;
 
     this.markerSprite = data.markerSprite;
+    this.displayInfo = data.displayInfo == undefined ? true : data.displayInfo;
   }
 }

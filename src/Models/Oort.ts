@@ -14,13 +14,11 @@ export default class Oort extends SystemObject {
   public init() {
     // const range = (this.distanceEnd - this.data.distanceToParent) / Constants.DISTANCE_SCALE;
     // const distanceEnd = this.distanceEnd / Constants.DISTANCE_SCALE;
-
     // const vertexs = [];
     // for (let i = 0; i < PNTCOUNT; i++) {
     //   const [x, y, z] = randSpherePointExcludes(distanceEnd, distanceEnd + range);
     //   vertexs.push(x, y, z);
     // }
-
     // (this.object.masterGrp as Points).geometry.setAttribute("position", new Float32BufferAttribute(vertexs, 3));
   }
 

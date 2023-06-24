@@ -4,25 +4,24 @@ import { Text } from "troika-three-text";
 import { Planet } from "../Models/Planet";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
-import infoSpriteFactory from "./InfoSpriteFactory";
 import build_orbit from "./OrbitFactory";
 
+import { randFloat } from "three/src/math/MathUtils";
 import CelestialBase from "../Classes/CelestialBase";
 import Internal3DObject from "../Classes/Internal3DObject";
 import Constants from "../helpers/Constants";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
-import { randFloat } from "three/src/math/MathUtils";
 
 export default function build(data: SystemObjectData) {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`)
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
   const [mesh, atmo] = build_sphere_mesh_and_atmo(
     new THREE.Color(parseInt(data.draw.glowColor)),
     data.draw.glowIntensity,
     data.draw.albedoPath,
     data.draw.normalPath,
-    data.radius / Constants.SIZE_SCALE,//data.draw.radius,
+    data.radius / Constants.SIZE_SCALE, //data.draw.radius,
     data.name
   );
 
@@ -42,18 +41,12 @@ export default function build(data: SystemObjectData) {
   const orbit = build_orbit(data.draw);
   masterGrp.add(orbit);
 
-  let infoSprite;
-  if (data.texts) {
-    infoSprite = infoSpriteFactory();
-    infoSprite.name = `${data.name}_infoSprite`;
-    parentGrp.add(infoSprite);
-  }
-
   let markerSprite;
   if (!data.type.includes("moon")) {
-    const map = Constants.TEX_LOAD("/diamond-solid.svg");
+    const map = Constants.TEX_LOAD("./diamond-solid.svg");
     const material = new THREE.SpriteMaterial({ map: map });
     markerSprite = new THREE.Sprite(material);
+    markerSprite.name = `${data.name}_markerSprite`;
     markerSprite.position.y = data.draw.radius + data.draw.radius / 3;
     masterGrp.add(markerSprite);
   }
@@ -74,7 +67,7 @@ export default function build(data: SystemObjectData) {
 
   if (data.draw.orbInvert) celestialData.invertAngularOrbVel();
 
-  parentGrp.rotation.y = randFloat(-Math.PI*randFloat(1,2), Math.PI*randFloat(1,2))
+  parentGrp.rotation.y = randFloat(-Math.PI * randFloat(1, 2), Math.PI * randFloat(1, 2));
   const internalObject = new Internal3DObject({
     parentGrp,
     masterGrp,
@@ -82,16 +75,17 @@ export default function build(data: SystemObjectData) {
     mesh,
     atmo,
     orbit,
-    markerSprite: markerSprite
+    markerSprite,
+    displayInfo: data.displayInfo
   });
 
   const planet = new Planet({
     data: celestialData,
     object: internalObject
   });
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`)
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
 
-  return planet
+  return planet;
 }
 
 function build_sphere_mesh_and_atmo(

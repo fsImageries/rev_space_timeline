@@ -1,127 +1,150 @@
 import { System } from "../Models/System";
+import { capitalize, formatTexts, getFirstYear, splitWord, toTitle } from "../helpers/utils";
 import { TextObject } from "../jsonInterfaces";
 import { InfoSpriteManager } from "./InfoSpriteManager";
 import SystemObject from "./SystemObject";
 
-
 type TextsMap = { [key: string]: string };
-const NL_SEP = "\n• "
+
 export class InfoPanel {
-  public _parentPanel: HTMLDivElement;
-  public _titlePanel: HTMLDivElement;
-  public _titleSunPanel: HTMLDivElement;
-  public _textPanel: HTMLDivElement;
-  public _footerPanel: HTMLDivElement;
+  public panel: HTMLElement;
 
-  private _visible: boolean;
-  private _fullTexts: string;
-  private _textMap: TextsMap;
+  public titleMain: HTMLElement;
+  public titleSub: HTMLElement;
+
+  public content: HTMLElement;
+  public timeline: HTMLElement;
+  public help: HTMLElement;
+
+  public nav: HTMLElement;
+  public navIcos: HTMLElement[];
+
   private _spriteManager: InfoSpriteManager;
+  private _textMap: { [key: string]: string };
+  private _fullText: string;
+  private _visible: boolean;
 
-  constructor(texts: TextObject[]) {
-    this.genTexts(texts)
+  private _curContent: HTMLElement;
+  private _curHighlight: HTMLElement;
 
-    this._spriteManager = new InfoSpriteManager()
+  constructor() {
+    this.panel = document.getElementById("infoPanel");
+    this.titleMain = document.getElementById("infoPanelMain");
+    this.titleSub = document.getElementById("infoPanelSub");
 
-    this._parentPanel = document.getElementById("parent") as HTMLDivElement;
-    this._titlePanel = document.getElementById("title") as HTMLDivElement;
-    this._titleSunPanel = document.getElementById("title_parent") as HTMLDivElement;
-    this._textPanel = document.getElementById("text") as HTMLDivElement;
-    this._footerPanel = document.getElementById("footer") as HTMLDivElement;
+    this.content = document.getElementById("infoPanelContent");
+    this.timeline = document.getElementById("infoPanelTimeline");
+    this.help = document.getElementById("infoPanelHelp");
+
+    this.nav = document.getElementById("infoPanelNav");
+    const icos = [];
+
+    for (const ico of this.nav.children) {
+      icos.push(ico as HTMLElement);
+      ico.addEventListener("click", (e) => {
+        const id = (e.target as HTMLElement).getAttribute("data-id");
+        this.updateContent(id);
+      });
+    }
+
+    this.navIcos = icos;
+
+    this._spriteManager = new InfoSpriteManager();
+    this._visible = false;
+    this._curContent = this.help;
+    this._curHighlight = this.navIcos.find((el) => el.id.toLowerCase().includes("help"));
   }
 
-  public get visible(): boolean {
-    return this._visible;
+  public updateContent(elem: string | HTMLElement, switchVisible = false) {
+    if (typeof elem === "string") elem = document.getElementById(elem);
+    if (this._curContent != elem) {
+      this._curContent = elem;
+      this._curHighlight = this.navIcos.find((el) => el.id.includes(this._curContent.id));
+    }
+    this.switchContent();
+    this.switchNavHighlight();
+    if (switchVisible) this.visible = !this.visible;
   }
+
+  private switchNavHighlight() {
+    this.navIcos.forEach((el) => el.classList.remove("hover"));
+    this._curHighlight.classList.add("hover");
+  }
+
+  private switchContent() {
+    this._curContent.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+  }
+
   public set visible(value: boolean) {
     this._visible = value;
-    const val = this._visible ? "visible" : "hidden"
-    this._parentPanel.style.setProperty('visibility', val, 'important')
-    // this._parentPanel.style.visibility = this._visible ? "visible !important" : "hidden !important";
+    value ? (this.panel.style.left = "0vw") : (this.panel.style.left = "-55vw");
   }
 
-  public init(system:System) {
-    const parents = system.flat.filter(obj => obj.data.name in this._textMap || obj.data.type == "sun")
-    this._spriteManager.build(parents)
-    this._spriteManager.init()
+  public get visible() {
+    return this._visible;
   }
 
-  public show(obj: SystemObject) {
-    this.writeTitle(obj.data.name, obj.data.parent || "null");
+  public showTimeline(obj: SystemObject) {
+    this.visible = true;
+
+    this.writeTitle(obj.data.name, obj.data.parent || "Local Group");
     if (obj.data.name in this._textMap) {
-      this.writeText(this._textMap[obj.data.name]);
+      this.writeTimelineText(this._textMap[obj.data.name]);
+      return;
     }
-    else if (obj.data.type == "sun") {
-      this.writeText(this._fullTexts);
+
+    // TODO implement system to select a general info and produce text for suns
+    if (obj.data.type == "sun") {
+      this.writeTimelineText(this._fullText);
+      return;
     }
-    this.visible = true;
   }
 
-  public showAll(system: System) {
-    this.writeTitle(system.name, "")
-    this.writeText(this._fullTexts);
-    this.visible = true;
+  public writeFullTimeline(obj: System) {
+    this.writeTitle(obj.name, "Local Group");
+    this.writeTimelineText(this._fullText);
+  }
+
+  public init(system: System, texts: TextObject[]) {
+    this.genTexts(texts);
+    const parents = system.flat.filter(
+      (obj) => (obj.data.name in this._textMap || obj.data.type == "sun") && obj.object.displayInfo
+    );
+
+    if (parents.length == 0) return;
+    this._spriteManager.build(parents);
+    this._spriteManager.init();
   }
 
   private genTexts(texts: TextObject[]) {
     // generate map from obj to texts
-    const map: TextsMap = {}
-    const formatted: string[][] = []
-    texts.forEach(obj => {
-      const val = this.formatTexts(obj.texts, false) as string[];
-      formatted.push(val)
-      map[obj.name] = val.join("\n\r")
-    })
-    this._textMap = map
+    const map: TextsMap = {};
+    const formatted: string[][] = [];
+    texts.forEach((obj) => {
+      const val = formatTexts(obj.texts, false) as string[];
+      formatted.push(val);
+      map[obj.name] = val.join("\n\r");
+    });
+    this._textMap = map;
 
-    // generate general text (all) 
+    // generate general text (all)
     const sorted = texts
-      .map(obj => this.formatTexts(obj.texts, false, this.capitalize(obj.name)))
+      .map((obj) => formatTexts(obj.texts, true, capitalize(obj.name)))
       .flat()
       .sort((a: string, b: string) => {
-        const year1 = parseInt(this.getFirstYear(this.splitWord(a)[0]))
-        const year2 = parseInt(this.getFirstYear(this.splitWord(b)[0]))
-        return year1 - year2
-    })
-    this._fullTexts = sorted.join("\n\r");
-  }
-
-  private getFirstYear(str: string) {
-    return str.match(/(\d+)\D/)[0]
-  }
-
-  private capitalize(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  private splitWord(str: string) {
-    return str.split(/(?=[A-Z])/);
-  }
-
-  private toTitle(str: string) {
-    return this.splitWord(str)
-      .map((s) => this.capitalize(s))
-      .join(" ");
-  }
-
-  private formatTexts(texts: string[], join = true, infectName: boolean | string = false) {
-    texts = texts.map((t) => {
-      const line = t.split("\n");
-      if (infectName) {
-        line[0] = `${line[0]} (${infectName})`
-      }
-      return `${line[0]}${NL_SEP}${line.slice(1).join(NL_SEP)}`;
-    });
-    if (join) return texts.join("\n\r")
-    return texts
+        const year1 = parseInt(getFirstYear(splitWord(a)[0]));
+        const year2 = parseInt(getFirstYear(splitWord(b)[0]));
+        return year1 - year2;
+      });
+    this._fullText = sorted.join("<br>");
   }
 
   private writeTitle(planetName: string, sunName: string) {
-    this._titlePanel.textContent = this.toTitle(planetName);
-    this._titleSunPanel.textContent = this.toTitle(sunName);
+    this.titleMain.textContent = toTitle(planetName);
+    this.titleSub.textContent = toTitle(sunName);
   }
 
-  private writeText(text: string) {
-    this._textPanel.textContent = text;
+  private writeTimelineText(text: string) {
+    this.timeline.innerHTML = text;
   }
 }

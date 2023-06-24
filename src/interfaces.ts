@@ -33,6 +33,7 @@ export interface Internal3DObjectParams {
   atmo?: THREE.Object3D;
   orbit?: THREE.Object3D;
   markerSprite?: THREE.Object3D;
+  displayInfo?: boolean;
 }
 
 export interface SystemObjectParams {
@@ -46,4 +47,5 @@ export interface SystemParams {
   flat: SystemObject[];
   name: string;
   isSingleSun: boolean;
+  startTarget:string;
 }

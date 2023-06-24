@@ -16,6 +16,7 @@ export class System {
 
   public isSingleSun: boolean;
   public radius: number;
+  public startTarget: string;
 
   constructor(data: SystemParams) {
     this.tree = data.tree;
@@ -27,11 +28,9 @@ export class System {
     this.tree.forEach((obj) => this.topGrp.add(obj.object.parentGrp));
     this._flat = data.flat;
     this.radius = this.getRadius();
-  }
 
-  // public get allCelestialObjects(): CelestialObject[] {
-  //     return this._allCelestialObjects;
-  // }
+    this.startTarget = data.startTarget;
+  }
 
   private getRadius() {
     return this.mainSequenceObjects().reduce((acc, cur) => {
@@ -44,7 +43,9 @@ export class System {
     return this._flat.reduce((acc, cur) => (acc.data.id === id ? acc : cur));
   }
 
-  public get flat() { return this._flat }
+  public get flat() {
+    return this._flat;
+  }
 
   public oortCloud() {
     return this._flat.reduce((acc, cur) => (acc.data.type === "oortcloud" ? acc : cur));
@@ -60,16 +61,21 @@ export class System {
     );
   }
 
+  public initWorld(world: World, freeCam = false) {
+    this.init();
+    // world.scene.add(this.topGrp);
+
+    const obj = this._flat.find((obj) => obj.data.name == this.startTarget);
+    if (!obj) return;
+    world.cam.setFollowTarget(obj);
+    freeCam ? world.cam.activateFree() : world.cam.activateThird();
+  }
+
   public init() {
     this.radius = this.getRadius();
     const lightRadius = (this.oortCloud() as Oort).distanceEnd / Constants.DISTANCE_SCALE;
     (this.suns() as Sun[]).forEach((sun) => (sun.lightRadius = lightRadius));
     this.tree.forEach((obj) => obj.init());
-  }
-
-  public initWorld(world: World) {
-    this.init();
-    world.scene.add(this.topGrp);
   }
 
   public update(world: World) {

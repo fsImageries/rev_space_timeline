@@ -5,11 +5,10 @@ import Oort from "../Models/Oort";
 import { uuidv4 } from "../helpers/utils";
 import { SystemObjectData } from "../jsonInterfaces";
 
-import PWorker from "../workers/ParticleWorker?worker"
+import PWorker from "../workers/ParticleWorker?worker";
 import Constants from "../helpers/Constants";
 
-
-export default async function buildAsync(data: SystemObjectData) {
+export default function build(data: SystemObjectData) {
   const material = new PointsMaterial({
     color: "white",
     opacity: 0.2,
@@ -18,13 +17,13 @@ export default async function buildAsync(data: SystemObjectData) {
   const geometry = new BufferGeometry();
   const points = new Points(geometry, material);
 
-  const worker = new PWorker()
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`)
-  worker.postMessage({type:data.type, distanceToParent:data.distanceToParent, distScale:Constants.DISTANCE_SCALE})
+  const worker = new PWorker();
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`);
+  worker.postMessage({ type: data.type, distanceToParent: data.distanceToParent, distScale: Constants.DISTANCE_SCALE });
   worker.onmessage = (event) => {
-    Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`)
-    geometry.setAttribute("position", new Float32BufferAttribute(event.data, 3));
-  }
+    Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`);
+    geometry.setAttribute("position", new Float32BufferAttribute(event.data[0], 3));
+  };
 
   const parentGrp = new Group();
   parentGrp.add(points);

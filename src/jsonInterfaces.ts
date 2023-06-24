@@ -1,3 +1,5 @@
+import { ColorRepresentation } from "three";
+
 export interface DrawData {
   radius: number;
   cache?: string,
@@ -11,11 +13,17 @@ export interface DrawData {
   height?: number;
   orbInvert?: boolean;
   orbLen?: number;
+  genColor?: boolean;
+  pointShader?: boolean;
+  end?: number;
 }
 
 export interface SunData extends SystemObjectData {
   highTemp: number;
   lowTemp: number;
+  isSimple?: boolean;
+  color?: ColorRepresentation;
+  disableLight?: boolean;
 }
 
 export interface SystemsData {
@@ -32,6 +40,9 @@ export interface SystemData {
   isSingleSun: boolean;
   objects: SystemObjectData[];
   texts: TextObject[];
+  
+  startTarget:string;
+  freeCam:boolean;
 }
 
 export interface SystemObjectData {
@@ -47,4 +58,5 @@ export interface SystemObjectData {
   // lowTemp: 1700 # TODO implement into new interfaces
   draw: DrawData;
   texts?: string[];
+  displayInfo?: boolean;
 }

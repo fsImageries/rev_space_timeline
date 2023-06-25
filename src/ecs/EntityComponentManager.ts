@@ -1,7 +1,10 @@
 import { Component, ComponentConstructor, ComponentSchema } from "./Component";
 import { Entity } from "./Entity";
+import { SystemQueries } from "./System";
 
-type Query = { [systemID: string]: { componentIDs: string[]; entities: Entity[] } };
+// type Query = { [systemID: string]: { componentIDs: string[]; entities: Entity[] } };
+export type QueryElements = { componentIDs: string[]; entities: Entity[] }[] ;
+export type Query = { [systemID: string]: QueryElements };
 
 export class EntityComponentManager {
   public queries: Query;
@@ -13,9 +16,17 @@ export class EntityComponentManager {
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any*/
-  public getQuery(id: string, components: ComponentConstructor<any, any>[]) {
-    if (!(id in this.queries)) this.queries[id] = { componentIDs: components.map((c) => c.typeID), entities: [] };
-    return this.queries[id].entities;
+  public getQuery(id: string, components: SystemQueries) {
+    if (!(id in this.queries)) {
+      this.queries[id] = components.map(comp => {
+        return {
+          componentIDs: comp.map((c) => c.typeID),
+          entities: []
+        }
+      })
+    }
+    // pass the entity list to the querying component and fill it everytime a component is added
+    return this.queries[id];
   }
 
   public createEntity() {
@@ -40,10 +51,12 @@ export class EntityComponentManager {
 
     // check if entity needs to be put into query
     for (const id in this.queries) {
-      const q = this.queries[id];
-      const cIds = q.componentIDs;
-      if (cIds.length != 0 && !q.entities.includes(entity) && cIds.every((i) => i in (entity as Entity).components)) {
-        q.entities.push(entity);
+      const query = this.queries[id];
+      for (const q of query) {
+        const cIds = q.componentIDs;
+        if (cIds.length != 0 && !q.entities.includes(entity) && cIds.every((i) => i in (entity as Entity).components)) {
+          q.entities.push(entity);
+        }
       }
     }
 

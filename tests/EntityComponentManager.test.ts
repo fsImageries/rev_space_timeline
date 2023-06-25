@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { EntityComponentManager } from '../src/ecs/EntityComponentManager';
 import { World } from '../src/ecs/World';
-import { RadiusComponent, RadiusMultSystem, RenderSystem, RotComponent, RotRadSystem, RotSystem } from './samples';
+import { RadiusComponent, RadiusMultSystem, RenderSystem, RotAndRadSystem, RotComponent, RotRadSystem, RotSystem } from './samples';
 
 
 describe("EntityComponentManager test", () => {
@@ -76,13 +76,13 @@ describe("EntityComponentManager test", () => {
         .addComponent(RadiusComponent, data)
 
         // Assert
-        const queryEntities = man.queries[key].entities
-        const entities = sys.systems[0].entities
+        const query = man.queries[key]
+        const sysquery = sys.systems[0].queries
 
         expect(man.queries[key]).not.be.equal(undefined, "Query should return the query object for the added system's key")
-        expect(queryEntities.length).to.be.equal(0, "Query entities should be len(0)")
-        expect(queryEntities).toBe(entities)
-        expect(queryEntities[0]).toBe(entities[0])
+        expect(query.length).to.be.equal(0, "Query should be len(0)")
+        expect(query).toBe(sysquery)
+        expect(query[0]).toBe(sysquery[0])
     })
 
     it("query should update", () => {
@@ -100,8 +100,8 @@ describe("EntityComponentManager test", () => {
         .addComponent(RadiusComponent, data)
 
         // Assert
-        const queryEntities = man.queries[key].entities
-        const entities = sys.systems[0].entities
+        const queryEntities = man.queries[key][0].entities
+        const entities = sys.systems[0].queries[0].entities
 
         expect(man.queries[key]).not.be.equal(undefined, "Query should return the query object for the added system's key")
         expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
@@ -139,20 +139,20 @@ describe("EntityComponentManager test", () => {
         expect(man.queries[key2]).not.be.equal(undefined, "Query should return the query object for the added system's key")
         
         
-        let queryEntities = man.queries[key0].entities
-        let entities = sys.systems[0].entities
+        let queryEntities = man.queries[key0][0].entities
+        let entities = sys.systems[0].queries[0].entities
         expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
         expect(queryEntities).toBe(entities)
         expect(queryEntities[0]).toBe(entities[0])
 
-        queryEntities = man.queries[key1].entities
-        entities = sys.systems[1].entities
+        queryEntities = man.queries[key1][0].entities
+        entities = sys.systems[1].queries[0].entities
         expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
         expect(queryEntities).toBe(entities)
         expect(queryEntities[0]).toBe(entities[0])
 
-        queryEntities = man.queries[key2].entities
-        entities = sys.systems[2].entities
+        queryEntities = man.queries[key2][0].entities
+        entities = sys.systems[2].queries[0].entities
         expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
         expect(queryEntities).toBe(entities)
         expect(queryEntities[0]).toBe(entities[0])
@@ -183,19 +183,47 @@ describe("EntityComponentManager test", () => {
         .addComponent(RotComponent, data2)
 
         // Assert
-        let queryEntities = man.queries[key0].entities
-        let entities = sys.systems[0].entities
+        let queryEntities = man.queries[key0][0].entities
+        let entities = sys.systems[0].queries[0].entities
         expect(queryEntities.length).to.be.equal(2, "Query entities should be len(2)")
         expect(queryEntities).toBe(entities)
 
-        queryEntities = man.queries[key1].entities
-        entities = sys.systems[1].entities
+        queryEntities = man.queries[key1][0].entities
+        entities = sys.systems[1].queries[0].entities
         expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
         expect(queryEntities).toBe(entities)
 
-        queryEntities = man.queries[key2].entities
-        entities = sys.systems[2].entities
+        queryEntities = man.queries[key2][0].entities
+        entities = sys.systems[2].queries[0].entities
         expect(queryEntities.length).to.be.equal(1, "Query entities should be len(1)")
         expect(queryEntities).toBe(entities)
+    })
+
+    it("multi entity query should update", () => {
+        // Arrange
+        const world = new World()
+        const man = world.ecManager
+        const sys = world.sysManager
+        const data = { real: 555, draw: 5.5 }
+        const data2 = { rot: 180 }
+        
+        sys.registerSystem(RotAndRadSystem)
+        const key0 = RotAndRadSystem.typeID
+
+        // Act
+        man.createEntity()
+        .addComponent(RadiusComponent, data)
+
+        man.createEntity()
+        .addComponent(RotComponent, data2)
+
+        // Assert
+        const query0 = man.queries[key0]
+        const entities = sys.systems[0].queries
+
+        expect(man.queries[key0]).not.be.equal(undefined, "Query should return the query object for the added system's key")
+        expect(query0.length).to.be.equal(2, "Query entities should be len(2)")
+        expect(query0).toBe(entities)
+        expect(query0[0].entities[0]).not.toBe(entities[0].entities[1])
     })
 })

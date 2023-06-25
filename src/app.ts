@@ -30,14 +30,7 @@ const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent
 scene.add(mesh);
 console.log(scene.children);
 
-// [RenderComponent, SceneComponent, CameraComponent];
-const rcomp = world.ecManager.entities.find((e) => e.getComponent(RenderComponent));
-const scomp = world.ecManager.entities.find((e) => e.getComponent(SceneComponent));
-const ccomp = world.ecManager.entities.find((e) => e.getComponent(CameraComponent));
 
-if (!(rcomp && scomp && ccomp)) throw new Error();
-
-world.ecManager.queries[RenderSystem.typeID].entities.push(rcomp, scomp, ccomp);
 console.log(world.ecManager.queries[RenderSystem.typeID]);
 
 const max = 5;

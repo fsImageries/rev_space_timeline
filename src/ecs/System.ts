@@ -1,31 +1,30 @@
 import { ComponentConstructor } from "./Component";
 import { Entity } from "./Entity";
+import { Query, QueryElements } from "./EntityComponentManager";
 import { World } from "./World";
 
 /* eslint-disable @typescript-eslint/no-explicit-any*/
-export type SystemQuery = ComponentConstructor<any, any>;
-export type SystemQueries = SystemQuery[];
+export type SystemQueries = ComponentConstructor<any, any>[][];
 
 export abstract class System {
   static queries: SystemQueries;
   static typeID: string;
 
   public world: World;
-  public entities: Entity[];
+  public queries: QueryElements;
   public enabled: boolean;
   public executeTime: number;
 
   constructor(world: World) {
-    const that = this.constructor as typeof System;
     this.world = world;
     this.enabled = true;
     this.executeTime = -1;
-    this.entities = world.ecManager.getQuery(that.typeID, that.queries);
+    this.queries = this.query()
   }
 
   public query() {
     const that = this.constructor as typeof System;
-    this.entities = this.world.ecManager.getQuery(that.typeID, that.queries);
+    return this.world.ecManager.getQuery(that.typeID, that.queries);
   }
 
   abstract execute(delta: number, time: number): void;

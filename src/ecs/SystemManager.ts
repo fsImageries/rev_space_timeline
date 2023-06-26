@@ -49,4 +49,8 @@ export class SystemManager {
   public getSystem<T extends System>(SystemClass: SystemConstructor<T>) {
     return this.systems.find((s) => s instanceof SystemClass);
   }
+
+  public requery() {
+    this.systems.forEach(s => s.requery())
+  }
 }

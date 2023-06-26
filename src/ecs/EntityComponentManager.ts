@@ -59,7 +59,6 @@ export class EntityComponentManager {
         }
       }
     }
-
     return this;
   }
 
@@ -69,5 +68,10 @@ export class EntityComponentManager {
 
   public init() {
     this.entities.forEach(e => e.init())
+  }
+
+  public load() {
+    this.queryComponentDependencies()
+    this.init()
   }
 }

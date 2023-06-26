@@ -1,4 +1,4 @@
-import { Mesh, MeshNormalMaterial, SphereGeometry } from "three";
+import { Mesh, MeshNormalMaterial, SphereGeometry, BoxGeometry } from "three";
 import { CameraComponent, MeshComponent, RenderComponent, SceneComponent } from "./baseclasses/CommonComponents";
 import { RenderSystem } from "./baseclasses/CommonSystems";
 import { World } from "./ecs/World";
@@ -7,30 +7,54 @@ const world = new World();
 
 world.sysManager.registerSystem(RenderSystem);
 
-const geometry = new SphereGeometry(15, 32, 16);
-const material = new MeshNormalMaterial();
-const sphere = new Mesh(geometry, material);
 
-// Sphere Entity
-world.ecManager.createEntity().addComponent(MeshComponent, { mesh: sphere as Mesh });
+const base = () => {
+  const geometry = new SphereGeometry(15, 32, 16);
+  const material = new MeshNormalMaterial();
+  const sphere = new Mesh(geometry, material);
 
-// Renderer
-world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getData(world));
+  // Sphere Entity
+  world.ecManager.createEntity().addComponent(MeshComponent, { mesh: sphere as Mesh });
+  
+  // Renderer
+  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getData(world));
+  
+  // Renderer
+  world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getData());
+  
+  // Camera
+  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getData(world));
+  
+  world.ecManager.load()
+}
 
-// Renderer
-world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getData());
+const base2 = () => {
+  const geometry = new BoxGeometry(20, 20, 20);
+  const material = new MeshNormalMaterial();
+  const cube = new Mesh(geometry, material);
 
-// Camera
-world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getData(world));
+  // Sphere Entity
+  world.ecManager.createEntity().addComponent(MeshComponent, { mesh: cube as Mesh });
+  
+  // Renderer
+  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getData(world));
+  
+  // Renderer
+  world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getData());
+  
+  // Camera
+  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getData(world));
+  
+  world.ecManager.load()
+}
 
-const mesh = world.ecManager.entities.find((e) => e.getComponent(MeshComponent))?.components[MeshComponent.typeID].data
-  .mesh;
-const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
-  .data.scene;
-// scene.add(mesh);
+world.lvlManager.openLevel("start", base)
+world.lvlManager.openLevel("second", base2)
 
-world.ecManager.queryComponentDependencies()
-world.ecManager.init()
+world.lvlManager.openLevel("start")
+world.lvlManager.openLevel("second")
+
+const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID].data.scene;
 console.log(scene.children);
 
 

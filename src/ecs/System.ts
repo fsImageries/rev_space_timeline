@@ -22,9 +22,13 @@ export abstract class System {
     this.queries = this.query()
   }
 
-  public query() {
+  private query() {
     const that = this.constructor as typeof System;
     return this.world.ecManager.getQuery(that.typeID, that.queries);
+  }
+
+  public requery() {
+    this.queries = this.query()
   }
 
   abstract execute(delta: number, time: number): void;

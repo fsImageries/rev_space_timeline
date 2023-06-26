@@ -58,4 +58,11 @@ export interface MeshComponentData { mesh: Mesh; }
 export class MeshComponent extends Component<MeshComponentData> { 
   static dependencies = [SceneComponent];
   static typeID = crypto.randomUUID()
+
+  public init() {
+    if (!this.dependendEntities) return
+    for (const entity of this.dependendEntities) {
+      (entity.getComponent(SceneComponent) as SceneComponent).data.scene.add(this.data.mesh)
+    }
+  }
 }

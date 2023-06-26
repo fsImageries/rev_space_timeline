@@ -27,15 +27,12 @@ const mesh = world.ecManager.entities.find((e) => e.getComponent(MeshComponent))
   .mesh;
 const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
   .data.scene;
-scene.add(mesh);
+// scene.add(mesh);
 
 world.ecManager.queryComponentDependencies()
-// console.log(scene.children);
+world.ecManager.init()
+console.log(scene.children);
 
-
-world.ecManager.entities.forEach(e => e.init())
-
-// console.log(world.ecManager.queries[RenderSystem.typeID]);
 
 const max = 5;
 let n = 0;

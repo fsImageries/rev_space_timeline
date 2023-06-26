@@ -66,4 +66,8 @@ export class EntityComponentManager {
   public queryComponentDependencies() {
     this.entities.forEach(e => e.queryComponentDependencies())
   }
+
+  public init() {
+    this.entities.forEach(e => e.init())
+  }
 }

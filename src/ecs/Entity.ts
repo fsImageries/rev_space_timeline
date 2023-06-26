@@ -24,9 +24,10 @@ export class Entity {
   }
 
   public init() {
-    console.log(this)
     Object.values(this.components).forEach(c => {
-      console.log(c.dependendEntities)
+      if ("init" in c) {
+        (c as any).init()
+      }
     })
     
   }

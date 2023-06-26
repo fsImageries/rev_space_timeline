@@ -52,7 +52,9 @@ world.lvlManager.openLevel("start", base)
 world.lvlManager.openLevel("second", base2)
 
 world.lvlManager.openLevel("start")
-world.lvlManager.openLevel("second")
+// world.lvlManager.openLevel("second")
+
+console.log(world.sysManager.systems)
 
 const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID].data.scene;
 console.log(scene.children);

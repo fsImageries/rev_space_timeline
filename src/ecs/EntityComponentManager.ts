@@ -1,33 +1,35 @@
 import { Component, ComponentConstructor, ComponentSchema } from "./Component";
 import { Entity } from "./Entity";
-import { SystemQueries } from "./System";
+import { World } from "./World";
 
 // type Query = { [systemID: string]: { componentIDs: string[]; entities: Entity[] } };
-export type QueryElements = { componentIDs: string[]; entities: Entity[] }[] ;
-export type Query = { [systemID: string]: QueryElements };
+// export type QueryElements = { componentIDs: string[]; entities: Entity[] }[] ;
+// export type Query = { [systemID: string]: QueryElements };
 
 export class EntityComponentManager {
-  public queries: Query;
+  // public queries: Query;
   public entities: Entity[];
+  public world: World
 
-  constructor() {
-    this.queries = {};
+  constructor(world:World) {
+    // this.queries = {};
     this.entities = [];
+    this.world = world
   }
 
-  /* eslint-disable @typescript-eslint/no-explicit-any*/
-  public getQuery(id: string, components: SystemQueries) {
-    if (!(id in this.queries)) {
-      this.queries[id] = components.map(comp => {
-        return {
-          componentIDs: comp.map((c) => c.typeID),
-          entities: []
-        }
-      })
-    }
-    // pass the entity list to the querying component and fill it everytime a component is added
-    return this.queries[id];
-  }
+  // /* eslint-disable @typescript-eslint/no-explicit-any*/
+  // public getQuery(id: string, components: SystemQueries) {
+  //   if (!(id in this.queries)) {
+  //     this.queries[id] = components.map(comp => {
+  //       return {
+  //         componentIDs: comp.map((c) => c.typeID),
+  //         entities: []
+  //       }
+  //     })
+  //   }
+  //   // pass the entity list to the querying component and fill it everytime a component is added
+  //   return this.queries[id];
+  // }
 
   public createEntity() {
     const entity = new Entity(this, crypto.randomUUID(), {});
@@ -49,16 +51,7 @@ export class EntityComponentManager {
     const c = new component(data);
     entity.components[typeID] = c;
 
-    // check if entity needs to be put into query
-    for (const id in this.queries) {
-      const query = this.queries[id];
-      for (const q of query) {
-        const cIds = q.componentIDs;
-        if (cIds.length != 0 && !q.entities.includes(entity) && cIds.every((i) => i in (entity as Entity).components)) {
-          q.entities.push(entity);
-        }
-      }
-    }
+    this.world.queryManager.updateQuery(entity)
     return this;
   }
 

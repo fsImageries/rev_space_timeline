@@ -3,11 +3,16 @@ import { CameraComponent, RenderComponent, SceneComponent } from "./CommonCompon
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
-  // TODO need to determine if combined entity or entity per component
+  // static queries = [
+  //   [RenderComponent],
+  //   [SceneComponent],
+  //   [CameraComponent]
+  // ];
+
   static queries = [
-    [RenderComponent],
-    [SceneComponent],
-    [CameraComponent]
+    [{operand:"exist", value:RenderComponent}], //, {operand:"exist", value:SceneComponent}],
+    [{operand:"exist", value:SceneComponent}],
+    [{operand:"exist", value:CameraComponent}]
   ];
   execute(delta: number): void {
     const [render, scene, camera] = [this.queries[0].entities[0], this.queries[1].entities[0], this.queries[2].entities[0]];

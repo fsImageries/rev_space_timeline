@@ -62,4 +62,8 @@ export class EntityComponentManager {
 
     return this;
   }
+
+  public queryComponentDependencies() {
+    this.entities.forEach(e => e.queryComponentDependencies())
+  }
 }

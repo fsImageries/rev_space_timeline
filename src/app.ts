@@ -15,23 +15,27 @@ const sphere = new Mesh(geometry, material);
 world.ecManager.createEntity().addComponent(MeshComponent, { mesh: sphere as Mesh });
 
 // Renderer
-world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.setup(world));
+world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getData(world));
 
 // Renderer
-world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.setup());
+world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getData());
 
 // Camera
-world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.setup(world));
+world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getData(world));
 
 const mesh = world.ecManager.entities.find((e) => e.getComponent(MeshComponent))?.components[MeshComponent.typeID].data
   .mesh;
 const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
   .data.scene;
 scene.add(mesh);
-console.log(scene.children);
+
+world.ecManager.queryComponentDependencies()
+// console.log(scene.children);
 
 
-console.log(world.ecManager.queries[RenderSystem.typeID]);
+world.ecManager.entities.forEach(e => e.init())
+
+// console.log(world.ecManager.queries[RenderSystem.typeID]);
 
 const max = 5;
 let n = 0;

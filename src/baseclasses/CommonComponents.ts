@@ -1,5 +1,5 @@
 import { AmbientLight, Camera, Mesh, PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { Component } from "../ecs/Component";
+import { Component, ComponentConstructor } from "../ecs/Component";
 import { World } from "../ecs/World";
 
 export interface RenderComponentData {
@@ -8,7 +8,7 @@ export interface RenderComponentData {
 }
 
 export class RenderComponent extends Component<RenderComponentData> {
-  static setup(world: World): RenderComponentData {
+  static getData(world: World): RenderComponentData {
     const renderer = new WebGLRenderer({
       canvas: world.canvas,
       antialias: true,
@@ -29,29 +29,23 @@ export interface SceneComponentData {
   scene: Scene;
 }
 export class SceneComponent extends Component<SceneComponentData> {
-  static setup(): SceneComponentData {
+  static getData(): SceneComponentData {
     const scene = new Scene();
-    const l = new AmbientLight("#ffffff", 1);
-    // l.position.y = 100
-    scene.add(l);
+    // const l = new AmbientLight("#ffffff", 1);
+    // // l.position.y = 100
+    // scene.add(l);
     return { scene };
   }
 }
 SceneComponent.typeID = crypto.randomUUID();
 
-export interface MeshComponentData {
-  mesh: Mesh;
-}
-export class MeshComponent extends Component<MeshComponentData> {}
-MeshComponent.typeID = crypto.randomUUID();
-
 export interface CameraComponentData {
-  active: Camera /*freeCtrl: OrbitControls */;
+  active: PerspectiveCamera /*freeCtrl: OrbitControls */;
 }
 export class CameraComponent extends Component<CameraComponentData> {
-  static setup(world: World): CameraComponentData {
+  static getData(world: World): CameraComponentData {
     const cam = new PerspectiveCamera(30, world.canvas.clientWidth / world.canvas.clientHeight, 0.1, 1e12);
-    cam.position.z = 100;
+    cam.position.z = 200;
     return {
       active: cam
       // freeCtrl: new OrbitControls(new PerspectiveCamera(), )
@@ -59,3 +53,9 @@ export class CameraComponent extends Component<CameraComponentData> {
   }
 }
 CameraComponent.typeID = crypto.randomUUID();
+
+export interface MeshComponentData { mesh: Mesh; }
+export class MeshComponent extends Component<MeshComponentData> { 
+  static dependencies = [SceneComponent];
+  static typeID = crypto.randomUUID()
+}

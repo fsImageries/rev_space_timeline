@@ -13,28 +13,29 @@ export class RenderSystem extends System {
 }
 
 export class RadiusMultSystem extends System {
-    static queries = [[RadiusComponent]]
+    static queries = [[{operand: "exist", value: RadiusComponent}]]
     execute(): void {
         // do something
     }
 }
 
 export class RotSystem extends System {
-    static queries = [[RotComponent]]
+    static queries = [[{operand: "exist", value: RotComponent}]]
     execute(): void {
         // do something
     }
 }
 
 export class RotRadSystem extends System {
-    static queries = [[RotComponent, RadiusComponent]]
+    // TODO write convienience function to build operand types
+    static queries = [[{operand: "exist", value: RotComponent}, {operand: "exist", value: RadiusComponent}]]
     execute(): void {
         // do something
     }
 }
 
 export class RotAndRadSystem extends System {
-    static queries = [[RotComponent], [RadiusComponent]]
+    static queries = [[{operand: "exist", value: RotComponent}], [{operand: "exist", value: RadiusComponent}]]
     execute(): void {
         // do something
     }

@@ -53,7 +53,7 @@ CameraComponent.typeID = crypto.randomUUID();
 
 export interface MeshComponentData { mesh: Mesh; }
 export class MeshComponent extends Component<MeshComponentData> { 
-  static dependencies = [{operand:"exist", value:SceneComponent}];
+  static dependencies = [{operand:"exist", value:SceneComponent}]; //, {operand:"exist", value:RenderComponent}];
   static typeID = crypto.randomUUID()
 
   public init() {

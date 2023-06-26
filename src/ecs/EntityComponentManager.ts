@@ -17,20 +17,6 @@ export class EntityComponentManager {
     this.world = world
   }
 
-  // /* eslint-disable @typescript-eslint/no-explicit-any*/
-  // public getQuery(id: string, components: SystemQueries) {
-  //   if (!(id in this.queries)) {
-  //     this.queries[id] = components.map(comp => {
-  //       return {
-  //         componentIDs: comp.map((c) => c.typeID),
-  //         entities: []
-  //       }
-  //     })
-  //   }
-  //   // pass the entity list to the querying component and fill it everytime a component is added
-  //   return this.queries[id];
-  // }
-
   public createEntity() {
     const entity = new Entity(this, crypto.randomUUID(), {});
     this.entities.push(entity);
@@ -51,20 +37,17 @@ export class EntityComponentManager {
     const c = new component(data);
     entity.components[typeID] = c;
 
-    this.world.queryManager.updateQuery(entity)
+    c.dependendEntities = this.world.queryManager.getComponentQuery(component)
+
+    this.world.queryManager.updateQueries(entity)
     return this;
   }
 
-  public queryComponentDependencies() {
-    this.entities.forEach(e => e.queryComponentDependencies())
-  }
+  // public queryComponentDependencies() {
+  //   this.entities.forEach(e => e.queryComponentDependencies())
+  // }
 
   public init() {
     this.entities.forEach(e => e.init())
-  }
-
-  public load() {
-    this.queryComponentDependencies()
-    this.init()
   }
 }

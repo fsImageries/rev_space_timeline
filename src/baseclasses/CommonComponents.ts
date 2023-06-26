@@ -1,5 +1,5 @@
-import { AmbientLight, Camera, Mesh, PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { Component, ComponentConstructor } from "../ecs/Component";
+import { Mesh, PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { Component } from "../ecs/Component";
 import { World } from "../ecs/World";
 
 export interface RenderComponentData {
@@ -31,9 +31,6 @@ export interface SceneComponentData {
 export class SceneComponent extends Component<SceneComponentData> {
   static getData(): SceneComponentData {
     const scene = new Scene();
-    // const l = new AmbientLight("#ffffff", 1);
-    // // l.position.y = 100
-    // scene.add(l);
     return { scene };
   }
 }
@@ -56,12 +53,12 @@ CameraComponent.typeID = crypto.randomUUID();
 
 export interface MeshComponentData { mesh: Mesh; }
 export class MeshComponent extends Component<MeshComponentData> { 
-  static dependencies = [SceneComponent];
+  static dependencies = [{operand:"exist", value:SceneComponent}];
   static typeID = crypto.randomUUID()
 
   public init() {
     if (!this.dependendEntities) return
-    for (const entity of this.dependendEntities) {
+    for (const entity of this.dependendEntities[0].entities) {
       (entity.getComponent(SceneComponent) as SceneComponent).data.scene.add(this.data.mesh)
     }
   }

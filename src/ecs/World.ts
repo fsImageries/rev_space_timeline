@@ -17,12 +17,17 @@ export class World {
     this.ecManager = new EntityComponentManager(this);
     this.sysManager = new SystemManager(this);
     this.lvlManager = new LevelManager(this)
-    this.queryManager = new QueryManager()
+    this.queryManager = new QueryManager(this)
 
     this.canvas = document.querySelector(`canvas#main`) as HTMLCanvasElement;
   }
 
-  execute(delta: number, time: number) {
+  public execute(delta: number, time: number) {
     if (this.enabled) this.sysManager.execute(delta, time);
+  }
+
+  public load() {
+    this.queryManager.queryComponentQueries()
+    this.ecManager.init()
   }
 }

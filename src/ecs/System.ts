@@ -18,11 +18,11 @@ export abstract class System {
     this.world = world;
     this.enabled = true;
     this.executeTime = -1;
-    this.queries = this.world.queryManager.getQuery(this)
+    this.queries = this.world.queryManager.getSystemQuery(this)
   }
 
   public requery() {
-    this.queries = this.world.queryManager.getQuery(this)
+    this.queries = this.world.queryManager.getSystemQuery(this)
   }
 
   abstract execute(delta: number, time: number): void;

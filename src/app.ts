@@ -1,4 +1,4 @@
-import { Mesh, MeshNormalMaterial, SphereGeometry, BoxGeometry } from "three";
+import { BoxGeometry, Mesh, MeshNormalMaterial, SphereGeometry } from "three";
 import { CameraComponent, MeshComponent, RenderComponent, SceneComponent } from "./baseclasses/CommonComponents";
 import { RenderSystem } from "./baseclasses/CommonSystems";
 import { World } from "./ecs/World";
@@ -25,7 +25,7 @@ const base = () => {
   // Camera
   world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getData(world));
   
-  world.ecManager.load()
+  world.load()
 }
 
 const base2 = () => {
@@ -45,16 +45,15 @@ const base2 = () => {
   // Camera
   world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getData(world));
   
-  world.ecManager.load()
+  world.load()
 }
 
 world.lvlManager.openLevel("start", base)
 world.lvlManager.openLevel("second", base2)
 
-world.lvlManager.openLevel("start")
+// world.lvlManager.openLevel("start")
 // world.lvlManager.openLevel("second")
 
-console.log(world.sysManager.systems)
 
 const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID].data.scene;
 console.log(scene.children);

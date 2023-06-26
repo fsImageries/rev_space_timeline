@@ -1,22 +1,27 @@
-import { ComponentConstructor } from "./Component";
+import { TComponent } from "./Component";
 import { Entity } from "./Entity";
 import { System } from "./System";
+import { World } from "./World";
+
 
 export type QueryElements = { entityQuery: ComponentQueryState[]; entities: Entity[] }[];
 export type Query = { [systemID: string]: QueryElements };
 export type ComponentQueryState = [string, boolean, boolean];
 
-
 export interface QueryOperand {
     operand: string;
-    value: ComponentConstructor<any, any>
+    value: TComponent
 }
 
 export class QueryManager {
-    public queries: Query;
+    public sysQueries: Query;
+    public compQueries:  Query;
+    public world: World;
 
-    constructor() {
-        this.queries = {}
+    constructor(world: World) {
+        this.sysQueries = {}
+        this.compQueries = {}
+        this.world = world
     }
 
     private stateFromOperands(operands: QueryOperand[]): ComponentQueryState[] {
@@ -59,26 +64,45 @@ export class QueryManager {
         })
     }
 
-    /* eslint-disable @typescript-eslint/no-explicit-any*/
-    public getQuery(sys: System) {
+    public getSystemQuery(sys: System) {
         const that = (sys.constructor as typeof System)
         const id = that.typeID
-        if (!(id in this.queries)) {
-            this.queries[id] = that.queries.map(opers => {
+        if (!(id in this.sysQueries)) {
+            this.sysQueries[id] = that.queries.map(opers => {
                 return {
                     entityQuery: this.stateFromOperands(opers),
                     entities: []
                 }
             })
         }
-        // pass the entity list to the querying component and fill it everytime a component is added
-        return this.queries[id];
+        return this.sysQueries[id];
     }
 
-    public updateQuery(entity: Entity) {
+    public getComponentQuery(component:TComponent) {
+        if (component.dependencies.length === 0) return
+        const id = component.typeID
+        if (!(id in this.compQueries)) {
+            this.compQueries[id] = component.dependencies.map(opers => {
+                return {
+                    entityQuery: this.stateFromOperands([opers]),
+                    entities: []
+                }
+            })
+        }
+        return this.compQueries[id];
+    }
+
+    public queryComponentQueries() {
+        for (const entity of this.world.ecManager.entities) {
+            this.updateQueries(entity, this.compQueries)
+        }
+    }
+
+    public updateQueries(entity: Entity, queries?:Query) {
+        if (!queries) queries = this.sysQueries
         // check if entity needs to be put into query
-        for (const id in this.queries) {
-            const query = this.queries[id];
+        for (const id in queries) {
+            const query = queries[id];
             for (const q of query) {
                 if (!q.entities.includes(entity) && this.validateEntityState(entity, q.entityQuery)) q.entities.push(entity)
                 // const cIds = q.componentIDs;
@@ -88,5 +112,4 @@ export class QueryManager {
             }
         }
     }
-
 }

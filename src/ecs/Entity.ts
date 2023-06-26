@@ -31,17 +31,4 @@ export class Entity {
     })
     
   }
-
-  public queryComponentDependencies() {
-    for (const comp of Object.values(this.components)) {
-      const deps = (comp.constructor as typeof Component).dependencies
-      if (deps.length === 0) continue
-      const ents = []
-      for (const ent of this.ecManager.entities) {
-        if (ent === this) continue
-        if (deps.some(d => d.typeID in ent.components)) ents.push(ent)
-      }
-      if (ents.length !== 0) comp.dependendEntities = ents
-    }
-  }
 }

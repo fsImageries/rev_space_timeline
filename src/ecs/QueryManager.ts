@@ -24,7 +24,7 @@ export class QueryManager {
         this.world = world
     }
 
-    private stateFromOperands(operands: QueryOperand[]): ComponentQueryState[] {
+    private stateFromOperands(operands: QueryOperand[], self?:TComponent): ComponentQueryState[] {
         const entityState: ComponentQueryState[] = []
         for (const operand of operands) {
             // State: [componentID, shouldExist, shouldSelf]
@@ -39,6 +39,8 @@ export class QueryManager {
                     break
                 };
                 case "self": {
+                    if (self)
+                    entityState.push([self.typeID, true, false])
                     entityState.push([operand.value.typeID, true, true])
                     break
                 }
@@ -54,6 +56,7 @@ export class QueryManager {
             // check if component should exist
             if (!shouldExist && ids.includes(id)) return false
 
+            // TODO needs to fire on component query
             // needs more thought
             // if (shouldSelf) return false
 
@@ -84,7 +87,7 @@ export class QueryManager {
         if (!(id in this.compQueries)) {
             this.compQueries[id] = component.dependencies.map(opers => {
                 return {
-                    entityQuery: this.stateFromOperands([opers]),
+                    entityQuery: this.stateFromOperands([opers], component),
                     entities: []
                 }
             })
@@ -105,10 +108,6 @@ export class QueryManager {
             const query = queries[id];
             for (const q of query) {
                 if (!q.entities.includes(entity) && this.validateEntityState(entity, q.entityQuery)) q.entities.push(entity)
-                // const cIds = q.componentIDs;
-                // if (cIds.length != 0 && !q.entities.includes(entity) && cIds.every((i) => i in (entity as Entity).components)) {
-                //     q.entities.push(entity);
-                // }
             }
         }
     }

@@ -1,5 +1,5 @@
 import { BoxGeometry, Mesh, MeshNormalMaterial, SphereGeometry } from "three";
-import { CameraComponent, MeshComponent, RenderComponent, SceneComponent } from "./baseclasses/CommonComponents";
+import { CameraComponent, MeshComponent, ObjectGroupComponent, RenderComponent, RotGroupComponent, SceneComponent } from "./baseclasses/CommonComponents";
 import { RenderSystem } from "./baseclasses/CommonSystems";
 import { World } from "./ecs/World";
 
@@ -14,7 +14,10 @@ const base = () => {
   const sphere = new Mesh(geometry, material);
 
   // Sphere Entity
-  world.ecManager.createEntity().addComponent(MeshComponent, { mesh: sphere as Mesh });
+  world.ecManager.createEntity()
+  .addComponent(MeshComponent, { mesh: sphere as Mesh })
+  .addComponent(ObjectGroupComponent, ObjectGroupComponent.getData())
+  .addComponent(RotGroupComponent, RotGroupComponent.getData())
   
   // Renderer
   world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getData(world));
@@ -33,8 +36,11 @@ const base2 = () => {
   const material = new MeshNormalMaterial();
   const cube = new Mesh(geometry, material);
 
-  // Sphere Entity
-  world.ecManager.createEntity().addComponent(MeshComponent, { mesh: cube as Mesh });
+  // Cube Entity
+  world.ecManager.createEntity()
+  .addComponent(MeshComponent, { mesh: cube as Mesh })
+  .addComponent(ObjectGroupComponent, ObjectGroupComponent.getData())
+  .addComponent(RotGroupComponent, RotGroupComponent.getData())
   
   // Renderer
   world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getData(world));
@@ -51,7 +57,7 @@ const base2 = () => {
 world.lvlManager.openLevel("start", base)
 world.lvlManager.openLevel("second", base2)
 
-// world.lvlManager.openLevel("start")
+world.lvlManager.openLevel("start")
 // world.lvlManager.openLevel("second")
 
 

@@ -1,6 +1,7 @@
-import { Mesh, PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { Group, Mesh, Object3D, PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { Component } from "../ecs/Component";
 import { World } from "../ecs/World";
+import { QueryOperand } from "../ecs/QueryManager";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
@@ -52,8 +53,9 @@ export class CameraComponent extends Component<CameraComponentData> {
 CameraComponent.typeID = crypto.randomUUID();
 
 export interface MeshComponentData { mesh: Mesh; }
-export class MeshComponent extends Component<MeshComponentData> { 
-  static dependencies = [{operand:"exist", value:SceneComponent}]; //, {operand:"exist", value:RenderComponent}];
+export class MeshComponent extends Component<MeshComponentData> {
+  static dependencies = [];
+  // static dependencies = [{ operand: "exist", value: SceneComponent }]; //, {operand:"exist", value:RenderComponent}];
   static typeID = crypto.randomUUID()
 
   public init() {
@@ -61,5 +63,44 @@ export class MeshComponent extends Component<MeshComponentData> {
     for (const entity of this.dependendEntities[0].entities) {
       (entity.getComponent(SceneComponent) as SceneComponent).data.scene.add(this.data.mesh)
     }
+  }
+}
+
+export interface GroupData { group: Object3D }
+export class ObjectGroupComponent extends Component<GroupData> {
+  static dependencies = [{ operand: "self", value: MeshComponent }];
+  static typeID = crypto.randomUUID()
+
+  static getData(): GroupData {
+    return {
+      group: new Group()
+    };
+  }
+
+  public init() {
+    if (!this.dependendEntities) return
+    const mesh = this.dependendEntities[0].entities[0]
+    this.data.group.add((mesh.getComponent(MeshComponent) as MeshComponent).data.mesh);
+  }
+}
+
+export class RotGroupComponent extends Component<GroupData> {
+  static dependencies = [{ operand: "self", value: ObjectGroupComponent }, { operand: "exist", value: SceneComponent }];
+  static typeID = crypto.randomUUID()
+
+  static getData(): GroupData {
+    return {
+      group: new Group()
+    };
+  }
+
+  public init() {
+    if (!this.dependendEntities) return
+    const grp = this.dependendEntities[0].entities[0]
+    const scene = this.dependendEntities[1].entities[0]
+
+    this.data.group.add((grp.getComponent(MeshComponent) as MeshComponent).data.mesh);
+    (scene.getComponent(SceneComponent) as SceneComponent).data.scene.add(this.data.group)
+
   }
 }

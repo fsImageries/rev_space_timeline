@@ -13,6 +13,8 @@ export interface QueryOperand {
     value: TComponent
 }
 
+export const operand = (o: string, c: TComponent):QueryOperand => {return {operand: o, value: c}}
+
 export class QueryManager {
     public sysQueries: Query;
     public compQueries:  Query;

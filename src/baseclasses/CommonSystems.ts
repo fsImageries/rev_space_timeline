@@ -1,18 +1,14 @@
+import { operand } from "../ecs/QueryManager";
 import { System } from "../ecs/System";
 import { CameraComponent, RenderComponent, SceneComponent } from "./CommonComponents";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
-  // static queries = [
-  //   [RenderComponent],
-  //   [SceneComponent],
-  //   [CameraComponent]
-  // ];
 
   static queries = [
-    [{operand:"exist", value:RenderComponent}], //, {operand:"exist", value:SceneComponent}],
-    [{operand:"exist", value:SceneComponent}],
-    [{operand:"exist", value:CameraComponent}]
+    [operand("exist", RenderComponent)],
+    [operand("exist", SceneComponent)],
+    [operand("exist", CameraComponent)]
   ];
   execute(delta: number): void {
     const [render, scene, camera] = [this.queries[0].entities[0], this.queries[1].entities[0], this.queries[2].entities[0]];

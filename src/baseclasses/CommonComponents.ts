@@ -1,7 +1,7 @@
 import { Group, Mesh, Object3D, PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { Component } from "../ecs/Component";
+import { operand } from "../ecs/QueryManager";
 import { World } from "../ecs/World";
-import { QueryOperand } from "../ecs/QueryManager";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
@@ -55,7 +55,6 @@ CameraComponent.typeID = crypto.randomUUID();
 export interface MeshComponentData { mesh: Mesh; }
 export class MeshComponent extends Component<MeshComponentData> {
   static dependencies = [];
-  // static dependencies = [{ operand: "exist", value: SceneComponent }]; //, {operand:"exist", value:RenderComponent}];
   static typeID = crypto.randomUUID()
 
   public init() {
@@ -68,7 +67,7 @@ export class MeshComponent extends Component<MeshComponentData> {
 
 export interface GroupData { group: Object3D }
 export class ObjectGroupComponent extends Component<GroupData> {
-  static dependencies = [{ operand: "self", value: MeshComponent }];
+  static dependencies = [operand("self", MeshComponent)];
   static typeID = crypto.randomUUID()
 
   static getData(): GroupData {
@@ -85,7 +84,7 @@ export class ObjectGroupComponent extends Component<GroupData> {
 }
 
 export class RotGroupComponent extends Component<GroupData> {
-  static dependencies = [{ operand: "self", value: ObjectGroupComponent }, { operand: "exist", value: SceneComponent }];
+  static dependencies = [operand("self", ObjectGroupComponent), operand("exist", SceneComponent)];
   static typeID = crypto.randomUUID()
 
   static getData(): GroupData {

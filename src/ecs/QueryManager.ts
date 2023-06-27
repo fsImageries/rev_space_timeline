@@ -1,4 +1,4 @@
-import { TComponent } from "./Component";
+import { Component, IComponent, TComponent } from "./Component";
 import { Entity } from "./Entity";
 import { System } from "./System";
 import { World } from "./World";
@@ -41,8 +41,8 @@ export class QueryManager {
                     break
                 };
                 case "self": {
-                    if (self)
-                    entityState.push([self.typeID, true, false])
+                    // if (self)
+                    // entityState.push([self.typeID, true, false])
                     entityState.push([operand.value.typeID, true, true])
                     break
                 }
@@ -51,16 +51,21 @@ export class QueryManager {
         return entityState
     }
 
-    private validateEntityState(entity: Entity, state: ComponentQueryState[]) {
+    private validateState(entity: Entity, state: ComponentQueryState[], compID?:string) {
         const ids = Object.keys(entity.components)
+        const instanceIds = Object.values(entity.components).map(c => c.instanceID)
         return state.every(query => {
-            const [id, shouldExist, _shouldSelf] = query
+            const [id, shouldExist, shouldSelf] = query
             // check if component should exist
             if (!shouldExist && ids.includes(id)) return false
 
-            // TODO needs to fire on component query
-            // needs more thought
-            // if (shouldSelf) return false
+
+            // Check if component should only be on same entity
+            if (shouldSelf) {
+                return compID ? instanceIds.includes(compID) : false
+                // get quering component in question from entity
+                // check against compID
+            }
 
             // check that component exists
             if (!ids.includes(id)) return false
@@ -83,13 +88,14 @@ export class QueryManager {
         return this.sysQueries[id];
     }
 
-    public getComponentQuery(component:TComponent) {
-        if (component.dependencies.length === 0) return
-        const id = component.typeID
+    public getComponentQuery(component:IComponent) {
+        const that = (component.constructor as typeof Component)
+        if (that.dependencies.length === 0) return
+        const id = component.instanceID
         if (!(id in this.compQueries)) {
-            this.compQueries[id] = component.dependencies.map(opers => {
+            this.compQueries[id] = that.dependencies.map(opers => {
                 return {
-                    entityQuery: this.stateFromOperands([opers], component),
+                    entityQuery: this.stateFromOperands([opers], (that as unknown) as TComponent),
                     entities: []
                 }
             })
@@ -99,17 +105,18 @@ export class QueryManager {
 
     public queryComponentQueries() {
         for (const entity of this.world.ecManager.entities) {
-            this.updateQueries(entity, this.compQueries)
+            this.updateQueries(entity, this.compQueries, true)
         }
     }
 
-    public updateQueries(entity: Entity, queries?:Query) {
+    public updateQueries(entity: Entity, queries?:Query, comp = false) {
         if (!queries) queries = this.sysQueries
         // check if entity needs to be put into query
         for (const id in queries) {
             const query = queries[id];
+            const compID = comp ? id : undefined
             for (const q of query) {
-                if (!q.entities.includes(entity) && this.validateEntityState(entity, q.entityQuery)) q.entities.push(entity)
+                if (!q.entities.includes(entity) && this.validateState(entity, q.entityQuery, compID)) q.entities.push(entity)
             }
         }
     }

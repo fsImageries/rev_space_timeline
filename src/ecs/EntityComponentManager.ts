@@ -37,7 +37,7 @@ export class EntityComponentManager {
     const c = new component(data);
     entity.components[typeID] = c;
 
-    c.dependendEntities = this.world.queryManager.getComponentQuery(component)
+    c.dependendQueries = this.world.queryManager.getComponentQuery(c)
 
     this.world.queryManager.updateQueries(entity)
     return this;

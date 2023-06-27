@@ -9,15 +9,17 @@ world.sysManager.registerSystem(RenderSystem);
 
 
 const base = () => {
-  const geometry = new SphereGeometry(15, 32, 16);
+  const geometry = new SphereGeometry(1, 32, 16);
   const material = new MeshNormalMaterial();
   const sphere = new Mesh(geometry, material);
 
-  // Sphere Entity
-  world.ecManager.createEntity()
-  .addComponent(MeshComponent, { mesh: sphere as Mesh })
-  .addComponent(ObjectGroupComponent, ObjectGroupComponent.getData())
-  .addComponent(RotGroupComponent, RotGroupComponent.getData())
+  for (let i = 0; i < 2; i++) {
+    // Sphere Entity
+    world.ecManager.createEntity()
+    .addComponent(MeshComponent, { mesh: new Mesh(geometry, material) as Mesh })
+    .addComponent(ObjectGroupComponent, ObjectGroupComponent.getData())
+    .addComponent(RotGroupComponent, RotGroupComponent.getData())
+  }
   
   // Renderer
   world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getData(world));
@@ -29,6 +31,8 @@ const base = () => {
   world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getData(world));
   
   world.load()
+
+  console.log(world.ecManager.entities[0].components)
 }
 
 const base2 = () => {
@@ -55,9 +59,9 @@ const base2 = () => {
 }
 
 world.lvlManager.openLevel("start", base)
-world.lvlManager.openLevel("second", base2)
+// world.lvlManager.openLevel("second", base2)
 
-world.lvlManager.openLevel("start")
+// world.lvlManager.openLevel("start")
 // world.lvlManager.openLevel("second")
 
 
@@ -77,7 +81,7 @@ function eventLoop(timestamp:number) {
   // Run all the systems
   world.execute(delta, timestamp)
 
-  if (n > max) return
+  // if (n > max) return
   n++
 
   prev = timestamp

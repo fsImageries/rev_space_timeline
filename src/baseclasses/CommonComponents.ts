@@ -58,8 +58,8 @@ export class MeshComponent extends Component<MeshComponentData> {
   static typeID = crypto.randomUUID()
 
   public init() {
-    if (!this.dependendEntities) return
-    for (const entity of this.dependendEntities[0].entities) {
+    if (!this.dependendQueries) return
+    for (const entity of this.dependendQueries[0].entities) {
       (entity.getComponent(SceneComponent) as SceneComponent).data.scene.add(this.data.mesh)
     }
   }
@@ -71,14 +71,17 @@ export class ObjectGroupComponent extends Component<GroupData> {
   static typeID = crypto.randomUUID()
 
   static getData(): GroupData {
+    const g = new Group()
+    g.position.set(Math.random() * 10, Math.random() * 10, Math.random() * 10)
     return {
-      group: new Group()
+      group: g
     };
   }
 
   public init() {
-    if (!this.dependendEntities) return
-    const mesh = this.dependendEntities[0].entities[0]
+    if (!this.dependendQueries) return
+    const mesh = this.dependendQueries[0].entities[0]
+    console.log("mesh: ",mesh)
     this.data.group.add((mesh.getComponent(MeshComponent) as MeshComponent).data.mesh);
   }
 }
@@ -94,12 +97,19 @@ export class RotGroupComponent extends Component<GroupData> {
   }
 
   public init() {
-    if (!this.dependendEntities) return
-    const grp = this.dependendEntities[0].entities[0]
-    const scene = this.dependendEntities[1].entities[0]
+    if (!this.dependendQueries) return
+    // TODO we query more than just self, every ObjectGroupComponent that exists is called, not just on same instance
+    // this.dependendQueries[0] <-- all groups
+    // this.dependendQueries[1] <-- all scenes
 
-    this.data.group.add((grp.getComponent(MeshComponent) as MeshComponent).data.mesh);
-    (scene.getComponent(SceneComponent) as SceneComponent).data.scene.add(this.data.group)
-
+    const scene = (this.dependendQueries[1].entities[0].getComponent(SceneComponent) as SceneComponent).data.scene;
+    for (let i = 0; i < this.dependendQueries[0].entities.length; i++) {
+      const grp = this.dependendQueries[0].entities[i]    //<-- this index needs to change    
+  
+      // console.log(grp, scene)
+      this.data.group.add((grp.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group);
+      scene.add(this.data.group)
+      // (scene.getComponent(SceneComponent) as SceneComponent).data.scene.add(this.data.group)
+    }
   }
 }

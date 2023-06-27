@@ -65,22 +65,23 @@ const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent
 console.log(scene.children);
 
 
+
 const max = 5;
 let n = 0;
-function run() {
-  // Compute delta and elapsed time
-  const time = performance.now();
-  const delta = time - lastTime;
+let prev:number;
+
+function eventLoop(timestamp:number) {
+  if (!prev) prev = timestamp
+  const delta = timestamp - prev;
 
   // Run all the systems
-  world.execute(delta, time);
-  if (n > max) return;
+  world.execute(delta, timestamp)
 
-  n++;
+  if (n > max) return
+  n++
 
-  lastTime = time;
-  requestAnimationFrame(run);
+  prev = timestamp
+  requestAnimationFrame(eventLoop)
 }
 
-let lastTime = performance.now();
-run();
+eventLoop(0)

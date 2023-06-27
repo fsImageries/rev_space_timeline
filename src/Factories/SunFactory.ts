@@ -1,89 +1,59 @@
-// import { Group, Mesh, MeshBasicMaterial, ShaderMaterial, SphereGeometry } from "three";
-// import CelestialBase from "../Classes/CelestialBase";
-// import Internal3DObject from "../Classes/Internal3DObject";
-// import { Sun } from "../Models/Sun";
-// import Constants from "../helpers/Constants";
-// import { uuidv4 } from "../helpers/utils";
-// import { SunData } from "../jsonInterfaces";
-// import sunFrag from "./../glsl/sun_frag.glsl?raw";
-// import sunVert from "./../glsl/sun_vert.glsl?raw";
+import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
+import Constants from "../helpers/Constants";
+import { SunData } from "../jsonInterfaces";
+import sunFrag from "./../glsl/sun_frag.glsl?raw";
+import sunVert from "./../glsl/sun_vert.glsl?raw";
+import { Entity } from "../ecs/Entity";
+import { AxisRotComponent } from "../baseclasses/CelestialComponents";
+import { MeshComponent, ObjectGroupComponent, PointLightComponent, RotGroupComponent } from "../baseclasses/MeshComponents";
 
-// const GEOM = new SphereGeometry(1, 30, 30);
+const GEOM = new SphereGeometry(1, 30, 30);
 
-// let MS_MAT: MeshBasicMaterial;
+export function buildSun(entity:Entity, data:SunData) {
+    const [mesh, objectGrp, rotGrp] =  buildMeshes(data)
+    mesh.scale.multiplyScalar(1000)
 
-// export default function build(data: SunData) {
-//   Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
+    Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
+    entity
+    .addComponent(AxisRotComponent, AxisRotComponent.getData(data.rotationPeriod))
+    .addComponent(MeshComponent, {mesh: mesh as Mesh})
+    .addComponent(ObjectGroupComponent, ObjectGroupComponent.getData())
+    .addComponent(RotGroupComponent, RotGroupComponent.getData())
+    .addComponent(PointLightComponent, PointLightComponent.getData("#fff", 1, 100))
 
-//   const mat = getMat(data);
-//   const mesh = new Mesh(GEOM, mat);
-//   mesh.scale.setScalar(data.radius / Constants.SIZE_SCALE);
-//   mesh.name = `${data.name}_mesh`;
+    Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
-//   const meshGrp = new Group();
-//   meshGrp.name = `${data.name}_meshGrp`;
-//   meshGrp.add(mesh);
+    return entity
+}
 
-//   const masterGrp = new Group();
-//   const parentGrp = new Group();
-//   masterGrp.name = `${data.name}_masterGrp`;
-//   parentGrp.name = `${data.name}_parentGrp`;
-//   masterGrp.add(meshGrp);
-//   parentGrp.add(masterGrp);
+function buildMeshes(data: SunData) {
+    Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
-//   const celestialData = new CelestialBase({
-//     id: uuidv4(),
-//     name: data.name,
-//     type: data.type,
-//     tilt: data.tilt,
-//     parent: data.parent,
-//     radius: data.radius,
-//     texts: data.texts,
-//     orbitalPeriod: data.orbitalPeriod,
-//     rotationPeriod: data.rotationPeriod,
-//     distanceToParent: data.distanceToParent,
-//     drawRadius: data.draw.radius
-//   });
+    const mat = new ShaderMaterial({
+        uniforms: {
+            time: { value: 1.0 },
+            scale: { value: 2.5 },
+            highTemp: { value: data.highTemp },
+            lowTemp: { value: data.lowTemp }
+        },
+        vertexShader: sunVert,
+        fragmentShader: sunFrag,
+        depthWrite: true,
+        depthTest: true,
+        transparent: false
+    });
 
-//   const internalObject = new Internal3DObject({
-//     parentGrp,
-//     masterGrp,
-//     meshGrp,
-//     mesh,
-//     displayInfo: data.displayInfo
-//   });
+    const mesh = new Mesh(GEOM, mat);
+    mesh.scale.setScalar(data.radius / Constants.SIZE_SCALE);
+    mesh.name = `${data.name}_mesh`;
 
-//   const sun = new Sun(
-//     {
-//       data: celestialData,
-//       object: internalObject
-//     },
-//     data.disableLight
-//   );
-//   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
+    const objectGrp = new Group();
+    const rotGrp = new Group();
+    objectGrp.name = `${data.name}_objectGrp`;
+    rotGrp.name = `${data.name}_rotGrp`;
 
-//   return sun;
-// }
 
-// const getMat = (data: SunData) => {
-//   if (data.isSimple) {
-//     if (MS_MAT) return MS_MAT;
-//     return new MeshBasicMaterial({
-//       color: data.color ? data.color : 0xffffff
-//     });
-//   }
-//   // if (SH_MAT) return SH_MAT;
-//   return new ShaderMaterial({
-//     uniforms: {
-//       time: { value: 1.0 },
-//       scale: { value: 2.5 },
-//       highTemp: { value: data.highTemp },
-//       lowTemp: { value: data.lowTemp }
-//     },
-//     vertexShader: sunVert,
-//     fragmentShader: sunFrag,
-//     depthWrite: true,
-//     depthTest: true,
-//     transparent: false
-//   });
-// };
+    Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
+
+    return [mesh, objectGrp, rotGrp]
+}

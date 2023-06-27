@@ -26,7 +26,7 @@ export class QueryManager {
         this.world = world
     }
 
-    private stateFromOperands(operands: QueryOperand[], self?:TComponent): ComponentQueryState[] {
+    private stateFromOperands(operands: QueryOperand[]): ComponentQueryState[] {
         const entityState: ComponentQueryState[] = []
         for (const operand of operands) {
             // State: [componentID, shouldExist, shouldSelf]
@@ -95,7 +95,7 @@ export class QueryManager {
         if (!(id in this.compQueries)) {
             this.compQueries[id] = that.dependencies.map(opers => {
                 return {
-                    entityQuery: this.stateFromOperands([opers], (that as unknown) as TComponent),
+                    entityQuery: this.stateFromOperands([opers]),
                     entities: []
                 }
             })

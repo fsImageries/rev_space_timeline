@@ -1,5 +1,5 @@
 import { BoxGeometry, Mesh, MeshNormalMaterial, SphereGeometry } from "three";
-import { CameraComponent, RenderComponent, SceneComponent } from "./baseclasses/CommonComponents";
+import { CameraComponent, RenderComponent, SceneComponent, UniformsComponent } from "./baseclasses/CommonComponents";
 import { RenderSystem } from "./baseclasses/CommonSystems";
 import { MeshComponent, ObjectGroupComponent, RotGroupComponent } from "./baseclasses/MeshComponents";
 import { World } from "./ecs/World";
@@ -61,6 +61,7 @@ world.lvlManager.openLevel("second", _base)
 
 
 const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID].data.scene;
+const uniforms = world.ecManager.entities.find((e) => e.getComponent(UniformsComponent))?.components[UniformsComponent.typeID].data;
 console.log(scene.children);
 
 
@@ -75,8 +76,10 @@ function eventLoop(timestamp: number) {
 
   // Run all the systems
   world.execute(delta, timestamp)
+  uniforms.time.value = timestamp * 0.0001
+  // console.log(uniforms)
 
-  if (n > max) return
+  // if (n > max) return
   n++
 
   prev = timestamp

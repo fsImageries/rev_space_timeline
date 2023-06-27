@@ -6,36 +6,40 @@ import sunVert from "./../glsl/sun_vert.glsl?raw";
 import { Entity } from "../ecs/Entity";
 import { AxisRotComponent } from "../baseclasses/CelestialComponents";
 import { MeshComponent, ObjectGroupComponent, PointLightComponent, RotGroupComponent } from "../baseclasses/MeshComponents";
+import { UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
 
 const GEOM = new SphereGeometry(1, 30, 30);
 
-export function buildSun(entity:Entity, data:SunData) {
-    const [mesh, objectGrp, rotGrp] =  buildMeshes(data)
+export function buildSun(entity: Entity, data: SunData) {
+    const [mesh, objectGrp, rotGrp, uniforms] = buildMeshes(data)
     mesh.scale.multiplyScalar(1000)
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
     entity
-    .addComponent(AxisRotComponent, AxisRotComponent.getData(data.rotationPeriod))
-    .addComponent(MeshComponent, {mesh: mesh as Mesh})
-    .addComponent(ObjectGroupComponent, ObjectGroupComponent.getData())
-    .addComponent(RotGroupComponent, RotGroupComponent.getData())
-    .addComponent(PointLightComponent, PointLightComponent.getData("#fff", 1, 100))
+        .addComponent(AxisRotComponent, AxisRotComponent.getData(data.rotationPeriod))
+        .addComponent(UniformsComponent, uniforms)
+        .addComponent(MeshComponent, { mesh: mesh as Mesh })
+        .addComponent(ObjectGroupComponent, ObjectGroupComponent.getData())
+        .addComponent(RotGroupComponent, RotGroupComponent.getData())
+        .addComponent(PointLightComponent, PointLightComponent.getData("#fff", 1, 100))
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
     return entity
 }
 
-function buildMeshes(data: SunData) {
+function buildMeshes(data: SunData): [Mesh, Group, Group, UniformsData] {
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
 
+    const uniforms = {
+        time: { value: 1.0 },
+        scale: { value: 2.5 },
+        highTemp: { value: data.highTemp },
+        lowTemp: { value: data.lowTemp }
+    }
+
     const mat = new ShaderMaterial({
-        uniforms: {
-            time: { value: 1.0 },
-            scale: { value: 2.5 },
-            highTemp: { value: data.highTemp },
-            lowTemp: { value: data.lowTemp }
-        },
+        uniforms: uniforms,
         vertexShader: sunVert,
         fragmentShader: sunFrag,
         depthWrite: true,
@@ -55,5 +59,5 @@ function buildMeshes(data: SunData) {
 
     Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
 
-    return [mesh, objectGrp, rotGrp]
+    return [mesh, objectGrp, rotGrp, uniforms]
 }

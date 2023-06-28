@@ -47,16 +47,15 @@ export interface SystemData {
 
 export interface SystemObjectData {
   name: string;
-  type: string;
   radius: number;
-  rotationPeriod: number;
-  orbitalPeriod: number;
-  parent: string;
-  tilt: number;
-  distanceToParent: number;
+  rotationPeriod?: number;
+  orbitalPeriod?: number;
+  parent?: string;
+  tilt?: number;
+  distanceToParent?: number;
   // highTemp: 5100 # TODO implement into new interfaces
   // lowTemp: 1700 # TODO implement into new interfaces
-  draw: DrawData;
+  draw?: DrawData;
   texts?: string[];
   displayInfo?: boolean;
 }

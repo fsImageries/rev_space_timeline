@@ -26,7 +26,7 @@ export class EntityComponentManager {
   public addEntityComponent<T extends ComponentSchema, C extends Component<T>>(
     entity: Entity | string,
     component: ComponentConstructor<T, C>,
-    data: T
+    data?: T
   ) {
     if (!component.typeID) component.typeID = crypto.randomUUID();
     const typeID = component.typeID;
@@ -34,7 +34,7 @@ export class EntityComponentManager {
     entity = typeof entity === "string" ? (this.entities.find((e) => e.id === entity) as Entity) : entity;
     if (typeID in entity.components) return this; // Component already exists
 
-    const c = new component(data);
+    const c = new component(data ? data : {} as T);
     entity.components[typeID] = c;
 
     c.dependendQueries = this.world.queryManager.getComponentQuery(c)

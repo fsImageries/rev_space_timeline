@@ -13,7 +13,7 @@ export class Entity {
 
   public addComponent<T extends ComponentSchema, C extends Component<T>>(
     component: ComponentConstructor<T, C>,
-    data: T
+    data?: T
   ) {
     this.ecManager.addEntityComponent(this, component, data);
     return this;

@@ -1,8 +1,8 @@
 import { PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Component, TypeComponent } from "../ecs/Component";
+import { operand } from "../ecs/QueryManager";
 import { World } from "../ecs/World";
-import { QueryOperand, operand } from "../ecs/QueryManager";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;

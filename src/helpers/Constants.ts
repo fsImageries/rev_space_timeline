@@ -11,7 +11,7 @@ const Constants = {
   DISTANCE_SCALE: 100000,
   SIZE_SCALE: 100000,
   ORB_SCALE: 1000000,
-  ROT_SCALE: 10000,
+  ROT_SCALE: 100,
   CAM_ROT_SPEED: Math.PI / 64,
 
   _time_scale: 1,

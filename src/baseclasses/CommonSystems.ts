@@ -1,6 +1,9 @@
 import { operand } from "../ecs/QueryManager";
 import { System } from "../ecs/System";
+import Constants from "../helpers/Constants";
+import { AxisRotComponent } from "./CelestialComponents";
 import { CameraComponent, RenderComponent, SceneComponent } from "./CommonComponents";
+import { MeshComponent, ObjectGroupComponent } from "./MeshComponents";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
@@ -42,4 +45,21 @@ export function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
     renderer.setSize(width, height, false);
   }
   return needResize;
+}
+
+
+export class AxisRotSystem extends System {
+
+  static queries = [
+    [operand("exist", AxisRotComponent), operand("exist", MeshComponent)],
+  ];
+  execute(delta: number): void {
+    for (const entity of this.queries[0].entities) {
+      const axis = (entity.getComponent(AxisRotComponent) as AxisRotComponent);
+      const objGrp = (entity.getComponent(MeshComponent) as MeshComponent);
+
+      const axisVal = delta * axis.data.rotVel * Constants.ROT_SCALE
+      objGrp.data.mesh.rotation.y += axisVal
+    }
+  }
 }

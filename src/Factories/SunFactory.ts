@@ -14,16 +14,17 @@ export function buildSun(entity: Entity, data: SunData) {
     const [mesh, objectGrp, rotGrp, uniforms] = buildMeshes(data)
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
+    if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod))
+    if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 100))
+
     entity
-        .addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod))
         .addComponent(UniformsComponent, uniforms)
         .addComponent(MeshComponent, { mesh: mesh as Mesh })
         .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults(objectGrp))
         .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp))
-        .addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 100))
         .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
-        .addComponent(SunTypeComponent, {})
         .addComponent(BaseDataComponent, {name:data.name, uuid: crypto.randomUUID() as string})
+        .addComponent(SunTypeComponent)
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 

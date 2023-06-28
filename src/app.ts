@@ -1,14 +1,15 @@
-import { BoxGeometry, Mesh, MeshNormalMaterial, SphereGeometry } from "three";
+import { Mesh, MeshNormalMaterial, SphereGeometry } from "three";
+import { buildCosmicMap } from "./Levels/CosmicMap";
 import { CameraComponent, RenderComponent, SceneComponent, UniformsComponent } from "./baseclasses/CommonComponents";
-import { RenderSystem } from "./baseclasses/CommonSystems";
+import { AxisRotSystem, RenderSystem } from "./baseclasses/CommonSystems";
 import { MeshComponent, ObjectGroupComponent, RotGroupComponent } from "./baseclasses/MeshComponents";
 import { World } from "./ecs/World";
-import { buildSun } from "./Factories/SunFactory";
-import { buildCosmicMap } from "./Levels/CosmicMap";
 
 const world = new World();
 
-world.sysManager.registerSystem(RenderSystem);
+world.sysManager
+.registerSystem(RenderSystem)
+.registerSystem(AxisRotSystem);
 
 
 const base = () => {

@@ -52,7 +52,7 @@ export interface SystemObjectData {
   orbitalPeriod?: number;
   parent?: string;
   tilt?: number;
-  distanceToParent?: number;
+  distanceToParent?: number[];
   // highTemp: 5100 # TODO implement into new interfaces
   // lowTemp: 1700 # TODO implement into new interfaces
   draw?: DrawData;

@@ -96,7 +96,7 @@ export interface RadiusData {
     static getDefaults(radius: number): RadiusData {
       return {
         radius: radius,
-        drawRadius: radius / Constants.SIZE_SCALE
+        drawRadius: radius * Constants.SIZE_SCALE
       };
     }
   

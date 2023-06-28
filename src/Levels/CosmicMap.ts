@@ -2,14 +2,23 @@ import { World } from "../ecs/World";
 import { buildSun } from "../Factories/SunFactory";
 import { RenderComponent, SceneComponent, CameraComponent } from "../baseclasses/CommonComponents";
 
-export function buildCosmicMap(world:World) {
-    let sun = world.ecManager.createEntity()
+export function registerCosmicMap(world:World) {
 
-    buildSun(sun, { 
-        highTemp: 7000, lowTemp: 3000, 
-        name: "sol", 
+    buildSun(world.ecManager.createEntity(), { 
+        highTemp: 7100, lowTemp: 3100, 
+        name: "Sol", 
         rotationPeriod: 648, 
-        radius: 508328.2,
+        radius: 3000,
+        disableLight: true
+    })
+
+    buildSun(world.ecManager.createEntity(), { 
+        highTemp: 4500, lowTemp: 3500, 
+        name: "Epsilon Eridani", 
+        rotationPeriod: 1000, 
+        radius: 2200,
+        distanceToParent: [1000000, 300000],
+        disableLight: true
     })
   
     // Renderer

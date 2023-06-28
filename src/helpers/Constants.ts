@@ -8,8 +8,8 @@ manager.onError = function (url) {
 };
 
 const Constants = {
-  DISTANCE_SCALE: 100000,
-  SIZE_SCALE: 100000,
+  DISTANCE_SCALE: 1e-4,
+  SIZE_SCALE: 1e-3,
   ORB_SCALE: 1000000,
   ROT_SCALE: 100,
   CAM_ROT_SPEED: Math.PI / 64,

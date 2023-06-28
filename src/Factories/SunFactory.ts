@@ -1,5 +1,5 @@
 import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
-import { AxisRotComponent } from "../baseclasses/CelestialComponents";
+import { AxisRotComponent, DistanceToParentComponent } from "../baseclasses/CelestialComponents";
 import { BaseDataComponent, SunTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
 import { MeshComponent, ObjectGroupComponent, PointLightComponent, RadiusComponent, RotGroupComponent } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
@@ -16,6 +16,8 @@ export function buildSun(entity: Entity, data: SunData) {
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
     if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod))
     if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 100))
+    if (data.distanceToParent)
+        entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent))
 
     entity
         .addComponent(UniformsComponent, uniforms)
@@ -23,7 +25,7 @@ export function buildSun(entity: Entity, data: SunData) {
         .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults(objectGrp))
         .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp))
         .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
-        .addComponent(BaseDataComponent, {name:data.name, uuid: crypto.randomUUID() as string})
+        .addComponent(BaseDataComponent, { name: data.name, uuid: crypto.randomUUID() as string })
         .addComponent(SunTypeComponent)
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
@@ -51,7 +53,7 @@ function buildMeshes(data: SunData): [Mesh, Group, Group, UniformsData] {
     });
 
     const mesh = new Mesh(GEOM, mat);
-    mesh.scale.setScalar(data.radius / Constants.SIZE_SCALE);
+    mesh.scale.setScalar(data.radius * Constants.SIZE_SCALE);
     mesh.name = `${data.name}_mesh`;
 
     const objectGrp = new Group();

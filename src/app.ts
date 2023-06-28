@@ -1,5 +1,5 @@
 import { Mesh, MeshNormalMaterial, SphereGeometry } from "three";
-import { buildCosmicMap } from "./Levels/CosmicMap";
+import { registerCosmicMap } from "./Levels/CosmicMap";
 import { CameraComponent, RenderComponent, SceneComponent, UniformsComponent } from "./baseclasses/CommonComponents";
 import { AxisRotSystem, RenderSystem } from "./baseclasses/CommonSystems";
 import { MeshComponent, ObjectGroupComponent, RotGroupComponent } from "./baseclasses/MeshComponents";
@@ -39,7 +39,7 @@ const base = () => {
 }
 
 // world.lvlManager.openLevel("start", base)
-world.lvlManager.openLevel("second", buildCosmicMap)
+world.lvlManager.openLevel("cosmicMap", registerCosmicMap)
 
 // world.lvlManager.openLevel("start")
 // world.lvlManager.openLevel("second")

@@ -2,6 +2,7 @@ import { Group, Mesh, Object3D, PointLight } from "three";
 import { Component } from "../ecs/Component";
 import { SceneComponent } from "./CommonComponents";
 import { operand } from "../ecs/QueryManager";
+import Constants from "../helpers/Constants";
 
 
 export interface MeshData { mesh: Mesh; }
@@ -23,11 +24,9 @@ export class ObjectGroupComponent extends Component<GroupData> {
     static dependencies = [operand("self", MeshComponent)];
     static typeID = crypto.randomUUID()
 
-    static getDefaults(): GroupData {
-        const g = new Group()
-        g.position.set(Math.random() * 10, Math.random() * 10, Math.random() * 10)
+    static getDefaults(g?: Group): GroupData {
         return {
-            group: g
+            group: g ? g : new Group()
         };
     }
 
@@ -43,9 +42,9 @@ export class RotGroupComponent extends Component<GroupData> {
     static dependencies = [operand("self", ObjectGroupComponent), operand("exist", SceneComponent)];
     static typeID = crypto.randomUUID()
 
-    static getDefaults(): GroupData {
+    static getDefaults(g?:Group): GroupData {
         return {
-            group: new Group()
+            group: g ? g : new Group()
         };
     }
 
@@ -71,7 +70,7 @@ export class PointLightComponent extends Component<PointLightData> {
     static dependencies = [operand("self", ObjectGroupComponent)];
     static typeID = crypto.randomUUID()
 
-    static getDefaults(color:string, intensity: number, distance:number): PointLightData {
+    static getDefaults(color: string, intensity: number, distance: number): PointLightData {
         return {
             light: new PointLight(color, intensity, distance)
         };
@@ -84,3 +83,27 @@ export class PointLightComponent extends Component<PointLightData> {
         grp.data.group.add(this.data.light)
     }
 }
+
+
+export interface RadiusData {
+    radius: number,
+    drawRadius: number
+  };
+  export class RadiusComponent extends Component<RadiusData> {
+    static dependencies = [operand("self", ObjectGroupComponent)];
+    static typeID = crypto.randomUUID();
+  
+    static getDefaults(radius: number): RadiusData {
+      return {
+        radius: radius,
+        drawRadius: radius / Constants.SIZE_SCALE
+      };
+    }
+  
+    public init() {
+      if (!this.dependendQueries) return
+  
+      const objGrp = this.dependendQueries[0].entities[0];
+      (objGrp.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group.scale.multiplyScalar(this.data.drawRadius*2)
+    }
+  }

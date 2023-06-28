@@ -1,27 +1,29 @@
 import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
+import { AxisRotComponent } from "../baseclasses/CelestialComponents";
+import { BaseDataComponent, SunTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
+import { MeshComponent, ObjectGroupComponent, PointLightComponent, RadiusComponent, RotGroupComponent } from "../baseclasses/MeshComponents";
+import { Entity } from "../ecs/Entity";
 import Constants from "../helpers/Constants";
 import { SunData } from "../jsonInterfaces";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
-import { Entity } from "../ecs/Entity";
-import { AxisRotComponent } from "../baseclasses/CelestialComponents";
-import { MeshComponent, ObjectGroupComponent, PointLightComponent, RotGroupComponent } from "../baseclasses/MeshComponents";
-import { UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
 
 const GEOM = new SphereGeometry(1, 30, 30);
 
 export function buildSun(entity: Entity, data: SunData) {
     const [mesh, objectGrp, rotGrp, uniforms] = buildMeshes(data)
-    mesh.scale.multiplyScalar(1000)
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
     entity
         .addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod))
         .addComponent(UniformsComponent, uniforms)
         .addComponent(MeshComponent, { mesh: mesh as Mesh })
-        .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults())
-        .addComponent(RotGroupComponent, RotGroupComponent.getDefaults())
+        .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults(objectGrp))
+        .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp))
         .addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 100))
+        .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
+        .addComponent(SunTypeComponent, {})
+        .addComponent(BaseDataComponent, {name:data.name, uuid: crypto.randomUUID() as string})
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 

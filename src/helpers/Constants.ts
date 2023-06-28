@@ -9,7 +9,7 @@ manager.onError = function (url) {
 
 const Constants = {
   DISTANCE_SCALE: 100000,
-  SIZE_SCALE: 100,
+  SIZE_SCALE: 100000,
   ORB_SCALE: 1000000,
   ROT_SCALE: 10000,
   CAM_ROT_SPEED: Math.PI / 64,

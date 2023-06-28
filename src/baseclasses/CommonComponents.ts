@@ -1,6 +1,8 @@
 import { PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Component, TypeComponent } from "../ecs/Component";
 import { World } from "../ecs/World";
+import { QueryOperand, operand } from "../ecs/QueryManager";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
@@ -37,18 +39,35 @@ export class SceneComponent extends Component<SceneComponentData> {
 }
 
 export interface CameraComponentData {
-  active: PerspectiveCamera /*freeCtrl: OrbitControls */;
+  active: PerspectiveCamera 
+  freeCtrl?: OrbitControls;
 }
 export class CameraComponent extends Component<CameraComponentData> {
+  static dependencies = [operand("exist", RenderComponent)]
   static typeID = crypto.randomUUID();
+  
   static getDefaults(world: World): CameraComponentData {
     const cam = new PerspectiveCamera(30, world.canvas.clientWidth / world.canvas.clientHeight, 0.1, 1e12);
-    cam.position.z = 200;
+    cam.position.z = 1200;
     return {
-      active: cam
-      // freeCtrl: new OrbitControls(new PerspectiveCamera(), )
+      active: cam,
     };
   }
+
+  public init() {
+    if (!this.dependendQueries) return
+  
+    const renderer = (this.dependendQueries[0].entities[0].getComponent(RenderComponent) as RenderComponent).data.renderer
+    this.data.freeCtrl = new OrbitControls(this.data.active, renderer.domElement)
+  }
+}
+
+export interface BaseDataData {
+  name: string,
+  uuid: string
+};
+export class BaseDataComponent extends Component<BaseDataData> {
+  static typeID = crypto.randomUUID();
 }
 
 export interface UniformsData { [uniformName: string]: { value: number } }

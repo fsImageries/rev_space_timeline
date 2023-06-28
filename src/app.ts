@@ -4,6 +4,7 @@ import { RenderSystem } from "./baseclasses/CommonSystems";
 import { MeshComponent, ObjectGroupComponent, RotGroupComponent } from "./baseclasses/MeshComponents";
 import { World } from "./ecs/World";
 import { buildSun } from "./Factories/SunFactory";
+import { buildCosmicMap } from "./Levels/CosmicMap";
 
 const world = new World();
 
@@ -36,25 +37,8 @@ const base = () => {
   console.log(world.ecManager.entities[0].components)
 }
 
-const _base = () => {
-  const sun = world.ecManager.createEntity()
-
-  buildSun(sun, { highTemp: 7000, lowTemp: 3000, name: "sol", rotationPeriod: 1000, radius: 1, parent: "", orbitalPeriod: NaN, type: "sun", tilt: 0, distanceToParent: 0, draw: { radius: 1 } })
-
-  // Renderer
-  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getDefaults(world));
-
-  // Renderer
-  world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getDefaults());
-
-  // Camera
-  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getDefaults(world));
-
-  world.load()
-}
-
 // world.lvlManager.openLevel("start", base)
-world.lvlManager.openLevel("second", _base)
+world.lvlManager.openLevel("second", buildCosmicMap)
 
 // world.lvlManager.openLevel("start")
 // world.lvlManager.openLevel("second")

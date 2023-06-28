@@ -1,7 +1,8 @@
-import { Group, Mesh, Object3D, PointLight } from "three";
+import { BufferGeometry, Group, Line, LineBasicMaterial, Mesh, Object3D, PointLight, Vector3 } from "three";
 import { Component } from "../ecs/Component";
-import { SceneComponent } from "./CommonComponents";
 import { operand } from "../ecs/QueryManager";
+import { SceneComponent } from "./CommonComponents";
+import { DEG2RAD } from "three/src/math/MathUtils";
 import Constants from "../helpers/Constants";
 
 
@@ -42,7 +43,7 @@ export class RotGroupComponent extends Component<GroupData> {
     static dependencies = [operand("self", ObjectGroupComponent), operand("exist", SceneComponent)];
     static typeID = crypto.randomUUID()
 
-    static getDefaults(g?:Group): GroupData {
+    static getDefaults(g?: Group): GroupData {
         return {
             group: g ? g : new Group()
         };
@@ -85,25 +86,35 @@ export class PointLightComponent extends Component<PointLightData> {
 }
 
 
-export interface RadiusData {
-    radius: number,
-    drawRadius: number
-  };
-  export class RadiusComponent extends Component<RadiusData> {
-    static dependencies = [operand("self", ObjectGroupComponent)];
-    static typeID = crypto.randomUUID();
-  
-    static getDefaults(radius: number): RadiusData {
-      return {
-        radius: radius,
-        drawRadius: radius * Constants.SIZE_SCALE
-      };
+const RINGMAT = new LineBasicMaterial({
+    color: "#ffffff",
+    transparent: true,
+    opacity: 0.45
+});
+export interface BasicRingData { line: Line }
+export class BasicRingComponent extends Component<BasicRingData> {
+    static dependencies = [operand("exist", SceneComponent)];
+    static typeID = crypto.randomUUID()
+
+    static getDefaults(mult = 1, radius = Constants.LIGHTYEAR): BasicRingData {
+        const points = [];
+        radius = radius * Constants.DISTANCE_SCALE
+        for (let i = 0; i <= 360; i++) {
+            points.push(new Vector3(radius * Math.sin(i * DEG2RAD), 0, radius * Math.cos(i * DEG2RAD)));
+        }
+        const geom = new BufferGeometry();
+        geom.setFromPoints(points);
+        geom.scale(mult, 1, mult)
+
+        return {
+            line: new Line(geom, RINGMAT)
+        };
     }
-  
+
     public init() {
-      if (!this.dependendQueries) return
-  
-      const objGrp = this.dependendQueries[0].entities[0];
-      (objGrp.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group.scale.multiplyScalar(this.data.drawRadius*2)
+        if (!this.dependendQueries) return
+        const grp = this.dependendQueries[0].entities[0].getComponent(SceneComponent) as SceneComponent
+        // this.data.line.position.copy(grp.data.group.position)
+        grp.data.scene.add(this.data.line)
     }
-  }
+}

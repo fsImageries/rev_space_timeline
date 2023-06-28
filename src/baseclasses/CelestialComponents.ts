@@ -1,5 +1,5 @@
 import { Component } from "../ecs/Component";
-import { QueryOperand, operand } from "../ecs/QueryManager";
+import { operand } from "../ecs/QueryManager";
 import Constants from "../helpers/Constants";
 import { ObjectGroupComponent } from "./MeshComponents";
 
@@ -40,5 +40,28 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
             grp.position.x += this.data.drawX
             if (this.data.drawY) grp.position.y += this.data.drawY
         }
+    }
+}
+
+export interface RadiusData {
+    radius: number,
+    drawRadius: number
+};
+export class RadiusComponent extends Component<RadiusData> {
+    static dependencies = [operand("self", ObjectGroupComponent)];
+    static typeID = crypto.randomUUID();
+
+    static getDefaults(radius: number): RadiusData {
+        return {
+            radius: radius,
+            drawRadius: radius * Constants.SIZE_SCALE
+        };
+    }
+
+    public init() {
+        if (!this.dependendQueries) return
+
+        const objGrp = this.dependendQueries[0].entities[0];
+        (objGrp.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group.scale.multiplyScalar(this.data.drawRadius * 2)
     }
 }

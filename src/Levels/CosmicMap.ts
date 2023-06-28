@@ -1,6 +1,8 @@
 import { World } from "../ecs/World";
 import { buildSun } from "../Factories/SunFactory";
 import { RenderComponent, SceneComponent, CameraComponent } from "../baseclasses/CommonComponents";
+import { BasicRingComponent } from "../baseclasses/MeshComponents";
+import Constants from "../helpers/Constants";
 
 export function registerCosmicMap(world:World) {
 
@@ -17,9 +19,18 @@ export function registerCosmicMap(world:World) {
         name: "Epsilon Eridani", 
         rotationPeriod: 1000, 
         radius: 2200,
-        distanceToParent: [1000000, 300000],
+        distanceToParent: [Constants.LIGHTYEAR * 10.47, -(Constants.LIGHTYEAR * 3)],
         disableLight: true
     })
+
+    world.ecManager.createEntity()
+    .addComponent(BasicRingComponent, BasicRingComponent.getDefaults())
+
+    world.ecManager.createEntity()
+    .addComponent(BasicRingComponent, BasicRingComponent.getDefaults(5))
+
+    world.ecManager.createEntity()
+    .addComponent(BasicRingComponent, BasicRingComponent.getDefaults(15))
   
     // Renderer
     world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getDefaults(world));

@@ -1,7 +1,7 @@
 import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
-import { AxisRotComponent, DistanceToParentComponent } from "../baseclasses/CelestialComponents";
+import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
 import { BaseDataComponent, SunTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
-import { MeshComponent, ObjectGroupComponent, PointLightComponent, RadiusComponent, RotGroupComponent } from "../baseclasses/MeshComponents";
+import { MeshComponent, ObjectGroupComponent, PointLightComponent, RotGroupComponent } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
 import Constants from "../helpers/Constants";
 import { SunData } from "../jsonInterfaces";

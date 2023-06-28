@@ -23,7 +23,7 @@ export class ObjectGroupComponent extends Component<GroupData> {
     static dependencies = [operand("self", MeshComponent)];
     static typeID = crypto.randomUUID()
 
-    static getData(): GroupData {
+    static getDefaults(): GroupData {
         const g = new Group()
         g.position.set(Math.random() * 10, Math.random() * 10, Math.random() * 10)
         return {
@@ -43,7 +43,7 @@ export class RotGroupComponent extends Component<GroupData> {
     static dependencies = [operand("self", ObjectGroupComponent), operand("exist", SceneComponent)];
     static typeID = crypto.randomUUID()
 
-    static getData(): GroupData {
+    static getDefaults(): GroupData {
         return {
             group: new Group()
         };
@@ -71,7 +71,7 @@ export class PointLightComponent extends Component<PointLightData> {
     static dependencies = [operand("self", ObjectGroupComponent)];
     static typeID = crypto.randomUUID()
 
-    static getData(color:string, intensity: number, distance:number): PointLightData {
+    static getDefaults(color:string, intensity: number, distance:number): PointLightData {
         return {
             light: new PointLight(color, intensity, distance)
         };

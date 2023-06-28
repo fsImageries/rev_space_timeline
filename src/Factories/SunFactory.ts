@@ -16,12 +16,12 @@ export function buildSun(entity: Entity, data: SunData) {
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
     entity
-        .addComponent(AxisRotComponent, AxisRotComponent.getData(data.rotationPeriod))
+        .addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod))
         .addComponent(UniformsComponent, uniforms)
         .addComponent(MeshComponent, { mesh: mesh as Mesh })
-        .addComponent(ObjectGroupComponent, ObjectGroupComponent.getData())
-        .addComponent(RotGroupComponent, RotGroupComponent.getData())
-        .addComponent(PointLightComponent, PointLightComponent.getData("#fff", 1, 100))
+        .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults())
+        .addComponent(RotGroupComponent, RotGroupComponent.getDefaults())
+        .addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 100))
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 

@@ -29,6 +29,11 @@ export class TagComponent<T extends ComponentSchema> extends Component<T> {
   static isTag = false;
 }
 
+export type TypeSchema = { type: string}
+export class TypeComponent extends Component<{}> {
+  static isTag = false;
+}
+
 export interface ComponentConstructor<T extends ComponentSchema, C extends Component<T>> {
   dependencies: QueryOperand[];
   typeID: string;

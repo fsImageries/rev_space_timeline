@@ -18,18 +18,18 @@ const base = () => {
     // Sphere Entity
     world.ecManager.createEntity()
       .addComponent(MeshComponent, { mesh: new Mesh(geometry, material) as Mesh })
-      .addComponent(ObjectGroupComponent, ObjectGroupComponent.getData())
-      .addComponent(RotGroupComponent, RotGroupComponent.getData())
+      .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults())
+      .addComponent(RotGroupComponent, RotGroupComponent.getDefaults())
   }
 
   // Renderer
-  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getData(world));
+  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getDefaults(world));
 
   // Renderer
-  world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getData());
+  world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getDefaults());
 
   // Camera
-  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getData(world));
+  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getDefaults(world));
 
   world.load()
 
@@ -42,13 +42,13 @@ const _base = () => {
   buildSun(sun, { highTemp: 7000, lowTemp: 3000, name: "sol", rotationPeriod: 1000, radius: 1, parent: "", orbitalPeriod: NaN, type: "sun", tilt: 0, distanceToParent: 0, draw: { radius: 1 } })
 
   // Renderer
-  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getData(world));
+  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getDefaults(world));
 
   // Renderer
-  world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getData());
+  world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getDefaults());
 
   // Camera
-  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getData(world));
+  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getDefaults(world));
 
   world.load()
 }

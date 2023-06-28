@@ -1,5 +1,5 @@
 import { PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { Component } from "../ecs/Component";
+import { Component, TypeComponent } from "../ecs/Component";
 import { World } from "../ecs/World";
 
 export interface RenderComponentData {
@@ -9,7 +9,7 @@ export interface RenderComponentData {
 
 export class RenderComponent extends Component<RenderComponentData> {
   static typeID = crypto.randomUUID();
-  static getData(world: World): RenderComponentData {
+  static getDefaults(world: World): RenderComponentData {
     const renderer = new WebGLRenderer({
       canvas: world.canvas,
       antialias: true,
@@ -30,7 +30,7 @@ export interface SceneComponentData {
 }
 export class SceneComponent extends Component<SceneComponentData> {
   static typeID = crypto.randomUUID();
-  static getData(): SceneComponentData {
+  static getDefaults(): SceneComponentData {
     const scene = new Scene();
     return { scene };
   }
@@ -41,7 +41,7 @@ export interface CameraComponentData {
 }
 export class CameraComponent extends Component<CameraComponentData> {
   static typeID = crypto.randomUUID();
-  static getData(world: World): CameraComponentData {
+  static getDefaults(world: World): CameraComponentData {
     const cam = new PerspectiveCamera(30, world.canvas.clientWidth / world.canvas.clientHeight, 0.1, 1e12);
     cam.position.z = 200;
     return {
@@ -51,5 +51,8 @@ export class CameraComponent extends Component<CameraComponentData> {
   }
 }
 
-export interface UniformsData { [uniformName: string]: {value: number} }
-export class UniformsComponent extends Component<UniformsData> {}
+export interface UniformsData { [uniformName: string]: { value: number } }
+export class UniformsComponent extends Component<UniformsData> { static typeID = crypto.randomUUID(); }
+
+export class SunTypeComponent extends TypeComponent { static typeID = crypto.randomUUID(); }
+export class PlanetTypeComponent extends TypeComponent { static typeID = crypto.randomUUID(); }

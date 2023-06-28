@@ -5,7 +5,7 @@ export interface AxisRotData { axisPeriod: number, rotVel: number }
 export class AxisRotComponent extends Component<AxisRotData> {
   static typeID = crypto.randomUUID()
 
-  static getData(period: number): AxisRotData {
+  static getDefaults(period: number): AxisRotData {
     let secsPerRotation = period * 60 * 60;
     const rotVel = (2 * Math.PI) / secsPerRotation;
     return {

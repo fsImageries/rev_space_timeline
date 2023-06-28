@@ -28,7 +28,6 @@ export class RotSystem extends System {
 }
 
 export class RotRadSystem extends System {
-    // TODO write convienience function to build operand types
     static queries = [[operand("exist", RotComponent), operand("exist", RadiusComponent)]]
     execute(): void {
         // do something

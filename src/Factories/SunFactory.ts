@@ -23,7 +23,7 @@ export function buildSun(entity: Entity, data: SunData) {
         .addComponent(UniformsComponent, uniforms)
         .addComponent(MeshComponent, { mesh: mesh as Mesh })
         .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults(objectGrp))
-        .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp))
+        .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
         .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
         .addComponent(BaseDataComponent, { name: data.name, uuid: crypto.randomUUID() as string })
         .addComponent(SunTypeComponent)

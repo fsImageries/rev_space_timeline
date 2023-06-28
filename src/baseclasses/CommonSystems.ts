@@ -3,7 +3,7 @@ import { System } from "../ecs/System";
 import Constants from "../helpers/Constants";
 import { AxisRotComponent } from "./CelestialComponents";
 import { CameraComponent, RenderComponent, SceneComponent } from "./CommonComponents";
-import { MeshComponent, ObjectGroupComponent } from "./MeshComponents";
+import { MeshComponent } from "./MeshComponents";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {

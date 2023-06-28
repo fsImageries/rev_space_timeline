@@ -1,7 +1,7 @@
-import { BufferGeometry, Group, Line, LineBasicMaterial, Mesh, Object3D, PointLight, Vector3 } from "three";
+import { BufferGeometry, Group, Line, LineBasicMaterial, LineSegments, Mesh, Object3D, PointLight, Vector3 } from "three";
 import { Component } from "../ecs/Component";
 import { operand } from "../ecs/QueryManager";
-import { SceneComponent } from "./CommonComponents";
+import { SceneComponent, SunTypeComponent } from "./CommonComponents";
 import { DEG2RAD } from "three/src/math/MathUtils";
 import Constants from "../helpers/Constants";
 
@@ -39,13 +39,15 @@ export class ObjectGroupComponent extends Component<GroupData> {
 }
 
 
-export class RotGroupComponent extends Component<GroupData> {
+export interface RotGroupData { group: Object3D, initRot: number }
+export class RotGroupComponent extends Component<RotGroupData> {
     static dependencies = [operand("self", ObjectGroupComponent), operand("exist", SceneComponent)];
     static typeID = crypto.randomUUID()
 
-    static getDefaults(g?: Group): GroupData {
+    static getDefaults(g?: Group, initRot= 0): RotGroupData {
         return {
-            group: g ? g : new Group()
+            group: g ? g : new Group(),
+            initRot
         };
     }
 
@@ -57,9 +59,10 @@ export class RotGroupComponent extends Component<GroupData> {
         const scene = (this.dependendQueries[1].entities[0].getComponent(SceneComponent) as SceneComponent).data.scene;
         for (let i = 0; i < this.dependendQueries[0].entities.length; i++) {
             const grp = this.dependendQueries[0].entities[i]    //<-- this index needs to change    
-
-            // console.log(grp, scene)
-            this.data.group.add((grp.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group);
+            const g = (grp.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group;
+            // console.log(g.children)
+            this.data.group.add(g);
+            this.data.group.rotateY(this.data.initRot)
             scene.add(this.data.group)
         }
     }
@@ -91,6 +94,7 @@ const RINGMAT = new LineBasicMaterial({
     transparent: true,
     opacity: 0.45
 });
+const GEOM = new BufferGeometry();
 export interface BasicRingData { line: Line }
 export class BasicRingComponent extends Component<BasicRingData> {
     static dependencies = [operand("exist", SceneComponent)];
@@ -102,19 +106,62 @@ export class BasicRingComponent extends Component<BasicRingData> {
         for (let i = 0; i <= 360; i++) {
             points.push(new Vector3(radius * Math.sin(i * DEG2RAD), 0, radius * Math.cos(i * DEG2RAD)));
         }
-        const geom = new BufferGeometry();
-        geom.setFromPoints(points);
-        geom.scale(mult, 1, mult)
+        GEOM.setFromPoints(points);
+        GEOM.scale(mult, 1, mult)
 
         return {
-            line: new Line(geom, RINGMAT)
+            line: new Line(GEOM.clone(), RINGMAT)
         };
     }
 
     public init() {
         if (!this.dependendQueries) return
-        const grp = this.dependendQueries[0].entities[0].getComponent(SceneComponent) as SceneComponent
-        // this.data.line.position.copy(grp.data.group.position)
-        grp.data.scene.add(this.data.line)
+        const scene = this.dependendQueries[0].entities[0].getComponent(SceneComponent) as SceneComponent
+        scene.data.scene.add(this.data.line)
+    }
+}
+
+const LEN_MAT = new LineBasicMaterial({
+    color: "#ffffff",
+    transparent: true,
+    opacity: 0.2
+  });
+  
+  const OBJ_MAT = new LineBasicMaterial({
+    color: "#ffffff",
+    transparent: true,
+    opacity: 0.09
+  });
+
+export interface LineSegmentData { line: LineSegments }
+export class DiskLinesComponent extends Component<LineSegmentData> {
+    static dependencies = [operand("exist", SceneComponent), operand("exist", ObjectGroupComponent)];
+    static typeID = crypto.randomUUID()
+
+    static getDefaults(linePoints: Vector3[], obj=false): LineSegmentData {
+        GEOM.setFromPoints(linePoints)
+        return {
+            line: new LineSegments(GEOM.clone(), obj ? OBJ_MAT : LEN_MAT)
+        };
+    }
+
+    public init() {
+        if (!this.dependendQueries) return
+
+        const linepnts = []
+        for (const entity of this.dependendQueries[1].entities) {
+            const p1 = (entity.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS).clone()
+            if (p1.y === 0) continue
+            const p2 = p1.clone()
+            p2.y = 0
+            linepnts.push(p1, p2)
+        }
+
+        GEOM.setFromPoints(linepnts)
+        this.data.line = new LineSegments(GEOM.clone(), OBJ_MAT)
+
+
+        const scene = this.dependendQueries[0].entities[0].getComponent(SceneComponent) as SceneComponent
+        scene.data.scene.add(this.data.line)
     }
 }

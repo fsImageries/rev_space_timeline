@@ -1,7 +1,7 @@
 import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
 import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
-import { BaseDataComponent, SunTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
-import { MeshComponent, ObjectGroupComponent, PointLightComponent, RotGroupComponent } from "../baseclasses/MeshComponents";
+import { BaseDataComponent, BaseDataData, SunTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
+import { MeshComponent, ObjectGroupComponent, PointLightComponent, RotGroupComponent, CosmicMapSunTextComponent } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
 import Constants from "../helpers/Constants";
 import { SunData } from "../jsonInterfaces";
@@ -25,7 +25,7 @@ export function buildSun(entity: Entity, data: SunData) {
         .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults(objectGrp))
         .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
         .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
-        .addComponent(BaseDataComponent, { name: data.name, uuid: crypto.randomUUID() as string })
+        .addComponent(BaseDataComponent, { name: data.name, uuid: crypto.randomUUID() as string, texts: data.texts } as BaseDataData)
         .addComponent(SunTypeComponent)
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);

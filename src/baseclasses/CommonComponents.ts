@@ -64,7 +64,8 @@ export class CameraComponent extends Component<CameraComponentData> {
 
 export interface BaseDataData {
   name: string,
-  uuid: string
+  uuid: string,
+  texts?: string[]
 };
 export class BaseDataComponent extends Component<BaseDataData> {
   static typeID = crypto.randomUUID();

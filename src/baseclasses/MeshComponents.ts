@@ -1,9 +1,11 @@
 import { BufferGeometry, Group, Line, LineBasicMaterial, LineSegments, Mesh, Object3D, PointLight, Vector3 } from "three";
+import { DEG2RAD } from "three/src/math/MathUtils";
+import { Text as TText } from "troika-three-text";
 import { Component } from "../ecs/Component";
 import { operand } from "../ecs/QueryManager";
-import { SceneComponent, SunTypeComponent } from "./CommonComponents";
-import { DEG2RAD } from "three/src/math/MathUtils";
 import Constants from "../helpers/Constants";
+import { RadiusComponent } from "./CelestialComponents";
+import { BaseDataComponent, SceneComponent } from "./CommonComponents";
 
 
 export interface MeshData { mesh: Mesh; }
@@ -44,7 +46,7 @@ export class RotGroupComponent extends Component<RotGroupData> {
     static dependencies = [operand("self", ObjectGroupComponent), operand("exist", SceneComponent)];
     static typeID = crypto.randomUUID()
 
-    static getDefaults(g?: Group, initRot= 0): RotGroupData {
+    static getDefaults(g?: Group, initRot = 0): RotGroupData {
         return {
             group: g ? g : new Group(),
             initRot
@@ -94,13 +96,14 @@ const RINGMAT = new LineBasicMaterial({
     transparent: true,
     opacity: 0.45
 });
+
 const GEOM = new BufferGeometry();
-export interface BasicRingData { line: Line }
+export interface BasicRingData { line: Line, radius: number }
 export class BasicRingComponent extends Component<BasicRingData> {
     static dependencies = [operand("exist", SceneComponent)];
     static typeID = crypto.randomUUID()
 
-    static getDefaults(mult = 1, radius = Constants.LIGHTYEAR): BasicRingData {
+    static getDefaults(mult: number, radius = Constants.LIGHTYEAR): BasicRingData {
         const points = [];
         radius = radius * Constants.DISTANCE_SCALE
         for (let i = 0; i <= 360; i++) {
@@ -110,7 +113,8 @@ export class BasicRingComponent extends Component<BasicRingData> {
         GEOM.scale(mult, 1, mult)
 
         return {
-            line: new Line(GEOM.clone(), RINGMAT)
+            line: new Line(GEOM.clone(), RINGMAT),
+            radius: mult * radius
         };
     }
 
@@ -125,25 +129,18 @@ const LEN_MAT = new LineBasicMaterial({
     color: "#ffffff",
     transparent: true,
     opacity: 0.2
-  });
-  
-  const OBJ_MAT = new LineBasicMaterial({
+});
+
+const OBJ_MAT = new LineBasicMaterial({
     color: "#ffffff",
     transparent: true,
     opacity: 0.09
-  });
+});
 
 export interface LineSegmentData { line: LineSegments }
 export class DiskLinesComponent extends Component<LineSegmentData> {
     static dependencies = [operand("exist", SceneComponent), operand("exist", ObjectGroupComponent)];
     static typeID = crypto.randomUUID()
-
-    static getDefaults(linePoints: Vector3[], obj=false): LineSegmentData {
-        GEOM.setFromPoints(linePoints)
-        return {
-            line: new LineSegments(GEOM.clone(), obj ? OBJ_MAT : LEN_MAT)
-        };
-    }
 
     public init() {
         if (!this.dependendQueries) return
@@ -158,10 +155,84 @@ export class DiskLinesComponent extends Component<LineSegmentData> {
         }
 
         GEOM.setFromPoints(linepnts)
-        this.data.line = new LineSegments(GEOM.clone(), OBJ_MAT)
-
+        this.data.line = new LineSegments(GEOM.clone(), LEN_MAT)
 
         const scene = this.dependendQueries[0].entities[0].getComponent(SceneComponent) as SceneComponent
         scene.data.scene.add(this.data.line)
+    }
+}
+
+
+export interface TextData { title: typeof TText, texts: typeof TText, up:boolean }
+export class CosmicMapSunTextComponent extends Component<TextData> {
+    static dependencies = [operand("self", ObjectGroupComponent)];
+    static typeID = crypto.randomUUID()
+
+    static getDefaults(up=false): TextData {
+        const t = new TText()
+        t.color = 0xffffff;
+        t.font = "./Open_Sans/static/OpenSans-Light.ttf";
+        const t2 = new TText()
+        t2.font = "./Open_Sans/static/OpenSans-Light.ttf";
+        t2.color = 0xffffff;
+        return {
+            title: t,
+            texts: t2,
+            up
+        };
+    }
+
+    public init() {
+        if (!this.dependendQueries) return
+        const dcomp = this.dependendQueries[0].entities[0].getComponent(BaseDataComponent) as BaseDataComponent
+        if (!dcomp.data.texts) return
+        this.data.title.text = dcomp.data.name
+        this.data.title.name = `${dcomp.data.name}_text`;
+        this.data.texts.text = dcomp.data.texts.join("\n")
+        this.data.texts.fillOpacity = .4
+
+        const rrcomp = this.dependendQueries[0].entities[0].getComponent(RotGroupComponent) as RotGroupComponent
+        const rotY = rrcomp.data.group.rotation.y
+        this.data.title.rotation.y -= rotY + (Math.PI * .1)
+        this.data.texts.rotation.y -= rotY
+
+        const rcomp = this.dependendQueries[0].entities[0].getComponent(RadiusComponent) as RadiusComponent
+        const rad = rcomp.data.drawRadius
+        this.data.title.fontSize = rad * 2
+        this.data.title.position.x = rad * 1.5
+        this.data.title.position.y = rad * 2
+        
+        this.data.texts.fontSize = rad
+        this.data.texts.position.y = rad * ( this.data.up ? dcomp.data.texts.length * rad + 1 : -1.1)
+
+        const ocomp = this.dependendQueries[0].entities[0].getComponent(ObjectGroupComponent) as ObjectGroupComponent
+        ocomp.data.group.add(this.data.title)
+        ocomp.data.group.add(this.data.texts)
+    }
+}
+
+export interface TitleData { title: typeof TText}
+export class BasicRingTextComponent extends Component<TitleData> {
+    static dependencies = [operand("self", BasicRingComponent)];
+    static typeID = crypto.randomUUID()
+
+    static getDefaults(txt: string, size = 1): TitleData {
+        const t = new TText()
+        t.text = txt
+        t.fontSize = size
+        t.position.x -= size * 1.5
+        t.position.y += size * 1.1
+        t.color = 0xffffff;
+        t.font = "./Open_Sans/static/OpenSans-Light.ttf";
+        return {
+            title: t
+        };
+    }
+
+    public init() {
+        if (!this.dependendQueries) return
+        const rcomp = this.dependendQueries[0].entities[0].getComponent(BasicRingComponent) as BasicRingComponent
+        this.data.title.position.x -= rcomp.data.radius
+        rcomp.data.line.add(this.data.title)
     }
 }

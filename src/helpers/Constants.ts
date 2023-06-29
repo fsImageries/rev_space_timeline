@@ -1,6 +1,5 @@
 import { LoadingManager, Quaternion, Sprite, SpriteMaterial, Texture, TextureLoader, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { UIManager } from "../Classes/UIManager";
 
 const manager = new LoadingManager();
 
@@ -9,10 +8,11 @@ manager.onError = function (url) {
 };
 
 const Constants = {
-  DISTANCE_SCALE: 100000,
-  SIZE_SCALE: 100,
+  LIGHTYEAR: 9.461e12,
+  DISTANCE_SCALE: 1e-11,
+  SIZE_SCALE: 1e-3,
   ORB_SCALE: 1000000,
-  ROT_SCALE: 10000,
+  ROT_SCALE: 100,
   CAM_ROT_SPEED: Math.PI / 64,
 
   _time_scale: 1,
@@ -40,7 +40,6 @@ const Constants = {
     return new Sprite(mat);
   },
   LOAD_MANAGER: manager,
-  UIMANAGER: new UIManager(),
 
   WORLD_POS: new Vector3(),
   CAM_POS: new Vector3(),

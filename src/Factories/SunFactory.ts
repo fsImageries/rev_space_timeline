@@ -1,89 +1,81 @@
-import { Group, Mesh, MeshBasicMaterial, ShaderMaterial, SphereGeometry } from "three";
-import CelestialBase from "../Classes/CelestialBase";
-import Internal3DObject from "../Classes/Internal3DObject";
-import { Sun } from "../Models/Sun";
+import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
+import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
+import {
+  BaseDataComponent,
+  BaseDataData,
+  SunTypeComponent,
+  UniformsComponent,
+  UniformsData
+} from "../baseclasses/CommonComponents";
+import {
+  MeshComponent,
+  TransformGroupComponent,
+  PointLightComponent,
+  RotGroupComponent} from "../baseclasses/MeshComponents";
+import { Entity } from "../ecs/Entity";
 import Constants from "../helpers/Constants";
-import { uuidv4 } from "../helpers/utils";
 import { SunData } from "../jsonInterfaces";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
 
 const GEOM = new SphereGeometry(1, 30, 30);
 
-let MS_MAT: MeshBasicMaterial;
+export function buildSun(entity: Entity, data: SunData) {
+  const [mesh, objectGrp, rotGrp, uniforms] = buildMeshes(data);
 
-export default function build(data: SunData) {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
-  const mat = getMat(data);
-  const mesh = new Mesh(GEOM, mat);
-  mesh.scale.setScalar(data.radius / Constants.SIZE_SCALE);
-  mesh.name = `${data.name}_mesh`;
+  if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
+  if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 100));
+  if (data.distanceToParent)
+    entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
 
-  const meshGrp = new Group();
-  meshGrp.name = `${data.name}_meshGrp`;
-  meshGrp.add(mesh);
+  entity
+    .addComponent(UniformsComponent, uniforms)
+    .addComponent(MeshComponent, { mesh: mesh as Mesh })
+    .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(objectGrp))
+    .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
+    .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
+    .addComponent(BaseDataComponent, {
+      name: data.name,
+      uuid: crypto.randomUUID() as string,
+      texts: data.texts
+    } as BaseDataData)
+    .addComponent(SunTypeComponent);
 
-  const masterGrp = new Group();
-  const parentGrp = new Group();
-  masterGrp.name = `${data.name}_masterGrp`;
-  parentGrp.name = `${data.name}_parentGrp`;
-  masterGrp.add(meshGrp);
-  parentGrp.add(masterGrp);
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
-  const celestialData = new CelestialBase({
-    id: uuidv4(),
-    name: data.name,
-    type: data.type,
-    tilt: data.tilt,
-    parent: data.parent,
-    radius: data.radius,
-    texts: data.texts,
-    orbitalPeriod: data.orbitalPeriod,
-    rotationPeriod: data.rotationPeriod,
-    distanceToParent: data.distanceToParent,
-    drawRadius: data.draw.radius
-  });
-
-  const internalObject = new Internal3DObject({
-    parentGrp,
-    masterGrp,
-    meshGrp,
-    mesh,
-    displayInfo: data.displayInfo
-  });
-
-  const sun = new Sun(
-    {
-      data: celestialData,
-      object: internalObject
-    },
-    data.disableLight
-  );
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
-
-  return sun;
+  return entity;
 }
 
-const getMat = (data: SunData) => {
-  if (data.isSimple) {
-    if (MS_MAT) return MS_MAT;
-    return new MeshBasicMaterial({
-      color: data.color ? data.color : 0xffffff
-    });
-  }
-  // if (SH_MAT) return SH_MAT;
-  return new ShaderMaterial({
-    uniforms: {
-      time: { value: 1.0 },
-      scale: { value: 2.5 },
-      highTemp: { value: data.highTemp },
-      lowTemp: { value: data.lowTemp }
-    },
+function buildMeshes(data: SunData): [Mesh, Group, Group, UniformsData] {
+  Constants.LOAD_MANAGER.itemStart(`://${data.name}_sun`);
+
+  const uniforms = {
+    time: { value: 1.0 },
+    scale: { value: 2.5 },
+    highTemp: { value: data.highTemp },
+    lowTemp: { value: data.lowTemp }
+  };
+
+  const mat = new ShaderMaterial({
+    uniforms: uniforms,
     vertexShader: sunVert,
     fragmentShader: sunFrag,
     depthWrite: true,
     depthTest: true,
     transparent: false
   });
-};
+
+  const mesh = new Mesh(GEOM, mat);
+  mesh.scale.setScalar(data.radius * Constants.SIZE_SCALE);
+  mesh.name = `${data.name}_mesh`;
+
+  const objectGrp = new Group();
+  const rotGrp = new Group();
+  objectGrp.name = `${data.name}_objectGrp`;
+  rotGrp.name = `${data.name}_rotGrp`;
+
+  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_sun`);
+  return [mesh, objectGrp, rotGrp, uniforms];
+}

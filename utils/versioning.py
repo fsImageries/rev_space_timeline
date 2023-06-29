@@ -70,7 +70,7 @@ def set_gh_output(k, v):
 
 def parse_version(v:str):
     # TODO try-catch
-    res = re.search("(\d+)\.(\d+)\.(\d+)-(\w+.)", v)
+    res = re.search("(\d+)\.(\d+)\.(\d+)-([A-Za-z-_\.]+.)", v)
     res = res.groups()
     nums = [int(m) for m in res[:3]]
     return (nums, res[-1])

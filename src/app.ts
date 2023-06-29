@@ -1,8 +1,9 @@
 import { Mesh, MeshNormalMaterial, SphereGeometry } from "three";
-import { registerCosmicMap } from "./Levels/CosmicMap";
+
 import { CameraComponent, RenderComponent, SceneComponent, UniformsComponent } from "./baseclasses/CommonComponents";
+import { registerCosmicMap as initCosmicMap } from "./Levels/CosmicMap"; // TODO reordering imports kills references
 import { AxisRotSystem, RenderSystem } from "./baseclasses/CommonSystems";
-import { MeshComponent, ObjectGroupComponent, RotGroupComponent } from "./baseclasses/MeshComponents";
+import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./baseclasses/MeshComponents";
 import { World } from "./ecs/World";
 
 const world = new World();
@@ -20,7 +21,7 @@ const base = () => {
     // Sphere Entity
     world.ecManager.createEntity()
       .addComponent(MeshComponent, { mesh: new Mesh(geometry, material) as Mesh })
-      .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults())
+      .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults())
       .addComponent(RotGroupComponent, RotGroupComponent.getDefaults())
   }
 
@@ -38,11 +39,10 @@ const base = () => {
   console.log(world.ecManager.entities[0].components)
 }
 
-// world.lvlManager.openLevel("start", base)
-world.lvlManager.openLevel("cosmicMap", registerCosmicMap)
+world.lvlManager.openLevel("cosmicMap", initCosmicMap)
+// world.lvlManager.openLevel("start", base) // TODO levelmanager doesn't watch out for systems which need current components
 
 // world.lvlManager.openLevel("start")
-// world.lvlManager.openLevel("second")
 
 
 const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID].data.scene;

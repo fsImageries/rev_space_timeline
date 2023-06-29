@@ -1,3 +1,4 @@
+import { BaseDataComponent } from "../baseclasses/CommonComponents";
 import { Component, IComponent, TComponent } from "./Component";
 import { Entity } from "./Entity";
 import { System } from "./System";
@@ -6,11 +7,12 @@ import { World } from "./World";
 
 export type QueryElements = { entityQuery: ComponentQueryState[]; entities: Entity[] }[];
 export type Query = { [systemID: string]: QueryElements };
-export type ComponentQueryState = [string, boolean, boolean];
+export type ComponentQueryState = [string, boolean, boolean, string | null];
 
 export interface QueryOperand {
     operand: string;
-    value: TComponent
+    value: TComponent;
+    extra?: any
 }
 
 export const operand = (o: string, c: TComponent):QueryOperand => {return {operand: o, value: c}}
@@ -29,23 +31,27 @@ export class QueryManager {
     private stateFromOperands(operands: QueryOperand[]): ComponentQueryState[] {
         const entityState: ComponentQueryState[] = []
         for (const operand of operands) {
-            // State: [componentID, shouldExist, shouldSelf]
+            // State: [componentID, shouldExist, shouldSelf, nameValue]
             // TODO combine operands?
             switch (operand.operand) {
                 case "exist": {
-                    entityState.push([operand.value.typeID, true, false])
+                    entityState.push([operand.value.typeID, true, false, null])
                     break
                 };
                 case "!exist": {
-                    entityState.push([operand.value.typeID, false, false])
+                    entityState.push([operand.value.typeID, false, false, null])
                     break
                 };
                 case "self": {
                     // if (self)
                     // entityState.push([self.typeID, true, false])
-                    entityState.push([operand.value.typeID, true, true])
+                    entityState.push([operand.value.typeID, true, true, null])
                     break
-                }
+                };
+                case "name": {
+                    entityState.push([operand.value.typeID, true, false, operand.extra.name])
+                    break
+                };
             }
         }
         return entityState
@@ -53,19 +59,24 @@ export class QueryManager {
 
     private validateState(entity: Entity, state: ComponentQueryState[], compID?:string) {
         const ids = Object.keys(entity.components)
-        const instanceIds = Object.values(entity.components).map(c => c.instanceID)
+        const names:string[] = []
+        const instanceIds = Object.values(entity.components).map(c => {
+            if (c.constructor.name === BaseDataComponent.name) names.push(c.data.name)
+            return c.instanceID
+        })
         return state.every(query => {
-            const [id, shouldExist, shouldSelf] = query
+            const [id, shouldExist, shouldSelf, name] = query
             // check if component should exist
             if (!shouldExist && ids.includes(id)) return false
 
 
             // Check if component should only be on same entity
             if (shouldSelf) {
-                return compID ? instanceIds.includes(compID) : false
-                // get quering component in question from entity
                 // check against compID
+                return compID ? instanceIds.includes(compID) : false
             }
+
+            if (name !== null) return names.includes(name)
 
             // check that component exists
             if (!ids.includes(id)) return false

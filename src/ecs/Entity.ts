@@ -19,7 +19,7 @@ export class Entity {
     return this;
   }
 
-  public getComponent<T extends ComponentSchema, C extends Component<T>>(component: ComponentConstructor<T, C>) {
+  public getComponent<T extends ComponentSchema, C extends Component<T>>(component: ComponentConstructor<T, C>): Component<T> {
     return this.components[component.typeID];
   }
 

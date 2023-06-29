@@ -6,6 +6,7 @@ import { operand } from "../ecs/QueryManager";
 import Constants from "../helpers/Constants";
 import { RadiusComponent } from "./CelestialComponents";
 import { BaseDataComponent, SceneComponent } from "./CommonComponents";
+import { Entity } from "../ecs/Entity";
 
 
 export interface MeshData { mesh: Mesh; }
@@ -23,7 +24,7 @@ export class MeshComponent extends Component<MeshData> {
 
 
 export interface GroupData { group: Object3D }
-export class ObjectGroupComponent extends Component<GroupData> {
+export class TransformGroupComponent extends Component<GroupData> {
     static dependencies = [operand("self", MeshComponent)];
     static typeID = crypto.randomUUID()
 
@@ -43,7 +44,7 @@ export class ObjectGroupComponent extends Component<GroupData> {
 
 export interface RotGroupData { group: Object3D, initRot: number }
 export class RotGroupComponent extends Component<RotGroupData> {
-    static dependencies = [operand("self", ObjectGroupComponent), operand("exist", SceneComponent)];
+    static dependencies = [operand("self", TransformGroupComponent), operand("exist", SceneComponent)];
     static typeID = crypto.randomUUID()
 
     static getDefaults(g?: Group, initRot = 0): RotGroupData {
@@ -61,7 +62,7 @@ export class RotGroupComponent extends Component<RotGroupData> {
         const scene = (this.dependendQueries[1].entities[0].getComponent(SceneComponent) as SceneComponent).data.scene;
         for (let i = 0; i < this.dependendQueries[0].entities.length; i++) {
             const grp = this.dependendQueries[0].entities[i]    //<-- this index needs to change    
-            const g = (grp.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group;
+            const g = (grp.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group;
             // console.log(g.children)
             this.data.group.add(g);
             this.data.group.rotateY(this.data.initRot)
@@ -73,7 +74,7 @@ export class RotGroupComponent extends Component<RotGroupData> {
 
 export interface PointLightData { light: PointLight; }
 export class PointLightComponent extends Component<PointLightData> {
-    static dependencies = [operand("self", ObjectGroupComponent)];
+    static dependencies = [operand("self", TransformGroupComponent)];
     static typeID = crypto.randomUUID()
 
     static getDefaults(color: string, intensity: number, distance: number): PointLightData {
@@ -84,7 +85,7 @@ export class PointLightComponent extends Component<PointLightData> {
 
     public init() {
         if (!this.dependendQueries) return
-        const grp = this.dependendQueries[0].entities[0].getComponent(ObjectGroupComponent) as ObjectGroupComponent
+        const grp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent) as TransformGroupComponent
         this.data.light.position.copy(grp.data.group.position)
         grp.data.group.add(this.data.light)
     }
@@ -134,38 +135,13 @@ const LEN_MAT = new LineBasicMaterial({
 const OBJ_MAT = new LineBasicMaterial({
     color: "#ffffff",
     transparent: true,
-    opacity: 0.09
+    opacity: 0.075
 });
-
-export interface LineSegmentData { line: LineSegments }
-export class DiskLinesComponent extends Component<LineSegmentData> {
-    static dependencies = [operand("exist", SceneComponent), operand("exist", ObjectGroupComponent)];
-    static typeID = crypto.randomUUID()
-
-    public init() {
-        if (!this.dependendQueries) return
-
-        const linepnts = []
-        for (const entity of this.dependendQueries[1].entities) {
-            const p1 = (entity.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS).clone()
-            if (p1.y === 0) continue
-            const p2 = p1.clone()
-            p2.y = 0
-            linepnts.push(p1, p2)
-        }
-
-        GEOM.setFromPoints(linepnts)
-        this.data.line = new LineSegments(GEOM.clone(), LEN_MAT)
-
-        const scene = this.dependendQueries[0].entities[0].getComponent(SceneComponent) as SceneComponent
-        scene.data.scene.add(this.data.line)
-    }
-}
 
 
 export interface TextData { title: typeof TText, texts: typeof TText, up:boolean }
 export class CosmicMapSunTextComponent extends Component<TextData> {
-    static dependencies = [operand("self", ObjectGroupComponent)];
+    static dependencies = [operand("self", TransformGroupComponent)];
     static typeID = crypto.randomUUID()
 
     static getDefaults(up=false): TextData {
@@ -205,7 +181,7 @@ export class CosmicMapSunTextComponent extends Component<TextData> {
         this.data.texts.fontSize = rad
         this.data.texts.position.y = rad * ( this.data.up ? dcomp.data.texts.length * rad + 1 : -1.1)
 
-        const ocomp = this.dependendQueries[0].entities[0].getComponent(ObjectGroupComponent) as ObjectGroupComponent
+        const ocomp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent) as TransformGroupComponent
         ocomp.data.group.add(this.data.title)
         ocomp.data.group.add(this.data.texts)
     }
@@ -234,5 +210,67 @@ export class BasicRingTextComponent extends Component<TitleData> {
         const rcomp = this.dependendQueries[0].entities[0].getComponent(BasicRingComponent) as BasicRingComponent
         this.data.title.position.x -= rcomp.data.radius
         rcomp.data.line.add(this.data.title)
+    }
+}
+
+
+export interface LineSegmentData { line: LineSegments }
+export class DiskLinesComponent extends Component<LineSegmentData> {
+    static dependencies = [operand("exist", SceneComponent), operand("exist", TransformGroupComponent)];
+    static typeID = crypto.randomUUID()
+
+    public init() {
+        if (!this.dependendQueries) return
+
+        const linepnts = []
+        for (const entity of this.dependendQueries[1].entities) {
+            const p1 = (entity.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS).clone()
+            if (p1.y === 0) continue
+            const p2 = p1.clone()
+            p2.y = 0
+            linepnts.push(p1, p2)
+        }
+
+        GEOM.setFromPoints(linepnts)
+        this.data.line = new LineSegments(GEOM.clone(), LEN_MAT)
+
+        const scene = this.dependendQueries[0].entities[0].getComponent(SceneComponent) as SceneComponent
+        scene.data.scene.add(this.data.line)
+    }
+}
+
+
+export interface ObjectLineData { line: LineSegments, pairs: string[] }
+export class ObjectLineComponent extends Component<ObjectLineData> {
+    static dependencies = [operand("exist", SceneComponent), operand("exist", BaseDataComponent)];
+    static typeID = crypto.randomUUID()
+
+    public init() {
+        if (!this.dependendQueries) return
+        if (this.data.pairs.length % 2 !== 0) {
+            console.warn(`${ObjectLineComponent.name} was called with an uneven amount of pair entries. Skipping`)
+            return
+        }
+
+        const entities: {[k:string]: Entity} = {}
+
+        this.dependendQueries[1].entities.forEach(e => {
+            const d = e.getComponent(BaseDataComponent)
+            if (this.data.pairs.includes(d.data.name) && !(d.data.name in entities)) entities[d.data.name] = e
+        })
+
+        const linepnts = []
+        for (let i = 0; i < this.data.pairs.length; i+=2) {
+            const [n1, n2] = [this.data.pairs[i], this.data.pairs[i+1]]
+            const [e1, e2] = [entities[n1], entities[n2]]
+            const [g1, g2] = [e1.getComponent(TransformGroupComponent).data.group, e2.getComponent(TransformGroupComponent).data.group]
+            const [p1, p2] = [g1.getWorldPosition(Constants.WORLD_POS).clone(), g2.getWorldPosition(Constants.WORLD_POS).clone()]
+            linepnts.push(p1, p2)
+        }
+        GEOM.setFromPoints(linepnts)
+        this.data.line = new LineSegments(GEOM.clone(), OBJ_MAT)
+
+        const scene = this.dependendQueries[0].entities[0].getComponent(SceneComponent)
+        scene.data.scene.add(this.data.line)
     }
 }

@@ -1,7 +1,7 @@
 import { Component } from "../ecs/Component";
 import { operand } from "../ecs/QueryManager";
 import Constants from "../helpers/Constants";
-import { ObjectGroupComponent } from "./MeshComponents";
+import { TransformGroupComponent } from "./MeshComponents";
 
 
 export interface AxisRotData { axisPeriod: number, rotVel: number }
@@ -20,7 +20,7 @@ export class AxisRotComponent extends Component<AxisRotData> {
 
 export interface DistanceToParentData { x: number, y?: number, drawX: number, drawY?: number }
 export class DistanceToParentComponent extends Component<DistanceToParentData> {
-    static dependencies = [operand("self", ObjectGroupComponent)]
+    static dependencies = [operand("self", TransformGroupComponent)]
     static typeID = crypto.randomUUID()
 
     static getDefaults(xy: number[]): DistanceToParentData {
@@ -36,7 +36,7 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
         if (!this.dependendQueries) return
 
         for (const entity of this.dependendQueries[0].entities) {
-            const grp = (entity.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group
+            const grp = (entity.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group
             grp.position.x += this.data.drawX
             if (this.data.drawY) grp.position.y += this.data.drawY
         }
@@ -48,7 +48,7 @@ export interface RadiusData {
     drawRadius: number
 };
 export class RadiusComponent extends Component<RadiusData> {
-    static dependencies = [operand("self", ObjectGroupComponent)];
+    static dependencies = [operand("self", TransformGroupComponent)];
     static typeID = crypto.randomUUID();
 
     static getDefaults(radius: number): RadiusData {
@@ -62,6 +62,6 @@ export class RadiusComponent extends Component<RadiusData> {
         if (!this.dependendQueries) return
 
         const objGrp = this.dependendQueries[0].entities[0];
-        (objGrp.getComponent(ObjectGroupComponent) as ObjectGroupComponent).data.group.scale.multiplyScalar(this.data.drawRadius * 2)
+        (objGrp.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group.scale.multiplyScalar(this.data.drawRadius * 2)
     }
 }

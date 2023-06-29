@@ -1,7 +1,7 @@
 import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
 import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
 import { BaseDataComponent, BaseDataData, SunTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
-import { MeshComponent, ObjectGroupComponent, PointLightComponent, RotGroupComponent, CosmicMapSunTextComponent } from "../baseclasses/MeshComponents";
+import { MeshComponent, TransformGroupComponent, PointLightComponent, RotGroupComponent, CosmicMapSunTextComponent } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
 import Constants from "../helpers/Constants";
 import { SunData } from "../jsonInterfaces";
@@ -14,6 +14,7 @@ export function buildSun(entity: Entity, data: SunData) {
     const [mesh, objectGrp, rotGrp, uniforms] = buildMeshes(data)
 
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
+
     if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod))
     if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 100))
     if (data.distanceToParent)
@@ -22,7 +23,7 @@ export function buildSun(entity: Entity, data: SunData) {
     entity
         .addComponent(UniformsComponent, uniforms)
         .addComponent(MeshComponent, { mesh: mesh as Mesh })
-        .addComponent(ObjectGroupComponent, ObjectGroupComponent.getDefaults(objectGrp))
+        .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(objectGrp))
         .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
         .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
         .addComponent(BaseDataComponent, { name: data.name, uuid: crypto.randomUUID() as string, texts: data.texts } as BaseDataData)
@@ -34,7 +35,7 @@ export function buildSun(entity: Entity, data: SunData) {
 }
 
 function buildMeshes(data: SunData): [Mesh, Group, Group, UniformsData] {
-    Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
+    Constants.LOAD_MANAGER.itemStart(`://${data.name}_sun`);
 
     const uniforms = {
         time: { value: 1.0 },
@@ -62,7 +63,6 @@ function buildMeshes(data: SunData): [Mesh, Group, Group, UniformsData] {
     rotGrp.name = `${data.name}_rotGrp`;
 
 
-    Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
-
+    Constants.LOAD_MANAGER.itemEnd(`://${data.name}_sun`);
     return [mesh, objectGrp, rotGrp, uniforms]
 }

@@ -1,6 +1,6 @@
 import { Component } from "../src/ecs/Component";
-import { operand } from "../src/ecs/QueryManager";
 import { System } from "../src/ecs/System";
+import { operand } from "../src/ecs/utils";
 
 export class RadiusComponent extends Component<{ real: number, draw: number }> { }
 

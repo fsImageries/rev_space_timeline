@@ -16,8 +16,8 @@ export class World {
   constructor() {
     this.ecManager = new EntityComponentManager(this);
     this.sysManager = new SystemManager(this);
-    this.lvlManager = new LevelManager(this)
-    this.queryManager = new QueryManager(this)
+    this.lvlManager = new LevelManager(this);
+    this.queryManager = new QueryManager(this);
 
     this.canvas = document.querySelector(`canvas#main`) as HTMLCanvasElement;
   }
@@ -27,7 +27,7 @@ export class World {
   }
 
   public load() {
-    this.queryManager.queryComponentQueries()
-    this.ecManager.init()
+    this.queryManager.queryComponentQueries();
+    this.ecManager.init();
   }
 }

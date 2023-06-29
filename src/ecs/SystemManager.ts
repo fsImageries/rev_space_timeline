@@ -51,6 +51,6 @@ export class SystemManager {
   }
 
   public requery() {
-    this.systems.forEach(s => s.requery())
+    this.systems.forEach((s) => s.requery());
   }
 }

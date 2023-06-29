@@ -3,40 +3,40 @@ import { registerCosmicMap as initCosmicMap } from "./Levels/CosmicMap"; // TODO
 import { AxisRotSystem, RenderSystem } from "./baseclasses/CommonSystems";
 import { World } from "./ecs/World";
 
-
 window.onload = () => {
   const world = new World();
 
-  world.sysManager
-    .registerSystem(RenderSystem)
-    .registerSystem(AxisRotSystem);
+  world.sysManager.registerSystem(RenderSystem).registerSystem(AxisRotSystem);
 
-  world.lvlManager.openLevel("cosmicMap", initCosmicMap)
+  world.lvlManager.openLevel("cosmicMap", initCosmicMap);
   // world.lvlManager.openLevel("start", base) // TODO levelmanager doesn't watch out for systems which need current components
 
-  const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID].data.scene;
-  const uniforms = world.ecManager.entities.find((e) => e.getComponent(UniformsComponent))?.components[UniformsComponent.typeID].data;
+  const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
+    .data.scene;
+  const uniforms = world.ecManager.entities.find((e) => e.getComponent(UniformsComponent))?.components[
+    UniformsComponent.typeID
+  ].data;
   console.log(scene.children);
 
-  const max = 5;
-  let n = 0;
+  // const max = 5;
+  // let n = 0;
   let prev: number;
 
   function eventLoop(timestamp: number) {
-    if (!prev) prev = timestamp
+    if (!prev) prev = timestamp;
     const delta = timestamp - prev;
 
     // Run all the systems
-    world.execute(delta, timestamp)
-    uniforms.time.value = timestamp * 0.0001
+    world.execute(delta, timestamp);
+    uniforms.time.value = timestamp * 0.0001;
     // console.log(uniforms)
 
     // if (n > max) return
-    n++
+    // n++;
 
-    prev = timestamp
-    requestAnimationFrame(eventLoop)
+    prev = timestamp;
+    requestAnimationFrame(eventLoop);
   }
 
-  eventLoop(0)
-}
+  eventLoop(0);
+};

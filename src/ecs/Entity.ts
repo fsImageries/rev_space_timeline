@@ -1,15 +1,10 @@
-import { Component, ComponentConstructor, ComponentSchema } from "./Component";
+import { Component } from "./Component";
 import { EntityComponentManager } from "./EntityComponentManager";
+import { ComponentConstructor, ComponentMap, ComponentSchema } from "./types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any*/
-type ComponentMap = { [propName: string]: Component<any> };
 
 export class Entity {
-  constructor(
-    public ecManager: EntityComponentManager,
-    public id: string,
-    public components: ComponentMap
-  ) { }
+  constructor(public ecManager: EntityComponentManager, public id: string, public components: ComponentMap) {}
 
   public addComponent<T extends ComponentSchema, C extends Component<T>>(
     component: ComponentConstructor<T, C>,
@@ -19,16 +14,18 @@ export class Entity {
     return this;
   }
 
-  public getComponent<T extends ComponentSchema, C extends Component<T>>(component: ComponentConstructor<T, C>): Component<T> {
+  public getComponent<T extends ComponentSchema, C extends Component<T>>(
+    component: ComponentConstructor<T, C>
+  ): Component<T> {
     return this.components[component.typeID];
   }
 
   public init() {
-    Object.values(this.components).forEach(c => {
+    Object.values(this.components).forEach((c) => {
       if ("init" in c) {
-        (c as any).init()
+        /* eslint-disable @typescript-eslint/no-explicit-any*/
+        (c as any).init();
       }
-    })
-    
+    });
   }
 }

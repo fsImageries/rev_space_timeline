@@ -1,20 +1,17 @@
-import { Component, ComponentConstructor, ComponentSchema } from "./Component";
+import { Component } from "./Component";
 import { Entity } from "./Entity";
 import { World } from "./World";
-
-// type Query = { [systemID: string]: { componentIDs: string[]; entities: Entity[] } };
-// export type QueryElements = { componentIDs: string[]; entities: Entity[] }[] ;
-// export type Query = { [systemID: string]: QueryElements };
+import { ComponentConstructor, ComponentSchema } from "./types";
 
 export class EntityComponentManager {
   // public queries: Query;
   public entities: Entity[];
-  public world: World
+  public world: World;
 
-  constructor(world:World) {
+  constructor(world: World) {
     // this.queries = {};
     this.entities = [];
-    this.world = world
+    this.world = world;
   }
 
   public createEntity() {
@@ -34,12 +31,12 @@ export class EntityComponentManager {
     entity = typeof entity === "string" ? (this.entities.find((e) => e.id === entity) as Entity) : entity;
     if (typeID in entity.components) return this; // Component already exists
 
-    const c = new component(data ? data : {} as T);
+    const c = new component(data ? data : ({} as T));
     entity.components[typeID] = c;
 
-    c.dependendQueries = this.world.queryManager.getComponentQuery(c)
+    c.dependendQueries = this.world.queryManager.getComponentQuery(c);
 
-    this.world.queryManager.updateQueries(entity)
+    this.world.queryManager.updateQueries(entity);
     return this;
   }
 
@@ -48,6 +45,6 @@ export class EntityComponentManager {
   // }
 
   public init() {
-    this.entities.forEach(e => e.init())
+    this.entities.forEach((e) => e.init());
   }
 }

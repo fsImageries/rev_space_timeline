@@ -47,7 +47,7 @@ export class CameraComponent extends Component<CameraComponentData> {
   static typeID = crypto.randomUUID();
   
   static getDefaults(world: World): CameraComponentData {
-    const cam = new PerspectiveCamera(30, world.canvas.clientWidth / world.canvas.clientHeight, 0.1, 1e12);
+    const cam = new PerspectiveCamera(55, world.canvas.clientWidth / world.canvas.clientHeight, 0.1, 1e12);
     cam.position.z = 1200;
     return {
       active: cam,
@@ -56,6 +56,10 @@ export class CameraComponent extends Component<CameraComponentData> {
 
   public init() {
     if (!this.dependendQueries) return
+
+    // TODO do something about this, like comon
+    this.data.active.position.set(0, 2118 * .5, 10175 * .5);
+    this.data.freeCtrl?.update();
   
     const renderer = (this.dependendQueries[0].entities[0].getComponent(RenderComponent) as RenderComponent).data.renderer
     this.data.freeCtrl = new OrbitControls(this.data.active, renderer.domElement)

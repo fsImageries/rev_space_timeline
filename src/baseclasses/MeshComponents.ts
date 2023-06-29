@@ -4,7 +4,6 @@ import { Text as TText } from "troika-three-text";
 import { Component } from "../ecs/Component";
 import { operand } from "../ecs/QueryManager";
 import Constants from "../helpers/Constants";
-import { RadiusComponent } from "./CelestialComponents";
 import { BaseDataComponent, SceneComponent } from "./CommonComponents";
 import { Entity } from "../ecs/Entity";
 
@@ -141,16 +140,18 @@ const OBJ_MAT = new LineBasicMaterial({
 
 export interface TextData { title: typeof TText, texts: typeof TText, up:boolean }
 export class CosmicMapSunTextComponent extends Component<TextData> {
-    static dependencies = [operand("self", TransformGroupComponent)];
+    static dependencies = [operand("self", TransformGroupComponent), operand("exist", SceneComponent)];
     static typeID = crypto.randomUUID()
 
-    static getDefaults(up=false): TextData {
+    static getDefaults(up=false, fontSize=30): TextData {
         const t = new TText()
         t.color = 0xffffff;
+        t.fontSize = fontSize
         t.font = "./Open_Sans/static/OpenSans-Light.ttf";
         const t2 = new TText()
         t2.font = "./Open_Sans/static/OpenSans-Light.ttf";
         t2.color = 0xffffff;
+        t2.fontSize = fontSize * .5
         return {
             title: t,
             texts: t2,
@@ -167,23 +168,26 @@ export class CosmicMapSunTextComponent extends Component<TextData> {
         this.data.texts.text = dcomp.data.texts.join("\n")
         this.data.texts.fillOpacity = .4
 
-        const rrcomp = this.dependendQueries[0].entities[0].getComponent(RotGroupComponent) as RotGroupComponent
-        const rotY = rrcomp.data.group.rotation.y
-        this.data.title.rotation.y -= rotY + (Math.PI * .1)
-        this.data.texts.rotation.y -= rotY
-
-        const rcomp = this.dependendQueries[0].entities[0].getComponent(RadiusComponent) as RadiusComponent
-        const rad = rcomp.data.drawRadius
-        this.data.title.fontSize = rad * 2
-        this.data.title.position.x = rad * 1.5
-        this.data.title.position.y = rad * 2
+        const tgrp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent).data.group
+        tgrp.getWorldPosition(Constants.WORLD_POS)
+        this.data.title.position.copy(Constants.WORLD_POS)
+        this.data.texts.position.copy(Constants.WORLD_POS)
         
-        this.data.texts.fontSize = rad
-        this.data.texts.position.y = rad * ( this.data.up ? dcomp.data.texts.length * rad + 1 : -1.1)
+        const fs = this.data.title.fontSize
+        this.data.title.position.x += fs
+        this.data.title.position.y += fs
+        this.data.title.rotateY(Math.PI * -.1)
+        
+        if (this.data.up) {
+            this.data.texts.position.y += fs * dcomp.data.texts.length * (dcomp.data.texts.length == 1 ? 2 : 1) 
+        } else {
+            this.data.texts.position.y += (fs) * -1
+        }
 
-        const ocomp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent) as TransformGroupComponent
-        ocomp.data.group.add(this.data.title)
-        ocomp.data.group.add(this.data.texts)
+        const scene = this.dependendQueries[1].entities[0].getComponent(SceneComponent).data.scene
+        scene.add(this.data.title)
+        scene.add(this.data.texts)
+
     }
 }
 

@@ -11,7 +11,8 @@ import {
   MeshComponent,
   TransformGroupComponent,
   PointLightComponent,
-  RotGroupComponent} from "../baseclasses/MeshComponents";
+  RotGroupComponent
+} from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
 import Constants from "../helpers/Constants";
 import { SunData } from "../jsonInterfaces";

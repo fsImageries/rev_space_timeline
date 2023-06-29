@@ -2,7 +2,6 @@ import { Component } from "./Component";
 import { EntityComponentManager } from "./EntityComponentManager";
 import { ComponentConstructor, ComponentMap, ComponentSchema } from "./types";
 
-
 export class Entity {
   constructor(public ecManager: EntityComponentManager, public id: string, public components: ComponentMap) {}
 

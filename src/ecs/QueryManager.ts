@@ -5,7 +5,6 @@ import { World } from "./World";
 import { ComponentQueryState, IComponent, Query, QueryOperand } from "./types";
 import { validateState } from "./utils";
 
-
 export class QueryManager {
   public sysQueries: Query;
   public compQueries: Query;
@@ -93,4 +92,3 @@ export class QueryManager {
     }
   }
 }
-

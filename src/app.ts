@@ -1,12 +1,12 @@
 import { SceneComponent, UniformsComponent } from "./baseclasses/CommonComponents";
 import { registerCosmicMap as initCosmicMap } from "./Levels/CosmicMap"; // TODO reordering imports kills references
-import { AxisRotSystem, RenderSystem } from "./baseclasses/CommonSystems";
+import { AxisRotSystem, RenderSystem, SunUniformsUpdateSystem } from "./baseclasses/CommonSystems";
 import { World } from "./ecs/World";
 
 window.onload = () => {
   const world = new World();
 
-  world.sysManager.registerSystem(RenderSystem).registerSystem(AxisRotSystem);
+  world.sysManager.registerSystem(RenderSystem).registerSystem(AxisRotSystem).registerSystem(SunUniformsUpdateSystem);
 
   world.lvlManager.openLevel("cosmicMap", initCosmicMap);
   // world.lvlManager.openLevel("start", base) // TODO levelmanager doesn't watch out for systems which need current components

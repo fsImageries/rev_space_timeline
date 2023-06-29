@@ -2,7 +2,7 @@ import { System } from "../ecs/System";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
 import { AxisRotComponent } from "./CelestialComponents";
-import { CameraComponent, RenderComponent, SceneComponent } from "./CommonComponents";
+import { CameraComponent, RenderComponent, SceneComponent, SunTypeComponent, UniformsComponent } from "./CommonComponents";
 import { MeshComponent } from "./MeshComponents";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
@@ -57,6 +57,16 @@ export class AxisRotSystem extends System {
 
       const axisVal = delta * axis.data.rotVel * Constants.ROT_SCALE;
       objGrp.data.mesh.rotation.y += axisVal;
+    }
+  }
+}
+
+export class SunUniformsUpdateSystem extends System {
+  static queries = [[operand("exist", UniformsComponent), operand("exist", SunTypeComponent)]];
+  execute(_: number, time: number): void {
+    for (const entity of this.queries[0].entities) {
+      const ucomp = entity.getComponent(UniformsComponent);
+      ucomp.data.time.value = time * 0.0001;
     }
   }
 }

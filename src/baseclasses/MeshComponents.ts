@@ -16,6 +16,10 @@ import Constants from "../helpers/Constants";
 import { BaseDataComponent, SceneComponent } from "./CommonComponents";
 import { Entity } from "../ecs/Entity";
 import { operand } from "../ecs/utils";
+import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer"
+import { World } from "../ecs/World";
+import { CameraFocusSystem } from "./CommonSystems";
+
 
 export interface MeshData {
   mesh: Mesh;
@@ -312,5 +316,37 @@ export class ObjectLineComponent extends Component<ObjectLineData> {
 
     const scene = this.dependendQueries[0].entities[0].getComponent(SceneComponent);
     scene.data.scene.add(this.data.line);
+  }
+}
+
+
+export class CSSMarkerComponent extends Component<object> {
+  static dependencies = [operand("self", TransformGroupComponent)];
+  static typeID = crypto.randomUUID();
+
+  public init(world:World) {
+    if (!this.dependendQueries) return;
+    const tcomp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent)
+    const bcomp = this.dependendQueries[0].entities[0].getComponent(BaseDataComponent)
+
+    const containerDiv = document.createElement( 'div' );
+    const markerDiv = document.createElement( 'div' );
+    const txtDiv = document.createElement( 'div' );
+    containerDiv.appendChild(markerDiv)
+    containerDiv.appendChild(txtDiv)
+    containerDiv.className = 'markerContainer';
+    markerDiv.className = 'CSSdiamond';
+    txtDiv.className = "diamondText"
+    txtDiv.textContent = bcomp.data.name.toUpperCase();
+
+    containerDiv.addEventListener("pointerdown", () => {
+      world.store.focusTarget = bcomp.data.name.toLowerCase()
+      const sys = world.sysManager.getSystem(CameraFocusSystem)
+      if (!sys) return
+      sys.enabled = true
+    })
+    
+    const markerLabel = new CSS2DObject( containerDiv );
+    tcomp.data.group.add( markerLabel );    
   }
 }

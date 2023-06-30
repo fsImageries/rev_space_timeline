@@ -1,12 +1,14 @@
 import { Color, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
 import { Component, TypeComponent } from "../ecs/Component";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
-  renderer: WebGLRenderer;
+  renderer3d: WebGLRenderer;
+  renderer2d: CSS2DRenderer;
 }
 
 export class RenderComponent extends Component<RenderComponentData> {
@@ -23,7 +25,13 @@ export class RenderComponent extends Component<RenderComponentData> {
     renderer.shadowMap.type = PCFSoftShadowMap;
     renderer.setClearColor(0x000000);
 
-    return { renderer };
+    const renderer2d = new CSS2DRenderer();
+    document.body.appendChild(renderer2d.domElement)
+    renderer2d.setSize(window.innerWidth, window.innerHeight);
+    renderer2d.domElement.style.position = 'absolute';
+    renderer2d.domElement.style.top = '0px';
+
+    return { renderer3d: renderer, renderer2d: renderer2d };
   }
 }
 
@@ -47,7 +55,7 @@ export class CameraComponent extends Component<CameraComponentData> {
   static dependencies = [operand("exist", RenderComponent)];
   static typeID = crypto.randomUUID();
 
-  static getDefaults(world: World, defaultPos?:Vector3): CameraComponentData {
+  static getDefaults(world: World, defaultPos?: Vector3): CameraComponentData {
     const cam = new PerspectiveCamera(55, world.store["canvas"].clientWidth / world.store["canvas"].clientHeight, 0.001, 1e12);
     cam.position.z = 1200;
     return {
@@ -61,11 +69,11 @@ export class CameraComponent extends Component<CameraComponentData> {
 
     // TODO do something about this, like comon
     if (this.data.defaultPos)
-    this.data.active.position.copy(this.data.defaultPos)
+      this.data.active.position.copy(this.data.defaultPos)
     this.data.freeCtrl?.update();
 
-    const renderer = (this.dependendQueries[0].entities[0].getComponent(RenderComponent) as RenderComponent).data
-      .renderer;
+    const renderer = this.dependendQueries[0].entities[0].getComponent(RenderComponent).data
+      .renderer2d;
     this.data.freeCtrl = new OrbitControls(this.data.active, renderer.domElement);
   }
 }
@@ -80,7 +88,7 @@ export class BaseDataComponent extends Component<BaseDataData> {
 }
 
 export interface UniformsData {
-  [uniformName: string]: { value: number|Vector3|Color };
+  [uniformName: string]: { value: number | Vector3 | Color };
 }
 export class UniformsComponent extends Component<UniformsData> {
   static typeID = crypto.randomUUID();

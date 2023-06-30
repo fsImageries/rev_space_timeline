@@ -6,6 +6,8 @@ import { AxisRotComponent } from "./CelestialComponents";
 import { BaseDataComponent, CameraComponent, PlanetTypeComponent, RenderComponent, SceneComponent, SunTypeComponent, UniformsComponent } from "./CommonComponents";
 import { AtmoComponent, MeshComponent, TransformGroupComponent } from "./MeshComponents";
 import { World } from "../ecs/World";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
+
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
@@ -25,29 +27,32 @@ export class RenderSystem extends System {
     const ccomp = camera.getComponent(CameraComponent) as CameraComponent;
 
     if (delta > requiredElapsed) {
-      const renderer = rcomp.data.renderer;
+      const renderer = rcomp.data.renderer3d;
+      const renderer2d = rcomp.data.renderer2d;
       const cameraa = ccomp.data.active;
 
-      if (resizeRendererToDisplaySize(renderer)) {
+      if (resizeRendererToDisplaySize(renderer, renderer2d)) {
         const canvas = renderer.domElement;
         cameraa.aspect = canvas.clientWidth / canvas.clientHeight;
         cameraa.updateProjectionMatrix();
       }
 
       ccomp.data.freeCtrl?.update()
-      rcomp.data.renderer.clear();
-      rcomp.data.renderer.render(scomp.data.scene, ccomp.data.active);
+      rcomp.data.renderer3d.clear();
+      renderer.render(scomp.data.scene, ccomp.data.active);
+      renderer2d.render(scomp.data.scene, ccomp.data.active);
     }
   }
 }
 
-export function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
+export function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer, renderer2d: CSS2DRenderer) {
   const canvas = renderer.domElement;
   const width = canvas.clientWidth;
   const height = canvas.clientHeight;
   const needResize = canvas.width !== width || canvas.height !== height;
   if (needResize) {
     renderer.setSize(width, height, false);
+    renderer2d.setSize(width, height);
   }
   return needResize;
 }
@@ -109,18 +114,17 @@ export class CameraFocusSystem extends System {
   }
 
   execute(): void {
-    const tar = this.world.store["focusTarget"]
+    const tar = (this.world.store["focusTarget"] as string).toLowerCase()
     if (!this.queries || !tar) return
 
     const ccomp = this.queries[1].entities[0].getComponent(CameraComponent)
 
     for (const entity of this.queries[0].entities) { //<- Tranform groups
-      if (tar === entity.getComponent(BaseDataComponent).data.name) {
+      if (tar === entity.getComponent(BaseDataComponent).data.name.toLowerCase()) {
         entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS)
         ccomp.data.freeCtrl?.target.copy(Constants.WORLD_POS)
       }
     }
-
     this.enabled = false
   }
 }

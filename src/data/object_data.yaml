@@ -1,25 +1,25 @@
 ---
 systems:
-- name: epsilonEridani
+- name: Epsilon Eridani
   isSingleSun: true
 
-  startTarget: yellowstone  # determines which object should be targeted when the system is loaded
+  startTarget: Yellowstone  # determines which object should be targeted when the system is loaded
   freeCam: false            # determine if the scene should start in freeCam mode (Cosmic Map starts in freemode)
 
   objects:
-  - name: epsilonEridani
+  - name: Epsilon Eridani
     type: sun
     radius: 508328.2
     rotationPeriod: 273.6
     highTemp: 5500 # TODO implement into new interfaces
     lowTemp: 3500 # TODO implement into new interfaces
 
-  - name: tangerineDream
+  - name: Tangerine Dream
     type: planet
     radius: 84592.31
     rotationPeriod: 24
     orbitalPeriod: 63948
-    parent: epsilonEridani
+    parent: Epsilon Eridani
     tilt: 45
     distanceToParent: 5086400000
     draw:
@@ -29,12 +29,12 @@ systems:
       glowIntensity: 0.1
       radius: 100
 
-  - name: yellowstone
+  - name: Yellowstone
     type: planet
     radius: 5600
     rotationPeriod: 26
     orbitalPeriod: 2453000
-    parent: epsilonEridani
+    parent: Epsilon Eridani
     tilt: 20
     distanceToParent: 59840000000
     draw:
@@ -44,12 +44,12 @@ systems:
       glowIntensity: 0.25
       radius: 100
 
-  - name: marcosEye
+  - name: Marcos Eye
     type: "moon"
     radius: 1737.4
     rotationPeriod: 6552
     orbitalPeriod: 6552
-    parent: yellowstone
+    parent: Yellowstone
     tilt: 0
     distanceToParent: 308440000
     draw:
@@ -67,7 +67,7 @@ systems:
     radius: 
     rotationPeriod: 
     orbitalPeriod: 62000
-    parent: yellowstone
+    parent: Yellowstone
     tilt: 0          
     distanceToParent: 550000000
     draw:
@@ -82,7 +82,7 @@ systems:
     radius: 
     rotationPeriod: 
     orbitalPeriod: 62000
-    parent: epsilonEridani
+    parent: Epsilon Eridani
     tilt: 0          #1220000000000
     distanceToParent: 19920000000000
     draw:
@@ -94,7 +94,7 @@ systems:
     radius: 
     rotationPeriod: 
     orbitalPeriod: 752000000
-    parent: epsilonEridani
+    parent: Epsilon Eridani
     tilt: 0
     distanceToParent: 748793612000
     draw:

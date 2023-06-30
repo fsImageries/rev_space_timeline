@@ -1,7 +1,7 @@
 import { AdditiveBlending, BackSide, Color, Group, Mesh, MeshPhongMaterial, NearestFilter, ShaderMaterial } from "three";
 import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
 import { BaseDataComponent, BaseDataData, PlanetTypeComponent } from "../baseclasses/CommonComponents";
-import { AtmoComponent, MeshComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
+import { AtmoComponent, CSSMarkerComponent, MeshComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
 import Constants from "../helpers/Constants";
 
@@ -30,7 +30,8 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
             uuid: crypto.randomUUID() as string,
             texts: data.texts
         } as BaseDataData)
-        .addComponent(PlanetTypeComponent);
+        .addComponent(CSSMarkerComponent, {})
+        .addComponent(PlanetTypeComponent)
 
 
     Constants.LOAD_MANAGER.itemEnd(`://${data.name}_components`);

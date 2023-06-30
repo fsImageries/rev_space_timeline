@@ -23,6 +23,7 @@ export class World {
 
     this.store = {
       canvas:document.querySelector(`canvas#main`) as HTMLCanvasElement,
+      canvas2d:document.querySelector(`canvas#holder`) as HTMLCanvasElement,
       raycaster: new Raycaster(),
       raypointer: new Vector2(Infinity, Infinity),
       focusTarget: "yellowstone",
@@ -32,13 +33,13 @@ export class World {
   }
 
   private initListeners() {
-    window.ondblclick = (e)=> {
-      this.updateMousePointer(e)
-      const sys = this.sysManager.getSystem(RaycasterSystem)
-      console.log(sys)
-      if (!sys) return
-      sys.enabled = true
-    }
+    // document.ondblclick = (e)=> {
+    //   this.updateMousePointer(e)
+    //   const sys = this.sysManager.getSystem(RaycasterSystem)
+    //   console.log(sys)
+    //   if (!sys) return
+    //   sys.enabled = true
+    // }
   }
 
   private updateMousePointer(e: MouseEvent) {

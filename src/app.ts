@@ -1,6 +1,6 @@
 import { SceneComponent } from "./baseclasses/CommonComponents";
 import { initCosmicMap as initCosmicMap } from "./Levels/CosmicMap"; // TODO reordering imports kills references
-import { AxisRotSystem, CameraFocusSystem, PlanetUniformsUpdateSystem, RenderSystem, SunUniformsUpdateSystem } from "./baseclasses/CommonSystems";
+import { AxisRotSystem, CameraFocusSystem, PlanetUniformsUpdateSystem, RaycasterSystem, RenderSystem, SunUniformsUpdateSystem } from "./baseclasses/CommonSystems";
 import { World } from "./ecs/World";
 import { initSystem } from "./Levels/AutoMap";
 import objectData from "./data/object_data.yaml"
@@ -17,9 +17,8 @@ window.onload = () => {
   .registerSystem(AxisRotSystem)
   .registerSystem(SunUniformsUpdateSystem)
   .registerSystem(CameraFocusSystem)
+  .registerSystem(RaycasterSystem)
   // .registerSystem(PlanetUniformsUpdateSystem);
-
-  window.onclick = ()=> world.needsFocus = !world.needsFocus
 
   // world.lvlManager.openLevel("cosmicMap", initCosmicMap);
   world.lvlManager.openLevel("epsilonEridani", (w)=> initSystem(w, DATA.systems[0]));

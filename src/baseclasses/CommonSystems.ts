@@ -1,10 +1,11 @@
-import { Vector3 } from "three";
+import { Raycaster, Vector3 } from "three";
 import { System } from "../ecs/System";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
 import { AxisRotComponent } from "./CelestialComponents";
 import { BaseDataComponent, CameraComponent, PlanetTypeComponent, RenderComponent, SceneComponent, SunTypeComponent, UniformsComponent } from "./CommonComponents";
 import { AtmoComponent, MeshComponent, TransformGroupComponent } from "./MeshComponents";
+import { World } from "../ecs/World";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
@@ -101,10 +102,15 @@ export class CameraFocusSystem extends System {
     [operand("exist", CameraComponent)]
   ];
 
+  
+  constructor(world:World) {
+    super(world);
+    this.enabled = false
+  }
+
   execute(): void {
-    if (!this.world.needsFocus || !this.queries) return
-    const tar = this.world.focus
-    if (!tar) return
+    const tar = this.world.store["focusTarget"]
+    if (!this.queries || !tar) return
 
     const ccomp = this.queries[1].entities[0].getComponent(CameraComponent)
 
@@ -112,10 +118,38 @@ export class CameraFocusSystem extends System {
       if (tar === entity.getComponent(BaseDataComponent).data.name) {
         entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS)
         ccomp.data.freeCtrl?.target.copy(Constants.WORLD_POS)
-        ccomp.data.freeCtrl?.update() // need to implement system?
       }
     }
 
-    this.world.needsFocus = false
+    this.enabled = false
+  }
+}
+
+export class RaycasterSystem extends System {
+  static queries = [
+    [operand("exist", MeshComponent), operand("exist", BaseDataComponent)],
+    [operand("exist", CameraComponent)]
+  ];
+
+  execute(): void {
+    if (!this.queries) return
+    
+    const cam = this.queries[1].entities[0].getComponent(CameraComponent).data.active;
+    const raycaster = this.world.store.raycaster as Raycaster
+    raycaster.setFromCamera(this.world.store.raypointer, cam);
+
+    for (const entity of this.queries[0].entities) {
+      const mesh = entity.getComponent(MeshComponent).data.mesh
+      const intersects = raycaster.intersectObject(mesh)
+      if (intersects.length > 0) {
+        const base = entity.getComponent(BaseDataComponent)
+        this.world.store.focusTarget = base.data.name
+        const sys = this.world.sysManager.getSystem(CameraFocusSystem)
+        if (!sys) return
+        sys.enabled = true
+      }
+    }
+
+    this.enabled = false
   }
 }

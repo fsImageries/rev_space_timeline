@@ -13,7 +13,7 @@ export class RenderComponent extends Component<RenderComponentData> {
   static typeID = crypto.randomUUID();
   static getDefaults(world: World): RenderComponentData {
     const renderer = new WebGLRenderer({
-      canvas: world.canvas,
+      canvas: world.store["canvas"],
       antialias: true,
       alpha: true,
       logarithmicDepthBuffer: true
@@ -48,7 +48,7 @@ export class CameraComponent extends Component<CameraComponentData> {
   static typeID = crypto.randomUUID();
 
   static getDefaults(world: World, defaultPos?:Vector3): CameraComponentData {
-    const cam = new PerspectiveCamera(55, world.canvas.clientWidth / world.canvas.clientHeight, 0.1, 1e12);
+    const cam = new PerspectiveCamera(55, world.store["canvas"].clientWidth / world.store["canvas"].clientHeight, 0.001, 1e12);
     cam.position.z = 1200;
     return {
       active: cam,

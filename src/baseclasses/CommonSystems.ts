@@ -2,9 +2,9 @@ import { Raycaster, Vector3 } from "three";
 import { System } from "../ecs/System";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
-import { AxisRotComponent } from "./CelestialComponents";
+import { AxisRotComponent, OrbitRotComponent } from "./CelestialComponents";
 import { BaseDataComponent, CameraComponent, PlanetTypeComponent, RenderComponent, SceneComponent, SunTypeComponent, UniformsComponent } from "./CommonComponents";
-import { AtmoComponent, MeshComponent, TransformGroupComponent } from "./MeshComponents";
+import { AtmoComponent, MeshComponent, RotGroupComponent, TransformGroupComponent } from "./MeshComponents";
 import { World } from "../ecs/World";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
 
@@ -64,8 +64,23 @@ export class AxisRotSystem extends System {
       const axis = entity.getComponent(AxisRotComponent) as AxisRotComponent;
       const objGrp = entity.getComponent(MeshComponent) as MeshComponent;
 
-      const axisVal = delta * axis.data.rotVel * Constants.ROT_SCALE;
+      const axisVal = delta * axis.data.vel * Constants.ROT_SCALE;
       objGrp.data.mesh.rotation.y += axisVal;
+    }
+  }
+}
+
+export class OrbitRotSystem extends System {
+  static queries = [[operand("exist", OrbitRotComponent), operand("exist", RotGroupComponent)]];
+  execute(delta: number): void {
+    if (!this.queries) return 
+
+    for (const entity of this.queries[0].entities) {
+      const ocomp = entity.getComponent(OrbitRotComponent);
+      const tcomp = entity.getComponent(RotGroupComponent);
+
+      const val = delta * ocomp.data.vel * Constants.ORB_SCALE;
+      tcomp.data.group.rotation.y += val;
     }
   }
 }

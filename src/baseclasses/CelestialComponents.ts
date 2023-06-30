@@ -1,21 +1,37 @@
 import { Component } from "../ecs/Component";
+import { QueryOperand } from "../ecs/types";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
 import { TransformGroupComponent } from "./MeshComponents";
 
-export interface AxisRotData {
-  axisPeriod: number;
-  rotVel: number;
+export interface RotData {
+  period: number;
+  vel: number;
 }
-export class AxisRotComponent extends Component<AxisRotData> {
+export class AxisRotComponent extends Component<RotData> {
   static typeID = crypto.randomUUID();
 
-  static getDefaults(period: number): AxisRotData {
+  static getDefaults(period: number, invert=false): RotData {
+    period = invert ? period * -1 : period
     const secsPerRotation = period * 60 * 60;
     const rotVel = (2 * Math.PI) / secsPerRotation;
     return {
-      axisPeriod: period,
-      rotVel: rotVel
+      period: period,
+      vel: rotVel
+    };
+  }
+}
+
+export class OrbitRotComponent extends Component<RotData> {
+  static typeID = crypto.randomUUID();
+
+  static getDefaults(period: number, invert=false): RotData {
+    period = invert ? period * -1 : period
+    const secsPerRotation = period * 60 * 60;
+    const rotVel = (2 * Math.PI) / secsPerRotation;
+    return {
+      period: period,
+      vel: rotVel
     };
   }
 }

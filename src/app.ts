@@ -1,6 +1,6 @@
 import { SceneComponent } from "./baseclasses/CommonComponents";
 import { initCosmicMap as initCosmicMap } from "./Levels/CosmicMap"; // TODO reordering imports kills references
-import { AxisRotSystem, CameraFocusSystem, PlanetUniformsUpdateSystem, RaycasterSystem, RenderSystem, SunUniformsUpdateSystem } from "./baseclasses/CommonSystems";
+import { AxisRotSystem, CameraFocusSystem, OrbitRotSystem, PlanetUniformsUpdateSystem, RaycasterSystem, RenderSystem, SunUniformsUpdateSystem } from "./baseclasses/CommonSystems";
 import { World } from "./ecs/World";
 import { initSystem } from "./Levels/AutoMap";
 import objectData from "./data/object_data.yaml"
@@ -15,6 +15,7 @@ window.onload = () => {
   world.sysManager
   .registerSystem(RenderSystem)
   .registerSystem(AxisRotSystem)
+  .registerSystem(OrbitRotSystem)
   .registerSystem(SunUniformsUpdateSystem)
   .registerSystem(CameraFocusSystem)
   .registerSystem(RaycasterSystem)

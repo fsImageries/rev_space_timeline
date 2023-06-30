@@ -1,5 +1,5 @@
 import { AdditiveBlending, BackSide, Color, Group, Mesh, MeshPhongMaterial, NearestFilter, ShaderMaterial } from "three";
-import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
+import { AxisRotComponent, DistanceToParentComponent, OrbitRotComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
 import { BaseDataComponent, BaseDataData, PlanetTypeComponent } from "../baseclasses/CommonComponents";
 import { AtmoComponent, CSSMarkerComponent, MeshComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
@@ -15,6 +15,7 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
     const [mesh, atmo, transformGrp, rotGrp] = buildMeshes(data)
 
     if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
+    if (data.orbitalPeriod) entity.addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod)); // TODO combine common component assignments for easy reuse (sun) like asp with servicecollection
     if (data.distanceToParent)
         entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
 

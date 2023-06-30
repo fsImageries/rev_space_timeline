@@ -1,14 +1,13 @@
-import { SystemObjectData } from "../jsonInterfaces";
-
-import { randFloat } from "three/src/math/MathUtils";
+import { AdditiveBlending, BackSide, Color, Group, Mesh, MeshPhongMaterial, NearestFilter, ShaderMaterial } from "three";
+import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
+import { BaseDataComponent, BaseDataData, PlanetTypeComponent } from "../baseclasses/CommonComponents";
+import { AtmoComponent, MeshComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
+import { Entity } from "../ecs/Entity";
 import Constants from "../helpers/Constants";
+
+import { SystemObjectData } from "../jsonInterfaces";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
-import { AdditiveBlending, BackSide, Color, Group, Mesh, MeshPhongMaterial, NearestFilter, ShaderMaterial, Vector3 } from "three";
-import { Entity } from "../ecs/Entity";
-import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
-import { BaseDataComponent, BaseDataData, PlanetTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
-import { AtmoComponent, MeshComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
 
 export function buildPlanet(entity: Entity, data: SystemObjectData) {
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);

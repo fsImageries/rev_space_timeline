@@ -13,14 +13,14 @@ import { AtmoComponent, MeshComponent, RotGroupComponent, TransformGroupComponen
 export function buildPlanet(entity: Entity, data: SystemObjectData) {
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
-    const [mesh, atmo, transformGrp, rotGrp, uniforms] = buildMeshes(data)
+    const [mesh, atmo, transformGrp, rotGrp] = buildMeshes(data)
 
     if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
     if (data.distanceToParent)
         entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
 
     entity
-        .addComponent(UniformsComponent, uniforms)
+        // .addComponent(UniformsComponent, uniforms)
         .addComponent(MeshComponent, { mesh: mesh as Mesh })
         .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
         .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot)) // implement random start rot
@@ -39,7 +39,7 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
     return entity;
 }
 
-function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group, UniformsData] {
+function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group] {
     Constants.LOAD_MANAGER.itemStart(`://${data.name}_meshes`);
 
     const albedo = Constants.TEX_LOAD(data.draw?.albedoPath as string);
@@ -59,9 +59,7 @@ function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group, Uniform
 
     const uniforms = {
         intensityMult: { value: data.draw?.glowIntensity as number },
-        viewVector: { value: new Vector3() },
         glowColor: { value: new Color(parseInt(data.draw?.glowColor as string)) }
-        // glowColor: { value: new Color(0xffffff) }
     }
 
     const atmoMat = new ShaderMaterial({
@@ -88,5 +86,5 @@ function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group, Uniform
     rotGrp.name = `${data.name}_rotGrp`;
 
     Constants.LOAD_MANAGER.itemEnd(`://${data.name}_meshes`);
-    return [mesh, atmo, transformGrp, rotGrp, uniforms];
+    return [mesh, atmo, transformGrp, rotGrp];
 }

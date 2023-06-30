@@ -14,7 +14,7 @@ export class World {
   public enabled = true;
 
   public needsFocus = false
-  public focus = "tangerineDream"
+  public focus = "yellowstone"
 
   constructor() {
     this.ecManager = new EntityComponentManager(this);

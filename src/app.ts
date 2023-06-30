@@ -17,7 +17,7 @@ window.onload = () => {
   .registerSystem(AxisRotSystem)
   .registerSystem(SunUniformsUpdateSystem)
   .registerSystem(CameraFocusSystem)
-  .registerSystem(PlanetUniformsUpdateSystem);
+  // .registerSystem(PlanetUniformsUpdateSystem);
 
   window.onclick = ()=> world.needsFocus = !world.needsFocus
 

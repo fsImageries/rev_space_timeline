@@ -11,14 +11,8 @@ systems:
     type: sun
     radius: 508328.2
     rotationPeriod: 273.6
-    orbitalPeriod:
-    parent:
-    tilt: 0
-    distanceToParent:
-    highTemp: 5100 # TODO implement into new interfaces
-    lowTemp: 1700 # TODO implement into new interfaces
-    draw:
-      radius: 100000
+    highTemp: 5500 # TODO implement into new interfaces
+    lowTemp: 3500 # TODO implement into new interfaces
 
   - name: tangerineDream
     type: planet

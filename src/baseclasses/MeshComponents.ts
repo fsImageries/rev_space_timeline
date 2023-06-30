@@ -23,13 +23,6 @@ export interface MeshData {
 export class MeshComponent extends Component<MeshData> {
   static dependencies = [];
   static typeID = crypto.randomUUID();
-
-  public init() {
-    if (!this.dependendQueries) return;
-    for (const entity of this.dependendQueries[0].entities) {
-      (entity.getComponent(SceneComponent) as SceneComponent).data.scene.add(this.data.mesh);
-    }
-  }
 }
 
 export interface GroupData {
@@ -81,6 +74,17 @@ export class RotGroupComponent extends Component<RotGroupData> {
       this.data.group.rotateY(this.data.initRot);
       scene.add(this.data.group);
     }
+  }
+}
+
+export class AtmoComponent extends Component<MeshData> {
+  static dependencies = [operand("self", TransformGroupComponent)];;
+  static typeID = crypto.randomUUID();
+
+  public init() {
+    if (!this.dependendQueries) return;
+    const grp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent).data.group;
+    grp.add(this.data.mesh)
   }
 }
 

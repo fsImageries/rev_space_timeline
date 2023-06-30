@@ -1,4 +1,4 @@
-import { PCFSoftShadowMap, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { Color, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Component, TypeComponent } from "../ecs/Component";
 import { World } from "../ecs/World";
@@ -41,16 +41,18 @@ export class SceneComponent extends Component<SceneComponentData> {
 export interface CameraComponentData {
   active: PerspectiveCamera;
   freeCtrl?: OrbitControls;
+  defaultPos?: Vector3,
 }
 export class CameraComponent extends Component<CameraComponentData> {
   static dependencies = [operand("exist", RenderComponent)];
   static typeID = crypto.randomUUID();
 
-  static getDefaults(world: World): CameraComponentData {
+  static getDefaults(world: World, defaultPos?:Vector3): CameraComponentData {
     const cam = new PerspectiveCamera(55, world.canvas.clientWidth / world.canvas.clientHeight, 0.1, 1e12);
     cam.position.z = 1200;
     return {
-      active: cam
+      active: cam,
+      defaultPos
     };
   }
 
@@ -58,7 +60,8 @@ export class CameraComponent extends Component<CameraComponentData> {
     if (!this.dependendQueries) return;
 
     // TODO do something about this, like comon
-    this.data.active.position.set(0, 2118 * 0.5, 10175 * 0.5);
+    if (this.data.defaultPos)
+    this.data.active.position.copy(this.data.defaultPos)
     this.data.freeCtrl?.update();
 
     const renderer = (this.dependendQueries[0].entities[0].getComponent(RenderComponent) as RenderComponent).data
@@ -77,7 +80,7 @@ export class BaseDataComponent extends Component<BaseDataData> {
 }
 
 export interface UniformsData {
-  [uniformName: string]: { value: number };
+  [uniformName: string]: { value: number|Vector3|Color };
 }
 export class UniformsComponent extends Component<UniformsData> {
   static typeID = crypto.randomUUID();

@@ -13,6 +13,9 @@ export class World {
 
   public enabled = true;
 
+  public needsFocus = false
+  public focus = "tangerineDream"
+
   constructor() {
     this.ecManager = new EntityComponentManager(this);
     this.sysManager = new SystemManager(this);

@@ -1,4 +1,4 @@
-import { Group, Mesh, ShaderMaterial, SphereGeometry } from "three";
+import { Group, Mesh, ShaderMaterial } from "three";
 import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
 import {
   BaseDataComponent,
@@ -19,22 +19,20 @@ import { SunData } from "../jsonInterfaces";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
 
-const GEOM = new SphereGeometry(1, 30, 30);
-
 export function buildSun(entity: Entity, data: SunData) {
-  const [mesh, objectGrp, rotGrp, uniforms] = buildMeshes(data);
+  const [mesh, transformGrp, rotGrp, uniforms] = buildMeshes(data);
 
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
   if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
-  if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 100));
+  if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 1e+5));
   if (data.distanceToParent)
     entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
 
   entity
     .addComponent(UniformsComponent, uniforms)
     .addComponent(MeshComponent, { mesh: mesh as Mesh })
-    .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(objectGrp))
+    .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
     .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
     .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
     .addComponent(BaseDataComponent, {
@@ -68,15 +66,15 @@ function buildMeshes(data: SunData): [Mesh, Group, Group, UniformsData] {
     transparent: false
   });
 
-  const mesh = new Mesh(GEOM, mat);
+  const mesh = new Mesh(Constants.SPHERE_GEOM, mat);
   mesh.scale.setScalar(data.radius * Constants.SIZE_SCALE);
   mesh.name = `${data.name}_mesh`;
 
-  const objectGrp = new Group();
+  const transformsGrp = new Group();
   const rotGrp = new Group();
-  objectGrp.name = `${data.name}_objectGrp`;
+  transformsGrp.name = `${data.name}_transformGrp`;
   rotGrp.name = `${data.name}_rotGrp`;
 
   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_sun`);
-  return [mesh, objectGrp, rotGrp, uniforms];
+  return [mesh, transformsGrp, rotGrp, uniforms];
 }

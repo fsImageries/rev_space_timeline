@@ -1,5 +1,5 @@
+import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
-import { CameraComponent, RenderComponent, SceneComponent } from "../baseclasses/CommonComponents";
 import {
   BasicRingComponent,
   BasicRingTextComponent,
@@ -11,11 +11,12 @@ import {
 } from "../baseclasses/MeshComponents";
 import { World } from "../ecs/World";
 import Constants from "../helpers/Constants";
+import { initCommon } from "./Common";
 
-export function registerCosmicMap(world: World) {
+export function initCosmicMap(world: World) {
   initSuns(world);
   initLines(world);
-  initCommon(world);
+  initCommon(world, new Vector3(0, 2118 * 0.5, 10175 * 0.5));
   world.load();
 }
 
@@ -203,15 +204,4 @@ function initLines(world: World) {
     "Sol"
   ];
   world.ecManager.createEntity().addComponent(ObjectLineComponent, { pairs: linepairs } as unknown as ObjectLineData);
-}
-
-function initCommon(world: World) {
-  // Renderer
-  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getDefaults(world));
-
-  // Renderer
-  world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getDefaults());
-
-  // Camera
-  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getDefaults(world));
 }

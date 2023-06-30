@@ -1,4 +1,4 @@
-import { LoadingManager, Quaternion, Sprite, SpriteMaterial, Texture, TextureLoader, Vector3 } from "three";
+import { LoadingManager, Quaternion, SphereGeometry, Sprite, SpriteMaterial, Texture, TextureLoader, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const manager = new LoadingManager();
@@ -9,10 +9,10 @@ manager.onError = function (url) {
 
 const Constants = {
   LIGHTYEAR: 9.461e12,
-  DISTANCE_SCALE: 1e-11,
-  SIZE_SCALE: 1e-3,
+  DISTANCE_SCALE: 3e-8,
+  SIZE_SCALE: 1e-5,
   ORB_SCALE: 1000000,
-  ROT_SCALE: 100,
+  ROT_SCALE: 10,
   CAM_ROT_SPEED: Math.PI / 64,
 
   _time_scale: 1,
@@ -44,7 +44,8 @@ const Constants = {
   WORLD_POS: new Vector3(),
   CAM_POS: new Vector3(),
   WORLD_QUAT: new Quaternion(),
-  WORLD_QUAT2: new Quaternion()
+  WORLD_QUAT2: new Quaternion(),
+  SPHERE_GEOM: new SphereGeometry(1, 30, 30)
 };
 
 const __tex: { [key: string]: Texture } = {};

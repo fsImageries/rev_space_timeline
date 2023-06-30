@@ -1,21 +1,32 @@
-import { SceneComponent, UniformsComponent } from "./baseclasses/CommonComponents";
-import { registerCosmicMap as initCosmicMap } from "./Levels/CosmicMap"; // TODO reordering imports kills references
-import { AxisRotSystem, RenderSystem, SunUniformsUpdateSystem } from "./baseclasses/CommonSystems";
+import { SceneComponent } from "./baseclasses/CommonComponents";
+import { initCosmicMap as initCosmicMap } from "./Levels/CosmicMap"; // TODO reordering imports kills references
+import { AxisRotSystem, CameraFocusSystem, PlanetUniformsUpdateSystem, RenderSystem, SunUniformsUpdateSystem } from "./baseclasses/CommonSystems";
 import { World } from "./ecs/World";
+import { initSystem } from "./Levels/AutoMap";
+import objectData from "./data/object_data.yaml"
+import { SystemsData } from "./jsonInterfaces";
+
+const DATA = objectData as SystemsData
+
 
 window.onload = () => {
   const world = new World();
 
-  world.sysManager.registerSystem(RenderSystem).registerSystem(AxisRotSystem).registerSystem(SunUniformsUpdateSystem);
+  world.sysManager
+  .registerSystem(RenderSystem)
+  .registerSystem(AxisRotSystem)
+  .registerSystem(SunUniformsUpdateSystem)
+  .registerSystem(CameraFocusSystem)
+  .registerSystem(PlanetUniformsUpdateSystem);
 
-  world.lvlManager.openLevel("cosmicMap", initCosmicMap);
+  window.onclick = ()=> world.needsFocus = !world.needsFocus
+
+  // world.lvlManager.openLevel("cosmicMap", initCosmicMap);
+  world.lvlManager.openLevel("epsilonEridani", (w)=> initSystem(w, DATA.systems[0]));
   // world.lvlManager.openLevel("start", base) // TODO levelmanager doesn't watch out for systems which need current components
 
   const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
     .data.scene;
-  const uniforms = world.ecManager.entities.find((e) => e.getComponent(UniformsComponent))?.components[
-    UniformsComponent.typeID
-  ].data;
   console.log(scene.children);
 
   // const max = 5;
@@ -28,7 +39,6 @@ window.onload = () => {
 
     // Run all the systems
     world.execute(delta, timestamp);
-    uniforms.time.value = timestamp * 0.0001;
     // console.log(uniforms)
 
     // if (n > max) return

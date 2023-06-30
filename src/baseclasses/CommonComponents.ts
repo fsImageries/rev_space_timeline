@@ -30,6 +30,12 @@ export class RenderComponent extends Component<RenderComponentData> {
     renderer2d.setSize(window.innerWidth, window.innerHeight);
     renderer2d.domElement.style.position = 'absolute';
     renderer2d.domElement.style.top = '0px';
+    renderer2d.domElement.id = "renderer2d"
+
+    // renderer2d.domElement.ondblclick = (e) => {
+    //   console.log(e.target);
+    //   (e.target as HTMLElement).dispatchEvent(new MouseEvent(e.type));
+    // };
 
     return { renderer3d: renderer, renderer2d: renderer2d };
   }
@@ -73,7 +79,7 @@ export class CameraComponent extends Component<CameraComponentData> {
     this.data.freeCtrl?.update();
 
     const renderer = this.dependendQueries[0].entities[0].getComponent(RenderComponent).data
-      .renderer2d;
+      .renderer3d;
     this.data.freeCtrl = new OrbitControls(this.data.active, renderer.domElement);
   }
 }

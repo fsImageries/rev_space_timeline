@@ -3,7 +3,7 @@ import { EntityComponentManager } from "./EntityComponentManager";
 import { LevelManager } from "./LevelManager";
 import { QueryManager } from "./QueryManager";
 import { SystemManager } from "./SystemManager";
-import { CameraFocusSystem, RaycasterSystem } from "../baseclasses/CommonSystems";
+import { RaycasterSystem } from "../baseclasses/CommonSystems";
 
 
 export class World {
@@ -33,13 +33,13 @@ export class World {
   }
 
   private initListeners() {
-    // document.ondblclick = (e)=> {
-    //   this.updateMousePointer(e)
-    //   const sys = this.sysManager.getSystem(RaycasterSystem)
-    //   console.log(sys)
-    //   if (!sys) return
-    //   sys.enabled = true
-    // }
+    window.ondblclick = (e:MouseEvent)=> {
+      this.updateMousePointer(e);
+
+      const sys = this.sysManager.getSystem(RaycasterSystem)
+      if (!sys) return
+      sys.enabled = true
+    }
   }
 
   private updateMousePointer(e: MouseEvent) {

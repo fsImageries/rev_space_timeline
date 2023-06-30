@@ -1,10 +1,9 @@
 import { SceneComponent } from "./baseclasses/CommonComponents";
-import { initCosmicMap as initCosmicMap } from "./Levels/CosmicMap"; // TODO reordering imports kills references
-import { AxisRotSystem, CameraFocusSystem, OrbitRotSystem, PlanetUniformsUpdateSystem, RaycasterSystem, RenderSystem, SunUniformsUpdateSystem } from "./baseclasses/CommonSystems";
+import objectData from "./data/object_data.yaml";
+import { SystemsData } from "./jsonInterfaces";
 import { World } from "./ecs/World";
 import { initSystem } from "./Levels/AutoMap";
-import objectData from "./data/object_data.yaml"
-import { SystemsData } from "./jsonInterfaces";
+import { AxisRotSystem, CameraFocusSystem, RaycasterSystem, RenderSystem, SunUniformsUpdateSystem } from "./baseclasses/CommonSystems";
 
 const DATA = objectData as SystemsData
 
@@ -15,7 +14,7 @@ window.onload = () => {
   world.sysManager
   .registerSystem(RenderSystem)
   .registerSystem(AxisRotSystem)
-  .registerSystem(OrbitRotSystem)
+  // .registerSystem(OrbitRotSystem)
   .registerSystem(SunUniformsUpdateSystem)
   .registerSystem(CameraFocusSystem)
   .registerSystem(RaycasterSystem)

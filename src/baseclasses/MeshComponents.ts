@@ -335,16 +335,20 @@ export class CSSMarkerComponent extends Component<object> {
     containerDiv.appendChild(markerDiv)
     containerDiv.appendChild(txtDiv)
     containerDiv.className = 'markerContainer';
-    markerDiv.className = 'CSSdiamond';
-    txtDiv.className = "diamondText"
+    markerDiv.className = 'markerDiamond';
+    txtDiv.className = "markerText"
     txtDiv.textContent = bcomp.data.name.toUpperCase();
 
-    containerDiv.addEventListener("pointerdown", () => {
+    const f = (e:MouseEvent) => {
+      e.stopImmediatePropagation()
+      e.preventDefault()
       world.store.focusTarget = bcomp.data.name.toLowerCase()
       const sys = world.sysManager.getSystem(CameraFocusSystem)
       if (!sys) return
       sys.enabled = true
-    })
+    }
+
+    containerDiv.ondblclick = markerDiv.ondblclick = txtDiv.ondblclick = f
     
     const markerLabel = new CSS2DObject( containerDiv );
     tcomp.data.group.add( markerLabel );    

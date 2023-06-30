@@ -1,5 +1,4 @@
 import { Component } from "../ecs/Component";
-import { QueryOperand } from "../ecs/types";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
 import { TransformGroupComponent } from "./MeshComponents";

@@ -1,12 +1,12 @@
-import { Raycaster, Vector3 } from "three";
+import { Raycaster } from "three";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { System } from "../ecs/System";
+import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
 import { AxisRotComponent, OrbitRotComponent } from "./CelestialComponents";
-import { BaseDataComponent, CameraComponent, PlanetTypeComponent, RenderComponent, SceneComponent, SunTypeComponent, UniformsComponent } from "./CommonComponents";
-import { AtmoComponent, MeshComponent, RotGroupComponent, TransformGroupComponent } from "./MeshComponents";
-import { World } from "../ecs/World";
-import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
+import { BaseDataComponent, CameraComponent, RenderComponent, SceneComponent, SunTypeComponent, UniformsComponent } from "./CommonComponents";
+import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./MeshComponents";
 
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
@@ -91,27 +91,6 @@ export class SunUniformsUpdateSystem extends System {
     for (const entity of this.queries[0].entities) {
       const ucomp = entity.getComponent(UniformsComponent);
       ucomp.data.time.value = time * 0.0001;
-    }
-  }
-}
-
-export class PlanetUniformsUpdateSystem extends System {
-  static queries = [
-    [operand("exist", UniformsComponent), operand("exist", PlanetTypeComponent)],
-    [operand("exist", CameraComponent)]
-  ];
-  execute(_:number, time:number): void {
-    if (!this.queries) return
-    const ccomp = this.queries[1].entities[0].getComponent(CameraComponent)
-    const cam = ccomp.data.active.getWorldPosition(Constants.CAM_POS)
-    // const cam = new Vector3()
-        
-    for (const entity of this.queries[0].entities) {
-      const ucomp = entity.getComponent(UniformsComponent);
-      const acomp = entity.getComponent(AtmoComponent);
-      
-      
-      (ucomp.data.viewVector.value as Vector3).subVectors(ccomp.data.active.getWorldPosition(Constants.CAM_POS), acomp.data.mesh.getWorldPosition(Constants.WORLD_POS));
     }
   }
 }

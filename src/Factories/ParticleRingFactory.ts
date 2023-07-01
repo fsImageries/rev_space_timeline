@@ -1,197 +1,165 @@
-// import {
-//   AdditiveBlending,
-//   BufferGeometry,
-//   Float32BufferAttribute,
-//   Group,
-//   Points,
-//   PointsMaterial,
-//   ShaderMaterial
-// } from "three";
-// import CelestialBase from "../Classes/CelestialBase";
-// import Internal3DObject from "../Classes/Internal3DObject";
-// import { ParticleRing } from "../Models/ParticleRing";
-// import Constants from "../helpers/Constants";
-// import { uuidv4 } from "../helpers/utils";
-// import { SystemObjectData } from "../jsonInterfaces";
+import { BufferAttribute, BufferGeometry, Color, Mesh, Points, PointsMaterial, ShaderLib, ShaderMaterial, Vector3, MeshPhongMaterial, RawShaderMaterial } from "three";
+import { World } from "../ecs/World";
+import { SystemObjectData } from "../jsonInterfaces";
+import Constants from "../helpers/Constants";
+import { MeshComponent, ParentComponent, ParticleRingComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
+import { Entity } from "../ecs/Entity";
+import { BaseDataComponent, ParticleRingTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
 
-// import PWorker from "../workers/ParticleWorker?worker";
+const vertexShader = `
+uniform float size;
+uniform float scale;
 
-// function getMaterial(data: SystemObjectData) {
-//   if (!data.draw.pointShader) {
-//     return new ShaderMaterial({
-//       blending: AdditiveBlending,
-//       // depthTest: false,
-//       transparent: true,
-//       vertexColors: true,
-//       depthWrite: false,
-//       uniforms: {
-//         dist: { value: 1.0 },
-//         dist_div: { value: data.draw.distDiv },
-//         size: { value: 2 },
-//         scale: { value: 1 },
-//         color: { value: [1, 1, 1] }
-//       },
-//       vertexShader: `
-//       uniform float size;
-//       uniform float scale;
+#include <common>
+#include <color_pars_vertex>
+#include <fog_pars_vertex>
+#include <morphtarget_pars_vertex>
+#include <logdepthbuf_pars_vertex>
+#include <clipping_planes_pars_vertex>
 
-//       #include <common>
-//       #include <color_pars_vertex>
-//       #include <fog_pars_vertex>
-//       #include <morphtarget_pars_vertex>
-//       #include <logdepthbuf_pars_vertex>
-//       #include <clipping_planes_pars_vertex>
 
-//       #ifdef USE_POINTS_UV
+uniform mat3 uvTransform;
+varying vec3 vPosition;
 
-//         varying vec2 vUv;
-//         uniform mat3 uvTransform;
 
-//       #endif
+void main() {
+    vPosition = position;
+    
 
-//       // varying vec3 vColor;
+	#include <color_vertex>
+	#include <morphcolor_vertex>
+	#include <begin_vertex>
+	#include <morphtarget_vertex>
+	#include <project_vertex>
 
-//       void main() {
-//         vColor = color;
+	gl_PointSize = size;
 
-//         #ifdef USE_POINTS_UV
 
-//           vUv = ( uvTransform * vec3( uv, 1 ) ).xy;
+    bool isPerspective = isPerspectiveMatrix( projectionMatrix );
 
-//         #endif
+    if ( isPerspective ) gl_PointSize *= ( scale / - mvPosition.z );
 
-//         #include <color_vertex>
-//         #include <morphcolor_vertex>
-//         #include <begin_vertex>
-//         #include <morphtarget_vertex>
-//         #include <project_vertex>
 
-//         gl_PointSize = size;
+	#include <logdepthbuf_vertex>
+	#include <clipping_planes_vertex>
+	#include <worldpos_vertex>
+	#include <fog_vertex>
+}   
+    `
 
-//         #ifdef USE_SIZEATTENUATION
+const fragmentShader = `
+    float lightStrength = .07;
+    uniform vec3 color;
+    uniform vec3 lightPos;
+    uniform vec3 basePos;
 
-//           bool isPerspective = isPerspectiveMatrix( projectionMatrix );
+    uniform float maxRad;
+    uniform float minRad;
 
-//           if ( isPerspective ) gl_PointSize *= ( scale / - mvPosition.z );
+    varying vec3 vPosition;
 
-//         #endif
+    float map(float value, float min1, float max1, float min2, float max2) {
+        return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+      }
 
-//         #include <logdepthbuf_vertex>
-//         #include <clipping_planes_vertex>
-//         #include <worldpos_vertex>
-//         #include <fog_vertex>
-//       }
-//       `,
-//       fragmentShader: `
-//           float rand(vec2 co){
-//             return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-//           }
+    vec3 v3map(vec3 value, vec3 min1, vec3 max1, vec3 min2, vec3 max2) {
+        return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+      }
+    
+    void main() {
+        // vec2 xy = gl_PointCoord.xy - vec2(0.5);
+        // float ll = length(xy);
+        // gl_FragColor = vec4(color, step(ll, 0.5));
 
-//           // uniform vec3 color;
-//           uniform float dist;
-//           uniform float dist_div;
 
-//           varying vec3 vColor;
+        float v = map(vPosition.x, 0.0, maxRad, 0.0, 1.0);
+        // float distanceToLightSource = distance(v, lightPos.x);
+        // vec3 lighterColor = color * distanceToLightSource * lightStrength;
+        
+        // vec3 actualPos = v3map(vPosition, vec3(minRad), vec3(maxRad), vec3(0.0), vec3(1.0));
+        // float distanceToLightSource = distance(lightPos, actualPos);
+        // vec3 lighterColor = color * distanceToLightSource * lightStrength;
 
-//           void main() {
-//               vec2 xy = gl_PointCoord.xy - vec2(0.5);
-//               float ll = length(xy);
-//               gl_FragColor = vec4(vColor, step(ll, 0.5));
+        // gl_FragColor = vec4(lighterColor, 1.0);
+        gl_FragColor = vec4(color * (v * -1.0) + vec3(.5), 1.0);
+    }
+    `
 
-//               float falloff = dist_div / (dist * dist);
-//               // float falloff = 1.0;
-//               falloff = clamp(0.0 + falloff, 0.0, 0.5);
-//               gl_FragColor.a = falloff;
-//           }
-//           `
-//     });
-//   }
-//   return new PointsMaterial({
-//     color: "white",
-//     opacity: 0.4,
-//     transparent: true,
-//     depthWrite: false
-//   });
-// }
+const POINTS_MAT = new ShaderMaterial({
+    transparent: true,
+    uniforms: {
+        size: { value: 1 },
+        scale: { value: 1 },
+        color: { value: [1, 1, 1] },
+        lightPos: { value: [0, 0, 0] },
+        basePos: { value: [0, 0, 0] }
+    }
+})
 
-// export default async function buildAsync(data: SystemObjectData) {
-//   Constants.LOAD_MANAGER.itemStart(`://${data.name}_particleRing`);
+export function buildParticlering(entity: Entity, data: SystemObjectData) {
+    const [mesh, uniforms] = buildParticleSystem(data);
 
-//   const material = getMaterial(data);
+    return entity
+        .addComponent(UniformsComponent, uniforms as UniformsData)
+        .addComponent(BaseDataComponent, BaseDataComponent.getDefaults(data))
+        .addComponent(MeshComponent, { mesh })
+        .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults())
+        .addComponent(RotGroupComponent, RotGroupComponent.getDefaults())
+        .addComponent(ParentComponent)
+        .addComponent(ParticleRingComponent)
+        .addComponent(ParticleRingTypeComponent)
+}
 
-//   let points: Points;
-//   let parentGrp: Group;
-//   if (!data.draw.cache) {
-//     const geometry = new BufferGeometry();
-//     points = new Points(geometry, material);
-//     parentGrp = new Group();
-//     parentGrp.add(points);
-//     parentGrp.name = `${data.name}_parentGrp`;
-//     points.name = `${data.name}_masterGrp`;
+function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
+    const randomRange = 0.1;
+    const numParticles = data.draw?.count as number;
+    const ringRadius = data.distanceToParent as number * Constants.DISTANCE_SCALE;
+    const ringWidth = data.draw?.height as number;
+    const particlesPerPosition = 3; // Number of particles per position
+    const minHeight = -1; // Minimum height value
+    const maxHeight = 1; // Maximum height value
 
-//     const radius = data.distanceToParent / Constants.DISTANCE_SCALE;
-//     const end = data.draw.end ? data.draw.end : undefined;
-//     const worker = new PWorker();
-//     Constants.LOAD_MANAGER.itemStart(`://${data.name}_worker`);
-//     worker.postMessage({
-//       type: data.type,
-//       radius,
-//       end,
-//       count: data.draw.count,
-//       height: data.draw.height,
-//       genColor: data.draw.genColor
-//     });
-//     worker.onmessage = (event) => {
-//       Constants.LOAD_MANAGER.itemEnd(`://${data.name}_worker`);
-//       geometry.setAttribute("position", new Float32BufferAttribute(event.data[0], 3));
-//       if (event.data.length > 1) geometry.setAttribute("color", new Float32BufferAttribute(event.data[1], 3));
-//     };
-//   } else {
-//     [points, parentGrp] = await loadCache(data.draw.cache);
-//     (points as Points).material = material;
-//   }
+    const geometry = new BufferGeometry();
+    const positions = new Float32Array(numParticles * particlesPerPosition * 3);
 
-//   const celestialData = new CelestialBase({
-//     id: uuidv4(),
-//     name: data.name,
-//     type: data.type,
-//     tilt: data.tilt,
-//     parent: data.parent,
-//     radius: data.radius,
-//     texts: data.texts,
-//     orbitalPeriod: data.orbitalPeriod,
-//     rotationPeriod: data.rotationPeriod,
-//     distanceToParent: data.distanceToParent,
-//     drawRadius: data.draw.radius
-//   });
+    for (let i = 0; i < numParticles; i++) {
+        const progress = i / numParticles;
+        const angle = progress * Math.PI * 2;
 
-//   if (data.draw.orbInvert) celestialData.invertAngularOrbVel();
+        for (let j = 0; j < particlesPerPosition; j++) {
+            const radiusOffset = Math.random() * randomRange - randomRange / 2;
+            const heightOffset = Math.random() * (maxHeight - minHeight) + minHeight; // Random height within the range
 
-//   const internalObject = new Internal3DObject({
-//     parentGrp,
-//     masterGrp: points
-//   });
+            const x = Math.cos(angle) * (ringRadius + ringWidth / 2 + radiusOffset) + radiusOffset * 25;
+            const y = heightOffset;
+            const z = Math.sin(angle) * (ringRadius + ringWidth / 2 + radiusOffset) + radiusOffset * 25;;
 
-//   const ring = new ParticleRing(
-//     {
-//       data: celestialData,
-//       object: internalObject
-//     },
-//     data.draw.count,
-//     data.draw.height
-//   );
-//   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
+            const index = (i * particlesPerPosition + j) * 3;
 
-//   return ring;
-// }
+            positions[index] = x;
+            positions[index + 1] = y;
+            positions[index + 2] = z;
+        }
+    }
 
-// function loadCache(path: string): Promise<[Points, Group]> {
-//   return new Promise((resolve) => {
-//     Constants.GLTF_LOADER.load(path, (gltf) => {
-//       const parentGrp = gltf.scene.children[0] as Group;
-//       const points = gltf.scene.children[0].children[0] as Points;
+    const uniforms = {
+        size: { value: 1 },
+        scale: { value: 1 },
+        color: { value: [1, 1, 1] },
+        lightPos: { value: [0, 0, 0] },
+        basePos: { value: [0, 0, 0] },
+        maxRad: { value: ringRadius + (randomRange * 25) },
+        minRad: { value: -(ringRadius + (randomRange * 25)) }
+    }
 
-//       resolve([points, parentGrp]);
-//     });
-//   });
-// }
+    const mat = new ShaderMaterial({
+        transparent: true,
+        uniforms,
+        vertexShader,
+        fragmentShader
+    })
+
+    const attr = new BufferAttribute(positions, 3)
+    geometry.setAttribute('position', attr);
+    return [new Points(geometry, mat) as unknown as Mesh, uniforms];
+}

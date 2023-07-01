@@ -1,3 +1,4 @@
+import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
 import { World } from "../ecs/World";
@@ -13,6 +14,10 @@ export function initSystem(world: World, data: SystemData) {
     }
     if (planetCheck.includes(d.type as string)) {
       buildPlanet(world.ecManager.createEntity(), d);
+    }
+
+    if (d.type === "particlering" && d.name === "glitterband") {
+      buildParticlering(world.ecManager.createEntity(), d)
     }
   }
 

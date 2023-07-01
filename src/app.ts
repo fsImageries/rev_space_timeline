@@ -22,7 +22,7 @@ window.onload = () => {
     // .registerSystem(OrbitRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem);
+    .registerSystem(RaycasterSystem)
   // .registerSystem(PlanetUniformsUpdateSystem);
 
   // world.lvlManager.openLevel("cosmicMap", initCosmicMap);

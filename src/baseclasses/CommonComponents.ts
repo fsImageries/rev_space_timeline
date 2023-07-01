@@ -4,6 +4,7 @@ import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { Component, TypeComponent } from "../ecs/Component";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
+import { SystemObjectData } from "../jsonInterfaces";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
@@ -97,10 +98,18 @@ export interface BaseDataData {
 }
 export class BaseDataComponent extends Component<BaseDataData> {
   static typeID = crypto.randomUUID();
+  static getDefaults(d:SystemObjectData):BaseDataData {
+    return {
+      name: d.name,
+      uuid: crypto.randomUUID() as string,
+      parent: d.parent,
+      texts: d.texts
+    }
+  }
 }
 
 export interface UniformsData {
-  [uniformName: string]: { value: number | Vector3 | Color };
+  [uniformName: string]: { value: number | Vector3 | Color| number[] };
 }
 export class UniformsComponent extends Component<UniformsData> {
   static typeID = crypto.randomUUID();
@@ -110,5 +119,9 @@ export class SunTypeComponent extends TypeComponent {
   static typeID = crypto.randomUUID();
 }
 export class PlanetTypeComponent extends TypeComponent {
+  static typeID = crypto.randomUUID();
+}
+
+export class ParticleRingTypeComponent extends TypeComponent {
   static typeID = crypto.randomUUID();
 }

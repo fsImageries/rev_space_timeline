@@ -5,13 +5,14 @@ import { QueryManager } from "./QueryManager";
 import { SystemManager } from "./SystemManager";
 import { RaycasterSystem } from "../baseclasses/CommonSystems";
 
-
 export class World {
   public ecManager: EntityComponentManager;
   public sysManager: SystemManager;
   public lvlManager: LevelManager;
   public queryManager: QueryManager;
-  public store: {[k:string]:any};
+
+  /* eslint-disable @typescript-eslint/no-explicit-any*/
+  public store: { [k: string]: any };
 
   public enabled = true;
 
@@ -22,24 +23,24 @@ export class World {
     this.queryManager = new QueryManager(this);
 
     this.store = {
-      canvas:document.querySelector(`canvas#main`) as HTMLCanvasElement,
-      canvas2d:document.querySelector(`canvas#holder`) as HTMLCanvasElement,
+      canvas: document.querySelector(`canvas#main`) as HTMLCanvasElement,
+      canvas2d: document.querySelector(`canvas#holder`) as HTMLCanvasElement,
       raycaster: new Raycaster(),
       raypointer: new Vector2(Infinity, Infinity),
-      focusTarget: "yellowstone",
-    }
+      focusTarget: "yellowstone"
+    };
 
-    this.initListeners()
+    this.initListeners();
   }
 
   private initListeners() {
-    window.ondblclick = (e:MouseEvent)=> {
+    window.ondblclick = (e: MouseEvent) => {
       this.updateMousePointer(e);
 
-      const sys = this.sysManager.getSystem(RaycasterSystem)
-      if (!sys) return
-      sys.enabled = true
-    }
+      const sys = this.sysManager.getSystem(RaycasterSystem);
+      if (!sys) return;
+      sys.enabled = true;
+    };
   }
 
   private updateMousePointer(e: MouseEvent) {

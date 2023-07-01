@@ -1,13 +1,19 @@
-import { Raycaster, Vector3 } from "three";
+import { Raycaster } from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { System } from "../ecs/System";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
 import { AxisRotComponent, OrbitRotComponent, RadiusComponent } from "./CelestialComponents";
-import { BaseDataComponent, CameraComponent, RenderComponent, SceneComponent, SunTypeComponent, UniformsComponent } from "./CommonComponents";
+import {
+  BaseDataComponent,
+  CameraComponent,
+  RenderComponent,
+  SceneComponent,
+  SunTypeComponent,
+  UniformsComponent
+} from "./CommonComponents";
 import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./MeshComponents";
-
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
@@ -37,7 +43,7 @@ export class RenderSystem extends System {
         cameraa.updateProjectionMatrix();
       }
 
-      ccomp.data.freeCtrl?.update()
+      ccomp.data.freeCtrl?.update();
       rcomp.data.renderer3d.clear();
       renderer.render(scomp.data.scene, ccomp.data.active);
       renderer2d.render(scomp.data.scene, ccomp.data.active);
@@ -73,7 +79,7 @@ export class AxisRotSystem extends System {
 export class OrbitRotSystem extends System {
   static queries = [[operand("exist", OrbitRotComponent), operand("exist", RotGroupComponent)]];
   execute(delta: number): void {
-    if (!this.queries) return 
+    if (!this.queries) return;
 
     for (const entity of this.queries[0].entities) {
       const ocomp = entity.getComponent(OrbitRotComponent);
@@ -101,30 +107,31 @@ export class CameraFocusSystem extends System {
     [operand("exist", CameraComponent)]
   ];
 
-  
-  constructor(world:World) {
+  constructor(world: World) {
     super(world);
-    this.enabled = false
+    this.enabled = false;
   }
 
   execute(): void {
-    const tar = this.world.store.focusTarget.toLowerCase()
-    if (!this.queries || !tar) return
+    const tar = this.world.store.focusTarget.toLowerCase();
+    if (!this.queries || !tar) return;
 
-    const ccomp = this.queries[1].entities[0].getComponent(CameraComponent)
+    const ccomp = this.queries[1].entities[0].getComponent(CameraComponent);
 
-    for (const entity of this.queries[0].entities) { //<- Tranform groups
+    for (const entity of this.queries[0].entities) {
+      //<- Tranform groups
       if (tar === entity.getComponent(BaseDataComponent).data.name.toLowerCase()) {
-        entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS)
-        const rad = entity.getComponent(RadiusComponent).data.drawRadius
-        console.log(rad)
+        entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS);
+        const rad = entity.getComponent(RadiusComponent).data.drawRadius;
+        console.log(rad);
         // TODO calculate view vector from object to light (nearest)
-        ccomp.data.active.position.copy(Constants.WORLD_POS).x -= rad * (entity.getComponent(SunTypeComponent) ? 14 : 4)
-        ccomp.data.freeCtrl?.target.copy(Constants.WORLD_POS)
-        ccomp.data.freeCtrl?.update()
+        ccomp.data.active.position.copy(Constants.WORLD_POS).x -=
+          rad * (entity.getComponent(SunTypeComponent) ? 14 : 4);
+        ccomp.data.freeCtrl?.target.copy(Constants.WORLD_POS);
+        ccomp.data.freeCtrl?.update();
       }
     }
-    this.enabled = false
+    this.enabled = false;
   }
 }
 
@@ -135,24 +142,24 @@ export class RaycasterSystem extends System {
   ];
 
   execute(): void {
-    if (!this.queries) return
-    
+    if (!this.queries) return;
+
     const cam = this.queries[1].entities[0].getComponent(CameraComponent).data.active;
-    const raycaster = this.world.store.raycaster as Raycaster
+    const raycaster = this.world.store.raycaster as Raycaster;
     raycaster.setFromCamera(this.world.store.raypointer, cam);
 
     for (const entity of this.queries[0].entities) {
-      const mesh = entity.getComponent(MeshComponent).data.mesh
-      const intersects = raycaster.intersectObject(mesh)
+      const mesh = entity.getComponent(MeshComponent).data.mesh;
+      const intersects = raycaster.intersectObject(mesh);
       if (intersects.length > 0) {
-        const base = entity.getComponent(BaseDataComponent)
-        this.world.store.focusTarget = base.data.name
-        const sys = this.world.sysManager.getSystem(CameraFocusSystem)
-        if (!sys) return
-        sys.enabled = true
+        const base = entity.getComponent(BaseDataComponent);
+        this.world.store.focusTarget = base.data.name;
+        const sys = this.world.sysManager.getSystem(CameraFocusSystem);
+        if (!sys) return;
+        sys.enabled = true;
       }
     }
 
-    this.enabled = false
+    this.enabled = false;
   }
 }

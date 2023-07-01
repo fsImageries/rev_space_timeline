@@ -1,4 +1,13 @@
-import { LoadingManager, Quaternion, SphereGeometry, Sprite, SpriteMaterial, Texture, TextureLoader, Vector3 } from "three";
+import {
+  LoadingManager,
+  Quaternion,
+  SphereGeometry,
+  Sprite,
+  SpriteMaterial,
+  Texture,
+  TextureLoader,
+  Vector3
+} from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const manager = new LoadingManager();
@@ -45,7 +54,7 @@ const Constants = {
   CAM_POS: new Vector3(),
   WORLD_QUAT: new Quaternion(),
   WORLD_QUAT2: new Quaternion(),
-  SPHERE_GEOM: new SphereGeometry(1, 30, 30),
+  SPHERE_GEOM: new SphereGeometry(1, 30, 30)
 };
 
 const __tex: { [key: string]: Texture } = {};

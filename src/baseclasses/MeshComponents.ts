@@ -16,10 +16,9 @@ import Constants from "../helpers/Constants";
 import { BaseDataComponent, SceneComponent } from "./CommonComponents";
 import { Entity } from "../ecs/Entity";
 import { operand } from "../ecs/utils";
-import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer"
+import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { World } from "../ecs/World";
 import { CameraFocusSystem } from "./CommonSystems";
-
 
 export interface MeshData {
   mesh: Mesh;
@@ -77,21 +76,21 @@ export class RotGroupComponent extends Component<RotGroupData> {
       this.data.group.add(g);
       this.data.group.rotateY(this.data.initRot);
 
-      const pcomp = entity.getComponent(ParentComponent)
-      if (pcomp && pcomp.data.parent) continue
+      const pcomp = entity.getComponent(ParentComponent);
+      if (pcomp && pcomp.data.parent) continue;
       scene.add(this.data.group);
     }
   }
 }
 
 export class AtmoComponent extends Component<MeshData> {
-  static dependencies = [operand("self", TransformGroupComponent)];;
+  static dependencies = [operand("self", TransformGroupComponent)];
   static typeID = crypto.randomUUID();
 
   public init() {
     if (!this.dependendQueries) return;
     const grp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent).data.group;
-    grp.add(this.data.mesh)
+    grp.add(this.data.mesh);
   }
 }
 
@@ -322,77 +321,85 @@ export class ObjectLineComponent extends Component<ObjectLineData> {
   }
 }
 
-
 export class CSSMarkerComponent extends Component<object> {
   static dependencies = [operand("self", TransformGroupComponent)];
   static typeID = crypto.randomUUID();
 
   public init(world: World) {
     if (!this.dependendQueries) return;
-    const tcomp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent)
-    const bcomp = this.dependendQueries[0].entities[0].getComponent(BaseDataComponent)
+    const tcomp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent);
+    const bcomp = this.dependendQueries[0].entities[0].getComponent(BaseDataComponent);
 
-    const containerDiv = document.createElement('div');
-    const markerDiv = document.createElement('div');
-    const txtDiv = document.createElement('div');
-    containerDiv.appendChild(markerDiv)
-    containerDiv.appendChild(txtDiv)
-    containerDiv.className = 'markerContainer';
-    markerDiv.className = 'markerDiamond';
-    txtDiv.className = "markerText"
+    const containerDiv = document.createElement("div");
+    const markerDiv = document.createElement("div");
+    const txtDiv = document.createElement("div");
+    containerDiv.appendChild(markerDiv);
+    containerDiv.appendChild(txtDiv);
+    containerDiv.className = "markerContainer";
+    markerDiv.className = "markerDiamond";
+    txtDiv.className = "markerText";
     txtDiv.textContent = bcomp.data.name.toUpperCase();
 
     const f = (e: MouseEvent) => {
-      e.stopImmediatePropagation()
-      e.preventDefault()
-      world.store.focusTarget = bcomp.data.name.toLowerCase()
-      const sys = world.sysManager.getSystem(CameraFocusSystem)
-      if (!sys) return
-      sys.enabled = true
-    }
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      world.store.focusTarget = bcomp.data.name.toLowerCase();
+      const sys = world.sysManager.getSystem(CameraFocusSystem);
+      if (!sys) return;
+      sys.enabled = true;
+    };
 
-    containerDiv.ondblclick = markerDiv.ondblclick = txtDiv.ondblclick = f
+    containerDiv.ondblclick = markerDiv.ondblclick = txtDiv.ondblclick = f;
 
     const markerLabel = new CSS2DObject(containerDiv);
     tcomp.data.group.add(markerLabel);
   }
 }
 
-export interface ParentComponentData { parent: Entity, dyn: boolean };
+export interface ParentComponentData {
+  parent: Entity;
+  dyn: boolean;
+}
 export class ParentComponent extends Component<ParentComponentData> {
-  static dependencies = [operand("self", BaseDataComponent), operand("self", TransformGroupComponent), operand("self", RotGroupComponent)];
+  static dependencies = [
+    operand("self", BaseDataComponent),
+    operand("self", TransformGroupComponent),
+    operand("self", RotGroupComponent)
+  ];
   static typeID = crypto.randomUUID();
 
   static getDefaults(dyn = false) {
     // dynamic means we're skipping the parenting step
-    return { dyn }
+    return { dyn };
   }
 
   public init(world: World) {
     if (!this.dependendQueries) return;
 
-    const self = this.dependendQueries[0].entities[0]
-    const name = self.getComponent(BaseDataComponent).data.parent?.toLowerCase()
+    const self = this.dependendQueries[0].entities[0];
+    const name = self.getComponent(BaseDataComponent).data.parent?.toLowerCase();
 
-    const parent = world.ecManager.entities.find(e => {
-      const c = e.getComponent(BaseDataComponent)
-      if (!c) return false
-      return c.data.name.toLowerCase() === name
-    })
+    const parent = world.ecManager.entities.find((e) => {
+      const c = e.getComponent(BaseDataComponent);
+      if (!c) return false;
+      return c.data.name.toLowerCase() === name;
+    });
     if (!parent) {
-      console.warn("No parent was found.")
-      return
+      console.warn("No parent was found.");
+      return;
     }
-    this.data.parent = parent
+    this.data.parent = parent;
 
-    if (this.data.dyn) {return}
+    if (this.data.dyn) {
+      return;
+    }
 
-    const rgrp = self.getComponent(RotGroupComponent).data.group
-    const ptgrp = parent.getComponent(TransformGroupComponent).data.group
-    const prgrp = parent.getComponent(RotGroupComponent).data.group
+    const rgrp = self.getComponent(RotGroupComponent).data.group;
+    const ptgrp = parent.getComponent(TransformGroupComponent).data.group;
+    const prgrp = parent.getComponent(RotGroupComponent).data.group;
 
-    ptgrp.getWorldPosition(Constants.WORLD_POS)
-    rgrp.position.add(Constants.WORLD_POS)
-    prgrp.add(rgrp)
+    ptgrp.getWorldPosition(Constants.WORLD_POS);
+    rgrp.position.add(Constants.WORLD_POS);
+    prgrp.add(rgrp);
   }
 }

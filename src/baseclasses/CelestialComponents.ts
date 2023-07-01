@@ -11,7 +11,7 @@ export class AxisRotComponent extends Component<RotData> {
   static typeID = crypto.randomUUID();
 
   static getDefaults(period: number, invert = false): RotData {
-    period = invert ? period * -1 : period
+    period = invert ? period * -1 : period;
     const secsPerRotation = period * 60 * 60;
     const rotVel = (2 * Math.PI) / secsPerRotation;
     return {
@@ -25,7 +25,7 @@ export class OrbitRotComponent extends Component<RotData> {
   static typeID = crypto.randomUUID();
 
   static getDefaults(period: number, invert = false): RotData {
-    period = invert ? period * -1 : period
+    period = invert ? period * -1 : period;
     const secsPerRotation = period * 60 * 60;
     const rotVel = (2 * Math.PI) / secsPerRotation;
     return {
@@ -46,7 +46,7 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
   static typeID = crypto.randomUUID();
 
   static getDefaults(xy: number[] | number): DistanceToParentData {
-    if (typeof xy === "number") xy = [xy]
+    if (typeof xy === "number") xy = [xy];
     const [x, y] = xy.length === 1 ? [xy[0], undefined] : xy;
     const drawX = x * Constants.DISTANCE_SCALE;
     const drawY = y ? y * Constants.DISTANCE_SCALE : y;
@@ -88,8 +88,6 @@ export class RadiusComponent extends Component<RadiusData> {
     if (!this.dependendQueries) return;
 
     const objGrp = this.dependendQueries[0].entities[0];
-    objGrp.getComponent(TransformGroupComponent).data.group.scale.multiplyScalar(
-      this.data.drawRadius
-    );
+    objGrp.getComponent(TransformGroupComponent).data.group.scale.multiplyScalar(this.data.drawRadius);
   }
 }

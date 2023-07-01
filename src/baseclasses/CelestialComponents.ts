@@ -10,7 +10,7 @@ export interface RotData {
 export class AxisRotComponent extends Component<RotData> {
   static typeID = crypto.randomUUID();
 
-  static getDefaults(period: number, invert=false): RotData {
+  static getDefaults(period: number, invert = false): RotData {
     period = invert ? period * -1 : period
     const secsPerRotation = period * 60 * 60;
     const rotVel = (2 * Math.PI) / secsPerRotation;
@@ -24,7 +24,7 @@ export class AxisRotComponent extends Component<RotData> {
 export class OrbitRotComponent extends Component<RotData> {
   static typeID = crypto.randomUUID();
 
-  static getDefaults(period: number, invert=false): RotData {
+  static getDefaults(period: number, invert = false): RotData {
     period = invert ? period * -1 : period
     const secsPerRotation = period * 60 * 60;
     const rotVel = (2 * Math.PI) / secsPerRotation;
@@ -88,8 +88,8 @@ export class RadiusComponent extends Component<RadiusData> {
     if (!this.dependendQueries) return;
 
     const objGrp = this.dependendQueries[0].entities[0];
-    (objGrp.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group.scale.multiplyScalar(
-      this.data.drawRadius * 2
+    objGrp.getComponent(TransformGroupComponent).data.group.scale.multiplyScalar(
+      this.data.drawRadius
     );
   }
 }

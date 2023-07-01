@@ -14,7 +14,7 @@ window.onload = () => {
   world.sysManager
   .registerSystem(RenderSystem)
   .registerSystem(AxisRotSystem)
-  .registerSystem(OrbitRotSystem)
+  // .registerSystem(OrbitRotSystem)
   .registerSystem(SunUniformsUpdateSystem)
   .registerSystem(CameraFocusSystem)
   .registerSystem(RaycasterSystem)

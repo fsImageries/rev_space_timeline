@@ -1,10 +1,10 @@
-import { Raycaster } from "three";
+import { Raycaster, Vector3 } from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { System } from "../ecs/System";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
-import { AxisRotComponent, OrbitRotComponent } from "./CelestialComponents";
+import { AxisRotComponent, OrbitRotComponent, RadiusComponent } from "./CelestialComponents";
 import { BaseDataComponent, CameraComponent, RenderComponent, SceneComponent, SunTypeComponent, UniformsComponent } from "./CommonComponents";
 import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./MeshComponents";
 
@@ -108,7 +108,7 @@ export class CameraFocusSystem extends System {
   }
 
   execute(): void {
-    const tar = (this.world.store["focusTarget"] as string).toLowerCase()
+    const tar = this.world.store.focusTarget.toLowerCase()
     if (!this.queries || !tar) return
 
     const ccomp = this.queries[1].entities[0].getComponent(CameraComponent)
@@ -116,7 +116,12 @@ export class CameraFocusSystem extends System {
     for (const entity of this.queries[0].entities) { //<- Tranform groups
       if (tar === entity.getComponent(BaseDataComponent).data.name.toLowerCase()) {
         entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS)
+        const rad = entity.getComponent(RadiusComponent).data.drawRadius
+        console.log(rad)
+        // TODO calculate view vector from object to light (nearest)
+        ccomp.data.active.position.copy(Constants.WORLD_POS).x -= rad * (entity.getComponent(SunTypeComponent) ? 14 : 4)
         ccomp.data.freeCtrl?.target.copy(Constants.WORLD_POS)
+        ccomp.data.freeCtrl?.update()
       }
     }
     this.enabled = false

@@ -45,7 +45,7 @@ const Constants = {
   CAM_POS: new Vector3(),
   WORLD_QUAT: new Quaternion(),
   WORLD_QUAT2: new Quaternion(),
-  SPHERE_GEOM: new SphereGeometry(1, 30, 30)
+  SPHERE_GEOM: new SphereGeometry(1, 30, 30),
 };
 
 const __tex: { [key: string]: Texture } = {};

@@ -82,6 +82,8 @@ export class CameraComponent extends Component<CameraComponentData> {
     const renderer = this.dependendQueries[0].entities[0].getComponent(RenderComponent).data
       .renderer3d;
     this.data.freeCtrl = new OrbitControls(this.data.active, renderer.domElement);
+    this.data.freeCtrl.enableDamping = true;
+    this.data.freeCtrl.dampingFactor = 0.5;
   }
 }
 

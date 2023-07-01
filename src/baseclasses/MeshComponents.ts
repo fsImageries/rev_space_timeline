@@ -69,13 +69,16 @@ export class RotGroupComponent extends Component<RotGroupData> {
     // this.dependendQueries[0] <-- all groups
     // this.dependendQueries[1] <-- all scenes
 
-    const scene = (this.dependendQueries[1].entities[0].getComponent(SceneComponent) as SceneComponent).data.scene;
+    const scene = this.dependendQueries[1].entities[0].getComponent(SceneComponent).data.scene;
     for (let i = 0; i < this.dependendQueries[0].entities.length; i++) {
-      const grp = this.dependendQueries[0].entities[i]; //<-- this index needs to change
-      const g = (grp.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group;
-      // console.log(g.children)
+      const entity = this.dependendQueries[0].entities[i]; //<-- this index needs to change
+
+      const g = entity.getComponent(TransformGroupComponent).data.group;
       this.data.group.add(g);
       this.data.group.rotateY(this.data.initRot);
+
+      const pcomp = entity.getComponent(ParentComponent)
+      if (pcomp && pcomp.data.parent) continue
       scene.add(this.data.group);
     }
   }
@@ -324,14 +327,14 @@ export class CSSMarkerComponent extends Component<object> {
   static dependencies = [operand("self", TransformGroupComponent)];
   static typeID = crypto.randomUUID();
 
-  public init(world:World) {
+  public init(world: World) {
     if (!this.dependendQueries) return;
     const tcomp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent)
     const bcomp = this.dependendQueries[0].entities[0].getComponent(BaseDataComponent)
 
-    const containerDiv = document.createElement( 'div' );
-    const markerDiv = document.createElement( 'div' );
-    const txtDiv = document.createElement( 'div' );
+    const containerDiv = document.createElement('div');
+    const markerDiv = document.createElement('div');
+    const txtDiv = document.createElement('div');
     containerDiv.appendChild(markerDiv)
     containerDiv.appendChild(txtDiv)
     containerDiv.className = 'markerContainer';
@@ -339,7 +342,7 @@ export class CSSMarkerComponent extends Component<object> {
     txtDiv.className = "markerText"
     txtDiv.textContent = bcomp.data.name.toUpperCase();
 
-    const f = (e:MouseEvent) => {
+    const f = (e: MouseEvent) => {
       e.stopImmediatePropagation()
       e.preventDefault()
       world.store.focusTarget = bcomp.data.name.toLowerCase()
@@ -349,8 +352,47 @@ export class CSSMarkerComponent extends Component<object> {
     }
 
     containerDiv.ondblclick = markerDiv.ondblclick = txtDiv.ondblclick = f
-    
-    const markerLabel = new CSS2DObject( containerDiv );
-    tcomp.data.group.add( markerLabel );    
+
+    const markerLabel = new CSS2DObject(containerDiv);
+    tcomp.data.group.add(markerLabel);
+  }
+}
+
+export interface ParentComponentData { parent: Entity, dyn: boolean };
+export class ParentComponent extends Component<ParentComponentData> {
+  static dependencies = [operand("self", BaseDataComponent), operand("self", TransformGroupComponent), operand("self", RotGroupComponent)];
+  static typeID = crypto.randomUUID();
+
+  static getDefaults(dyn = false) {
+    // dynamic means we're skipping the parenting step
+    return { dyn }
+  }
+
+  public init(world: World) {
+    if (!this.dependendQueries) return;
+
+    const self = this.dependendQueries[0].entities[0]
+    const name = self.getComponent(BaseDataComponent).data.parent?.toLowerCase()
+
+    const parent = world.ecManager.entities.find(e => {
+      const c = e.getComponent(BaseDataComponent)
+      if (!c) return false
+      return c.data.name.toLowerCase() === name
+    })
+    if (!parent) {
+      console.warn("No parent was found.")
+      return
+    }
+    this.data.parent = parent
+
+    if (this.data.dyn) {return}
+
+    const rgrp = self.getComponent(RotGroupComponent).data.group
+    const ptgrp = parent.getComponent(TransformGroupComponent).data.group
+    const prgrp = parent.getComponent(RotGroupComponent).data.group
+
+    ptgrp.getWorldPosition(Constants.WORLD_POS)
+    rgrp.position.add(Constants.WORLD_POS)
+    prgrp.add(rgrp)
   }
 }

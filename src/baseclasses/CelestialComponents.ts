@@ -62,7 +62,7 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
     if (!this.dependendQueries) return;
 
     for (const entity of this.dependendQueries[0].entities) {
-      const grp = (entity.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group;
+      const grp = entity.getComponent(TransformGroupComponent).data.group;
       grp.position.x += this.data.drawX;
       if (this.data.drawY) grp.position.y += this.data.drawY;
     }

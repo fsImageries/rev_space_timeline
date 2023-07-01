@@ -4,6 +4,7 @@ import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
 import { Component, TypeComponent } from "../ecs/Component";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
+import { Entity } from "../ecs/Entity";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
@@ -87,6 +88,7 @@ export class CameraComponent extends Component<CameraComponentData> {
 export interface BaseDataData {
   name: string;
   uuid: string;
+  parent?: string;
   texts?: string[];
 }
 export class BaseDataComponent extends Component<BaseDataData> {

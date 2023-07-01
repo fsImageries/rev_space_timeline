@@ -1,7 +1,7 @@
 import { AdditiveBlending, BackSide, Color, Group, Mesh, MeshPhongMaterial, NearestFilter, ShaderMaterial } from "three";
 import { AxisRotComponent, DistanceToParentComponent, OrbitRotComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
 import { BaseDataComponent, BaseDataData, PlanetTypeComponent } from "../baseclasses/CommonComponents";
-import { AtmoComponent, CSSMarkerComponent, MeshComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
+import { AtmoComponent, CSSMarkerComponent, MeshComponent, ParentComponent, ParentComponentData, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
 import Constants from "../helpers/Constants";
 
@@ -18,22 +18,24 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
     if (data.orbitalPeriod) entity.addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod)); // TODO combine common component assignments for easy reuse (sun) like asp with servicecollection
     if (data.distanceToParent)
         entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
+    if (data.parent) entity.addComponent(ParentComponent, ParentComponent.getDefaults() as ParentComponentData) // <- determine if dynamic?
+
 
     entity
         // .addComponent(UniformsComponent, uniforms)
         .addComponent(MeshComponent, { mesh: mesh as Mesh })
         .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
         .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot)) // implement random start rot
-        .addComponent(AtmoComponent, {mesh:atmo})
+        .addComponent(AtmoComponent, { mesh: atmo })
         .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
         .addComponent(BaseDataComponent, {
             name: data.name,
             uuid: crypto.randomUUID() as string,
+            parent: data.parent,
             texts: data.texts
         } as BaseDataData)
         .addComponent(CSSMarkerComponent, {})
         .addComponent(PlanetTypeComponent)
-
 
     Constants.LOAD_MANAGER.itemEnd(`://${data.name}_components`);
 

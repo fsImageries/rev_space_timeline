@@ -77,10 +77,10 @@ export class OrbitRotSystem extends System {
 
     for (const entity of this.queries[0].entities) {
       const ocomp = entity.getComponent(OrbitRotComponent);
-      const tcomp = entity.getComponent(RotGroupComponent);
+      const rcomp = entity.getComponent(RotGroupComponent);
 
       const val = delta * ocomp.data.vel * Constants.ORB_SCALE;
-      tcomp.data.group.rotation.y += val;
+      rcomp.data.group.rotation.y += val;
     }
   }
 }

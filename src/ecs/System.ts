@@ -4,6 +4,13 @@ import { ComponentConstructor, QueryElements, QueryOperand } from "./types";
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 export type SystemQueries = ComponentConstructor<any, any>[][];
 
+export interface SystemConstructor<T extends System> {
+  typeID: string;
+  queries: QueryOperand[][];
+  getName(): string;
+  new (...args: any): T;
+}
+
 export abstract class System {
   static queries: QueryOperand[][];
   static typeID: string;
@@ -29,11 +36,4 @@ export abstract class System {
   static getName() {
     return this.constructor.name;
   }
-}
-
-export interface SystemConstructor<T extends System> {
-  typeID: string;
-  queries: QueryOperand[][];
-  getName(): string;
-  new (...args: any): T;
 }

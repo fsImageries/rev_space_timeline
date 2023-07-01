@@ -23,7 +23,7 @@ export class Entity {
     Object.values(this.components).forEach((c) => {
       if ("init" in c) {
         /* eslint-disable @typescript-eslint/no-explicit-any*/
-        (c as any).init();
+        (c as any).init(this.ecManager.world);
       }
     });
   }

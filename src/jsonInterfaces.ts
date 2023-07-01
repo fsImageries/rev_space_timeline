@@ -49,11 +49,12 @@ export interface SystemData {
 export interface SystemObjectData {
   name: string;
   radius: number;
+  type?: string;
   rotationPeriod?: number;
   orbitalPeriod?: number;
   parent?: string;
   tilt?: number;
-  distanceToParent?: number[];
+  distanceToParent?: number | [number, number];
   // highTemp: 5100 # TODO implement into new interfaces
   // lowTemp: 1700 # TODO implement into new interfaces
   draw?: DrawData;

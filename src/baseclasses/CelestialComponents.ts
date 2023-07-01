@@ -3,19 +3,34 @@ import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
 import { TransformGroupComponent } from "./MeshComponents";
 
-export interface AxisRotData {
-  axisPeriod: number;
-  rotVel: number;
+export interface RotData {
+  period: number;
+  vel: number;
 }
-export class AxisRotComponent extends Component<AxisRotData> {
+export class AxisRotComponent extends Component<RotData> {
   static typeID = crypto.randomUUID();
 
-  static getDefaults(period: number): AxisRotData {
+  static getDefaults(period: number, invert = false): RotData {
+    period = invert ? period * -1 : period;
     const secsPerRotation = period * 60 * 60;
     const rotVel = (2 * Math.PI) / secsPerRotation;
     return {
-      axisPeriod: period,
-      rotVel: rotVel
+      period: period,
+      vel: rotVel
+    };
+  }
+}
+
+export class OrbitRotComponent extends Component<RotData> {
+  static typeID = crypto.randomUUID();
+
+  static getDefaults(period: number, invert = false): RotData {
+    period = invert ? period * -1 : period;
+    const secsPerRotation = period * 60 * 60;
+    const rotVel = (2 * Math.PI) / secsPerRotation;
+    return {
+      period: period,
+      vel: rotVel
     };
   }
 }
@@ -30,7 +45,8 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
   static dependencies = [operand("self", TransformGroupComponent)];
   static typeID = crypto.randomUUID();
 
-  static getDefaults(xy: number[]): DistanceToParentData {
+  static getDefaults(xy: number[] | number): DistanceToParentData {
+    if (typeof xy === "number") xy = [xy];
     const [x, y] = xy.length === 1 ? [xy[0], undefined] : xy;
     const drawX = x * Constants.DISTANCE_SCALE;
     const drawY = y ? y * Constants.DISTANCE_SCALE : y;
@@ -46,7 +62,7 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
     if (!this.dependendQueries) return;
 
     for (const entity of this.dependendQueries[0].entities) {
-      const grp = (entity.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group;
+      const grp = entity.getComponent(TransformGroupComponent).data.group;
       grp.position.x += this.data.drawX;
       if (this.data.drawY) grp.position.y += this.data.drawY;
     }
@@ -72,8 +88,6 @@ export class RadiusComponent extends Component<RadiusData> {
     if (!this.dependendQueries) return;
 
     const objGrp = this.dependendQueries[0].entities[0];
-    (objGrp.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group.scale.multiplyScalar(
-      this.data.drawRadius * 2
-    );
+    objGrp.getComponent(TransformGroupComponent).data.group.scale.multiplyScalar(this.data.drawRadius);
   }
 }

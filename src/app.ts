@@ -1,4 +1,5 @@
-import { SceneComponent } from "./baseclasses/CommonComponents";
+// import { SceneComponent } from "./baseclasses/CommonComponents";
+import {SceneComponent} from "./baseclasses/Components"
 import objectData from "./data/object_data.yaml";
 import { SystemsData } from "./jsonInterfaces";
 import { World } from "./ecs/World";

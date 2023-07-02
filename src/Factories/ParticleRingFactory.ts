@@ -1,6 +1,7 @@
 import { BufferAttribute, BufferGeometry, Color, Mesh, Points, ShaderMaterial } from "three";
 import { randFloat } from "three/src/math/MathUtils";
 import {
+  CSSMarkerComponent,
   MeshComponent,
   ParentComponent,
   ParticleRingComponent,
@@ -10,7 +11,10 @@ import {
 import {
   AxisRotComponent,
   BaseDataComponent,
+  DistanceToParentComponent,
+  OrbitRotComponent,
   ParticleRingTypeComponent,
+  RadiusComponent,
   UniformsComponent,
   UniformsData
 } from "../baseclasses/imports";
@@ -116,8 +120,8 @@ const fragmentShader = `
         // vec3 lighterColor = color * distanceToLightSource * lightStrength;
 
         // gl_FragColor = vec4(lighterColor, 1.0);
-        float m = map((v * -1.0), -1., 0., .36, 1.);
-        // float m = map((v * -1.0), -1., 0., 0.0, 1.1);
+        // float m = map((v * -1.0), -1., 0., .36, 1.);
+        float m = map((v * -1.0), -1., 0., 0.0, .7);
         gl_FragColor = vec4(vColor, 1.0) * m;
     }
     `;
@@ -134,14 +138,17 @@ export function buildParticlering(entity: Entity, data: SystemObjectData) {
 
   return entity
     .addComponent(UniformsComponent, uniforms as UniformsData)
-    .addComponent(AxisRotComponent, AxisRotComponent.getDefaults(125))
+    .addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(125))
     .addComponent(BaseDataComponent, BaseDataComponent.getDefaults(data))
+    .addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent as number, false))
+    .addComponent(RadiusComponent, {radius: data.distanceToParent as number, drawRadius: data.distanceToParent as number * Constants.DISTANCE_SCALE})
     .addComponent(MeshComponent, { mesh })
     .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults())
     .addComponent(RotGroupComponent, RotGroupComponent.getDefaults())
     .addComponent(ParentComponent)
     .addComponent(ParticleRingComponent)
-    .addComponent(ParticleRingTypeComponent);
+    .addComponent(ParticleRingTypeComponent)
+    .addComponent(CSSMarkerComponent);
 }
 
 function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {

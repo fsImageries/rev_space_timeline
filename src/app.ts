@@ -6,12 +6,11 @@ import { initSystem } from "./Levels/AutoMap";
 import {
   AxisRotSystem,
   CameraFocusSystem,
-  // OrbitRotSystem,
   RaycasterSystem,
   RenderSystem,
   SunUniformsUpdateSystem
 } from "./baseclasses/imports";
-import { CSSMarkerSystem } from "./baseclasses/CommonSystems";
+import { CSSMarkerSystem, OrbitRotSystem } from "./baseclasses/CommonSystems";
 
 const DATA = objectData as SystemsData;
 

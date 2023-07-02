@@ -105,7 +105,7 @@ export class SunUniformsUpdateSystem extends System {
 
 export class CameraFocusSystem extends System {
   static queries = [
-    [operand("exist", TransformGroupComponent), operand("exist", BaseDataComponent)],
+    [operand("exist", TransformGroupComponent), operand("exist", BaseDataComponent), operand("exist", RadiusComponent)],
     [operand("exist", CameraComponent)]
   ];
 
@@ -190,7 +190,7 @@ export class CSSMarkerSystem extends System {
         entity.getComponent(ParentComponent).data.parent.getComponent(TransformGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS)
         const dist2par = entity.getComponent(DistanceToParentComponent).data.drawX
         const camDist = cam.position.distanceTo(Constants.WORLD_POS)
-        const maxd = dist2par * 8
+        const maxd = dist2par * 100
         container.style.opacity = camDist < maxd ?
             `${mapLinear(dist, maxd, 0, 0, 1)}` :
             "0"

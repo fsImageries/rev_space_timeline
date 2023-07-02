@@ -13,7 +13,7 @@ import { DEG2RAD } from "three/src/math/MathUtils";
 import { Text as TText } from "troika-three-text";
 import { Component } from "../ecs/Component";
 import Constants from "../helpers/Constants";
-import { BaseDataComponent, ParticleRingTypeComponent, SceneComponent, UniformsComponent } from "./imports";
+import { BaseDataComponent, DistanceToParentComponent, ParticleRingTypeComponent, RadiusComponent, SceneComponent, UniformsComponent } from "./imports";
 import { Entity } from "../ecs/Entity";
 import { operand } from "../ecs/utils";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
@@ -366,6 +366,13 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       containerDiv,
       diamondDiv: markerDiv,
       txtDiv
+    }
+
+    const entity = this.dependendQueries[0].entities[0]
+    if (entity.getComponent(ParticleRingTypeComponent)) {
+      const rad = entity.getComponent(RadiusComponent).data.drawRadius
+      markerLabel.position.x -= rad * .5
+      markerLabel.position.z -= rad * .775
     }
   }
 }

@@ -69,12 +69,12 @@ systems:
     orbitalPeriod: 62000
     parent: Yellowstone
     tilt: 0         //308440000
-    distanceToParent: 550000000
+    distanceToParent: 325000000
     draw:
       cache: "./epsilonEridani/glitterband.glb"
       count: 10000
       distDiv: 3000000000
-      height: .5
+      height: .1
       genColor: true
 
   - name: oortCloud

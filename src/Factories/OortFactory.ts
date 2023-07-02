@@ -56,11 +56,11 @@ function buildParticleSystem(data: SystemObjectData): [Mesh] {
     }
   }
 
-//   const uniforms = {
-//     size: { value: 100 },
-//     scale: { value: 1000 },
-//     color: { value: [1, 1, 1] }
-//   };
+  //   const uniforms = {
+  //     size: { value: 100 },
+  //     scale: { value: 1000 },
+  //     color: { value: [1, 1, 1] }
+  //   };
 
   // const mat = new ShaderMaterial({
   //     transparent: true,

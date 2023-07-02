@@ -4,8 +4,8 @@ import { SystemObjectData } from "../jsonInterfaces";
 import Constants from "../helpers/Constants";
 import { MeshComponent, ParentComponent, ParticleRingComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
-import { BaseDataComponent, ParticleRingTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
-import { AxisRotComponent } from "../baseclasses/CelestialComponents";
+import { BaseDataComponent, ParticleRingTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/imports";
+import { AxisRotComponent } from "../baseclasses/imports";
 import { randFloat } from "three/src/math/MathUtils";
 
 const vertexShader = `
@@ -19,8 +19,13 @@ uniform float scale;
 #include <logdepthbuf_pars_vertex>
 #include <clipping_planes_pars_vertex>
 
+#ifdef USE_POINTS_UV
 
-uniform mat3 uvTransform;
+	varying vec2 vUv;
+	uniform mat3 uvTransform;
+
+#endif
+
 varying vec3 vPosition;
 varying vec3 vvPosition;
 varying vec3 vColor;
@@ -39,6 +44,12 @@ void main() {
     vec4 viewPosition = viewMatrix * worldPosition;
     vvPosition = worldPosition.xyz;
     
+	#ifdef USE_POINTS_UV
+
+		vUv = ( uvTransform * vec3( uv, 1 ) ).xy;
+
+	#endif
+
 	#include <color_vertex>
 	#include <morphcolor_vertex>
 	#include <begin_vertex>
@@ -47,14 +58,15 @@ void main() {
 
 	gl_PointSize = size;
 
-    // bool isPerspective = isPerspectiveMatrix( projectionMatrix );
-    // if ( isPerspective ) gl_PointSize *= ( scale / - mvPosition.z );
+    bool isPerspective = isPerspectiveMatrix( projectionMatrix );
+    if ( isPerspective ) gl_PointSize *= ( scale / - mvPosition.z );
 
 	#include <logdepthbuf_vertex>
 	#include <clipping_planes_vertex>
 	#include <worldpos_vertex>
 	#include <fog_vertex>
 }   
+
     `
 
 const fragmentShader = `
@@ -79,6 +91,7 @@ const fragmentShader = `
       }
     
     void main() {
+        
         // vec2 xy = gl_PointCoord.xy - vec2(0.5);
         // float ll = length(xy);
         // gl_FragColor = vec4(color, step(ll, 0.5));
@@ -93,7 +106,8 @@ const fragmentShader = `
         // vec3 lighterColor = color * distanceToLightSource * lightStrength;
 
         // gl_FragColor = vec4(lighterColor, 1.0);
-        float m = map((v * -1.0), -1., 0., .36, .8);
+        // float m = map((v * -1.0), -1., 0., .36, .8);
+        float m = map((v * -1.0), -1., 0., 0.0, 1.1);
         gl_FragColor = vec4(vColor, 1.0) * m;
     }
     `

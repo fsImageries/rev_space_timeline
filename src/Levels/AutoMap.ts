@@ -1,7 +1,7 @@
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
-import { CameraFocusSystem } from "../baseclasses/CommonSystems";
+import { CameraFocusSystem } from "../baseclasses/imports";
 import { World } from "../ecs/World";
 import { SunData, SystemData } from "../jsonInterfaces";
 import { initCommon } from "./Common";

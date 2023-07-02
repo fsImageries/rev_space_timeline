@@ -3,7 +3,7 @@ import { EntityComponentManager } from "./EntityComponentManager";
 import { LevelManager } from "./LevelManager";
 import { QueryManager } from "./QueryManager";
 import { SystemManager } from "./SystemManager";
-import { RaycasterSystem } from "../baseclasses/CommonSystems";
+import { RaycasterSystem } from "../baseclasses/imports";
 
 export class World {
   public ecManager: EntityComponentManager;

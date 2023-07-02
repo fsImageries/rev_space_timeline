@@ -1,5 +1,4 @@
-// import { SceneComponent } from "./baseclasses/CommonComponents";
-import {SceneComponent} from "./baseclasses/Components"
+import {SceneComponent} from "./baseclasses/imports"
 import objectData from "./data/object_data.yaml";
 import { SystemsData } from "./jsonInterfaces";
 import { World } from "./ecs/World";
@@ -11,7 +10,7 @@ import {
   RaycasterSystem,
   RenderSystem,
   SunUniformsUpdateSystem
-} from "./baseclasses/CommonSystems";
+} from "./baseclasses/imports";
 
 const DATA = objectData as SystemsData;
 

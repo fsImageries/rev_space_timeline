@@ -72,7 +72,7 @@ systems:
     distanceToParent: 550000000
     draw:
       cache: "./epsilonEridani/glitterband.glb"
-      count: 10_000
+      count: 10000
       distDiv: 3000000000
       height: .5
       genColor: true

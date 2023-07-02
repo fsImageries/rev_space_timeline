@@ -1,12 +1,12 @@
 import { Group, Mesh, ShaderMaterial } from "three";
-import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/CelestialComponents";
+import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/imports";
 import {
   BaseDataComponent,
   BaseDataData,
   SunTypeComponent,
   UniformsComponent,
   UniformsData
-} from "../baseclasses/CommonComponents";
+} from "../baseclasses/imports";
 import {
   MeshComponent,
   TransformGroupComponent,

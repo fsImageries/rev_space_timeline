@@ -13,8 +13,8 @@ import {
   DistanceToParentComponent,
   OrbitRotComponent,
   RadiusComponent
-} from "../baseclasses/CelestialComponents";
-import { BaseDataComponent, BaseDataData, PlanetTypeComponent } from "../baseclasses/CommonComponents";
+} from "../baseclasses/imports";
+import { BaseDataComponent, BaseDataData, PlanetTypeComponent } from "../baseclasses/imports";
 import {
   AtmoComponent,
   CSSMarkerComponent,

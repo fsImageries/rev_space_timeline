@@ -4,7 +4,7 @@ import { System } from "../ecs/System";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
-import { AxisRotComponent, OrbitRotComponent, RadiusComponent } from "./CelestialComponents";
+import { AxisRotComponent, OrbitRotComponent, RadiusComponent } from "./imports";
 import {
   BaseDataComponent,
   CameraComponent,
@@ -13,7 +13,7 @@ import {
   SunTypeComponent,
   UniformsComponent
 } from "./CommonComponents";
-import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./MeshComponents";
+import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./imports";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {

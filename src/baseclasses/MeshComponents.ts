@@ -13,12 +13,12 @@ import { DEG2RAD } from "three/src/math/MathUtils";
 import { Text as TText } from "troika-three-text";
 import { Component } from "../ecs/Component";
 import Constants from "../helpers/Constants";
-import { BaseDataComponent, SceneComponent } from "./CommonComponents";
+import { BaseDataComponent, ParticleRingTypeComponent, SceneComponent, UniformsComponent } from "./imports";
 import { Entity } from "../ecs/Entity";
 import { operand } from "../ecs/utils";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { World } from "../ecs/World";
-import { CameraFocusSystem } from "./CommonSystems";
+import { CameraFocusSystem } from "./imports";
 
 export interface MeshData {
   mesh: Mesh;
@@ -401,5 +401,26 @@ export class ParentComponent extends Component<ParentComponentData> {
     ptgrp.getWorldPosition(Constants.WORLD_POS);
     rgrp.position.add(Constants.WORLD_POS);
     prgrp.add(rgrp);
+  }
+}
+
+export class ParticleRingComponent extends Component<object> {
+  static dependencies = [
+    operand("self", ParticleRingTypeComponent),
+    operand("self", ParentComponent),
+    operand("self", UniformsComponent)
+  ];
+  static typeID = crypto.randomUUID();
+
+  public init() {
+    if (!this.dependendQueries) return;
+
+    const self = this.dependendQueries[0].entities[0];
+    const trans = self.getComponent(ParentComponent).data.parent.getComponent(TransformGroupComponent).data.group;
+    const ucomp = self.getComponent(UniformsComponent);
+    trans.getWorldPosition(Constants.WORLD_POS);
+    console.log(Constants.WORLD_POS);
+    ucomp.data.basePos.value = Constants.WORLD_POS.clone();
+    console.log(self.getComponent(MeshComponent).data.mesh);
   }
 }

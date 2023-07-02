@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { RenderComponent, SceneComponent, CameraComponent } from "../baseclasses/CommonComponents";
+import { RenderComponent, SceneComponent, CameraComponent } from "../baseclasses/imports";
 import { World } from "../ecs/World";
 
 export function initCommon(world: World, camPos?: Vector3) {

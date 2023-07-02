@@ -55,7 +55,7 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
       parent: data.parent,
       texts: data.texts
     } as BaseDataData)
-    .addComponent(CSSMarkerComponent, {})
+    .addComponent(CSSMarkerComponent)
     .addComponent(PlanetTypeComponent);
 
   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_components`);

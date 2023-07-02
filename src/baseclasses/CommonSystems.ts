@@ -4,7 +4,7 @@ import { System } from "../ecs/System";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
-import { AxisRotComponent, OrbitRotComponent, RadiusComponent } from "./imports";
+import { AxisRotComponent, CSSMarkerComponent, OrbitRotComponent, RadiusComponent } from "./imports";
 import {
   BaseDataComponent,
   CameraComponent,
@@ -12,8 +12,10 @@ import {
   SceneComponent,
   SunTypeComponent,
   UniformsComponent
-} from "./CommonComponents";
+} from "./imports";
 import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./imports";
+import { mapLinear } from "three/src/math/MathUtils";
+
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
@@ -161,5 +163,31 @@ export class RaycasterSystem extends System {
     }
 
     this.enabled = false;
+  }
+}
+
+export class CSSMarkerSystem extends System {
+  static queries = [
+    [operand("exist", CSSMarkerComponent), operand("exist", TransformGroupComponent), operand("exist", RadiusComponent)],
+    [operand("exist", CameraComponent)]
+  ];
+
+  execute(): void {
+    if (!this.queries) return;
+
+    const cam = this.queries[1].entities[0].getComponent(CameraComponent).data.active;
+
+
+    for (const entity of this.queries[0].entities) {
+      const trans = entity.getComponent(TransformGroupComponent).data.group;
+      trans.getWorldPosition(Constants.WORLD_POS)
+      const dist = Constants.WORLD_POS.distanceTo(cam.position)
+      const rad = entity.getComponent(RadiusComponent).data.drawRadius
+      const marker = entity.getComponent(CSSMarkerComponent).data.diamondDiv
+
+      marker.style.opacity = dist < rad * 25 ?
+        `${mapLinear(dist, rad * 4, rad * 25, 0, 1)}` :
+        "1"
+    }
   }
 }

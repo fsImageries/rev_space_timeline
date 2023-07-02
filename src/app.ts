@@ -11,6 +11,7 @@ import {
   RenderSystem,
   SunUniformsUpdateSystem
 } from "./baseclasses/imports";
+import { CSSMarkerSystem } from "./baseclasses/CommonSystems";
 
 const DATA = objectData as SystemsData;
 
@@ -23,7 +24,8 @@ window.onload = () => {
     // .registerSystem(OrbitRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem);
+    .registerSystem(RaycasterSystem)
+    .registerSystem(CSSMarkerSystem);
   // .registerSystem(PlanetUniformsUpdateSystem);
 
   // world.lvlManager.openLevel("cosmicMap", initCosmicMap);

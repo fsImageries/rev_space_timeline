@@ -321,8 +321,16 @@ export class ObjectLineComponent extends Component<ObjectLineData> {
   }
 }
 
-export class CSSMarkerComponent extends Component<object> {
-  static dependencies = [operand("self", TransformGroupComponent)];
+export interface CSSMarkerData {
+  mesh: CSS2DObject;
+  containerDiv: HTMLDivElement;
+  diamondDiv: HTMLDivElement;
+  txtDiv: HTMLDivElement;
+}
+export class CSSMarkerComponent extends Component<CSSMarkerData> {
+  static dependencies = [
+    operand("self", TransformGroupComponent), operand("self", BaseDataComponent)
+  ];
   static typeID = crypto.randomUUID();
 
   public init(world: World) {
@@ -353,6 +361,12 @@ export class CSSMarkerComponent extends Component<object> {
 
     const markerLabel = new CSS2DObject(containerDiv);
     tcomp.data.group.add(markerLabel);
+    this.data = {
+      mesh: markerLabel,
+      containerDiv,
+      diamondDiv: markerDiv,
+      txtDiv
+    }
   }
 }
 

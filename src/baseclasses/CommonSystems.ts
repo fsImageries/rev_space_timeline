@@ -4,7 +4,7 @@ import { System } from "../ecs/System";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
-import { AxisRotComponent, CSSMarkerComponent, OrbitRotComponent, RadiusComponent } from "./imports";
+import { AxisRotComponent, CSSMarkerComponent, DistanceToParentComponent, OrbitRotComponent, ParentComponent, PlanetTypeComponent, RadiusComponent } from "./imports";
 import {
   BaseDataComponent,
   CameraComponent,
@@ -184,10 +184,22 @@ export class CSSMarkerSystem extends System {
       const dist = Constants.WORLD_POS.distanceTo(cam.position)
       const rad = entity.getComponent(RadiusComponent).data.drawRadius
       const marker = entity.getComponent(CSSMarkerComponent).data.diamondDiv
+      const container = entity.getComponent(CSSMarkerComponent).data.containerDiv
+
+      if (!entity.getComponent(PlanetTypeComponent)) {
+        entity.getComponent(ParentComponent).data.parent.getComponent(TransformGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS)
+        const dist2par = entity.getComponent(DistanceToParentComponent).data.drawX
+        const camDist = cam.position.distanceTo(Constants.WORLD_POS)
+        const maxd = dist2par * 8
+        container.style.opacity = camDist < maxd ?
+            `${mapLinear(dist, maxd, 0, 0, 1)}` :
+            "0"
+      }
 
       marker.style.opacity = dist < rad * 25 ?
         `${mapLinear(dist, rad * 4, rad * 25, 0, 1)}` :
         "1"
     }
+
   }
 }

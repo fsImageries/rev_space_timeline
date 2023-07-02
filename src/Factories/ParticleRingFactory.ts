@@ -5,6 +5,8 @@ import Constants from "../helpers/Constants";
 import { MeshComponent, ParentComponent, ParticleRingComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
 import { BaseDataComponent, ParticleRingTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/CommonComponents";
+import { AxisRotComponent } from "../baseclasses/CelestialComponents";
+import { randFloat } from "three/src/math/MathUtils";
 
 const vertexShader = `
 uniform float size;
@@ -20,12 +22,23 @@ uniform float scale;
 
 uniform mat3 uvTransform;
 varying vec3 vPosition;
+varying vec3 vvPosition;
+varying vec3 vColor;
+attribute vec3 color;
 
+float map(float value, float min1, float max1, float min2, float max2) {
+    return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+}
 
 void main() {
     vPosition = position;
-    
+    vColor = color;
 
+    vec4 localPosition = vec4( position, 1.);
+    vec4 worldPosition = modelMatrix * localPosition;
+    vec4 viewPosition = viewMatrix * worldPosition;
+    vvPosition = worldPosition.xyz;
+    
 	#include <color_vertex>
 	#include <morphcolor_vertex>
 	#include <begin_vertex>
@@ -34,11 +47,8 @@ void main() {
 
 	gl_PointSize = size;
 
-
-    bool isPerspective = isPerspectiveMatrix( projectionMatrix );
-
-    if ( isPerspective ) gl_PointSize *= ( scale / - mvPosition.z );
-
+    // bool isPerspective = isPerspectiveMatrix( projectionMatrix );
+    // if ( isPerspective ) gl_PointSize *= ( scale / - mvPosition.z );
 
 	#include <logdepthbuf_vertex>
 	#include <clipping_planes_vertex>
@@ -57,6 +67,8 @@ const fragmentShader = `
     uniform float minRad;
 
     varying vec3 vPosition;
+    varying vec3 vvPosition;
+    varying vec3 vColor;
 
     float map(float value, float min1, float max1, float min2, float max2) {
         return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
@@ -71,8 +83,8 @@ const fragmentShader = `
         // float ll = length(xy);
         // gl_FragColor = vec4(color, step(ll, 0.5));
 
-
-        float v = map(vPosition.x, 0.0, maxRad, 0.0, 1.0);
+        // need a vector pointing to the light
+        float v = map(vvPosition.x - basePos.x, minRad, maxRad, 0.0, 1.0);
         // float distanceToLightSource = distance(v, lightPos.x);
         // vec3 lighterColor = color * distanceToLightSource * lightStrength;
         
@@ -81,26 +93,24 @@ const fragmentShader = `
         // vec3 lighterColor = color * distanceToLightSource * lightStrength;
 
         // gl_FragColor = vec4(lighterColor, 1.0);
-        gl_FragColor = vec4(color * (v * -1.0) + vec3(.5), 1.0);
+        float m = map((v * -1.0), -1., 0., .36, .8);
+        gl_FragColor = vec4(vColor, 1.0) * m;
     }
     `
 
-const POINTS_MAT = new ShaderMaterial({
-    transparent: true,
-    uniforms: {
-        size: { value: 1 },
-        scale: { value: 1 },
-        color: { value: [1, 1, 1] },
-        lightPos: { value: [0, 0, 0] },
-        basePos: { value: [0, 0, 0] }
-    }
-})
+const COLOR = new Color("#fff");
+const C1 = 0.01;
+const C2 = 0.5;
+function genCol(col: number[]) {
+    return [(col[0] + randFloat(C1, C2)) % 1, (col[1] + randFloat(C1, C2)) % 1, (col[2] + randFloat(C1, C2)) % 1];
+}
 
 export function buildParticlering(entity: Entity, data: SystemObjectData) {
     const [mesh, uniforms] = buildParticleSystem(data);
 
     return entity
         .addComponent(UniformsComponent, uniforms as UniformsData)
+        .addComponent(AxisRotComponent, AxisRotComponent.getDefaults(125))
         .addComponent(BaseDataComponent, BaseDataComponent.getDefaults(data))
         .addComponent(MeshComponent, { mesh })
         .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults())
@@ -111,16 +121,20 @@ export function buildParticlering(entity: Entity, data: SystemObjectData) {
 }
 
 function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
+    const particlesPerPosition = 3; // Number of particles per position
     const randomRange = 0.1;
-    const numParticles = data.draw?.count as number;
+    const numParticles = Math.round(data.draw?.count as number / particlesPerPosition);
     const ringRadius = data.distanceToParent as number * Constants.DISTANCE_SCALE;
     const ringWidth = data.draw?.height as number;
-    const particlesPerPosition = 3; // Number of particles per position
-    const minHeight = -1; // Minimum height value
-    const maxHeight = 1; // Maximum height value
+    const maxHeight = data.draw?.height as number; // Maximum height value
+    const minHeight = -maxHeight; // Minimum height value
+    const col = data.draw?.genColor;
 
     const geometry = new BufferGeometry();
     const positions = new Float32Array(numParticles * particlesPerPosition * 3);
+    
+    let colors;
+    if (col) colors = new Float32Array(numParticles * particlesPerPosition * 3);
 
     for (let i = 0; i < numParticles; i++) {
         const progress = i / numParticles;
@@ -136,6 +150,12 @@ function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
 
             const index = (i * particlesPerPosition + j) * 3;
 
+            if (colors && col) {
+                const [r,g,b] = genCol([COLOR.r, COLOR.g, COLOR.b])
+                colors[index] = r;
+                colors[index + 1] = g;
+                colors[index + 2] = b;    
+            }
             positions[index] = x;
             positions[index + 1] = y;
             positions[index + 2] = z;
@@ -144,7 +164,7 @@ function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
 
     const uniforms = {
         size: { value: 1 },
-        scale: { value: 1 },
+        scale: { value: 20 },
         color: { value: [1, 1, 1] },
         lightPos: { value: [0, 0, 0] },
         basePos: { value: [0, 0, 0] },
@@ -161,5 +181,6 @@ function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
 
     const attr = new BufferAttribute(positions, 3)
     geometry.setAttribute('position', attr);
+    if (colors && col) geometry.setAttribute('color', new BufferAttribute(colors, 3));
     return [new Points(geometry, mat) as unknown as Mesh, uniforms];
 }

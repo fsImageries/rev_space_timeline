@@ -20,7 +20,7 @@ const Constants = {
   LIGHTYEAR: 9.461e12,
   DISTANCE_SCALE: 3e-8,
   SIZE_SCALE: 1e-5,
-  ORB_SCALE: 10000,
+  ORB_SCALE: 200,
   ROT_SCALE: 10,
   CAM_ROT_SPEED: Math.PI / 64,
 

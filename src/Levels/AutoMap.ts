@@ -1,6 +1,7 @@
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
+import { CameraFocusSystem } from "../baseclasses/CommonSystems";
 import { World } from "../ecs/World";
 import { SunData, SystemData } from "../jsonInterfaces";
 import { initCommon } from "./Common";
@@ -21,6 +22,15 @@ export function initSystem(world: World, data: SystemData) {
     }
   }
 
+
   initCommon(world);
   world.load();
+
+  if (data.startTarget) {
+    world.store.focusTarget = data.startTarget
+    const sys = world.sysManager.getSystem(CameraFocusSystem);
+    if (!sys) return;
+    sys.enabled = true;
+
+  }
 }

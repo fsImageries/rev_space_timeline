@@ -6,6 +6,7 @@ import { initSystem } from "./Levels/AutoMap";
 import {
   AxisRotSystem,
   CameraFocusSystem,
+  OrbitRotSystem,
   RaycasterSystem,
   RenderSystem,
   SunUniformsUpdateSystem

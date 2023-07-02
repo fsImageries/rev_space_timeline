@@ -406,7 +406,9 @@ export class ParentComponent extends Component<ParentComponentData> {
 
 export class ParticleRingComponent extends Component<object> {
   static dependencies = [
-    operand("self", ParticleRingTypeComponent), operand("self", ParentComponent), operand("self", UniformsComponent)
+    operand("self", ParticleRingTypeComponent),
+    operand("self", ParentComponent),
+    operand("self", UniformsComponent)
   ];
   static typeID = crypto.randomUUID();
 
@@ -414,11 +416,11 @@ export class ParticleRingComponent extends Component<object> {
     if (!this.dependendQueries) return;
 
     const self = this.dependendQueries[0].entities[0];
-    const trans = self.getComponent(ParentComponent).data.parent.getComponent(TransformGroupComponent).data.group
-    const ucomp = self.getComponent(UniformsComponent)
-    trans.getWorldPosition(Constants.WORLD_POS)
-    console.log(Constants.WORLD_POS)
-    ucomp.data.basePos.value = Constants.WORLD_POS.clone()
-    console.log(self.getComponent(MeshComponent).data.mesh)
+    const trans = self.getComponent(ParentComponent).data.parent.getComponent(TransformGroupComponent).data.group;
+    const ucomp = self.getComponent(UniformsComponent);
+    trans.getWorldPosition(Constants.WORLD_POS);
+    console.log(Constants.WORLD_POS);
+    ucomp.data.basePos.value = Constants.WORLD_POS.clone();
+    console.log(self.getComponent(MeshComponent).data.mesh);
   }
 }

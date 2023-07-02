@@ -1,4 +1,4 @@
-import {SceneComponent} from "./baseclasses/imports"
+import { SceneComponent } from "./baseclasses/imports";
 import objectData from "./data/object_data.yaml";
 import { SystemsData } from "./jsonInterfaces";
 import { World } from "./ecs/World";
@@ -6,7 +6,7 @@ import { initSystem } from "./Levels/AutoMap";
 import {
   AxisRotSystem,
   CameraFocusSystem,
-  OrbitRotSystem,
+  // OrbitRotSystem,
   RaycasterSystem,
   RenderSystem,
   SunUniformsUpdateSystem
@@ -23,7 +23,7 @@ window.onload = () => {
     // .registerSystem(OrbitRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem)
+    .registerSystem(RaycasterSystem);
   // .registerSystem(PlanetUniformsUpdateSystem);
 
   // world.lvlManager.openLevel("cosmicMap", initCosmicMap);

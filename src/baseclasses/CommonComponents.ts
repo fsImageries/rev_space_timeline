@@ -98,18 +98,18 @@ export interface BaseDataData {
 }
 export class BaseDataComponent extends Component<BaseDataData> {
   static typeID = crypto.randomUUID();
-  static getDefaults(d:SystemObjectData):BaseDataData {
+  static getDefaults(d: SystemObjectData): BaseDataData {
     return {
       name: d.name,
       uuid: crypto.randomUUID() as string,
       parent: d.parent,
       texts: d.texts
-    }
+    };
   }
 }
 
 export interface UniformsData {
-  [uniformName: string]: { value: number | Vector3 | Color| number[] };
+  [uniformName: string]: { value: number | Vector3 | Color | number[] };
 }
 export class UniformsComponent extends Component<UniformsData> {
   static typeID = crypto.randomUUID();

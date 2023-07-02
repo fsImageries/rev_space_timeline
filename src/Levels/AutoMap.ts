@@ -20,23 +20,21 @@ export function initSystem(world: World, data: SystemData) {
     }
 
     if (d.type === "particlering" && d.name === "glitterband") {
-      buildParticlering(world.ecManager.createEntity(), d)
+      buildParticlering(world.ecManager.createEntity(), d);
     }
 
     if (d.type === "oortcloud") {
-      buildOortCloud(world.ecManager.createEntity(), d)
+      buildOortCloud(world.ecManager.createEntity(), d);
     }
   }
-
 
   initCommon(world);
   world.load();
 
   if (data.startTarget) {
-    world.store.focusTarget = data.startTarget
+    world.store.focusTarget = data.startTarget;
     const sys = world.sysManager.getSystem(CameraFocusSystem);
     if (!sys) return;
     sys.enabled = true;
-
   }
 }

@@ -1,12 +1,22 @@
-import { BufferAttribute, BufferGeometry, Color, Mesh, Points, PointsMaterial, ShaderLib, ShaderMaterial, Vector3, MeshPhongMaterial, RawShaderMaterial } from "three";
-import { World } from "../ecs/World";
-import { SystemObjectData } from "../jsonInterfaces";
-import Constants from "../helpers/Constants";
-import { MeshComponent, ParentComponent, ParticleRingComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
-import { Entity } from "../ecs/Entity";
-import { BaseDataComponent, ParticleRingTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/imports";
-import { AxisRotComponent } from "../baseclasses/imports";
+import { BufferAttribute, BufferGeometry, Color, Mesh, Points, ShaderMaterial } from "three";
 import { randFloat } from "three/src/math/MathUtils";
+import {
+  MeshComponent,
+  ParentComponent,
+  ParticleRingComponent,
+  RotGroupComponent,
+  TransformGroupComponent
+} from "../baseclasses/MeshComponents";
+import {
+  AxisRotComponent,
+  BaseDataComponent,
+  ParticleRingTypeComponent,
+  UniformsComponent,
+  UniformsData
+} from "../baseclasses/imports";
+import { Entity } from "../ecs/Entity";
+import Constants from "../helpers/Constants";
+import { SystemObjectData } from "../jsonInterfaces";
 
 const vertexShader = `
 uniform float size;
@@ -67,7 +77,7 @@ void main() {
 	#include <fog_vertex>
 }   
 
-    `
+    `;
 
 const fragmentShader = `
     float lightStrength = .07;
@@ -110,91 +120,91 @@ const fragmentShader = `
         // float m = map((v * -1.0), -1., 0., 0.0, 1.1);
         gl_FragColor = vec4(vColor, 1.0) * m;
     }
-    `
+    `;
 
 const COLOR = new Color("#fff");
 const C1 = 0.01;
 const C2 = 0.5;
 function genCol(col: number[]) {
-    return [(col[0] + randFloat(C1, C2)) % 1, (col[1] + randFloat(C1, C2)) % 1, (col[2] + randFloat(C1, C2)) % 1];
+  return [(col[0] + randFloat(C1, C2)) % 1, (col[1] + randFloat(C1, C2)) % 1, (col[2] + randFloat(C1, C2)) % 1];
 }
 
 export function buildParticlering(entity: Entity, data: SystemObjectData) {
-    const [mesh, uniforms] = buildParticleSystem(data);
+  const [mesh, uniforms] = buildParticleSystem(data);
 
-    return entity
-        .addComponent(UniformsComponent, uniforms as UniformsData)
-        .addComponent(AxisRotComponent, AxisRotComponent.getDefaults(125))
-        .addComponent(BaseDataComponent, BaseDataComponent.getDefaults(data))
-        .addComponent(MeshComponent, { mesh })
-        .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults())
-        .addComponent(RotGroupComponent, RotGroupComponent.getDefaults())
-        .addComponent(ParentComponent)
-        .addComponent(ParticleRingComponent)
-        .addComponent(ParticleRingTypeComponent)
+  return entity
+    .addComponent(UniformsComponent, uniforms as UniformsData)
+    .addComponent(AxisRotComponent, AxisRotComponent.getDefaults(125))
+    .addComponent(BaseDataComponent, BaseDataComponent.getDefaults(data))
+    .addComponent(MeshComponent, { mesh })
+    .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults())
+    .addComponent(RotGroupComponent, RotGroupComponent.getDefaults())
+    .addComponent(ParentComponent)
+    .addComponent(ParticleRingComponent)
+    .addComponent(ParticleRingTypeComponent);
 }
 
 function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
-    const particlesPerPosition = 3; // Number of particles per position
-    const randomRange = 0.1;
-    const numParticles = Math.round(data.draw?.count as number / particlesPerPosition);
-    const ringRadius = data.distanceToParent as number * Constants.DISTANCE_SCALE;
-    const ringWidth = data.draw?.height as number;
-    const maxHeight = data.draw?.height as number; // Maximum height value
-    const minHeight = -maxHeight; // Minimum height value
-    const col = data.draw?.genColor;
+  const particlesPerPosition = 3; // Number of particles per position
+  const randomRange = 0.1;
+  const numParticles = Math.round((data.draw?.count as number) / particlesPerPosition);
+  const ringRadius = (data.distanceToParent as number) * Constants.DISTANCE_SCALE;
+  const ringWidth = data.draw?.height as number;
+  const maxHeight = data.draw?.height as number; // Maximum height value
+  const minHeight = -maxHeight; // Minimum height value
+  const col = data.draw?.genColor;
 
-    const geometry = new BufferGeometry();
-    const positions = new Float32Array(numParticles * particlesPerPosition * 3);
-    
-    let colors;
-    if (col) colors = new Float32Array(numParticles * particlesPerPosition * 3);
+  const geometry = new BufferGeometry();
+  const positions = new Float32Array(numParticles * particlesPerPosition * 3);
 
-    for (let i = 0; i < numParticles; i++) {
-        const progress = i / numParticles;
-        const angle = progress * Math.PI * 2;
+  let colors;
+  if (col) colors = new Float32Array(numParticles * particlesPerPosition * 3);
 
-        for (let j = 0; j < particlesPerPosition; j++) {
-            const radiusOffset = Math.random() * randomRange - randomRange / 2;
-            const heightOffset = Math.random() * (maxHeight - minHeight) + minHeight; // Random height within the range
+  for (let i = 0; i < numParticles; i++) {
+    const progress = i / numParticles;
+    const angle = progress * Math.PI * 2;
 
-            const x = Math.cos(angle) * (ringRadius + ringWidth / 2 + radiusOffset) + radiusOffset * 25;
-            const y = heightOffset;
-            const z = Math.sin(angle) * (ringRadius + ringWidth / 2 + radiusOffset) + radiusOffset * 25;;
+    for (let j = 0; j < particlesPerPosition; j++) {
+      const radiusOffset = Math.random() * randomRange - randomRange / 2;
+      const heightOffset = Math.random() * (maxHeight - minHeight) + minHeight; // Random height within the range
 
-            const index = (i * particlesPerPosition + j) * 3;
+      const x = Math.cos(angle) * (ringRadius + ringWidth / 2 + radiusOffset) + radiusOffset * 25;
+      const y = heightOffset;
+      const z = Math.sin(angle) * (ringRadius + ringWidth / 2 + radiusOffset) + radiusOffset * 25;
 
-            if (colors && col) {
-                const [r,g,b] = genCol([COLOR.r, COLOR.g, COLOR.b])
-                colors[index] = r;
-                colors[index + 1] = g;
-                colors[index + 2] = b;    
-            }
-            positions[index] = x;
-            positions[index + 1] = y;
-            positions[index + 2] = z;
-        }
+      const index = (i * particlesPerPosition + j) * 3;
+
+      if (colors && col) {
+        const [r, g, b] = genCol([COLOR.r, COLOR.g, COLOR.b]);
+        colors[index] = r;
+        colors[index + 1] = g;
+        colors[index + 2] = b;
+      }
+      positions[index] = x;
+      positions[index + 1] = y;
+      positions[index + 2] = z;
     }
+  }
 
-    const uniforms = {
-        size: { value: 1 },
-        scale: { value: 20 },
-        color: { value: [1, 1, 1] },
-        lightPos: { value: [0, 0, 0] },
-        basePos: { value: [0, 0, 0] },
-        maxRad: { value: ringRadius + (randomRange * 25) },
-        minRad: { value: -(ringRadius + (randomRange * 25)) }
-    }
+  const uniforms = {
+    size: { value: 1 },
+    scale: { value: 20 },
+    color: { value: [1, 1, 1] },
+    lightPos: { value: [0, 0, 0] },
+    basePos: { value: [0, 0, 0] },
+    maxRad: { value: ringRadius + randomRange * 25 },
+    minRad: { value: -(ringRadius + randomRange * 25) }
+  };
 
-    const mat = new ShaderMaterial({
-        transparent: true,
-        uniforms,
-        vertexShader,
-        fragmentShader
-    })
+  const mat = new ShaderMaterial({
+    transparent: true,
+    uniforms,
+    vertexShader,
+    fragmentShader
+  });
 
-    const attr = new BufferAttribute(positions, 3)
-    geometry.setAttribute('position', attr);
-    if (colors && col) geometry.setAttribute('color', new BufferAttribute(colors, 3));
-    return [new Points(geometry, mat) as unknown as Mesh, uniforms];
+  const attr = new BufferAttribute(positions, 3);
+  geometry.setAttribute("position", attr);
+  if (colors && col) geometry.setAttribute("color", new BufferAttribute(colors, 3));
+  return [new Points(geometry, mat) as unknown as Mesh, uniforms];
 }

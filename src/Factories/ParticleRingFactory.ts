@@ -9,7 +9,6 @@ import {
   TransformGroupComponent
 } from "../baseclasses/MeshComponents";
 import {
-  AxisRotComponent,
   BaseDataComponent,
   DistanceToParentComponent,
   OrbitRotComponent,
@@ -111,7 +110,7 @@ const fragmentShader = `
         // gl_FragColor = vec4(color, step(ll, 0.5));
 
         // need a vector pointing to the light
-        float v = map(vvPosition.x - basePos.x, minRad, maxRad, 0.0, 1.0);
+        float v = map(vvPosition.x - basePos.x, minRad * .5, maxRad * .5, 0., 1.0);
         // float distanceToLightSource = distance(v, lightPos.x);
         // vec3 lighterColor = color * distanceToLightSource * lightStrength;
         
@@ -120,9 +119,9 @@ const fragmentShader = `
         // vec3 lighterColor = color * distanceToLightSource * lightStrength;
 
         // gl_FragColor = vec4(lighterColor, 1.0);
-        // float m = map((v * -1.0), -1., 0., .36, 1.);
-        float m = map((v * -1.0), -1., 0., 0.0, .7);
-        gl_FragColor = vec4(vColor, 1.0) * m;
+        v = map((v * -1.0), -1., 0., .75, .9);
+        // v = map((v * -1.0), -1., 0., 0.0, 1.);
+        gl_FragColor = vec4(vColor, 1.0) * v;
     }
     `;
 
@@ -152,11 +151,11 @@ export function buildParticlering(entity: Entity, data: SystemObjectData) {
 }
 
 function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
-  const particlesPerPosition = 3; // Number of particles per position
-  const randomRange = 0.1;
+  const particlesPerPosition = 4; // Number of particles per position
+  const randomRange = .15;
   const numParticles = Math.round((data.draw?.count as number) / particlesPerPosition);
   const ringRadius = (data.distanceToParent as number) * Constants.DISTANCE_SCALE;
-  const ringWidth = data.draw?.height as number;
+  const ringWidth = ringRadius;
   const maxHeight = data.draw?.height as number; // Maximum height value
   const minHeight = -maxHeight; // Minimum height value
   const col = data.draw?.genColor;
@@ -175,9 +174,11 @@ function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
       const radiusOffset = Math.random() * randomRange - randomRange / 2;
       const heightOffset = Math.random() * (maxHeight - minHeight) + minHeight; // Random height within the range
 
-      const x = Math.cos(angle) * (ringRadius + ringWidth / 2 + radiusOffset) + radiusOffset * 25;
+      const x = Math.cos(angle) * (ringRadius + ringWidth / 2 + radiusOffset + radiusOffset * 25 * randFloat(-1.25, 1.25));
+      // const x = Math.cos(angle) * ringRadius;
       const y = heightOffset;
-      const z = Math.sin(angle) * (ringRadius + ringWidth / 2 + radiusOffset) + radiusOffset * 25;
+      const z = Math.sin(angle) * (ringRadius + ringWidth / 2 + radiusOffset + radiusOffset * 25 * randFloat(-1.25, 1.25));
+      // const z = Math.sin(angle) * ringRadius;
 
       const index = (i * particlesPerPosition + j) * 3;
 
@@ -199,8 +200,8 @@ function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
     color: { value: [1, 1, 1] },
     lightPos: { value: [0, 0, 0] },
     basePos: { value: [0, 0, 0] },
-    maxRad: { value: ringRadius + randomRange * 25 },
-    minRad: { value: -(ringRadius + randomRange * 25) }
+    maxRad: { value: ringRadius + ringWidth / 2 + 10 },
+    minRad: { value: -(ringRadius + ringWidth / 2 + 10) }
   };
 
   const mat = new ShaderMaterial({

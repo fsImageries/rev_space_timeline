@@ -2,12 +2,12 @@
 // import Internal3DObject2 from "./Classes/Internal3DObject";
 // import SystemObject from "./Classes/SystemObject";
 
-// export interface RandStats {
-//   range: number;
-//   distanceStart: number;
-//   distanceEnd: number;
-//   radius: number;
-// }
+export interface RandStats {
+  range: number;
+  distanceStart: number;
+  distanceEnd: number;
+  radius: number;
+}
 
 // export interface CelestialBaseParams {
 //   // all times are given in hours

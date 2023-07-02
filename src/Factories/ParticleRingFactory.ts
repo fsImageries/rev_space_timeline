@@ -106,8 +106,8 @@ const fragmentShader = `
         // vec3 lighterColor = color * distanceToLightSource * lightStrength;
 
         // gl_FragColor = vec4(lighterColor, 1.0);
-        // float m = map((v * -1.0), -1., 0., .36, .8);
-        float m = map((v * -1.0), -1., 0., 0.0, 1.1);
+        float m = map((v * -1.0), -1., 0., .36, 1.);
+        // float m = map((v * -1.0), -1., 0., 0.0, 1.1);
         gl_FragColor = vec4(vColor, 1.0) * m;
     }
     `

@@ -371,8 +371,8 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
     const entity = this.dependendQueries[0].entities[0]
     if (entity.getComponent(ParticleRingTypeComponent)) {
       const rad = entity.getComponent(RadiusComponent).data.drawRadius
-      markerLabel.position.x -= rad * .5
-      markerLabel.position.z -= rad * .775
+      // markerLabel.position.x += rad
+      markerLabel.position.z -= rad
     }
   }
 }

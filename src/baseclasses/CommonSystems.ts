@@ -4,7 +4,7 @@ import { System } from "../ecs/System";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
-import { AxisRotComponent, CSSMarkerComponent, DistanceToParentComponent, OrbitRotComponent, ParentComponent, PlanetTypeComponent, RadiusComponent } from "./imports";
+import { AxisRotComponent, CSSMarkerComponent, DistanceToParentComponent, OrbitRotComponent, ParentComponent, ParticleRingTypeComponent, PlanetTypeComponent, RadiusComponent } from "./imports";
 import {
   BaseDataComponent,
   CameraComponent,
@@ -179,10 +179,14 @@ export class CSSMarkerSystem extends System {
 
 
     for (const entity of this.queries[0].entities) {
-      const trans = entity.getComponent(TransformGroupComponent).data.group;
+      const isParticleRing = entity.getComponent(ParticleRingTypeComponent)
+      const trans = entity.getComponent(CSSMarkerComponent).data.mesh
+      // const trans = entity.getComponent(TransformGroupComponent).data.group;
       trans.getWorldPosition(Constants.WORLD_POS)
       const dist = Constants.WORLD_POS.distanceTo(cam.position)
-      const rad = entity.getComponent(RadiusComponent).data.drawRadius
+      const rad =  isParticleRing ? // TODO somewhat rework
+        entity.getComponent(ParentComponent).data.parent.getComponent(RadiusComponent).data.drawRadius : 
+        entity.getComponent(RadiusComponent).data.drawRadius
       const marker = entity.getComponent(CSSMarkerComponent).data.diamondDiv
       const container = entity.getComponent(CSSMarkerComponent).data.containerDiv
 
@@ -197,7 +201,7 @@ export class CSSMarkerSystem extends System {
       }
 
       marker.style.opacity = dist < rad * 25 ?
-        `${mapLinear(dist, rad * 4, rad * 25, 0, 1)}` :
+        `${mapLinear(dist, rad * 2, rad * 25, 0, 1)}` :
         "1"
     }
 

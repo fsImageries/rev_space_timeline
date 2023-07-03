@@ -14,15 +14,16 @@ import {
   RotGroupComponent
 } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
-import Constants from "../helpers/Constants";
+import GLOBALS from "../helpers/Constants";
 import { SunData } from "../jsonInterfaces";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
+import { Store } from "../ecs/Store";
 
 export function buildSun(entity: Entity, data: SunData) {
   const [mesh, transformGrp, rotGrp, uniforms] = buildMeshes(data);
 
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
+  GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
   if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
   if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 1e5));
@@ -42,13 +43,13 @@ export function buildSun(entity: Entity, data: SunData) {
     } as BaseDataData)
     .addComponent(SunTypeComponent);
 
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
+  GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
   return entity;
 }
 
 function buildMeshes(data: SunData): [Mesh, Group, Group, UniformsData] {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_sun`);
+  GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_sun`);
 
   const uniforms = {
     time: { value: 1.0 },
@@ -66,8 +67,8 @@ function buildMeshes(data: SunData): [Mesh, Group, Group, UniformsData] {
     transparent: false
   });
 
-  const mesh = new Mesh(Constants.SPHERE_GEOM, mat);
-  mesh.scale.setScalar(data.radius * Constants.SIZE_SCALE);
+  const mesh = new Mesh(GLOBALS.SPHERE_GEOM, mat);
+  mesh.scale.setScalar(data.radius * Store.getInstance().state.SIZE_SCALE);
   mesh.name = `${data.name}_mesh`;
 
   const transformsGrp = new Group();
@@ -75,6 +76,6 @@ function buildMeshes(data: SunData): [Mesh, Group, Group, UniformsData] {
   transformsGrp.name = `${data.name}_transformGrp`;
   rotGrp.name = `${data.name}_rotGrp`;
 
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_sun`);
+  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_sun`);
   return [mesh, transformsGrp, rotGrp, uniforms];
 }

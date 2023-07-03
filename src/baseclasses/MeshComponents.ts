@@ -16,7 +16,7 @@ import { Component } from "../ecs/Component";
 import { Entity } from "../ecs/Entity";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
-import Constants from "../helpers/Constants";
+import GLOBALS from "../helpers/Constants";
 import {
   BaseDataComponent,
   CameraFocusSystem,
@@ -25,6 +25,7 @@ import {
   SceneComponent,
   UniformsComponent
 } from "./imports";
+import { Store } from "../ecs/Store";
 
 export interface MeshData {
   mesh: Mesh;
@@ -136,9 +137,9 @@ export class BasicRingComponent extends Component<BasicRingData> {
   static dependencies = [operand("exist", SceneComponent)];
   static typeID = crypto.randomUUID();
 
-  static getDefaults(mult: number, radius = Constants.LIGHTYEAR): BasicRingData {
+  static getDefaults(mult: number, radius = Store.getInstance().store.LIGHTYEAR): BasicRingData {
     const points = [];
-    radius = radius * Constants.DISTANCE_SCALE;
+    radius = radius * Store.getInstance().state.DISTANCE_SCALE;
     for (let i = 0; i <= 360; i++) {
       points.push(new Vector3(radius * Math.sin(i * DEG2RAD), 0, radius * Math.cos(i * DEG2RAD)));
     }
@@ -205,9 +206,9 @@ export class CosmicMapSunTextComponent extends Component<TextData> {
     this.data.texts.fillOpacity = 0.4;
 
     const tgrp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent).data.group;
-    tgrp.getWorldPosition(Constants.WORLD_POS);
-    this.data.title.position.copy(Constants.WORLD_POS);
-    this.data.texts.position.copy(Constants.WORLD_POS);
+    tgrp.getWorldPosition(GLOBALS.WORLD_POS);
+    this.data.title.position.copy(GLOBALS.WORLD_POS);
+    this.data.texts.position.copy(GLOBALS.WORLD_POS);
 
     const fs = this.data.title.fontSize;
     this.data.title.position.x += fs;
@@ -267,7 +268,7 @@ export class DiskLinesComponent extends Component<LineSegmentData> {
     const linepnts = [];
     for (const entity of this.dependendQueries[1].entities) {
       const p1 = (entity.getComponent(TransformGroupComponent) as TransformGroupComponent).data.group
-        .getWorldPosition(Constants.WORLD_POS)
+        .getWorldPosition(GLOBALS.WORLD_POS)
         .clone();
       if (p1.y === 0) continue;
       const p2 = p1.clone();
@@ -314,8 +315,8 @@ export class ObjectLineComponent extends Component<ObjectLineData> {
         e2.getComponent(TransformGroupComponent).data.group
       ];
       const [p1, p2] = [
-        g1.getWorldPosition(Constants.WORLD_POS).clone(),
-        g2.getWorldPosition(Constants.WORLD_POS).clone()
+        g1.getWorldPosition(GLOBALS.WORLD_POS).clone(),
+        g2.getWorldPosition(GLOBALS.WORLD_POS).clone()
       ];
       linepnts.push(p1, p2);
     }
@@ -355,7 +356,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
     const f = (e: MouseEvent) => {
       e.stopImmediatePropagation();
       e.preventDefault();
-      world.store.focusTarget = bcomp.data.name.toLowerCase();
+      Store.getInstance().store.focusTarget = bcomp.data.name.toLowerCase();
       const sys = world.sysManager.getSystem(CameraFocusSystem);
       if (!sys) return;
       sys.enabled = true;
@@ -423,8 +424,8 @@ export class ParentComponent extends Component<ParentComponentData> {
     const ptgrp = parent.getComponent(TransformGroupComponent).data.group;
     const prgrp = parent.getComponent(RotGroupComponent).data.group;
 
-    ptgrp.getWorldPosition(Constants.WORLD_POS);
-    rgrp.position.add(Constants.WORLD_POS);
+    ptgrp.getWorldPosition(GLOBALS.WORLD_POS);
+    rgrp.position.add(GLOBALS.WORLD_POS);
     prgrp.add(rgrp);
   }
 }
@@ -443,9 +444,9 @@ export class ParticleRingComponent extends Component<object> {
     const self = this.dependendQueries[0].entities[0];
     const trans = self.getComponent(ParentComponent).data.parent.getComponent(TransformGroupComponent).data.group;
     const ucomp = self.getComponent(UniformsComponent);
-    trans.getWorldPosition(Constants.WORLD_POS);
-    console.log(Constants.WORLD_POS);
-    ucomp.data.basePos.value = Constants.WORLD_POS.clone();
+    trans.getWorldPosition(GLOBALS.WORLD_POS);
+    console.log(GLOBALS.WORLD_POS);
+    ucomp.data.basePos.value = GLOBALS.WORLD_POS.clone();
     console.log(self.getComponent(MeshComponent).data.mesh);
   }
 }

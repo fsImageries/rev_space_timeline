@@ -25,7 +25,7 @@ import {
   TransformGroupComponent
 } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
-import Constants from "../helpers/Constants";
+import GLOBALS from "../helpers/Constants";
 
 import { SystemObjectData } from "../jsonInterfaces";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
@@ -33,7 +33,7 @@ import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
 import { MoonTypeComponent } from "../baseclasses/CommonComponents";
 
 export function buildPlanet(entity: Entity, data: SystemObjectData) {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
+  GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
   const [mesh, atmo, transformGrp, rotGrp] = buildMeshes(data);
 
@@ -60,18 +60,18 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
 
   data.type === "planet" ? entity.addComponent(PlanetTypeComponent) : entity.addComponent(MoonTypeComponent);
 
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_components`);
+  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_components`);
 
   return entity;
 }
 
 function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group] {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_meshes`);
+  GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_meshes`);
 
-  const albedo = Constants.TEX_LOAD(data.draw?.albedoPath as string);
+  const albedo = GLOBALS.TEX_LOAD(data.draw?.albedoPath as string);
   albedo.magFilter = NearestFilter;
 
-  const normal = Constants.TEX_LOAD(data.draw?.normalPath as string);
+  const normal = GLOBALS.TEX_LOAD(data.draw?.normalPath as string);
   normal.magFilter = NearestFilter;
 
   const sphereMaterial = new MeshPhongMaterial({
@@ -79,7 +79,7 @@ function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group] {
     normalMap: normal
   });
 
-  const mesh = new Mesh(Constants.SPHERE_GEOM, sphereMaterial);
+  const mesh = new Mesh(GLOBALS.SPHERE_GEOM, sphereMaterial);
   mesh.castShadow = true;
   mesh.name = `${data.name}_mesh`;
 
@@ -100,7 +100,7 @@ function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group] {
     polygonOffsetFactor: -4
   });
 
-  const atmo = new Mesh(Constants.SPHERE_GEOM, atmoMat);
+  const atmo = new Mesh(GLOBALS.SPHERE_GEOM, atmoMat);
   atmo.name = `${data.name}_atmo`;
   // atmo.castShadow = true;
   atmo.scale.setScalar(1.025);
@@ -111,6 +111,6 @@ function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group] {
   const rotGrp = new Group();
   rotGrp.name = `${data.name}_rotGrp`;
 
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_meshes`);
+  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_meshes`);
   return [mesh, atmo, transformGrp, rotGrp];
 }

@@ -3,9 +3,9 @@ import { randFloat } from "three/src/math/MathUtils";
 import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
 import { BaseDataComponent } from "../baseclasses/imports";
 import { Entity } from "../ecs/Entity";
-import Constants from "../helpers/Constants";
 import { randSpherePointExcludes } from "../helpers/numericUtils";
 import { SystemObjectData } from "../jsonInterfaces";
+import { Store } from "../ecs/Store";
 
 const COLOR = new Color("#fff");
 const C1 = 0.01;
@@ -43,7 +43,7 @@ function buildParticleSystem(data: SystemObjectData): [Mesh] {
   const distanceEnd = dist + RANGE;
 
   for (let i = 0; i < PNTCOUNT; i += 3) {
-    const [x, y, z] = randSpherePointExcludes(dist * Constants.DISTANCE_SCALE, distanceEnd * Constants.DISTANCE_SCALE);
+    const [x, y, z] = randSpherePointExcludes(dist * Store.getInstance().state.DISTANCE_SCALE, distanceEnd * Store.getInstance().state.DISTANCE_SCALE);
 
     positions[i] = x;
     positions[i + 1] = y;

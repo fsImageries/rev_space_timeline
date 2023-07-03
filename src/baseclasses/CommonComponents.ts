@@ -2,9 +2,9 @@ import { Color, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRender
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { Component, TypeComponent } from "../ecs/Component";
-import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import { SystemObjectData } from "../jsonInterfaces";
+import { Store } from "../ecs/Store";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
@@ -14,9 +14,9 @@ export interface RenderComponentData {
 
 export class RenderComponent extends Component<RenderComponentData> {
   static typeID = crypto.randomUUID();
-  static getDefaults(world: World): RenderComponentData {
+  static getDefaults(): RenderComponentData {
     const renderer = new WebGLRenderer({
-      canvas: world.store["canvas"],
+      canvas: Store.getInstance().store.canvas,
       antialias: true,
       alpha: true,
       logarithmicDepthBuffer: true
@@ -62,10 +62,10 @@ export class CameraComponent extends Component<CameraComponentData> {
   static dependencies = [operand("exist", RenderComponent)];
   static typeID = crypto.randomUUID();
 
-  static getDefaults(world: World, defaultPos?: Vector3): CameraComponentData {
+  static getDefaults(defaultPos?: Vector3): CameraComponentData {
     const cam = new PerspectiveCamera(
       55,
-      world.store["canvas"].clientWidth / world.store["canvas"].clientHeight,
+      Store.getInstance().store.canvas.clientWidth / Store.getInstance().store.canvas.clientHeight,
       0.001,
       1e12
     );

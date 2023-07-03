@@ -1,6 +1,6 @@
 import { Component } from "../ecs/Component";
+import { Store } from "../ecs/Store";
 import { operand } from "../ecs/utils";
-import Constants from "../helpers/Constants";
 import { TransformGroupComponent } from "./imports";
 
 export interface RotData {
@@ -49,8 +49,8 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
   static getDefaults(xy: number[] | number, shouldInit = true): DistanceToParentData {
     if (typeof xy === "number") xy = [xy];
     const [x, y] = xy.length === 1 ? [xy[0], undefined] : xy;
-    const drawX = x * Constants.DISTANCE_SCALE;
-    const drawY = y ? y * Constants.DISTANCE_SCALE : y;
+    const drawX = x * Store.getInstance().state.DISTANCE_SCALE;
+    const drawY = y ? y * Store.getInstance().state.DISTANCE_SCALE : y;
     return {
       x,
       y,
@@ -82,7 +82,7 @@ export class RadiusComponent extends Component<RadiusData> {
   static getDefaults(radius: number): RadiusData {
     return {
       radius: radius,
-      drawRadius: radius * Constants.SIZE_SCALE
+      drawRadius: radius * Store.getInstance().state.SIZE_SCALE
     };
   }
 

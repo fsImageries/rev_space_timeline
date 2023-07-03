@@ -3,7 +3,7 @@ import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { System } from "../ecs/System";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
-import Constants from "../helpers/Constants";
+import GLOBALS from "../helpers/Constants";
 import {
   AxisRotComponent,
   CSSMarkerComponent,
@@ -24,6 +24,7 @@ import {
 } from "./imports";
 import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./imports";
 import { mapLinear } from "three/src/math/MathUtils";
+import { Store } from "../ecs/Store";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
@@ -80,7 +81,7 @@ export class AxisRotSystem extends System {
       const axis = entity.getComponent(AxisRotComponent) as AxisRotComponent;
       const objGrp = entity.getComponent(MeshComponent) as MeshComponent;
 
-      const axisVal = delta * axis.data.vel * Constants.ROT_SCALE;
+      const axisVal = delta * axis.data.vel * Store.getInstance().state.ROT_SCALE;
       objGrp.data.mesh.rotation.y += axisVal;
     }
   }
@@ -95,7 +96,7 @@ export class OrbitRotSystem extends System {
       const ocomp = entity.getComponent(OrbitRotComponent);
       const rcomp = entity.getComponent(RotGroupComponent);
 
-      const val = delta * ocomp.data.vel * Constants.ORB_SCALE;
+      const val = delta * ocomp.data.vel * Store.getInstance().state.ORB_SCALE;
       rcomp.data.group.rotation.y += val;
     }
   }
@@ -123,7 +124,7 @@ export class CameraFocusSystem extends System {
   }
 
   execute(): void {
-    const tar = this.world.store.focusTarget.toLowerCase();
+    const tar = Store.getInstance().store.focusTarget.toLowerCase();
     if (!this.queries || !tar) return;
 
     const ccomp = this.queries[1].entities[0].getComponent(CameraComponent);
@@ -131,13 +132,13 @@ export class CameraFocusSystem extends System {
     for (const entity of this.queries[0].entities) {
       //<- Tranform groups
       if (tar === entity.getComponent(BaseDataComponent).data.name.toLowerCase()) {
-        entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(Constants.WORLD_POS);
+        entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(GLOBALS.WORLD_POS);
         const rad = entity.getComponent(RadiusComponent).data.drawRadius;
         console.log(rad);
         // TODO calculate view vector from object to light (nearest)
-        ccomp.data.active.position.copy(Constants.WORLD_POS).x -=
+        ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -=
           rad * (entity.getComponent(SunTypeComponent) ? 14 : 4);
-        ccomp.data.freeCtrl?.target.copy(Constants.WORLD_POS);
+        ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS);
         ccomp.data.freeCtrl?.update();
       }
     }
@@ -155,15 +156,15 @@ export class RaycasterSystem extends System {
     if (!this.queries) return;
 
     const cam = this.queries[1].entities[0].getComponent(CameraComponent).data.active;
-    const raycaster = this.world.store.raycaster as Raycaster;
-    raycaster.setFromCamera(this.world.store.raypointer, cam);
+    const raycaster = Store.getInstance().store.raycaster as Raycaster;
+    raycaster.setFromCamera(Store.getInstance().store.raypointer, cam);
 
     for (const entity of this.queries[0].entities) {
       const mesh = entity.getComponent(MeshComponent).data.mesh;
       const intersects = raycaster.intersectObject(mesh);
       if (intersects.length > 0) {
         const base = entity.getComponent(BaseDataComponent);
-        this.world.store.focusTarget = base.data.name;
+        Store.getInstance().store.focusTarget = base.data.name;
         const sys = this.world.sysManager.getSystem(CameraFocusSystem);
         if (!sys) return;
         sys.enabled = true;
@@ -193,8 +194,8 @@ export class CSSMarkerSystem extends System {
       const isParticleRing = entity.getComponent(ParticleRingTypeComponent);
       const trans = entity.getComponent(CSSMarkerComponent).data.mesh;
       // const trans = entity.getComponent(TransformGroupComponent).data.group;
-      trans.getWorldPosition(Constants.WORLD_POS);
-      const dist = Constants.WORLD_POS.distanceTo(cam.position);
+      trans.getWorldPosition(GLOBALS.WORLD_POS);
+      const dist = GLOBALS.WORLD_POS.distanceTo(cam.position);
       const rad = isParticleRing // TODO somewhat rework
         ? entity.getComponent(ParentComponent).data.parent.getComponent(RadiusComponent).data.drawRadius
         : entity.getComponent(RadiusComponent).data.drawRadius;
@@ -205,9 +206,9 @@ export class CSSMarkerSystem extends System {
         entity
           .getComponent(ParentComponent)
           .data.parent.getComponent(TransformGroupComponent)
-          .data.group.getWorldPosition(Constants.WORLD_POS);
+          .data.group.getWorldPosition(GLOBALS.WORLD_POS);
         const dist2par = entity.getComponent(DistanceToParentComponent).data.drawX;
-        const camDist = cam.position.distanceTo(Constants.WORLD_POS);
+        const camDist = cam.position.distanceTo(GLOBALS.WORLD_POS);
         const maxd = dist2par * 100;
         container.style.opacity = camDist < maxd ? `${mapLinear(dist, maxd, 0, 0, 1)}` : "0";
       }

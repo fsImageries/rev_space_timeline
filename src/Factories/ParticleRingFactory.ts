@@ -137,7 +137,7 @@ export function buildParticlering(entity: Entity, data: SystemObjectData) {
 
   return entity
     .addComponent(UniformsComponent, uniforms as UniformsData)
-    .addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(125))
+    .addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod as number, data.draw?.orbInvert))
     .addComponent(BaseDataComponent, BaseDataComponent.getDefaults(data))
     .addComponent(
       DistanceToParentComponent,

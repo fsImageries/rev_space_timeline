@@ -66,16 +66,17 @@ systems:
     type: particlering
     radius: 
     rotationPeriod: 
-    orbitalPeriod: 62000
+    orbitalPeriod: 6200
     parent: Yellowstone
     tilt: 0         //308440000
-    distanceToParent: 325000000
+    distanceToParent: 225000000
     draw:
       cache: "./epsilonEridani/glitterband.glb"
       count: 10000
       distDiv: 3000000000
       height: .5
       genColor: true
+      orbInvert: true
 
   - name: oortCloud
     type: oortcloud

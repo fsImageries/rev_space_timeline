@@ -12,7 +12,7 @@ window.onload = () => {
 
   world.lvlManager.openLevel("cosmicMap", initCosmicMap);
   world.lvlManager.openLevel("epsilonEridani", (w) => initSystem(w, DATA.systems[0]));
-  world.lvlManager.openLevel("cosmicMap");
+  // world.lvlManager.openLevel("cosmicMap");
   // world.lvlManager.openLevel("epsilonEridani");
 
   const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]

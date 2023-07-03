@@ -14,6 +14,7 @@ import { DEG2RAD } from "three/src/math/MathUtils";
 import { Text as TText } from "troika-three-text";
 import { Component } from "../ecs/Component";
 import { Entity } from "../ecs/Entity";
+import { Store } from "../ecs/Store";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import GLOBALS from "../helpers/Constants";
@@ -25,7 +26,6 @@ import {
   SceneComponent,
   UniformsComponent
 } from "./imports";
-import { Store } from "../ecs/Store";
 
 export interface MeshData {
   mesh: Mesh;
@@ -442,8 +442,6 @@ export class ParticleRingComponent extends Component<object> {
     const trans = self.getComponent(ParentComponent).data.parent.getComponent(TransformGroupComponent).data.group;
     const ucomp = self.getComponent(UniformsComponent);
     trans.getWorldPosition(GLOBALS.WORLD_POS);
-    console.log(GLOBALS.WORLD_POS);
     ucomp.data.basePos.value = GLOBALS.WORLD_POS.clone();
-    console.log(self.getComponent(MeshComponent).data.mesh);
   }
 }

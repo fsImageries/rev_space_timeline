@@ -1,15 +1,29 @@
+import { AxisRotSystem, CSSMarkerSystem, CameraFocusSystem, RaycasterSystem, RenderSystem, SunUniformsUpdateSystem } from "../baseclasses/imports";
 import { buildOortCloud } from "../Factories/OortFactory";
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
-import { CameraFocusSystem } from "../baseclasses/imports";
 import { World } from "../ecs/World";
 import { SunData, SystemData } from "../jsonInterfaces";
 import { initCommon } from "./Common";
+import Constants from "../helpers/Constants";
+import { Store } from "../ecs/Store";
 
 const planetCheck = ["moon", "planet"];
 
 export function initSystem(world: World, data: SystemData) {
+  Constants.DISTANCE_SCALE = 3e-8
+  Constants.SIZE_SCALE = 1e-5
+  
+  world.sysManager
+    .registerSystem(RenderSystem)
+    .registerSystem(AxisRotSystem)
+    // .registerSystem(OrbitRotSystem)
+    .registerSystem(SunUniformsUpdateSystem)
+    .registerSystem(CameraFocusSystem)
+    .registerSystem(RaycasterSystem)
+    .registerSystem(CSSMarkerSystem);
+
   for (const d of data.objects) {
     if (d.type === "sun") {
       buildSun(world.ecManager.createEntity(), d as SunData);
@@ -32,7 +46,7 @@ export function initSystem(world: World, data: SystemData) {
   world.load();
 
   if (data.startTarget) {
-    world.store.focusTarget = data.startTarget;
+    Store.getInstance().store.focusTarget = data.startTarget;
     const sys = world.sysManager.getSystem(CameraFocusSystem);
     if (!sys) return;
     sys.enabled = true;

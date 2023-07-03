@@ -25,7 +25,7 @@ export class SystemManager {
 
   public registerSystem<T extends System>(SystemClass: SystemConstructor<T>) {
     if (this.getSystem(SystemClass) !== undefined) {
-      console.warn(`System '${SystemClass.getName()}' already registered.`);
+      console.warn(`System '${SystemClass.name}' already registered.`);
       return this;
     }
 
@@ -38,7 +38,7 @@ export class SystemManager {
   public unregisterSystem<T extends System>(SystemClass: SystemConstructor<T>) {
     const system = this.getSystem(SystemClass);
     if (system === undefined) {
-      console.warn(`Can unregister system '${SystemClass.getName()}'. It doesn't exist.`);
+      console.warn(`Can't unregister system '${SystemClass.getName()}'. It doesn't exist.`);
       return this;
     }
 
@@ -50,7 +50,7 @@ export class SystemManager {
     return this.systems.find((s) => s instanceof SystemClass);
   }
 
-  public requery() {
+  public querySysDependencies() {
     this.systems.forEach((s) => s.requery());
   }
 }

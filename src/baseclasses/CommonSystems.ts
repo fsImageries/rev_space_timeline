@@ -24,6 +24,7 @@ import {
 } from "./imports";
 import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./imports";
 import { mapLinear } from "three/src/math/MathUtils";
+import { Store } from "../ecs/Store";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
@@ -123,7 +124,7 @@ export class CameraFocusSystem extends System {
   }
 
   execute(): void {
-    const tar = this.world.store.focusTarget.toLowerCase();
+    const tar = Store.getInstance().store.focusTarget.toLowerCase();
     if (!this.queries || !tar) return;
 
     const ccomp = this.queries[1].entities[0].getComponent(CameraComponent);
@@ -155,15 +156,15 @@ export class RaycasterSystem extends System {
     if (!this.queries) return;
 
     const cam = this.queries[1].entities[0].getComponent(CameraComponent).data.active;
-    const raycaster = this.world.store.raycaster as Raycaster;
-    raycaster.setFromCamera(this.world.store.raypointer, cam);
+    const raycaster = Store.getInstance().store.raycaster as Raycaster;
+    raycaster.setFromCamera(Store.getInstance().store.raypointer, cam);
 
     for (const entity of this.queries[0].entities) {
       const mesh = entity.getComponent(MeshComponent).data.mesh;
       const intersects = raycaster.intersectObject(mesh);
       if (intersects.length > 0) {
         const base = entity.getComponent(BaseDataComponent);
-        this.world.store.focusTarget = base.data.name;
+        Store.getInstance().store.focusTarget = base.data.name;
         const sys = this.world.sysManager.getSystem(CameraFocusSystem);
         if (!sys) return;
         sys.enabled = true;

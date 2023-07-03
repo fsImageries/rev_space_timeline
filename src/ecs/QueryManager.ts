@@ -80,6 +80,12 @@ export class QueryManager {
     }
   }
 
+  public querySystemQueries() {
+    for (const entity of this.world.ecManager.entities) {
+      this.updateQueries(entity);
+    }
+  }
+
   public updateQueries(entity: Entity, queries?: Query, comp = false) {
     if (!queries) queries = this.sysQueries;
     // check if entity needs to be put into query

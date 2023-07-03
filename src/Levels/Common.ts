@@ -4,11 +4,11 @@ import { World } from "../ecs/World";
 
 export function initCommon(world: World, camPos?: Vector3) {
   // Renderer
-  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getDefaults(world));
+  world.ecManager.createEntity().addComponent(RenderComponent, RenderComponent.getDefaults());
 
   // Renderer
   world.ecManager.createEntity().addComponent(SceneComponent, SceneComponent.getDefaults());
 
   // Camera
-  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getDefaults(world, camPos));
+  world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getDefaults(camPos));
 }

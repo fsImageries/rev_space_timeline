@@ -1,3 +1,4 @@
+import { RenderSystem, AxisRotSystem, SunUniformsUpdateSystem, CameraFocusSystem, RaycasterSystem } from "../baseclasses/CommonSystems";
 import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
 import {
@@ -8,12 +9,22 @@ import {
   LineSegmentData,
   ObjectLineComponent,
   ObjectLineData
-} from "../baseclasses/MeshComponents";
+} from "../baseclasses/imports";
 import { World } from "../ecs/World";
 import Constants from "../helpers/Constants";
 import { initCommon } from "./Common";
 
 export function initCosmicMap(world: World) {
+  Constants.DISTANCE_SCALE = 1e-11
+  Constants.SIZE_SCALE = 1.5e-3
+
+  world.sysManager
+    .registerSystem(RenderSystem)
+    .registerSystem(AxisRotSystem)
+    .registerSystem(SunUniformsUpdateSystem)
+    .registerSystem(CameraFocusSystem)
+    .registerSystem(RaycasterSystem)
+
   initSuns(world);
   initLines(world);
   initCommon(world, new Vector3(0, 2118 * 0.5, 10175 * 0.5));
@@ -89,7 +100,7 @@ function initSuns(world: World) {
     lowTemp: 900,
     name: "Luyten 726-8",
     rotationPeriod: 956,
-    radius: 500,
+    radius: 1200,
     distanceToParent: [Constants.LIGHTYEAR * 8, -(Constants.LIGHTYEAR * 4)],
     disableLight: true,
     draw: { initRot: Math.PI * 1.9 },

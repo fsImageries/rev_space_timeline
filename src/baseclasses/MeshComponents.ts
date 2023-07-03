@@ -25,6 +25,7 @@ import {
   SceneComponent,
   UniformsComponent
 } from "./imports";
+import { Store } from "../ecs/Store";
 
 export interface MeshData {
   mesh: Mesh;
@@ -355,7 +356,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
     const f = (e: MouseEvent) => {
       e.stopImmediatePropagation();
       e.preventDefault();
-      world.store.focusTarget = bcomp.data.name.toLowerCase();
+      Store.getInstance().store.focusTarget = bcomp.data.name.toLowerCase();
       const sys = world.sysManager.getSystem(CameraFocusSystem);
       if (!sys) return;
       sys.enabled = true;

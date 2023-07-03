@@ -1,4 +1,11 @@
-import { AxisRotSystem, CSSMarkerSystem, CameraFocusSystem, RaycasterSystem, RenderSystem, SunUniformsUpdateSystem } from "../baseclasses/imports";
+import {
+  AxisRotSystem,
+  CSSMarkerSystem,
+  CameraFocusSystem,
+  RaycasterSystem,
+  RenderSystem,
+  SunUniformsUpdateSystem
+} from "../baseclasses/imports";
 import { buildOortCloud } from "../Factories/OortFactory";
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
@@ -11,9 +18,9 @@ import { Store } from "../ecs/Store";
 const planetCheck = ["moon", "planet"];
 
 export function initSystem(world: World, data: SystemData) {
-  Store.getInstance().state.DISTANCE_SCALE = 3e-8
-  Store.getInstance().state.SIZE_SCALE = 1e-5
-  
+  Store.getInstance().state.DISTANCE_SCALE = 3e-8;
+  Store.getInstance().state.SIZE_SCALE = 1e-5;
+
   world.sysManager
     .registerSystem(RenderSystem)
     .registerSystem(AxisRotSystem)

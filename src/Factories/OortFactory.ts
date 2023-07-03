@@ -43,7 +43,10 @@ function buildParticleSystem(data: SystemObjectData): [Mesh] {
   const distanceEnd = dist + RANGE;
 
   for (let i = 0; i < PNTCOUNT; i += 3) {
-    const [x, y, z] = randSpherePointExcludes(dist * Store.getInstance().state.DISTANCE_SCALE, distanceEnd * Store.getInstance().state.DISTANCE_SCALE);
+    const [x, y, z] = randSpherePointExcludes(
+      dist * Store.getInstance().state.DISTANCE_SCALE,
+      distanceEnd * Store.getInstance().state.DISTANCE_SCALE
+    );
 
     positions[i] = x;
     positions[i + 1] = y;

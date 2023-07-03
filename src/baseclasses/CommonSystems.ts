@@ -136,8 +136,7 @@ export class CameraFocusSystem extends System {
         const rad = entity.getComponent(RadiusComponent).data.drawRadius;
         console.log(rad);
         // TODO calculate view vector from object to light (nearest)
-        ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -=
-          rad * (entity.getComponent(SunTypeComponent) ? 14 : 4);
+        ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -= rad * (entity.getComponent(SunTypeComponent) ? 14 : 4);
         ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS);
         ccomp.data.freeCtrl?.update();
       }

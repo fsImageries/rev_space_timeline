@@ -1,4 +1,10 @@
-import { RenderSystem, AxisRotSystem, SunUniformsUpdateSystem, CameraFocusSystem, RaycasterSystem } from "../baseclasses/CommonSystems";
+import {
+  RenderSystem,
+  AxisRotSystem,
+  SunUniformsUpdateSystem,
+  CameraFocusSystem,
+  RaycasterSystem
+} from "../baseclasses/CommonSystems";
 import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
 import {
@@ -15,15 +21,15 @@ import { initCommon } from "./Common";
 import { Store } from "../ecs/Store";
 
 export function initCosmicMap(world: World) {
-  Store.getInstance().state.DISTANCE_SCALE = 1e-11
-  Store.getInstance().state.SIZE_SCALE = 1.5e-3
+  Store.getInstance().state.DISTANCE_SCALE = 1e-11;
+  Store.getInstance().state.SIZE_SCALE = 1.5e-3;
 
   world.sysManager
     .registerSystem(RenderSystem)
     .registerSystem(AxisRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem)
+    .registerSystem(RaycasterSystem);
 
   initSuns(world);
   initLines(world);

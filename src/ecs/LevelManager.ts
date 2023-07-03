@@ -4,7 +4,7 @@ import { System } from "./System";
 import { World } from "./World";
 import { Query } from "./types";
 
-type LevelEntry = [Entity[], Query, Query, System[], TState]
+type LevelEntry = [Entity[], Query, Query, System[], TState];
 
 export class LevelManager {
   /**
@@ -42,9 +42,9 @@ export class LevelManager {
     } else {
       this.world.ecManager.entities = this.levelMap[lvlName][0];
       this.world.sysManager.systems = this.levelMap[lvlName][3];
-      Store.getInstance().state = this.levelMap[lvlName][4]
+      Store.getInstance().state = this.levelMap[lvlName][4];
     }
-    
+
     this.world.enabled = true;
   }
 }

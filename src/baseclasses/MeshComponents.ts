@@ -314,10 +314,7 @@ export class ObjectLineComponent extends Component<ObjectLineData> {
         e1.getComponent(TransformGroupComponent).data.group,
         e2.getComponent(TransformGroupComponent).data.group
       ];
-      const [p1, p2] = [
-        g1.getWorldPosition(GLOBALS.WORLD_POS).clone(),
-        g2.getWorldPosition(GLOBALS.WORLD_POS).clone()
-      ];
+      const [p1, p2] = [g1.getWorldPosition(GLOBALS.WORLD_POS).clone(), g2.getWorldPosition(GLOBALS.WORLD_POS).clone()];
       linepnts.push(p1, p2);
     }
     GEOM.setFromPoints(linepnts);

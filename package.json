@@ -6,7 +6,7 @@
     },
     "name": "revelation-space-timeline",
     "private": true,
-    "version": "0.4.9-ecs-alpha",
+    "version": "0.4.10-ecs-alpha",
     "type": "module",
     "scripts": {
         "dev": "vite",

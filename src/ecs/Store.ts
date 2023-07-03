@@ -12,7 +12,6 @@ export class Store {
 
     /* eslint-disable @typescript-eslint/no-explicit-any*/
     public store: { [k:string]: any };
-
     public state: TState;
 
     constructor() {

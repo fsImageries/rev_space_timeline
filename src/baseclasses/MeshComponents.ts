@@ -20,6 +20,7 @@ import GLOBALS from "../helpers/Constants";
 import {
   BaseDataComponent,
   CameraFocusSystem,
+  DistanceToParentComponent,
   ParticleRingTypeComponent,
   RadiusComponent,
   SceneComponent,
@@ -442,8 +443,6 @@ export class ParticleRingComponent extends Component<object> {
     const trans = self.getComponent(ParentComponent).data.parent.getComponent(TransformGroupComponent).data.group;
     const ucomp = self.getComponent(UniformsComponent);
     trans.getWorldPosition(GLOBALS.WORLD_POS);
-    console.log(GLOBALS.WORLD_POS);
     ucomp.data.basePos.value = GLOBALS.WORLD_POS.clone();
-    console.log(self.getComponent(MeshComponent).data.mesh);
   }
 }

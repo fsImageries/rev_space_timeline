@@ -19,26 +19,29 @@ import {
   AtmoComponent,
   CSSMarkerComponent,
   MeshComponent,
+  OrbitLineComponent,
   ParentComponent,
   ParentComponentData,
   RotGroupComponent,
   TransformGroupComponent
-} from "../baseclasses/MeshComponents";
+} from "../baseclasses/imports";
 import { Entity } from "../ecs/Entity";
 import GLOBALS from "../helpers/Constants";
 
-import { SystemObjectData } from "../jsonInterfaces";
+import { DrawData, SystemObjectData } from "../jsonInterfaces";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
 import { MoonTypeComponent } from "../baseclasses/CommonComponents";
+import { buildOrbit } from "./OrbitFactory";
 
 export function buildPlanet(entity: Entity, data: SystemObjectData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
   const [mesh, atmo, transformGrp, rotGrp] = buildMeshes(data);
+  const orbit = buildOrbit(data.draw as DrawData)
 
   if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
-  if (data.orbitalPeriod) entity.addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod)); // TODO combine common component assignments for easy reuse (sun) like asp with servicecollection
+  if (data.orbitalPeriod) entity.addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod, data.draw?.orbInvert)); // TODO combine common component assignments for easy reuse (sun) like asp with servicecollection
   if (data.distanceToParent)
     entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
   if (data.parent) entity.addComponent(ParentComponent, ParentComponent.getDefaults() as ParentComponentData); // <- determine if dynamic?
@@ -56,6 +59,7 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
       parent: data.parent,
       texts: data.texts
     } as BaseDataData)
+    .addComponent(OrbitLineComponent, {mesh: orbit})
     .addComponent(CSSMarkerComponent);
 
   data.type === "planet" ? entity.addComponent(PlanetTypeComponent) : entity.addComponent(MoonTypeComponent);

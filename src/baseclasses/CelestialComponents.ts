@@ -1,7 +1,8 @@
 import { Component } from "../ecs/Component";
 import { Store } from "../ecs/Store";
 import { operand } from "../ecs/utils";
-import { TransformGroupComponent } from "./imports";
+import GLOBALS from "../helpers/Constants";
+import { BaseDataComponent, MeshData, RotGroupComponent, TransformGroupComponent } from "./imports";
 
 export interface RotData {
   period: number;
@@ -91,5 +92,23 @@ export class RadiusComponent extends Component<RadiusData> {
 
     const objGrp = this.dependendQueries[0].entities[0];
     objGrp.getComponent(TransformGroupComponent).data.group.scale.multiplyScalar(this.data.drawRadius);
+  }
+}
+
+export class OrbitLineComponent extends Component<MeshData> {
+  static dependencies = [
+    operand("self", TransformGroupComponent), operand("self", RotGroupComponent), operand("self", DistanceToParentComponent)
+  ];
+  static typeID = crypto.randomUUID();
+
+  public init() {
+    if (!this.dependendQueries) return;
+
+    const self = this.dependendQueries[0].entities[0];
+    const rot = self.getComponent(RotGroupComponent).data.group;
+    const dist = self.getComponent(DistanceToParentComponent).data.drawX;
+    
+    this.data.mesh.scale.multiplyScalar(dist)
+    rot.add(this.data.mesh)
   }
 }

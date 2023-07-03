@@ -2,6 +2,7 @@ import {
   AxisRotSystem,
   CSSMarkerSystem,
   CameraFocusSystem,
+  OrbitRotSystem,
   RaycasterSystem,
   RenderSystem,
   SunUniformsUpdateSystem
@@ -24,7 +25,7 @@ export function initSystem(world: World, data: SystemData) {
   world.sysManager
     .registerSystem(RenderSystem)
     .registerSystem(AxisRotSystem)
-    // .registerSystem(OrbitRotSystem)
+    .registerSystem(OrbitRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
     .registerSystem(RaycasterSystem)

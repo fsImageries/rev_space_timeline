@@ -14,19 +14,18 @@ import { DEG2RAD } from "three/src/math/MathUtils";
 import { Text as TText } from "troika-three-text";
 import { Component } from "../ecs/Component";
 import { Entity } from "../ecs/Entity";
+import { Store } from "../ecs/Store";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import GLOBALS from "../helpers/Constants";
 import {
   BaseDataComponent,
   CameraFocusSystem,
-  DistanceToParentComponent,
   ParticleRingTypeComponent,
   RadiusComponent,
   SceneComponent,
   UniformsComponent
 } from "./imports";
-import { Store } from "../ecs/Store";
 
 export interface MeshData {
   mesh: Mesh;

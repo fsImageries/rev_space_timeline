@@ -9,16 +9,16 @@ import {
   PointLight,
   Vector3
 } from "three";
+import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { DEG2RAD } from "three/src/math/MathUtils";
 import { Text as TText } from "troika-three-text";
 import { Component } from "../ecs/Component";
-import Constants from "../helpers/Constants";
-import { BaseDataComponent, DistanceToParentComponent, ParticleRingTypeComponent, RadiusComponent, SceneComponent, UniformsComponent } from "./imports";
 import { Entity } from "../ecs/Entity";
-import { operand } from "../ecs/utils";
-import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { World } from "../ecs/World";
-import { CameraFocusSystem } from "./imports";
+import { operand } from "../ecs/utils";
+import Constants from "../helpers/Constants";
+import { BaseDataComponent, CameraFocusSystem, ParticleRingTypeComponent, RadiusComponent, SceneComponent, UniformsComponent } from "./imports";
+
 
 export interface MeshData {
   mesh: Mesh;

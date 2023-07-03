@@ -36,7 +36,7 @@ import {
   CSSMarkerComponent,
   ParentComponent,
   ParentComponentData,
-  ParticleRingComponent,
+  ParticleRingComponent
 } from "./MeshComponents";
 
 import {
@@ -88,7 +88,7 @@ export {
   ObjectLineComponent,
   CSSMarkerComponent,
   ParentComponent,
-  ParticleRingComponent,
+  ParticleRingComponent
 };
 export type {
   MeshData,

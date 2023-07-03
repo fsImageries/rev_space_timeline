@@ -17,8 +17,14 @@ import { Entity } from "../ecs/Entity";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import Constants from "../helpers/Constants";
-import { BaseDataComponent, CameraFocusSystem, ParticleRingTypeComponent, RadiusComponent, SceneComponent, UniformsComponent } from "./imports";
-
+import {
+  BaseDataComponent,
+  CameraFocusSystem,
+  ParticleRingTypeComponent,
+  RadiusComponent,
+  SceneComponent,
+  UniformsComponent
+} from "./imports";
 
 export interface MeshData {
   mesh: Mesh;
@@ -328,9 +334,7 @@ export interface CSSMarkerData {
   txtDiv: HTMLDivElement;
 }
 export class CSSMarkerComponent extends Component<CSSMarkerData> {
-  static dependencies = [
-    operand("self", TransformGroupComponent), operand("self", BaseDataComponent)
-  ];
+  static dependencies = [operand("self", TransformGroupComponent), operand("self", BaseDataComponent)];
   static typeID = crypto.randomUUID();
 
   public init(world: World) {
@@ -366,13 +370,13 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       containerDiv,
       diamondDiv: markerDiv,
       txtDiv
-    }
+    };
 
-    const entity = this.dependendQueries[0].entities[0]
+    const entity = this.dependendQueries[0].entities[0];
     if (entity.getComponent(ParticleRingTypeComponent)) {
-      const rad = entity.getComponent(RadiusComponent).data.drawRadius
+      const rad = entity.getComponent(RadiusComponent).data.drawRadius;
       // markerLabel.position.x += rad
-      markerLabel.position.z -= rad
+      markerLabel.position.z -= rad;
     }
   }
 }

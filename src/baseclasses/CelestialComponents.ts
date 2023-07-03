@@ -46,7 +46,7 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
   static dependencies = [operand("self", TransformGroupComponent)];
   static typeID = crypto.randomUUID();
 
-  static getDefaults(xy: number[] | number, shouldInit=true): DistanceToParentData {
+  static getDefaults(xy: number[] | number, shouldInit = true): DistanceToParentData {
     if (typeof xy === "number") xy = [xy];
     const [x, y] = xy.length === 1 ? [xy[0], undefined] : xy;
     const drawX = x * Constants.DISTANCE_SCALE;

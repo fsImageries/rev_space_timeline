@@ -105,7 +105,6 @@ export type {
 export { AxisRotComponent, OrbitRotComponent, DistanceToParentComponent, RadiusComponent };
 export type { RotData, DistanceToParentData, RadiusData };
 
-
 // Systems
 export {
   RenderSystem,

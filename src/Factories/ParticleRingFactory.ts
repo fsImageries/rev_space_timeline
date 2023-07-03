@@ -139,8 +139,14 @@ export function buildParticlering(entity: Entity, data: SystemObjectData) {
     .addComponent(UniformsComponent, uniforms as UniformsData)
     .addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(125))
     .addComponent(BaseDataComponent, BaseDataComponent.getDefaults(data))
-    .addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent as number, false))
-    .addComponent(RadiusComponent, {radius: data.distanceToParent as number, drawRadius: data.distanceToParent as number * Constants.DISTANCE_SCALE})
+    .addComponent(
+      DistanceToParentComponent,
+      DistanceToParentComponent.getDefaults(data.distanceToParent as number, false)
+    )
+    .addComponent(RadiusComponent, {
+      radius: data.distanceToParent as number,
+      drawRadius: (data.distanceToParent as number) * Constants.DISTANCE_SCALE
+    })
     .addComponent(MeshComponent, { mesh })
     .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults())
     .addComponent(RotGroupComponent, RotGroupComponent.getDefaults())
@@ -152,7 +158,7 @@ export function buildParticlering(entity: Entity, data: SystemObjectData) {
 
 function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
   const particlesPerPosition = 4; // Number of particles per position
-  const randomRange = .15;
+  const randomRange = 0.15;
   const numParticles = Math.round((data.draw?.count as number) / particlesPerPosition);
   const ringRadius = (data.distanceToParent as number) * Constants.DISTANCE_SCALE;
   const ringWidth = ringRadius;
@@ -174,10 +180,12 @@ function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
       const radiusOffset = Math.random() * randomRange - randomRange / 2;
       const heightOffset = Math.random() * (maxHeight - minHeight) + minHeight; // Random height within the range
 
-      const x = Math.cos(angle) * (ringRadius + ringWidth / 2 + radiusOffset + radiusOffset * 25 * randFloat(-1.25, 1.25));
+      const x =
+        Math.cos(angle) * (ringRadius + ringWidth / 2 + radiusOffset + radiusOffset * 25 * randFloat(-1.25, 1.25));
       // const x = Math.cos(angle) * ringRadius;
       const y = heightOffset;
-      const z = Math.sin(angle) * (ringRadius + ringWidth / 2 + radiusOffset + radiusOffset * 25 * randFloat(-1.25, 1.25));
+      const z =
+        Math.sin(angle) * (ringRadius + ringWidth / 2 + radiusOffset + radiusOffset * 25 * randFloat(-1.25, 1.25));
       // const z = Math.sin(angle) * ringRadius;
 
       const index = (i * particlesPerPosition + j) * 3;

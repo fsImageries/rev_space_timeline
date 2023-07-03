@@ -96,7 +96,9 @@ export class RadiusComponent extends Component<RadiusData> {
 
 export class OrbitLineComponent extends Component<MeshData> {
   static dependencies = [
-    operand("self", TransformGroupComponent), operand("self", RotGroupComponent), operand("self", DistanceToParentComponent)
+    operand("self", TransformGroupComponent),
+    operand("self", RotGroupComponent),
+    operand("self", DistanceToParentComponent)
   ];
   static typeID = crypto.randomUUID();
 
@@ -106,8 +108,8 @@ export class OrbitLineComponent extends Component<MeshData> {
     const self = this.dependendQueries[0].entities[0];
     const rot = self.getComponent(RotGroupComponent).data.group;
     const dist = self.getComponent(DistanceToParentComponent).data.drawX;
-    
-    this.data.mesh.scale.multiplyScalar(dist)
-    rot.add(this.data.mesh)
+
+    this.data.mesh.scale.multiplyScalar(dist);
+    rot.add(this.data.mesh);
   }
 }

@@ -16,7 +16,7 @@ export function buildOrbit(data: DrawData) {
   geometry.computeBoundingBox();
   geometry.computeVertexNormals();
 
-  if (!geometry.boundingBox) throw new Error("Bounding box can't be calculated.")
+  if (!geometry.boundingBox) throw new Error("Bounding box can't be calculated.");
 
   const material = new ShaderMaterial({
     uniforms: {
@@ -54,8 +54,8 @@ export function buildOrbit(data: DrawData) {
   const line = new Line(geometry, material);
   line.scale.x = data.orbInvert ? -1 : 1;
   line.rotateY((180 - len) * (data.orbInvert ? -1 : 1) * DEG2RAD);
-  line.rotateX(Math.PI * .5);
-  line.rotateZ(Math.PI * .5)
+  line.rotateX(Math.PI * 0.5);
+  line.rotateZ(Math.PI * 0.5);
   line.updateMatrixWorld();
   return line as unknown as Mesh;
 }

@@ -38,10 +38,11 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
   const [mesh, atmo, transformGrp, rotGrp] = buildMeshes(data);
-  const orbit = buildOrbit(data.draw as DrawData)
+  const orbit = buildOrbit(data.draw as DrawData);
 
   if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
-  if (data.orbitalPeriod) entity.addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod, data.draw?.orbInvert)); // TODO combine common component assignments for easy reuse (sun) like asp with servicecollection
+  if (data.orbitalPeriod)
+    entity.addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod, data.draw?.orbInvert)); // TODO combine common component assignments for easy reuse (sun) like asp with servicecollection
   if (data.distanceToParent)
     entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
   if (data.parent) entity.addComponent(ParentComponent, ParentComponent.getDefaults() as ParentComponentData); // <- determine if dynamic?
@@ -59,7 +60,7 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
       parent: data.parent,
       texts: data.texts
     } as BaseDataData)
-    .addComponent(OrbitLineComponent, {mesh: orbit})
+    .addComponent(OrbitLineComponent, { mesh: orbit })
     .addComponent(CSSMarkerComponent);
 
   data.type === "planet" ? entity.addComponent(PlanetTypeComponent) : entity.addComponent(MoonTypeComponent);

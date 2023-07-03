@@ -162,13 +162,13 @@ export class BasicRingComponent extends Component<BasicRingData> {
 const LEN_MAT = new LineBasicMaterial({
   color: "#ffffff",
   transparent: true,
-  opacity: 0.2
+  opacity: 0.4
 });
 
 const OBJ_MAT = new LineBasicMaterial({
   color: "#ffffff",
   transparent: true,
-  opacity: 0.075
+  opacity: 0.15
 });
 
 export interface TextData {

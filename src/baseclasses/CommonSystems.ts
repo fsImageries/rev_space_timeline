@@ -7,6 +7,7 @@ import GLOBALS from "../helpers/Constants";
 import {
   AxisRotComponent,
   CSSMarkerComponent,
+  CosmicMapSunTextComponent,
   DistanceToParentComponent,
   OrbitRotComponent,
   ParentComponent,
@@ -161,7 +162,15 @@ export class RaycasterSystem extends System {
 
     for (const entity of this.queries[0].entities) {
       const mesh = entity.getComponent(MeshComponent).data.mesh;
-      const intersects = raycaster.intersectObject(mesh);
+      let intersects = raycaster.intersectObject(mesh);
+      if (intersects.length === 0) {
+        // TODO build general text component, check for that and get texts if necessary
+        const hasTxt = entity.getComponent(CosmicMapSunTextComponent)
+        if (hasTxt) {
+          intersects = raycaster.intersectObjects([hasTxt.data.title, hasTxt.data.texts])
+        }
+      }
+
       if (intersects.length > 0) {
         const base = entity.getComponent(BaseDataComponent);
         Store.getInstance().store.focusTarget = base.data.name;

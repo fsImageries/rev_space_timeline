@@ -1,4 +1,13 @@
-import { Color, EquirectangularReflectionMapping, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer, sRGBEncoding } from "three";
+import {
+  Color,
+  EquirectangularReflectionMapping,
+  PCFSoftShadowMap,
+  PerspectiveCamera,
+  Scene,
+  Vector3,
+  WebGLRenderer,
+  sRGBEncoding
+} from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { Component, TypeComponent } from "../ecs/Component";

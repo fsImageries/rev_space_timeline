@@ -6,14 +6,13 @@ import { buildSun } from "../Factories/SunFactory";
 import { World } from "../ecs/World";
 import { SunData, SystemData } from "../jsonInterfaces";
 import { initCommon } from "./Common";
-import Constants from "../helpers/Constants";
 import { Store } from "../ecs/Store";
 
 const planetCheck = ["moon", "planet"];
 
 export function initSystem(world: World, data: SystemData) {
-  Constants.DISTANCE_SCALE = 3e-8
-  Constants.SIZE_SCALE = 1e-5
+  Store.getInstance().state.DISTANCE_SCALE = 3e-8
+  Store.getInstance().state.SIZE_SCALE = 1e-5
   
   world.sysManager
     .registerSystem(RenderSystem)

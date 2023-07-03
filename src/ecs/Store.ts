@@ -17,7 +17,8 @@ export class Store {
 
     constructor() {
         this.store = {
-            canvas: document.querySelector(`canvas#main`) as HTMLCanvasElement,
+            LIGHTYEAR: 9.461e12,
+            canvas: document.querySelector("canvas#main") as HTMLCanvasElement,
             raycaster: new Raycaster(),
             raypointer: new Vector2(Infinity, Infinity),
             focusTarget: "yellowstone"
@@ -25,7 +26,9 @@ export class Store {
 
         this.state = {
             DISTANCE_SCALE: 0,
-            SIZE_SCALE: 0
+            SIZE_SCALE: 0,
+            ORB_SCALE: 20000,
+            ROT_SCALE: 10,
         }
     }
 }

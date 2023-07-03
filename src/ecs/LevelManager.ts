@@ -12,7 +12,7 @@ export class LevelManager {
    * When a new level is loaded we either get the saved snapshot or init() a new one and save it
    */
 
-  public levelMap: { [propName: string]: LevelEntry }; // Entities, SysQuery, CompQuery
+  public levelMap: { [propName: string]: LevelEntry };
   public world: World;
 
   constructor(world: World) {

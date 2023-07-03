@@ -16,27 +16,7 @@ manager.onError = function (url) {
   console.error("There was an error loading " + url);
 };
 
-const Constants = {
-  LIGHTYEAR: 9.461e12,
-  DISTANCE_SCALE: 1e-11,
-  SIZE_SCALE: 1.5e-3,
-  ORB_SCALE: 20000,
-  ROT_SCALE: 10,
-  CAM_ROT_SPEED: Math.PI / 64,
-
-  _time_scale: 1,
-  get TIME_SCALE() {
-    return this._time_scale;
-  },
-  set TIME_SCALE(v: number) {
-    this.ROT_SCALE = v;
-    this.ORB_SCALE = v;
-    this._time_scale = v;
-  },
-
-  CELESTIAL_ORB: true,
-  MAN_CELESTIAL_ORB: false,
-
+const GLOBALS = {
   GLTF_LOADER: new GLTFLoader(manager),
   TEX_LOADER: new TextureLoader(manager),
   TEX_LOAD(path: string) {
@@ -59,4 +39,4 @@ const Constants = {
 
 const __tex: { [key: string]: Texture } = {};
 
-export default Constants;
+export default GLOBALS;

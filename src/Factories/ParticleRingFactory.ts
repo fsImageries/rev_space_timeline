@@ -18,8 +18,8 @@ import {
   UniformsData
 } from "../baseclasses/imports";
 import { Entity } from "../ecs/Entity";
-import Constants from "../helpers/Constants";
 import { SystemObjectData } from "../jsonInterfaces";
+import { Store } from "../ecs/Store";
 
 const vertexShader = `
 uniform float size;
@@ -145,7 +145,7 @@ export function buildParticlering(entity: Entity, data: SystemObjectData) {
     )
     .addComponent(RadiusComponent, {
       radius: data.distanceToParent as number,
-      drawRadius: (data.distanceToParent as number) * Constants.DISTANCE_SCALE
+      drawRadius: (data.distanceToParent as number) * Store.getInstance().state.DISTANCE_SCALE
     })
     .addComponent(MeshComponent, { mesh })
     .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults())
@@ -160,7 +160,7 @@ function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
   const particlesPerPosition = 4; // Number of particles per position
   const randomRange = 0.15;
   const numParticles = Math.round((data.draw?.count as number) / particlesPerPosition);
-  const ringRadius = (data.distanceToParent as number) * Constants.DISTANCE_SCALE;
+  const ringRadius = (data.distanceToParent as number) * Store.getInstance().state.DISTANCE_SCALE;
   const ringWidth = ringRadius;
   const maxHeight = data.draw?.height as number; // Maximum height value
   const minHeight = -maxHeight; // Minimum height value

@@ -11,12 +11,12 @@ import {
   ObjectLineData
 } from "../baseclasses/imports";
 import { World } from "../ecs/World";
-import Constants from "../helpers/Constants";
 import { initCommon } from "./Common";
+import { Store } from "../ecs/Store";
 
 export function initCosmicMap(world: World) {
-  Constants.DISTANCE_SCALE = 1e-11
-  Constants.SIZE_SCALE = 1.5e-3
+  Store.getInstance().state.DISTANCE_SCALE = 1e-11
+  Store.getInstance().state.SIZE_SCALE = 1.5e-3
 
   world.sysManager
     .registerSystem(RenderSystem)
@@ -48,7 +48,7 @@ function initSuns(world: World) {
     name: "Epsilon Eridani",
     rotationPeriod: 1000,
     radius: 2200,
-    distanceToParent: [Constants.LIGHTYEAR * 10.47, -(Constants.LIGHTYEAR * 3)],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 10.47, -(Store.getInstance().store.LIGHTYEAR * 3)],
     disableLight: true,
     draw: { initRot: Math.PI * 2.1 },
     texts: ["Yellowstone [GRUBS]", "- Marcos Eye", "Tangerine Dream", "Conjoiner Nest", "- Conjoiner Comet"]
@@ -60,7 +60,7 @@ function initSuns(world: World) {
     name: "p Eridani",
     rotationPeriod: 1000,
     radius: 2200,
-    distanceToParent: [Constants.LIGHTYEAR * 12.47, -(Constants.LIGHTYEAR * 17)],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 12.47, -(Store.getInstance().store.LIGHTYEAR * 17)],
     disableLight: true,
     draw: { initRot: Math.PI * -1.9 * -1 },
     texts: ["Ararat [PATTERN JUGGLERS, NESTBUILDERS]"]
@@ -72,7 +72,7 @@ function initSuns(world: World) {
     name: "Delta Pavonis",
     rotationPeriod: 1356,
     radius: 3300,
-    distanceToParent: [Constants.LIGHTYEAR * 7.5, -(Constants.LIGHTYEAR * 20)],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 7.5, -(Store.getInstance().store.LIGHTYEAR * 20)],
     disableLight: true,
     draw: { initRot: (Math.PI / 2) * -1 },
     texts: [
@@ -89,7 +89,7 @@ function initSuns(world: World) {
     name: "Lacaille 9352",
     rotationPeriod: 1156,
     radius: 2000,
-    distanceToParent: [Constants.LIGHTYEAR * 10.47, -(Constants.LIGHTYEAR * 5)],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 10.47, -(Store.getInstance().store.LIGHTYEAR * 5)],
     disableLight: true,
     draw: { initRot: Math.PI * 1.65 },
     texts: ["Fand"]
@@ -101,7 +101,7 @@ function initSuns(world: World) {
     name: "Luyten 726-8",
     rotationPeriod: 956,
     radius: 1200,
-    distanceToParent: [Constants.LIGHTYEAR * 8, -(Constants.LIGHTYEAR * 4)],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 8, -(Store.getInstance().store.LIGHTYEAR * 4)],
     disableLight: true,
     draw: { initRot: Math.PI * 1.9 },
     texts: ["Luyten 726-8 Cometary Halo"]
@@ -113,7 +113,7 @@ function initSuns(world: World) {
     name: "Ross 248",
     rotationPeriod: 1256,
     radius: 1000,
-    distanceToParent: [Constants.LIGHTYEAR * 8.65, Constants.LIGHTYEAR * 5],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 8.65, Store.getInstance().store.LIGHTYEAR * 5],
     disableLight: true,
     draw: { initRot: Math.PI * 1.72 },
     texts: ["Diadem"]
@@ -125,7 +125,7 @@ function initSuns(world: World) {
     name: "61 Cygni",
     rotationPeriod: 1256,
     radius: 2000,
-    distanceToParent: [Constants.LIGHTYEAR * 7.65, Constants.LIGHTYEAR * 6],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 7.65, Store.getInstance().store.LIGHTYEAR * 6],
     disableLight: true,
     draw: { initRot: Math.PI * 1.558 },
     texts: ["Sky's Edge"]
@@ -137,7 +137,7 @@ function initSuns(world: World) {
     name: "Lalande 21185",
     rotationPeriod: 1256,
     radius: 1225,
-    distanceToParent: [Constants.LIGHTYEAR * 6, Constants.LIGHTYEAR * 4.5],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 6, Store.getInstance().store.LIGHTYEAR * 4.5],
     disableLight: true,
     draw: { initRot: Math.PI * 0.75 },
     texts: ["Zion"]
@@ -149,7 +149,7 @@ function initSuns(world: World) {
     name: "Gliese 687",
     rotationPeriod: 756,
     radius: 1560,
-    distanceToParent: [Constants.LIGHTYEAR * 4, Constants.LIGHTYEAR * 10],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 4, Store.getInstance().store.LIGHTYEAR * 10],
     disableLight: true,
     draw: { initRot: Math.PI * 1.3 },
     texts: ["Haven"]
@@ -161,7 +161,7 @@ function initSuns(world: World) {
     name: "Groombridge 1618",
     rotationPeriod: 756,
     radius: 1450,
-    distanceToParent: [Constants.LIGHTYEAR * 8.65, Constants.LIGHTYEAR * 9.5],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 8.65, Store.getInstance().store.LIGHTYEAR * 9.5],
     disableLight: true,
     draw: { initRot: Math.PI * 0.72 },
     texts: ["Turquoise [PATTERN JUGGLERS]"]
@@ -173,7 +173,7 @@ function initSuns(world: World) {
     name: "107 Piscium",
     rotationPeriod: 856,
     radius: 3000,
-    distanceToParent: [Constants.LIGHTYEAR * 20.47, Constants.LIGHTYEAR * 7.5],
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 20.47, Store.getInstance().store.LIGHTYEAR * 7.5],
     disableLight: true,
     draw: { initRot: Math.PI * -0.1 },
     texts: ["Haldora [SHADOWS]", "- Hela [SCUTTLERS, NESTBUILDERS(?)]"]

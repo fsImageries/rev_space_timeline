@@ -30,6 +30,7 @@ import Constants from "../helpers/Constants";
 import { SystemObjectData } from "../jsonInterfaces";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
+import { MoonTypeComponent } from "../baseclasses/CommonComponents";
 
 export function buildPlanet(entity: Entity, data: SystemObjectData) {
   Constants.LOAD_MANAGER.itemStart(`://${data.name}_components`);
@@ -55,8 +56,11 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
       parent: data.parent,
       texts: data.texts
     } as BaseDataData)
-    .addComponent(CSSMarkerComponent, {})
-    .addComponent(PlanetTypeComponent);
+    .addComponent(CSSMarkerComponent)
+    
+    data.type === "planet" ?
+    entity.addComponent(PlanetTypeComponent) :
+    entity.addComponent(MoonTypeComponent)
 
   Constants.LOAD_MANAGER.itemEnd(`://${data.name}_components`);
 

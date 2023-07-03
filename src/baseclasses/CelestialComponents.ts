@@ -40,12 +40,13 @@ export interface DistanceToParentData {
   y?: number;
   drawX: number;
   drawY?: number;
+  shouldInit: boolean;
 }
 export class DistanceToParentComponent extends Component<DistanceToParentData> {
   static dependencies = [operand("self", TransformGroupComponent)];
   static typeID = crypto.randomUUID();
 
-  static getDefaults(xy: number[] | number): DistanceToParentData {
+  static getDefaults(xy: number[] | number, shouldInit=true): DistanceToParentData {
     if (typeof xy === "number") xy = [xy];
     const [x, y] = xy.length === 1 ? [xy[0], undefined] : xy;
     const drawX = x * Constants.DISTANCE_SCALE;
@@ -54,12 +55,13 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
       x,
       y,
       drawX,
-      drawY
+      drawY,
+      shouldInit
     };
   }
 
   public init() {
-    if (!this.dependendQueries) return;
+    if (!this.dependendQueries || !this.data.shouldInit) return;
 
     for (const entity of this.dependendQueries[0].entities) {
       const grp = entity.getComponent(TransformGroupComponent).data.group;

@@ -122,6 +122,10 @@ export class PlanetTypeComponent extends TypeComponent {
   static typeID = crypto.randomUUID();
 }
 
+export class MoonTypeComponent extends TypeComponent {
+  static typeID = crypto.randomUUID();
+}
+
 export class ParticleRingTypeComponent extends TypeComponent {
   static typeID = crypto.randomUUID();
 }

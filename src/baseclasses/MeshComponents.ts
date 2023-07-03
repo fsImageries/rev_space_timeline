@@ -9,16 +9,16 @@ import {
   PointLight,
   Vector3
 } from "three";
+import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { DEG2RAD } from "three/src/math/MathUtils";
 import { Text as TText } from "troika-three-text";
 import { Component } from "../ecs/Component";
-import Constants from "../helpers/Constants";
-import { BaseDataComponent, ParticleRingTypeComponent, SceneComponent, UniformsComponent } from "./imports";
 import { Entity } from "../ecs/Entity";
-import { operand } from "../ecs/utils";
-import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { World } from "../ecs/World";
-import { CameraFocusSystem } from "./imports";
+import { operand } from "../ecs/utils";
+import Constants from "../helpers/Constants";
+import { BaseDataComponent, CameraFocusSystem, ParticleRingTypeComponent, RadiusComponent, SceneComponent, UniformsComponent } from "./imports";
+
 
 export interface MeshData {
   mesh: Mesh;
@@ -321,8 +321,16 @@ export class ObjectLineComponent extends Component<ObjectLineData> {
   }
 }
 
-export class CSSMarkerComponent extends Component<object> {
-  static dependencies = [operand("self", TransformGroupComponent)];
+export interface CSSMarkerData {
+  mesh: CSS2DObject;
+  containerDiv: HTMLDivElement;
+  diamondDiv: HTMLDivElement;
+  txtDiv: HTMLDivElement;
+}
+export class CSSMarkerComponent extends Component<CSSMarkerData> {
+  static dependencies = [
+    operand("self", TransformGroupComponent), operand("self", BaseDataComponent)
+  ];
   static typeID = crypto.randomUUID();
 
   public init(world: World) {
@@ -353,6 +361,19 @@ export class CSSMarkerComponent extends Component<object> {
 
     const markerLabel = new CSS2DObject(containerDiv);
     tcomp.data.group.add(markerLabel);
+    this.data = {
+      mesh: markerLabel,
+      containerDiv,
+      diamondDiv: markerDiv,
+      txtDiv
+    }
+
+    const entity = this.dependendQueries[0].entities[0]
+    if (entity.getComponent(ParticleRingTypeComponent)) {
+      const rad = entity.getComponent(RadiusComponent).data.drawRadius
+      // markerLabel.position.x += rad
+      markerLabel.position.z -= rad
+    }
   }
 }
 

@@ -1,16 +1,16 @@
-import { SceneComponent } from "./baseclasses/imports";
-import objectData from "./data/object_data.yaml";
-import { SystemsData } from "./jsonInterfaces";
-import { World } from "./ecs/World";
-import { initSystem } from "./Levels/AutoMap";
 import {
   AxisRotSystem,
+  CSSMarkerSystem,
   CameraFocusSystem,
-  // OrbitRotSystem,
   RaycasterSystem,
   RenderSystem,
+  SceneComponent,
   SunUniformsUpdateSystem
 } from "./baseclasses/imports";
+import { initSystem } from "./Levels/AutoMap";
+import objectData from "./data/object_data.yaml";
+import { World } from "./ecs/World";
+import { SystemsData } from "./jsonInterfaces";
 
 const DATA = objectData as SystemsData;
 
@@ -23,7 +23,8 @@ window.onload = () => {
     // .registerSystem(OrbitRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem);
+    .registerSystem(RaycasterSystem)
+    .registerSystem(CSSMarkerSystem);
   // .registerSystem(PlanetUniformsUpdateSystem);
 
   // world.lvlManager.openLevel("cosmicMap", initCosmicMap);

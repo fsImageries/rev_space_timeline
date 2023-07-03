@@ -33,7 +33,7 @@ export class World {
   }
 
   private updateMousePointer(e: MouseEvent) {
-    const s = Store.getInstance()
+    const s = Store.getInstance();
     s.store.raypointer.x = (e.clientX / window.innerWidth) * 2 - 1;
     s.store.raypointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
   }

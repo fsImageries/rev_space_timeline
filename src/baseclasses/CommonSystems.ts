@@ -164,9 +164,9 @@ export class RaycasterSystem extends System {
       let intersects = raycaster.intersectObject(mesh);
       if (intersects.length === 0) {
         // TODO build general text component, check for that and get texts if necessary
-        const hasTxt = entity.getComponent(CosmicMapSunTextComponent)
+        const hasTxt = entity.getComponent(CosmicMapSunTextComponent);
         if (hasTxt) {
-          intersects = raycaster.intersectObjects([hasTxt.data.title, hasTxt.data.texts])
+          intersects = raycaster.intersectObjects([hasTxt.data.title, hasTxt.data.texts]);
         }
       }
 

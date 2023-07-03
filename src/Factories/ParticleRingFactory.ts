@@ -110,7 +110,7 @@ const fragmentShader = `
         // gl_FragColor = vec4(color, step(ll, 0.5));
 
         // need a vector pointing to the light
-        float v = map(vvPosition.x - basePos.x, minRad * 2., maxRad * .5, 0., 1.0);
+        float v = map(vvPosition.x - basePos.x, minRad, maxRad * 5., 0., 1.0);
         // float distanceToLightSource = distance(v, lightPos.x);
         // vec3 lighterColor = color * distanceToLightSource * lightStrength;
         
@@ -119,7 +119,7 @@ const fragmentShader = `
         // vec3 lighterColor = color * distanceToLightSource * lightStrength;
 
         // gl_FragColor = vec4(lighterColor, 1.0);
-        v = map((v * -1.0), -1., 0., .75, 1.1);
+        v = map((v * -1.0), -1., -.5, .75, 1.1);
         // v = map((v * -1.0), -1., 0., 0.0, 1.);
         gl_FragColor = vec4(vColor, 1.0) * v;
     }

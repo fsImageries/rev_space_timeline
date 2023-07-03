@@ -26,7 +26,7 @@ export class Store {
     this.state = {
       DISTANCE_SCALE: 0,
       SIZE_SCALE: 0,
-      ORB_SCALE: 200,
+      ORB_SCALE: 1,
       ROT_SCALE: 10
     };
   }

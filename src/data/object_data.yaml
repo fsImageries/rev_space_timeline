@@ -74,7 +74,7 @@ systems:
       cache: "./epsilonEridani/glitterband.glb"
       count: 10000
       distDiv: 3000000000
-      height: .5
+      height: .25
       genColor: true
       orbInvert: true
 

@@ -1,10 +1,11 @@
-import { Color, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { Color, EquirectangularReflectionMapping, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer, sRGBEncoding } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { Component, TypeComponent } from "../ecs/Component";
 import { operand } from "../ecs/utils";
 import { SystemObjectData } from "../jsonInterfaces";
 import { Store } from "../ecs/Store";
+import Constants from "../helpers/Constants";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
@@ -49,6 +50,11 @@ export class SceneComponent extends Component<SceneComponentData> {
   static typeID = crypto.randomUUID();
   static getDefaults(): SceneComponentData {
     const scene = new Scene();
+    // Sky box
+    const backgroundImage = Constants.TEX_LOAD("./starmap_8k.jpg");
+    backgroundImage.mapping = EquirectangularReflectionMapping;
+    backgroundImage.encoding = sRGBEncoding;
+    scene.background = backgroundImage;
     return { scene };
   }
 }

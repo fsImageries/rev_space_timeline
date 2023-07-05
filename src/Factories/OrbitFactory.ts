@@ -44,7 +44,7 @@ export function buildOrbit(data: DrawData) {
             void main() {
                 vec4 col = vec4(mix(vec3(1), vec3(0), vUv.y), 1);
                 gl_FragColor = vec4(1);
-                gl_FragColor.a = 1.0 - vUv.y;
+                gl_FragColor.a = (1.0 - vUv.y) * .5;
             }
         `,
     transparent: true,

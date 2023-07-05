@@ -5,7 +5,8 @@
     padding: 1%;
     margin: 1%;
     backdrop-filter: blur(20px);
-    border: solid 1px rgba(204, 204, 204, 0.25);;
+    border: solid 1px rgba(204, 204, 204, 0.25);
+    ;
     border-radius: 1%;
     z-index: 100;
     display: flex;
@@ -94,4 +95,91 @@
 #infoPanelFooter .letter {
     font-size: .6rem;
     font-weight: lighter;
+}
+
+
+#infoPanelMain {
+    margin-top: 1%;
+    display: flex;
+    flex-direction: column;
+}
+
+#infoPanel .year {
+    font-weight: bold;
+}
+
+#infoPanelMain input {
+    display: none;
+}
+
+/* Tabs mit radio-Buttons */
+#infoPanelMain figure {
+    margin: 0;
+    padding: 0;
+}
+
+#infoPanelMain>input,
+#infoPanelMain figure>div {
+    display: none;
+}
+
+#infoPanelMain figure>div {
+}
+
+figure .tab1 {
+    font-weight: lighter;
+}
+
+#tab1:checked~figure .tab1,
+#tab2:checked~figure .tab2,
+#tab3:checked~figure .tab3 {
+    display: block;
+}
+
+#infoPanelMain nav {
+    background-color: rgba(240, 248, 255, 0.033);
+    padding-bottom: 1%;
+    border-bottom: solid 1px rgba(240, 248, 255, 0.233);
+}
+
+#infoPanelMain nav label {
+    border: solid 0px;
+    border-radius: 12%;
+    padding: .5%;
+    border: solid 1px;
+    margin-left: 1%;
+    transition: border-color 200ms, background-color 400ms;
+    border-color: rgba(255, 255, 255, 0.00);
+    cursor: pointer;
+
+}
+
+#infoPanelMain nav label:nth-child(1) {
+    margin-left: 0%;
+}
+
+#infoPanelMain nav label:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+#infoPanelMain nav label:active {
+
+}
+
+#tab1:checked~nav label[for="tab1"],
+#tab2:checked~nav label[for="tab2"],
+#tab3:checked~nav label[for="tab3"] {
+    border-color: rgba(255, 255, 255, 0.00);
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+#tab1:checked~nav label[for="tab1"]:after,
+#tab2:checked~nav label[for="tab2"]:after,
+#tab3:checked~nav label[for="tab3"]:after {
+
+}
+
+#infoPanelMain .tab1,
+#infoPanelMain .tab2,
+#infoPanelMain .tab3 {
 }

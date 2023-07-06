@@ -53,6 +53,13 @@ export function initSystem(world: World, data: SystemData) {
   world.load();
   world.uiManager.infoPanel.init(data.texts)
 
+  const master = data.texts.find(d => d.all)
+  if (master) {
+    const entity = world.ecManager.getEntityByBaseName(master.name)
+    if (entity) world.uiManager.infoPanel.setTarget(entity, "tab1")
+    world.uiManager.infoPanel.setConstellation(data.constellation)
+  }
+
   if (data.startTarget) {
     Store.getInstance().store.focusTarget = data.startTarget;
     const sys = world.sysManager.getSystem(CameraFocusSystem);

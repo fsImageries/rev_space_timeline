@@ -45,6 +45,7 @@ export interface SystemData {
 
   startTarget: string;
   freeCam: boolean;
+  constellation: string;
 }
 
 export interface SystemObjectData {

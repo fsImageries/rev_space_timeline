@@ -1,3 +1,4 @@
+import { BaseDataComponent } from "../baseclasses/imports";
 import { Component } from "./Component";
 import { Entity } from "./Entity";
 import { World } from "./World";
@@ -12,6 +13,10 @@ export class EntityComponentManager {
     // this.queries = {};
     this.entities = [];
     this.world = world;
+  }
+
+  public getEntityByBaseName(name:string) {
+    return this.entities.find(e => e.getComponent(BaseDataComponent)?.data.name === name)
   }
 
   public createEntity() {

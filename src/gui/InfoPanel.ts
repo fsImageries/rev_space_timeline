@@ -67,13 +67,13 @@ export class InfoPanelManager {
     this.subtext.innerText = name
   }
 
-  public setTarget(entity: Entity) {
+  public setTarget(entity: Entity, tab = "tab2") {
     const base = entity.getComponent(BaseDataComponent)
     this.timeline.innerHTML = this.map[base.data.name.toLowerCase()];
     this.title.innerText = base.data.name;
     this.subtitle.innerText = base.data.parent ? base.data.parent : "Local Group";
 
-    (document.getElementById("tab2") as HTMLInputElement).checked = true
+    (document.getElementById(tab) as HTMLInputElement).checked = true
   }
 
   private genTexts(texts: TextObject[]) {

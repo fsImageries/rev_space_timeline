@@ -5,6 +5,7 @@ systems:
 
   startTarget: Yellowstone  # determines which object should be targeted when the system is loaded
   freeCam: false            # determine if the scene should start in freeCam mode (Cosmic Map starts in freemode)
+  constellation: "Eridanus"
 
   objects:
   - name: Epsilon Eridani

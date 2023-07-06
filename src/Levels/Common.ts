@@ -16,7 +16,7 @@ export function initCommonEntities(world: World, camPos?: Vector3) {
 }
 
 
-export function initCelestialComponents(entity: Entity, data: SystemObjectData) {
+export function initCelestialComponents(entity: Entity, data: SystemObjectData, marker=true) {
   if (data.rotationPeriod)
     entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
   if (data.orbitalPeriod)
@@ -33,5 +33,7 @@ export function initCelestialComponents(entity: Entity, data: SystemObjectData) 
       texts: data.texts,
       parent: data.parent
     } as BaseDataData)
-    .addComponent(CSSMarkerComponent);
+
+    if (marker)
+      entity.addComponent(CSSMarkerComponent);
 }

@@ -21,7 +21,7 @@ import sunVert from "./../glsl/sun_vert.glsl?raw";
 import { Store } from "../ecs/Store";
 import { initCelestialComponents } from "../Levels/Common";
 
-export function buildSun(entity: Entity, data: SunData) {
+export function buildSun(entity: Entity, data: SunData, marker=true) {
   const [mesh, transformGrp, rotGrp, uniforms] = buildMeshes(data);
 
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
@@ -45,7 +45,7 @@ export function buildSun(entity: Entity, data: SunData) {
     // } as BaseDataData)
     .addComponent(SunTypeComponent);
     
-    initCelestialComponents(entity, data)
+    initCelestialComponents(entity, data, marker)
 
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 

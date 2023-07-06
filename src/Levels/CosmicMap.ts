@@ -17,7 +17,7 @@ import {
   ObjectLineData
 } from "../baseclasses/imports";
 import { World } from "../ecs/World";
-import { initCommon } from "./Common";
+import { initCommonEntities } from "./Common";
 import { Store } from "../ecs/Store";
 
 export function initCosmicMap(world: World) {
@@ -33,7 +33,7 @@ export function initCosmicMap(world: World) {
 
   initSuns(world);
   initLines(world);
-  initCommon(world, new Vector3(0, 2118 * 0.5, 10175 * 0.5));
+  initCommonEntities(world, new Vector3(0, 2118 * 0.5, 10175 * 0.5));
   world.load();
 }
 

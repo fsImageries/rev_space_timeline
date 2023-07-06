@@ -13,7 +13,7 @@ import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
 import { World } from "../ecs/World";
 import { SunData, SystemData } from "../dataInterfaces";
-import { initCommon } from "./Common";
+import { initCommonEntities } from "./Common";
 import { Store } from "../ecs/Store";
 
 const planetCheck = ["moon", "planet"];
@@ -49,7 +49,7 @@ export function initSystem(world: World, data: SystemData) {
     }
   }
 
-  initCommon(world);
+  initCommonEntities(world);
   world.load();
   world.uiManager.infoPanel.init(data.texts)
 

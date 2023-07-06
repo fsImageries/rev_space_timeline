@@ -210,7 +210,7 @@ export class CSSMarkerSystem extends System {
       const marker = entity.getComponent(CSSMarkerComponent).data.diamondDiv;
       const container = entity.getComponent(CSSMarkerComponent).data.containerDiv;
 
-      if (!entity.getComponent(PlanetTypeComponent)) {
+      if (!entity.getComponent(PlanetTypeComponent) && !entity.getComponent(SunTypeComponent)) {
         entity
           .getComponent(ParentComponent)
           .data.parent.getComponent(TransformGroupComponent)

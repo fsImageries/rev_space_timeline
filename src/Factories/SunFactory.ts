@@ -15,7 +15,7 @@ import {
 } from "../baseclasses/MeshComponents";
 import { Entity } from "../ecs/Entity";
 import GLOBALS from "../helpers/Constants";
-import { SunData } from "../jsonInterfaces";
+import { SunData } from "../dataInterfaces";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
 import { Store } from "../ecs/Store";

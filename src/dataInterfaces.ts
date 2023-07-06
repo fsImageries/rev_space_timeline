@@ -33,7 +33,8 @@ export interface SystemsData {
 
 export interface TextObject {
   name: string;
-  texts: string[];
+  all?: boolean;
+  timeline?: string[];
 }
 
 export interface SystemData {

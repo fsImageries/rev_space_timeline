@@ -5,7 +5,7 @@ export class UIManager {
     infoPanel: InfoPanelManager;
 
     constructor(
-        public world: World
+        public world: World,
     ) {
         this.infoPanel = new InfoPanelManager(this)
     }

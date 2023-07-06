@@ -12,7 +12,7 @@ import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
 import { World } from "../ecs/World";
-import { SunData, SystemData } from "../jsonInterfaces";
+import { SunData, SystemData } from "../dataInterfaces";
 import { initCommon } from "./Common";
 import { Store } from "../ecs/Store";
 
@@ -40,7 +40,7 @@ export function initSystem(world: World, data: SystemData) {
       buildPlanet(world.ecManager.createEntity(), d);
     }
 
-    if (d.type === "particlering" && d.name === "glitterband") {
+    if (d.type === "particlering") {
       buildParticlering(world.ecManager.createEntity(), d);
     }
 
@@ -51,6 +51,7 @@ export function initSystem(world: World, data: SystemData) {
 
   initCommon(world);
   world.load();
+  world.uiManager.infoPanel.init(data.texts)
 
   if (data.startTarget) {
     Store.getInstance().store.focusTarget = data.startTarget;

@@ -28,7 +28,7 @@ import {
 import { Entity } from "../ecs/Entity";
 import GLOBALS from "../helpers/Constants";
 
-import { DrawData, SystemObjectData } from "../jsonInterfaces";
+import { DrawData, SystemObjectData } from "../dataInterfaces";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
 import { MoonTypeComponent } from "../baseclasses/CommonComponents";

@@ -2,7 +2,7 @@ import { SceneComponent } from "./baseclasses/CommonComponents";
 import { initSystem } from "./Levels/AutoMap";
 import objectData from "./data/object_data.yaml";
 import { World } from "./ecs/World";
-import { SystemsData } from "./jsonInterfaces";
+import { SystemsData } from "./dataInterfaces";
 import { initCosmicMap } from "./Levels/CosmicMap";
 
 const DATA = objectData as SystemsData;

@@ -1,5 +1,5 @@
 import { DEG2RAD } from "three/src/math/MathUtils";
-import { DrawData } from "../jsonInterfaces";
+import { DrawData } from "../dataInterfaces";
 import { BufferGeometry, Line, Mesh, ShaderMaterial, Vector3 } from "three";
 
 export function buildOrbit(data: DrawData) {

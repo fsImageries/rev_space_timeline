@@ -359,11 +359,15 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       }
       e.stopImmediatePropagation()
       e.preventDefault()
-      timeoutID = setTimeout(() => world.uiManager.infoPanel.visible = true, 150)
+      const actualClick = (e:MouseEvent) => {
+        world.uiManager.infoPanel.setTarget(bcomp.data.name.toLowerCase())
+        world.uiManager.infoPanel.visible = true
+      }
+
+      timeoutID = setTimeout(actualClick, 150)
     }
 
     const f = (e: MouseEvent) => {
-      console.log("Feuert2")
       e.stopImmediatePropagation();
       e.preventDefault();
       Store.getInstance().store.focusTarget = bcomp.data.name.toLowerCase();

@@ -1,10 +1,11 @@
+import { TextObject } from "../dataInterfaces";
 import { Entity } from "./Entity";
 import { Store, TState } from "./Store";
 import { System } from "./System";
 import { World } from "./World";
 import { Query } from "./types";
 
-type LevelEntry = [Entity[], Query, Query, System[], TState];
+type LevelEntry = [Entity[], Query, Query, System[], TState, TextObject[]];
 
 export class LevelManager {
   /**
@@ -37,7 +38,8 @@ export class LevelManager {
         this.world.queryManager.sysQueries,
         this.world.queryManager.compQueries,
         [...this.world.sysManager.systems],
-        Store.getInstance().state
+        Store.getInstance().state,
+        this.world.uiManager.infoPanel.cache
       ];
     } else {
       this.world.ecManager.entities = this.levelMap[lvlName][0];

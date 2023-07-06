@@ -1,4 +1,4 @@
-import { RaycasterSystem } from "../baseclasses/imports";
+import { FocusRaycasterSystem, SwitchRaycasterSystem } from "../baseclasses/imports";
 import { UIManager } from "../gui/UIManager";
 import { EntityComponentManager } from "./EntityComponentManager";
 import { LevelManager } from "./LevelManager";
@@ -31,12 +31,23 @@ export class World {
       e.stopImmediatePropagation()
       this.updateMousePointer(e);
 
-      const sys = this.sysManager.getSystem(RaycasterSystem);
+      const sys = this.sysManager.getSystem(FocusRaycasterSystem);
       if (!sys) return;
       sys.enabled = true;
     };
 
     window.onclick = (e) => {
+      this.updateMousePointer(e);      
+      if (e.altKey || e.shiftKey) {
+        if (this.lvlManager.currentLvl == this.lvlManager.levelsNames[0]) {
+          const sys = this.sysManager.getSystem(SwitchRaycasterSystem);
+          if (!sys) return;
+          sys.enabled = true;
+        } else {
+          this.lvlManager.openLevel("Cosmic Map")
+        }
+      }
+
       const tar = (e.target as HTMLElement);
       if (!this.uiManager.infoPanel.main.contains(tar) && !(tar.id === "infoPanelButton")) 
         this.uiManager.infoPanel.visible = false

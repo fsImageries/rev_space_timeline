@@ -3,7 +3,7 @@ import {
   CSSMarkerSystem,
   CameraFocusSystem,
   OrbitRotSystem,
-  RaycasterSystem,
+  FocusRaycasterSystem,
   RenderSystem,
   SunUniformsUpdateSystem
 } from "../baseclasses/imports";
@@ -29,7 +29,7 @@ export function initSystem(world: World, data: SystemData) {
     .registerSystem(OrbitRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem)
+    .registerSystem(FocusRaycasterSystem)
     .registerSystem(CSSMarkerSystem);
 
   for (const d of data.objects) {

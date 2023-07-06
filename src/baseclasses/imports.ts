@@ -56,7 +56,8 @@ import {
   OrbitRotSystem,
   SunUniformsUpdateSystem,
   CameraFocusSystem,
-  RaycasterSystem,
+  FocusRaycasterSystem,
+  SwitchRaycasterSystem,
   CSSMarkerSystem,
   resizeRendererToDisplaySize
 } from "./CommonSystems";
@@ -113,7 +114,8 @@ export {
   OrbitRotSystem,
   SunUniformsUpdateSystem,
   CameraFocusSystem,
-  RaycasterSystem,
+  FocusRaycasterSystem,
+  SwitchRaycasterSystem,
   CSSMarkerSystem,
   resizeRendererToDisplaySize
 };

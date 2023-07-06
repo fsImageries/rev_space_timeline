@@ -1,17 +1,15 @@
 import { SceneComponent } from "./baseclasses/CommonComponents";
 import { initSystem } from "./Levels/AutoMap";
-import objectData from "./data/object_data.yaml";
 import { World } from "./ecs/World";
 import { SystemsData } from "./dataInterfaces";
 import { initCosmicMap } from "./Levels/CosmicMap";
 
-const DATA = objectData as SystemsData;
 
 window.onload = () => {
   const world = new World();
 
-  world.lvlManager.openLevel("cosmicMap", initCosmicMap);
-  world.lvlManager.openLevel("epsilonEridani", (w) => initSystem(w, DATA.systems[0]));
+  world.lvlManager.openLevel("Cosmic Map");
+  // world.lvlManager.openLevel("epsilonEridani", (w) => initSystem(w, DATA.systems[0]));
   // world.lvlManager.openLevel("cosmicMap");
   // world.lvlManager.openLevel("epsilonEridani");
 

@@ -3,7 +3,8 @@ import {
   AxisRotSystem,
   SunUniformsUpdateSystem,
   CameraFocusSystem,
-  RaycasterSystem
+  FocusRaycasterSystem,
+  SwitchRaycasterSystem
 } from "../baseclasses/CommonSystems";
 import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
@@ -31,7 +32,8 @@ export function initCosmicMap(world: World) {
     .registerSystem(AxisRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem);
+    .registerSystem(FocusRaycasterSystem)
+    .registerSystem(SwitchRaycasterSystem);
 
   initSuns(world);
   initLines(world);

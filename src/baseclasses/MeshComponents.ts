@@ -337,8 +337,9 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
 
   public init(world: World) {
     if (!this.dependendQueries) return;
-    const tcomp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent);
-    const bcomp = this.dependendQueries[0].entities[0].getComponent(BaseDataComponent);
+    const entity = this.dependendQueries[0].entities[0]
+    const tcomp = entity.getComponent(TransformGroupComponent);
+    const bcomp = entity.getComponent(BaseDataComponent);
 
     // Refactor into it's own marker class
     const containerDiv = document.createElement("div");
@@ -360,7 +361,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       e.stopImmediatePropagation()
       e.preventDefault()
       const actualClick = (e:MouseEvent) => {
-        world.uiManager.infoPanel.setTarget(bcomp.data.name.toLowerCase())
+        world.uiManager.infoPanel.setTarget(entity)
         world.uiManager.infoPanel.visible = true
       }
 
@@ -387,7 +388,6 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       txtDiv,
     };
 
-    const entity = this.dependendQueries[0].entities[0];
     if (entity.getComponent(ParticleRingTypeComponent)) {
       const rad = entity.getComponent(RadiusComponent).data.drawRadius;
       // markerLabel.position.x += rad

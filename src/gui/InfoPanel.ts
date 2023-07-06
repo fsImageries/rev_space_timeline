@@ -1,4 +1,6 @@
+import { BaseDataComponent } from "../baseclasses/imports";
 import { TextObject } from "../dataInterfaces";
+import { Entity } from "../ecs/Entity";
 import { capitalize, formatTexts, getFirstYear, splitWord } from "../helpers/utils";
 import { UIManager } from "./UIManager";
 
@@ -8,6 +10,9 @@ export class InfoPanelManager {
     public main: HTMLDivElement;
     public timeline: HTMLDivElement;
     public cache: TextObject[];
+    public title: HTMLDivElement;
+    public subtitle: HTMLDivElement;
+    public subtext: HTMLDivElement;
     
     private map: TextsMap;
     private fullTxt: string;
@@ -16,7 +21,11 @@ export class InfoPanelManager {
         public uiManager: UIManager
     ) {
         this.main = document.getElementById("infoPanel") as HTMLDivElement 
-        this.timeline = document.getElementById("infoPanelTimeline") as HTMLDivElement 
+        this.timeline = document.getElementById("infoPanelTimeline") as HTMLDivElement
+        this.title = document.querySelector("#infoPanelTitleArea .title") as HTMLDivElement
+        this.subtitle = document.querySelector("#infoPanelTitleArea .subtitle") as HTMLDivElement
+        this.subtext = document.querySelector("#infoPanelSubtextArea .subtitle") as HTMLDivElement
+
 
         this.cache = []
         this.map = {}
@@ -38,8 +47,16 @@ export class InfoPanelManager {
         this.genTexts(texts)
     }
 
-    public setTarget(name:string) {
-        this.timeline.innerHTML = this.map[name];
+    public setConstellation(name:string) {
+      this.subtext.innerText = name
+    }
+
+    public setTarget(entity:Entity) {
+        const base = entity.getComponent(BaseDataComponent)
+        this.timeline.innerHTML = this.map[base.data.name.toLowerCase()];
+        this.title.innerText = base.data.name;
+        this.subtitle.innerText = base.data.parent ? base.data.parent : "Local Group";
+
         (document.getElementById("tab2") as HTMLInputElement).checked = true
     }
 

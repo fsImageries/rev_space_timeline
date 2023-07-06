@@ -340,6 +340,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
     const tcomp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent);
     const bcomp = this.dependendQueries[0].entities[0].getComponent(BaseDataComponent);
 
+    // Refactor into it's own marker class
     const containerDiv = document.createElement("div");
     const markerDiv = document.createElement("div");
     const txtDiv = document.createElement("div");
@@ -350,7 +351,19 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
     txtDiv.className = "markerText";
     txtDiv.textContent = bcomp.data.name.toUpperCase();
 
+    let timeoutID = 0;
+    txtDiv.onclick = (e) => {
+      if (e.detail > 1) {
+        clearTimeout(timeoutID)
+        return
+      }
+      e.stopImmediatePropagation()
+      e.preventDefault()
+      timeoutID = setTimeout(() => world.uiManager.infoPanel.visible = true, 150)
+    }
+
     const f = (e: MouseEvent) => {
+      console.log("Feuert2")
       e.stopImmediatePropagation();
       e.preventDefault();
       Store.getInstance().store.focusTarget = bcomp.data.name.toLowerCase();
@@ -359,7 +372,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       sys.enabled = true;
     };
 
-    containerDiv.ondblclick = markerDiv.ondblclick = txtDiv.ondblclick = f;
+    containerDiv.ondblclick = f;
 
     const markerLabel = new CSS2DObject(containerDiv);
     tcomp.data.group.add(markerLabel);
@@ -367,7 +380,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       mesh: markerLabel,
       containerDiv,
       diamondDiv: markerDiv,
-      txtDiv
+      txtDiv,
     };
 
     const entity = this.dependendQueries[0].entities[0];

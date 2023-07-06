@@ -221,7 +221,7 @@ export class CSSMarkerSystem extends System {
         container.style.opacity = camDist < maxd ? `${mapLinear(dist, maxd, 0, 0, 1)}` : "0";
       }
 
-      marker.style.opacity = dist < rad * 25 ? `${mapLinear(dist, rad * 2, rad * 25, 0, 1)}` : "1";
+      marker.style.opacity = dist < rad * 30 ? `${mapLinear(dist, rad * 2, rad * 30, 0, 1)}` : "1";
     }
   }
 }

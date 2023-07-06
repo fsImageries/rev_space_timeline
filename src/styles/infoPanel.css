@@ -14,7 +14,7 @@
     align-items: stretch;
     flex-direction: column;
     margin-left: calc((100% + 10px) * -1);
-    transition: margin-left 500ms ease;
+    transition: margin-left 300ms ease;
 }
 
 #infoPanel.checked {

@@ -1,4 +1,5 @@
 import { RaycasterSystem } from "../baseclasses/imports";
+import { UIManager } from "../gui/UIManager";
 import { EntityComponentManager } from "./EntityComponentManager";
 import { LevelManager } from "./LevelManager";
 import { QueryManager } from "./QueryManager";
@@ -10,6 +11,7 @@ export class World {
   public sysManager: SystemManager;
   public lvlManager: LevelManager;
   public queryManager: QueryManager;
+  public uiManager: UIManager;
 
   public enabled = true;
 
@@ -18,18 +20,27 @@ export class World {
     this.sysManager = new SystemManager(this);
     this.lvlManager = new LevelManager(this);
     this.queryManager = new QueryManager(this);
+    this.uiManager = new UIManager(this)
 
     this.initListeners();
   }
 
   private initListeners() {
     window.ondblclick = (e: MouseEvent) => {
+      e.preventDefault()
+      e.stopImmediatePropagation()
       this.updateMousePointer(e);
+      console.log("Feuert")
 
       const sys = this.sysManager.getSystem(RaycasterSystem);
       if (!sys) return;
       sys.enabled = true;
     };
+
+    window.onclick = (e) => {
+      const tar = (e.target as HTMLElement);
+      if (!this.uiManager.infoPanel.main.contains(tar)) this.uiManager.infoPanel.visible = false
+    }
   }
 
   private updateMousePointer(e: MouseEvent) {

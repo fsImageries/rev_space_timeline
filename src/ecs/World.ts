@@ -30,7 +30,6 @@ export class World {
       e.preventDefault()
       e.stopImmediatePropagation()
       this.updateMousePointer(e);
-      console.log("Feuert")
 
       const sys = this.sysManager.getSystem(RaycasterSystem);
       if (!sys) return;
@@ -39,7 +38,8 @@ export class World {
 
     window.onclick = (e) => {
       const tar = (e.target as HTMLElement);
-      if (!this.uiManager.infoPanel.main.contains(tar)) this.uiManager.infoPanel.visible = false
+      if (!this.uiManager.infoPanel.main.contains(tar) && !(tar.id === "infoPanelButton")) 
+        this.uiManager.infoPanel.visible = false
     }
   }
 

@@ -1,3 +1,18 @@
+#infoPanelButton {
+    top: 0;
+    position: absolute; 
+    width: 2.5vh;
+    margin: 1vh;
+    opacity: .8;
+    cursor: pointer;
+    transition: opacity 150ms ease, transform 150ms ease;
+    /* transform: rotate(90deg); */
+}
+
+#infoPanelButton:hover {
+    opacity: 1;
+}
+
 #infoPanel {
     position: absolute;
     width: 50%;
@@ -13,8 +28,8 @@
     display: flex;
     align-items: stretch;
     flex-direction: column;
-    margin-left: calc((100% + 10px) * -1);
-    transition: margin-left 300ms ease;
+    margin-left: -110%;
+    transition: margin-left 400ms ease;
 }
 
 #infoPanel.checked {

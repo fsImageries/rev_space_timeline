@@ -13,9 +13,11 @@ export class InfoPanelManager {
   public title: HTMLDivElement;
   public subtitle: HTMLDivElement;
   public subtext: HTMLDivElement;
+  public menubtn: HTMLImageElement;
 
   private map: TextsMap;
   private fullTxt: string;
+  private _visible: boolean = false
 
   constructor(
     public uiManager: UIManager
@@ -25,11 +27,15 @@ export class InfoPanelManager {
     this.title = document.querySelector("#infoPanelTitleArea .title") as HTMLDivElement
     this.subtitle = document.querySelector("#infoPanelTitleArea .subtitle") as HTMLDivElement
     this.subtext = document.querySelector("#infoPanelSubtextArea .subtitle") as HTMLDivElement
-
+    this.menubtn = document.getElementById("infoPanelButton") as HTMLImageElement
 
     this.cache = []
     this.map = {}
     this.fullTxt = ""
+
+    this.menubtn.onclick = () => {
+      this.visible = !this._visible
+    }
   }
 
   public set visibility(value: boolean) {
@@ -40,6 +46,16 @@ export class InfoPanelManager {
     value ?
       this.main.classList.add("checked") :
       this.main.classList.remove("checked")
+    
+    this.menuVisible = value
+    this._visible = value
+  }
+
+  public set menuVisible(value: boolean) {
+    value ?
+      this.menubtn.style.transform = "scale(0)" :
+      this.menubtn.style.transform = "scale(1)"
+
   }
 
   public init(texts: TextObject[]) {

@@ -33,7 +33,7 @@ export function formatTexts(texts: string[], join = true, infectName: boolean | 
   texts = texts.map((t, i) => {
     const line = t.split("\n");
     if (infectName) {
-      line[0] = `${line[0]} <span class="year" style="font-size:.8rem; font-weight: normal;">(${infectName})</span>`;
+      line[0] = `${line[0]} <span class="year" style="font-size:.8rem;">(${infectName})</span>`;
     }
     return `${i != 0 && !join ? "<br><br>" : ""}<span class="year">${line[0]}</span>${NL_SEP}${line.slice(1).join(NL_SEP)}`;
   });

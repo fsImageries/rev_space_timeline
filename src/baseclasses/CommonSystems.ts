@@ -219,6 +219,7 @@ export class CSSMarkerSystem extends System {
         const camDist = cam.position.distanceTo(GLOBALS.WORLD_POS);
         const maxd = dist2par * 100;
         container.style.opacity = camDist < maxd ? `${mapLinear(dist, maxd, 0, 0, 1)}` : "0";
+        container.style.visibility = container.style.opacity === "0" ? "hidden" : "visible"
       }
 
       marker.style.opacity = dist < rad * 30 ? `${mapLinear(dist, rad * 2, rad * 30, 0, 1)}` : "1";

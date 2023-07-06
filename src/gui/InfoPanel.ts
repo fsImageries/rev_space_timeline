@@ -1,6 +1,7 @@
 import { BaseDataComponent } from "../baseclasses/imports";
 import { TextObject } from "../dataInterfaces";
 import { Entity } from "../ecs/Entity";
+import { LvlInfo } from "../ecs/LevelManager";
 import { capitalize, formatTexts, getFirstYear, splitWord } from "../helpers/utils";
 import { UIManager } from "./UIManager";
 
@@ -18,6 +19,7 @@ export class InfoPanelManager {
   private map: TextsMap;
   private fullTxt: string;
   private _visible: boolean = false
+  private lvlInfo: LvlInfo
 
   constructor(
     public uiManager: UIManager
@@ -32,8 +34,11 @@ export class InfoPanelManager {
     this.cache = []
     this.map = {}
     this.fullTxt = ""
+    this.lvlInfo = {} as LvlInfo
+    
 
     this.menubtn.onclick = () => {
+      this.setSysTarget()
       this.visible = !this._visible
     }
   }
@@ -58,9 +63,11 @@ export class InfoPanelManager {
 
   }
 
-  public init(texts: TextObject[]) {
+  public init(texts: TextObject[], lvlInfo: LvlInfo) {
     this.cache = texts
     this.genTexts(texts)
+    this.lvlInfo = lvlInfo
+    this.map["sys"] = ""
   }
 
   public setConstellation(name: string) {
@@ -74,6 +81,13 @@ export class InfoPanelManager {
     this.subtitle.innerText = base.data.parent ? base.data.parent : "Local Group";
 
     (document.getElementById(tab) as HTMLInputElement).checked = true
+  }
+
+  private setSysTarget() {
+    this.timeline.innerHTML = this.map["sys"]
+    this.title.innerText = this.lvlInfo.name
+    this.subtitle.innerText = "Local Group"
+    this.setConstellation(this.lvlInfo.constellation)
   }
 
   private genTexts(texts: TextObject[]) {

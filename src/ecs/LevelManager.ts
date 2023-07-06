@@ -5,7 +5,14 @@ import { System } from "./System";
 import { World } from "./World";
 import { Query } from "./types";
 
-type LevelEntry = [Entity[], Query, Query, System[], TState, TextObject[]];
+
+export type LvlInfo = {
+  name: string,
+  constellation: string
+}
+
+//                Entities   SysQueries CompQueries Systems   StoreState  Texts         Level info 
+type LevelEntry = [Entity[], Query,     Query,      System[], TState,     TextObject[], LvlInfo];
 
 export class LevelManager {
   /**
@@ -39,7 +46,8 @@ export class LevelManager {
         this.world.queryManager.compQueries,
         [...this.world.sysManager.systems],
         Store.getInstance().state,
-        this.world.uiManager.infoPanel.cache
+        this.world.uiManager.infoPanel.cache,
+        {} as LvlInfo
       ];
     } else {
       this.world.ecManager.entities = this.levelMap[lvlName][0];

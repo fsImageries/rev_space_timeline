@@ -10,7 +10,7 @@ const DATA = objectData as SystemsData;
 window.onload = () => {
   const world = new World();
 
-  world.lvlManager.openLevel("cosmicMap", initCosmicMap);
+  // world.lvlManager.openLevel("cosmicMap", initCosmicMap);
   world.lvlManager.openLevel("epsilonEridani", (w) => initSystem(w, DATA.systems[0]));
   // world.lvlManager.openLevel("cosmicMap");
   // world.lvlManager.openLevel("epsilonEridani");

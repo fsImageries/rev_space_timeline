@@ -83,6 +83,7 @@ a:active {
     all: unset;
     cursor: pointer;
     text-decoration: none;
+    pointer-events: all;
 }
 
 code {

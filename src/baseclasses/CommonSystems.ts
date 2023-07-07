@@ -143,7 +143,6 @@ export class CameraFocusSystem extends System {
         ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -= rad * (entity.getComponent(SunTypeComponent) ? 14 : 4);
         ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS.clone());
         ccomp.data.freeCtrl?.update();
-        console.log(ccomp.data.freeCtrl)
       }
     }
     this.enabled = false;

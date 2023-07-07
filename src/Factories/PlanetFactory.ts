@@ -9,31 +9,19 @@ import {
   ShaderMaterial
 } from "three";
 import {
-  AxisRotComponent,
-  DistanceToParentComponent,
-  OrbitRotComponent,
-  RadiusComponent
-} from "../baseclasses/imports";
-import { BaseDataComponent, BaseDataData, PlanetTypeComponent } from "../baseclasses/imports";
-import {
-  AtmoComponent,
-  CSSMarkerComponent,
-  MeshComponent,
-  OrbitLineComponent,
-  ParentComponent,
-  ParentComponentData,
-  RotGroupComponent,
+  AtmoComponent, MeshComponent,
+  OrbitLineComponent, PlanetTypeComponent, RotGroupComponent,
   TransformGroupComponent
 } from "../baseclasses/imports";
 import { Entity } from "../ecs/Entity";
 import GLOBALS from "../helpers/Constants";
 
+import { initCelestialComponents } from "../Levels/Common";
+import { MoonTypeComponent } from "../baseclasses/CommonComponents";
 import { DrawData, SystemObjectData } from "../dataInterfaces";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
-import { MoonTypeComponent } from "../baseclasses/CommonComponents";
 import { buildOrbit } from "./OrbitFactory";
-import { initCelestialComponents } from "../Levels/Common";
 
 export function buildPlanet(entity: Entity, data: SystemObjectData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);

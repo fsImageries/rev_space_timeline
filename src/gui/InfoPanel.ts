@@ -18,7 +18,7 @@ export class InfoPanelManager {
   private map: TextsMap;
   private fullTxt: string;
   private lvlInfo: LvlInfo;
-  private _visible: boolean = false
+  private _visible = false
 
   constructor(
     public uiManager: UIManager

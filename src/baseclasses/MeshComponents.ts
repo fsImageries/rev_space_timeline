@@ -361,7 +361,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       }
       e.stopImmediatePropagation()
       e.preventDefault()
-      const actualClick = (e:MouseEvent) => {
+      const actualClick = () => {
         world.uiManager.infoPanel.setTarget(entity)
         world.uiManager.infoPanel.visible = true
       }

@@ -1,25 +1,22 @@
 import { Group, Mesh, ShaderMaterial } from "three";
-import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/imports";
+import { initCelestialComponents } from "../Levels/Common";
 import {
-  BaseDataComponent,
-  BaseDataData,
+  MeshComponent,
+  PointLightComponent,
+  RotGroupComponent,
+  TransformGroupComponent
+} from "../baseclasses/MeshComponents";
+import {
   SunTypeComponent,
   UniformsComponent,
   UniformsData
 } from "../baseclasses/imports";
-import {
-  MeshComponent,
-  TransformGroupComponent,
-  PointLightComponent,
-  RotGroupComponent
-} from "../baseclasses/MeshComponents";
-import { Entity } from "../ecs/Entity";
-import GLOBALS from "../helpers/Constants";
 import { SunData } from "../dataInterfaces";
+import { Entity } from "../ecs/Entity";
+import { Store } from "../ecs/Store";
+import GLOBALS from "../helpers/Constants";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
-import { Store } from "../ecs/Store";
-import { initCelestialComponents } from "../Levels/Common";
 
 export function buildSun(entity: Entity, data: SunData, marker=true) {
   const [mesh, transformGrp, rotGrp, uniforms] = buildMeshes(data);

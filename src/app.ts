@@ -1,6 +1,9 @@
 import { SceneComponent } from "./baseclasses/imports";
 import { World } from "./ecs/World";
 
+document.title = `${document.title} (${APP_VERSION})`;
+const v = document.getElementById("version")
+if (v) v.innerText = `v${APP_VERSION}`;
 
 window.onload = () => {
   const world = new World();

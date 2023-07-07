@@ -272,15 +272,12 @@ export class CSSMarkerSystem extends System {
   }
 }
 
-
-const ORIGIN = new Vector3(0,0,0)
-const MAX  = (50*Store.getInstance().store.LIGHTYEAR) * 1e-11
-const MIN  = (25*Store.getInstance().store.LIGHTYEAR) * 1e-11
+const ORIGIN = new Vector3(0, 0, 0);
+const MAX = 50 * Store.getInstance().store.LIGHTYEAR * 1e-11;
+const MIN = 25 * Store.getInstance().store.LIGHTYEAR * 1e-11;
 
 export class CosmicMapStartTextSystem extends System {
-  static queries = [
-    [operand("exist", CameraComponent)]
-  ];
+  static queries = [[operand("exist", CameraComponent)]];
 
   execute(): void {
     if (!this.queries) return;
@@ -289,13 +286,13 @@ export class CosmicMapStartTextSystem extends System {
     let dist = cam.position.distanceTo(ORIGIN);
     dist = clamp(dist, MIN, MAX);
     dist = mapLinear(dist, MIN, MAX, 0, 1);
-    const txt = document.getElementById("cosmicMapTItle")
-    if (!txt) return
-    textOpacity(txt, dist)
+    const txt = document.getElementById("cosmicMapTItle");
+    if (!txt) return;
+    textOpacity(txt, dist);
   }
 }
 
-function textOpacity(el:HTMLElement, value: number) {
+function textOpacity(el: HTMLElement, value: number) {
   el.style.opacity = value.toString();
   el.style.visibility = value <= 0 ? "hidden" : "visible";
 }

@@ -9,29 +9,18 @@ import {
   ShaderMaterial
 } from "three";
 import {
-  AxisRotComponent,
-  DistanceToParentComponent,
-  OrbitRotComponent,
-  RadiusComponent
-} from "../baseclasses/imports";
-import { BaseDataComponent, BaseDataData, PlanetTypeComponent } from "../baseclasses/imports";
-import {
-  AtmoComponent,
-  CSSMarkerComponent,
-  MeshComponent,
-  OrbitLineComponent,
-  ParentComponent,
-  ParentComponentData,
-  RotGroupComponent,
+  AtmoComponent, MeshComponent,
+  OrbitLineComponent, PlanetTypeComponent, RotGroupComponent,
   TransformGroupComponent
 } from "../baseclasses/imports";
 import { Entity } from "../ecs/Entity";
 import GLOBALS from "../helpers/Constants";
 
-import { DrawData, SystemObjectData } from "../jsonInterfaces";
+import { initCelestialComponents } from "../Levels/Common";
+import { MoonTypeComponent } from "../baseclasses/CommonComponents";
+import { DrawData, SystemObjectData } from "../dataInterfaces";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
-import { MoonTypeComponent } from "../baseclasses/CommonComponents";
 import { buildOrbit } from "./OrbitFactory";
 
 export function buildPlanet(entity: Entity, data: SystemObjectData) {
@@ -40,28 +29,15 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
   const [mesh, atmo, transformGrp, rotGrp] = buildMeshes(data);
   const orbit = buildOrbit(data.draw as DrawData);
 
-  if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
-  if (data.orbitalPeriod)
-    entity.addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod, data.draw?.orbInvert)); // TODO combine common component assignments for easy reuse (sun) like asp with servicecollection
-  if (data.distanceToParent)
-    entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
-  if (data.parent) entity.addComponent(ParentComponent, ParentComponent.getDefaults() as ParentComponentData); // <- determine if dynamic?
-
   entity
     // .addComponent(UniformsComponent, uniforms)
     .addComponent(MeshComponent, { mesh: mesh as Mesh })
     .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
     .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot)) // implement random start rot
     .addComponent(AtmoComponent, { mesh: atmo })
-    .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
-    .addComponent(BaseDataComponent, {
-      name: data.name,
-      uuid: crypto.randomUUID() as string,
-      parent: data.parent,
-      texts: data.texts
-    } as BaseDataData)
     .addComponent(OrbitLineComponent, { mesh: orbit })
-    .addComponent(CSSMarkerComponent);
+    
+    initCelestialComponents(entity, data)
 
   data.type === "planet" ? entity.addComponent(PlanetTypeComponent) : entity.addComponent(MoonTypeComponent);
 

@@ -15,10 +15,101 @@
   <link rel="stylesheet" href="./src/styles/cosmicMap.css">
   <link rel="stylesheet" href="./src/styles/cornerBtn.css">
   <link rel="stylesheet" href="./src/styles/CSSRender.css">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 </head>
 
 <body>
-  <canvas id="main"></canvas>
+  <!-- <canvas id="main"></canvas> -->
+  
+  <img id="infoPanelButton" src="./menu_g.svg" alt="menu_logo">
+  <div id="infoPanel">
+    <div id="infoPanelHeader">
+      <div id="infoPanelTitleArea">
+        <div class="title"><!--Yellowstone--></div>
+        <div class="subtitle"><!--Epsilon Eridani --></div>
+      </div>
+      <div id="infoPanelSubtextArea">
+        <div class="title">Constellation:</div>
+        <div class="subtitle"><!--Eridanus--></div>
+      </div>
+    </div>
+
+    <div id="infoPanelMain">
+      <input checked="checked" id="tab1" type="radio" name="tabs" />
+      <input id="tab2" type="radio" name="tabs" />
+      <input id="tab3" type="radio" name="tabs" />
+      <input id="tab4" type="radio" name="tabs" />
+
+      <nav>
+        <label id="tab1Label" for="tab1">Info</label>
+        <label id="tab2Label" for="tab2">Timeline</label>
+        <label id="tab3Label" for="tab3">Settings</label>
+        <label id="tab4Label" for="tab4">Help</label>
+     </nav>
+     
+     <figure>
+        <div class="tab1">
+          Something
+        </div>
+        <div id="infoPanelTimeline" class="tab2">
+          <!-- <span class="year">2090 – 2110 (Yellowstone)</span>
+          <br>• Originally settled by Americans
+          <br>• Settled via Von Neumann machines housing fertilized human eggs
+          <br>• Colony failed in a similarly murderous manner as Diadem
+          <br><br><span class="year">≈2100 (MarcosEye)</span>
+          <br>• Named in honour of Marco Ferris
+
+          <br><span class="year">2090 – 2110 (Yellowstone)</span>
+          <br>• Originally settled by Americans
+          <br>• Settled via Von Neumann machines housing fertilized human eggs
+          <br>• Colony failed in a similarly murderous manner as Diadem
+          <br><br><span class="year">≈2100 (MarcosEye)</span>
+          <br>• Named in honour of Marco Ferris
+          <br><span class="year">2090 – 2110 (Yellowstone)</span>
+          <br>• Originally settled by Americans
+          <br>• Settled via Von Neumann machines housing fertilized human eggs
+          <br>• Colony failed in a similarly murderous manner as Diadem
+          <br><br><span class="year">≈2100 (MarcosEye)</span>
+          <br>• Named in honour of Marco Ferris
+          <br><span class="year">2090 – 2110 (Yellowstone)</span>
+          <br>• Originally settled by Americans
+          <br>• Settled via Von Neumann machines housing fertilized human eggs
+          <br>• Colony failed in a similarly murderous manner as Diadem
+          <br><br><span class="year">≈2100 (MarcosEye)</span>
+          <br>• Named in honour of Marco Ferris
+          <br><span class="year">2090 – 2110 (Yellowstone)</span>
+          <br>• Originally settled by Americans
+          <br>• Settled via Von Neumann machines housing fertilized human eggs
+          <br>• Colony failed in a similarly murderous manner as Diadem
+          <br><br><span class="year">≈2100 (MarcosEye)</span>
+          <br>• Named in honour of Marco Ferris
+          <br><span class="year">2090 – 2110 (Yellowstone)</span>
+          <br>• Originally settled by Americans
+          <br>• Settled via Von Neumann machines housing fertilized human eggs
+          <br>• Colony failed in a similarly murderous manner as Diadem
+          <br><br><span class="year">≈2100 (MarcosEye)</span>
+          <br>• Named in honour of Marco Ferris
+          <br><span class="year">2090 – 2110 (Yellowstone)</span>
+          <br>• Originally settled by Americans
+          <br>• Settled via Von Neumann machines housing fertilized human eggs
+          <br>• Colony failed in a similarly murderous manner as Diadem
+          <br><br><span class="year">≈2100 (MarcosEye)</span>
+          <br>• Named in honour of Marco Ferris -->
+        </div>
+        <div class="tab3">GHI</div>
+        <div class="tab4">DEF</div>
+     </figure>
+    </div>
+
+    <div id="infoPanelFooter">
+      <div class="coords">
+        <div class="x coord"><div class="digit">1.124</div> <div class="letter">x</div></div>
+        <div class="y coord"><div class="digit">1.124</div> <div class="letter">y</div></div>
+        <div class="z coord"><div class="digit">1.124</div> <div class="letter">z</div></div>
+      </div>
+    </div>
+  </div>
 </body>
 
 

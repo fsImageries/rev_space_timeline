@@ -33,7 +33,8 @@ export interface SystemsData {
 
 export interface TextObject {
   name: string;
-  texts: string[];
+  all?: boolean;
+  timeline?: string[];
 }
 
 export interface SystemData {
@@ -44,6 +45,7 @@ export interface SystemData {
 
   startTarget: string;
   freeCam: boolean;
+  constellation: string;
 }
 
 export interface SystemObjectData {

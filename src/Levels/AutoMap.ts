@@ -1,20 +1,20 @@
-import {
-  AxisRotSystem,
-  CSSMarkerSystem,
-  CameraFocusSystem,
-  OrbitRotSystem,
-  RaycasterSystem,
-  RenderSystem,
-  SunUniformsUpdateSystem
-} from "../baseclasses/imports";
 import { buildOortCloud } from "../Factories/OortFactory";
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
-import { World } from "../ecs/World";
-import { SunData, SystemData } from "../jsonInterfaces";
-import { initCommon } from "./Common";
+import {
+  AxisRotSystem,
+  CSSMarkerSystem,
+  CameraFocusSystem,
+  FocusRaycasterSystem,
+  OrbitRotSystem,
+  RenderSystem,
+  SunUniformsUpdateSystem
+} from "../baseclasses/imports";
+import { SunData, SystemData } from "../dataInterfaces";
 import { Store } from "../ecs/Store";
+import { World } from "../ecs/World";
+import { initCommonEntities } from "./Common";
 
 const planetCheck = ["moon", "planet"];
 
@@ -28,7 +28,7 @@ export function initSystem(world: World, data: SystemData) {
     .registerSystem(OrbitRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem)
+    .registerSystem(FocusRaycasterSystem)
     .registerSystem(CSSMarkerSystem);
 
   for (const d of data.objects) {
@@ -40,7 +40,7 @@ export function initSystem(world: World, data: SystemData) {
       buildPlanet(world.ecManager.createEntity(), d);
     }
 
-    if (d.type === "particlering" && d.name === "glitterband") {
+    if (d.type === "particlering") {
       buildParticlering(world.ecManager.createEntity(), d);
     }
 
@@ -49,13 +49,20 @@ export function initSystem(world: World, data: SystemData) {
     }
   }
 
-  initCommon(world);
+  initCommonEntities(world);
   world.load();
+  world.uiManager.infoPanel.init(data.texts, {name: data.name, constellation: data.constellation})
+
+  // const master = data.texts.find(d => d.all)
+  // if (master) {
+  //   const entity = world.ecManager.getEntityByBaseName(master.name)
+  //   if (entity) world.uiManager.infoPanel.setTarget(entity, "tab1")
+  //   world.uiManager.infoPanel.setConstellation(data.constellation)
+  // }
 
   if (data.startTarget) {
     Store.getInstance().store.focusTarget = data.startTarget;
     const sys = world.sysManager.getSystem(CameraFocusSystem);
-    if (!sys) return;
-    sys.enabled = true;
+    if (sys) sys.enabled = true;
   }
 }

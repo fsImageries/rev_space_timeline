@@ -4,7 +4,7 @@ import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "../ba
 import { BaseDataComponent } from "../baseclasses/imports";
 import { Entity } from "../ecs/Entity";
 import { randSpherePointExcludes } from "../helpers/numericUtils";
-import { SystemObjectData } from "../jsonInterfaces";
+import { SystemObjectData } from "../dataInterfaces";
 import { Store } from "../ecs/Store";
 
 const COLOR = new Color("#fff");

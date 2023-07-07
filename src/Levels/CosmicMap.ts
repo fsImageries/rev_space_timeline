@@ -3,7 +3,8 @@ import {
   AxisRotSystem,
   SunUniformsUpdateSystem,
   CameraFocusSystem,
-  RaycasterSystem
+  FocusRaycasterSystem,
+  SwitchRaycasterSystem
 } from "../baseclasses/CommonSystems";
 import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
@@ -17,8 +18,10 @@ import {
   ObjectLineData
 } from "../baseclasses/imports";
 import { World } from "../ecs/World";
-import { initCommon } from "./Common";
+import { initCommonEntities } from "./Common";
 import { Store } from "../ecs/Store";
+import { SunData } from "../dataInterfaces";
+import { Entity } from "../ecs/Entity";
 
 export function initCosmicMap(world: World) {
   Store.getInstance().state.DISTANCE_SCALE = 1e-11;
@@ -29,16 +32,21 @@ export function initCosmicMap(world: World) {
     .registerSystem(AxisRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem);
+    .registerSystem(FocusRaycasterSystem)
+    .registerSystem(SwitchRaycasterSystem);
 
   initSuns(world);
   initLines(world);
-  initCommon(world, new Vector3(0, 2118 * 0.5, 10175 * 0.5));
+  Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.5)
+  initCommonEntities(world, Store.getInstance().state.camPos);
   world.load();
+  world.uiManager.infoPanel.init([], {name: "Cosmic Map", constellation: ""})
 }
 
 function initSuns(world: World) {
-  buildSun(world.ecManager.createEntity(), {
+  const buildSun2 = (e:Entity, d:SunData) => buildSun(e, d, false)
+ 
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 7100,
     lowTemp: 3100,
     name: "Sol",
@@ -48,7 +56,7 @@ function initSuns(world: World) {
     texts: ["Earth", "- Moon", "Mars", "- Phobos", "Europa"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults());
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 5500,
     lowTemp: 3500,
     name: "Epsilon Eridani",
@@ -60,7 +68,7 @@ function initSuns(world: World) {
     texts: ["Yellowstone [GRUBS]", "- Marcos Eye", "Tangerine Dream", "Conjoiner Nest", "- Conjoiner Comet"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 6000,
     lowTemp: 3000,
     name: "p Eridani",
@@ -72,7 +80,7 @@ function initSuns(world: World) {
     texts: ["Ararat [PATTERN JUGGLERS, NESTBUILDERS]"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 7000,
     lowTemp: 3000,
     name: "Delta Pavonis",
@@ -89,7 +97,7 @@ function initSuns(world: World) {
     ]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 4000,
     lowTemp: 3000,
     name: "Lacaille 9352",
@@ -101,7 +109,7 @@ function initSuns(world: World) {
     texts: ["Fand"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 2000,
     lowTemp: 900,
     name: "Luyten 726-8",
@@ -113,7 +121,7 @@ function initSuns(world: World) {
     texts: ["Luyten 726-8 Cometary Halo"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 4000,
     lowTemp: 3000,
     name: "Ross 248",
@@ -125,7 +133,7 @@ function initSuns(world: World) {
     texts: ["Diadem"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 4000,
     lowTemp: 3000,
     name: "61 Cygni",
@@ -137,7 +145,7 @@ function initSuns(world: World) {
     texts: ["Sky's Edge"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 3000,
     lowTemp: 500,
     name: "Lalande 21185",
@@ -149,7 +157,7 @@ function initSuns(world: World) {
     texts: ["Zion"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 3000,
     lowTemp: 500,
     name: "Gliese 687",
@@ -161,7 +169,7 @@ function initSuns(world: World) {
     texts: ["Haven"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 5000,
     lowTemp: 500,
     name: "Groombridge 1618",
@@ -173,7 +181,7 @@ function initSuns(world: World) {
     texts: ["Turquoise [PATTERN JUGGLERS]"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults());
 
-  buildSun(world.ecManager.createEntity(), {
+  buildSun2(world.ecManager.createEntity(), {
     highTemp: 10000,
     lowTemp: 500,
     name: "107 Piscium",

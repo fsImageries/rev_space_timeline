@@ -18,7 +18,7 @@ import {
   UniformsData
 } from "../baseclasses/imports";
 import { Entity } from "../ecs/Entity";
-import { SystemObjectData } from "../jsonInterfaces";
+import { SystemObjectData } from "../dataInterfaces";
 import { Store } from "../ecs/Store";
 
 const vertexShader = `

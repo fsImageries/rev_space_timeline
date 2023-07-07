@@ -130,15 +130,18 @@ export class CameraFocusSystem extends System {
 
     const ccomp = this.queries[1].entities[0].getComponent(CameraComponent);
 
+    if (Store.getInstance().state.camPos) {
+      ccomp.data.active.position.copy(Store.getInstance().state.camPos)
+    }
+
     for (const entity of this.queries[0].entities) {
-      //<- Tranform groups
       if (tar === entity.getComponent(BaseDataComponent).data.name.toLowerCase()) {
         entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(GLOBALS.WORLD_POS);
         const rad = entity.getComponent(RadiusComponent).data.drawRadius;
-        console.log(rad);
+        
         // TODO calculate view vector from object to light (nearest)
         ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -= rad * (entity.getComponent(SunTypeComponent) ? 14 : 4);
-        ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS);
+        ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS.clone());
         ccomp.data.freeCtrl?.update();
       }
     }
@@ -146,11 +149,16 @@ export class CameraFocusSystem extends System {
   }
 }
 
-export class RaycasterSystem extends System {
+export class FocusRaycasterSystem extends System {
   static queries = [
     [operand("exist", MeshComponent), operand("exist", BaseDataComponent)],
     [operand("exist", CameraComponent)]
   ];
+
+  constructor(world: World) {
+    super(world);
+    // this.enabled = false;
+  }
 
   execute(): void {
     if (!this.queries) return;
@@ -178,7 +186,44 @@ export class RaycasterSystem extends System {
         sys.enabled = true;
       }
     }
+    this.enabled = false;
+  }
+}
 
+export class SwitchRaycasterSystem extends System {
+  static queries = [
+    [operand("exist", MeshComponent), operand("exist", BaseDataComponent)],
+    [operand("exist", CameraComponent)]
+  ];
+
+  constructor(world: World) {
+    super(world);
+    // this.enabled = false;
+  }
+
+  execute(): void {
+    if (!this.queries) return;
+
+    const cam = this.queries[1].entities[0].getComponent(CameraComponent).data.active;
+    const raycaster = Store.getInstance().store.raycaster as Raycaster;
+    raycaster.setFromCamera(Store.getInstance().store.raypointer, cam);
+
+    for (const entity of this.queries[0].entities) {
+      const mesh = entity.getComponent(MeshComponent).data.mesh;
+      let intersects = raycaster.intersectObject(mesh);
+      if (intersects.length === 0) {
+        // TODO build general text component, check for that and get texts if necessary
+        const hasTxt = entity.getComponent(CosmicMapSunTextComponent);
+        if (hasTxt) {
+          intersects = raycaster.intersectObjects([hasTxt.data.title, hasTxt.data.texts]);
+        }
+      }
+
+      if (intersects.length > 0) {
+        const base = entity.getComponent(BaseDataComponent);
+        this.world.lvlManager.openLevel(base.data.name)
+      }
+    }
     this.enabled = false;
   }
 }
@@ -210,7 +255,7 @@ export class CSSMarkerSystem extends System {
       const marker = entity.getComponent(CSSMarkerComponent).data.diamondDiv;
       const container = entity.getComponent(CSSMarkerComponent).data.containerDiv;
 
-      if (!entity.getComponent(PlanetTypeComponent)) {
+      if (!entity.getComponent(PlanetTypeComponent) && !entity.getComponent(SunTypeComponent)) {
         entity
           .getComponent(ParentComponent)
           .data.parent.getComponent(TransformGroupComponent)
@@ -219,9 +264,10 @@ export class CSSMarkerSystem extends System {
         const camDist = cam.position.distanceTo(GLOBALS.WORLD_POS);
         const maxd = dist2par * 100;
         container.style.opacity = camDist < maxd ? `${mapLinear(dist, maxd, 0, 0, 1)}` : "0";
+        container.style.visibility = container.style.opacity === "0" ? "hidden" : "visible"
       }
 
-      marker.style.opacity = dist < rad * 25 ? `${mapLinear(dist, rad * 2, rad * 25, 0, 1)}` : "1";
+      marker.style.opacity = dist < rad * 30 ? `${mapLinear(dist, rad * 2, rad * 30, 0, 1)}` : "1";
     }
   }
 }

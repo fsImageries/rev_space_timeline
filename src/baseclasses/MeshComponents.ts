@@ -224,6 +224,7 @@ export class CosmicMapSunTextComponent extends Component<TextData> {
     const scene = this.dependendQueries[1].entities[0].getComponent(SceneComponent).data.scene;
     scene.add(this.data.title);
     scene.add(this.data.texts);
+    // console.log("Hallo")
   }
 }
 
@@ -337,9 +338,11 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
 
   public init(world: World) {
     if (!this.dependendQueries) return;
-    const tcomp = this.dependendQueries[0].entities[0].getComponent(TransformGroupComponent);
-    const bcomp = this.dependendQueries[0].entities[0].getComponent(BaseDataComponent);
+    const entity = this.dependendQueries[0].entities[0]
+    const tcomp = entity.getComponent(TransformGroupComponent);
+    const bcomp = entity.getComponent(BaseDataComponent);
 
+    // Refactor into it's own marker class
     const containerDiv = document.createElement("div");
     const markerDiv = document.createElement("div");
     const txtDiv = document.createElement("div");
@@ -350,6 +353,22 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
     txtDiv.className = "markerText";
     txtDiv.textContent = bcomp.data.name.toUpperCase();
 
+    let timeoutID = 0;
+    txtDiv.onclick = (e) => {
+      if (e.detail > 1) {
+        clearTimeout(timeoutID)
+        return
+      }
+      e.stopImmediatePropagation()
+      e.preventDefault()
+      const actualClick = () => {
+        world.uiManager.infoPanel.setTarget(entity)
+        world.uiManager.infoPanel.visible = true
+      }
+
+      timeoutID = setTimeout(actualClick, 150)
+    }
+
     const f = (e: MouseEvent) => {
       e.stopImmediatePropagation();
       e.preventDefault();
@@ -359,7 +378,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       sys.enabled = true;
     };
 
-    containerDiv.ondblclick = markerDiv.ondblclick = txtDiv.ondblclick = f;
+    containerDiv.ondblclick = f;
 
     const markerLabel = new CSS2DObject(containerDiv);
     tcomp.data.group.add(markerLabel);
@@ -367,10 +386,9 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       mesh: markerLabel,
       containerDiv,
       diamondDiv: markerDiv,
-      txtDiv
+      txtDiv,
     };
 
-    const entity = this.dependendQueries[0].entities[0];
     if (entity.getComponent(ParticleRingTypeComponent)) {
       const rad = entity.getComponent(RadiusComponent).data.drawRadius;
       // markerLabel.position.x += rad

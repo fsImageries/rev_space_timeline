@@ -1,4 +1,5 @@
-import { RaycasterSystem } from "../baseclasses/imports";
+import { FocusRaycasterSystem, SwitchRaycasterSystem } from "../baseclasses/imports";
+import { UIManager } from "../gui/UIManager";
 import { EntityComponentManager } from "./EntityComponentManager";
 import { LevelManager } from "./LevelManager";
 import { QueryManager } from "./QueryManager";
@@ -10,6 +11,7 @@ export class World {
   public sysManager: SystemManager;
   public lvlManager: LevelManager;
   public queryManager: QueryManager;
+  public uiManager: UIManager;
 
   public enabled = true;
 
@@ -18,18 +20,38 @@ export class World {
     this.sysManager = new SystemManager(this);
     this.lvlManager = new LevelManager(this);
     this.queryManager = new QueryManager(this);
+    this.uiManager = new UIManager(this)
 
     this.initListeners();
   }
 
   private initListeners() {
     window.ondblclick = (e: MouseEvent) => {
+      e.preventDefault()
+      e.stopImmediatePropagation()
       this.updateMousePointer(e);
 
-      const sys = this.sysManager.getSystem(RaycasterSystem);
+      const sys = this.sysManager.getSystem(FocusRaycasterSystem);
       if (!sys) return;
       sys.enabled = true;
     };
+
+    window.onclick = (e) => {
+      this.updateMousePointer(e);      
+      if (e.altKey || e.shiftKey) {
+        if (this.lvlManager.currentLvl == this.lvlManager.levelsNames[0]) {
+          const sys = this.sysManager.getSystem(SwitchRaycasterSystem);
+          if (!sys) return;
+          sys.enabled = true;
+        } else {
+          this.lvlManager.openLevel("Cosmic Map")
+        }
+      }
+
+      const tar = (e.target as HTMLElement);
+      if (!this.uiManager.infoPanel.main.contains(tar) && !(tar.id === "infoPanelButton")) 
+        this.uiManager.infoPanel.visible = false
+    }
   }
 
   private updateMousePointer(e: MouseEvent) {

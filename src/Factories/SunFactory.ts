@@ -1,47 +1,48 @@
 import { Group, Mesh, ShaderMaterial } from "three";
-import { AxisRotComponent, DistanceToParentComponent, RadiusComponent } from "../baseclasses/imports";
+import { initCelestialComponents } from "../Levels/Common";
 import {
-  BaseDataComponent,
-  BaseDataData,
+  MeshComponent,
+  PointLightComponent,
+  RotGroupComponent,
+  TransformGroupComponent
+} from "../baseclasses/MeshComponents";
+import {
   SunTypeComponent,
   UniformsComponent,
   UniformsData
 } from "../baseclasses/imports";
-import {
-  MeshComponent,
-  TransformGroupComponent,
-  PointLightComponent,
-  RotGroupComponent
-} from "../baseclasses/MeshComponents";
+import { SunData } from "../dataInterfaces";
 import { Entity } from "../ecs/Entity";
+import { Store } from "../ecs/Store";
 import GLOBALS from "../helpers/Constants";
-import { SunData } from "../jsonInterfaces";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
-import { Store } from "../ecs/Store";
 
-export function buildSun(entity: Entity, data: SunData) {
+export function buildSun(entity: Entity, data: SunData, marker=true) {
   const [mesh, transformGrp, rotGrp, uniforms] = buildMeshes(data);
 
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 
-  if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
+  // if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
   if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 1e5));
-  if (data.distanceToParent)
-    entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
+  // if (data.distanceToParent)
+  //   entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
 
+  
   entity
-    .addComponent(UniformsComponent, uniforms)
-    .addComponent(MeshComponent, { mesh: mesh as Mesh })
-    .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
-    .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
-    .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
-    .addComponent(BaseDataComponent, {
-      name: data.name,
-      uuid: crypto.randomUUID() as string,
-      texts: data.texts
-    } as BaseDataData)
+  .addComponent(UniformsComponent, uniforms)
+  .addComponent(MeshComponent, { mesh: mesh as Mesh })
+  .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
+  .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
+  // .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
+  // .addComponent(BaseDataComponent, {
+    //   name: data.name,
+    //   uuid: crypto.randomUUID() as string,
+    //   texts: data.texts
+    // } as BaseDataData)
     .addComponent(SunTypeComponent);
+    
+    initCelestialComponents(entity, data, marker)
 
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 

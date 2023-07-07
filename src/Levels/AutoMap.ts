@@ -1,21 +1,20 @@
-import {
-  AxisRotSystem,
-  CSSMarkerSystem,
-  CameraFocusSystem,
-  OrbitRotSystem,
-  FocusRaycasterSystem,
-  RenderSystem,
-  SunUniformsUpdateSystem
-} from "../baseclasses/imports";
 import { buildOortCloud } from "../Factories/OortFactory";
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
-import { World } from "../ecs/World";
+import {
+  AxisRotSystem,
+  CSSMarkerSystem,
+  CameraFocusSystem,
+  FocusRaycasterSystem,
+  OrbitRotSystem,
+  RenderSystem,
+  SunUniformsUpdateSystem
+} from "../baseclasses/imports";
 import { SunData, SystemData } from "../dataInterfaces";
-import { initCommonEntities } from "./Common";
 import { Store } from "../ecs/Store";
-import { LvlInfo } from "../ecs/LevelManager";
+import { World } from "../ecs/World";
+import { initCommonEntities } from "./Common";
 
 const planetCheck = ["moon", "planet"];
 

@@ -224,6 +224,7 @@ export class CosmicMapSunTextComponent extends Component<TextData> {
     const scene = this.dependendQueries[1].entities[0].getComponent(SceneComponent).data.scene;
     scene.add(this.data.title);
     scene.add(this.data.texts);
+    // console.log("Hallo")
   }
 }
 

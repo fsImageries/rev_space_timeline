@@ -16,8 +16,11 @@ export interface RenderComponentData {
 export class RenderComponent extends Component<RenderComponentData> {
   static typeID = crypto.randomUUID();
   static getDefaults(): RenderComponentData {
+    const canvas = document.createElement("canvas")
+    canvas.id = "main"
+    Store.getInstance().state.canvas = canvas
     const renderer = new WebGLRenderer({
-      canvas: Store.getInstance().store.canvas,
+      canvas: Store.getInstance().state.canvas,
       antialias: true,
       alpha: true,
       logarithmicDepthBuffer: true
@@ -28,16 +31,13 @@ export class RenderComponent extends Component<RenderComponentData> {
     renderer.setClearColor(0x000000);
 
     const renderer2d = new CSS2DRenderer();
-    document.body.appendChild(renderer2d.domElement);
     renderer2d.setSize(window.innerWidth, window.innerHeight);
     renderer2d.domElement.style.position = "absolute";
     renderer2d.domElement.style.top = "0px";
     renderer2d.domElement.id = "renderer2d";
 
-    // renderer2d.domElement.ondblclick = (e) => {
-    //   console.log(e.target);
-    //   (e.target as HTMLElement).dispatchEvent(new MouseEvent(e.type));
-    // };
+    // document.body.appendChild(renderer.domElement);
+    // document.body.appendChild(renderer2d.domElement);
 
     return { renderer3d: renderer, renderer2d: renderer2d };
   }
@@ -71,7 +71,7 @@ export class CameraComponent extends Component<CameraComponentData> {
   static getDefaults(defaultPos?: Vector3): CameraComponentData {
     const cam = new PerspectiveCamera(
       55,
-      Store.getInstance().store.canvas.clientWidth / Store.getInstance().store.canvas.clientHeight,
+      Store.getInstance().state.canvas.clientWidth / Store.getInstance().state.canvas.clientHeight,
       0.001,
       1e12
     );
@@ -87,7 +87,7 @@ export class CameraComponent extends Component<CameraComponentData> {
 
     // TODO do something about this, like comon
     if (this.data.defaultPos) this.data.active.position.copy(this.data.defaultPos);
-    this.data.freeCtrl?.update();
+    // this.data.freeCtrl?.update();
 
     const renderer = this.dependendQueries[0].entities[0].getComponent(RenderComponent).data.renderer3d;
     this.data.freeCtrl = new OrbitControls(this.data.active, renderer.domElement);

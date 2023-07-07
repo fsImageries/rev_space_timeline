@@ -37,7 +37,8 @@ export function initCosmicMap(world: World) {
 
   initSuns(world);
   initLines(world);
-  initCommonEntities(world, new Vector3(0, 2118 * 0.5, 10175 * 0.5));
+  Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.5)
+  initCommonEntities(world, Store.getInstance().state.camPos);
   world.load();
   world.uiManager.infoPanel.init([], {name: "Cosmic Map", constellation: ""})
 }

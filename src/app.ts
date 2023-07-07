@@ -1,8 +1,5 @@
-import { SceneComponent } from "./baseclasses/CommonComponents";
-import { initSystem } from "./Levels/AutoMap";
+import { SceneComponent } from "./baseclasses/imports";
 import { World } from "./ecs/World";
-import { SystemsData } from "./dataInterfaces";
-import { initCosmicMap } from "./Levels/CosmicMap";
 
 
 window.onload = () => {
@@ -16,6 +13,8 @@ window.onload = () => {
   const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
     .data.scene;
   console.log(scene.children);
+  // const sys = world.sysManager.getSystem(CameraFocusSystem);
+  // if (sys) sys.enabled = true;
 
   // const max = 5;
   // let n = 0;

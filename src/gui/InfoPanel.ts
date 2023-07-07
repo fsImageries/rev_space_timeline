@@ -1,16 +1,15 @@
 import { BaseDataComponent } from "../baseclasses/imports";
 import { TextObject } from "../dataInterfaces";
 import { Entity } from "../ecs/Entity";
-import { LvlInfo } from "../ecs/LevelManager";
+import { InfoPanelCache, LvlInfo } from "../ecs/LevelManager";
 import { capitalize, formatTexts, getFirstYear, splitWord } from "../helpers/utils";
 import { UIManager } from "./UIManager";
 
-type TextsMap = { [key: string]: string };
+export type TextsMap = { [key: string]: string };
 
 export class InfoPanelManager {
   public main: HTMLDivElement;
   public timeline: HTMLDivElement;
-  public cache: TextObject[];
   public title: HTMLDivElement;
   public subtitle: HTMLDivElement;
   public subtext: HTMLDivElement;
@@ -18,8 +17,8 @@ export class InfoPanelManager {
 
   private map: TextsMap;
   private fullTxt: string;
+  private lvlInfo: LvlInfo;
   private _visible: boolean = false
-  private lvlInfo: LvlInfo
 
   constructor(
     public uiManager: UIManager
@@ -31,16 +30,24 @@ export class InfoPanelManager {
     this.subtext = document.querySelector("#infoPanelSubtextArea .subtitle") as HTMLDivElement
     this.menubtn = document.getElementById("infoPanelButton") as HTMLImageElement
 
-    this.cache = []
     this.map = {}
     this.fullTxt = ""
     this.lvlInfo = {} as LvlInfo
-    
 
     this.menubtn.onclick = () => {
       this.setSysTarget()
       this.visible = !this._visible
     }
+  }
+
+  public getCache() {
+    return { map: this.map, full: this.fullTxt, lvlInfo: this.lvlInfo }
+  }
+
+  public setCache(cache: InfoPanelCache) {
+    this.map = cache.map
+    this.fullTxt = cache.full
+    this.lvlInfo = cache.lvlInfo
   }
 
   public set visibility(value: boolean) {
@@ -51,7 +58,7 @@ export class InfoPanelManager {
     value ?
       this.main.classList.add("checked") :
       this.main.classList.remove("checked")
-    
+
     this.menuVisible = value
     this._visible = value
   }
@@ -64,7 +71,6 @@ export class InfoPanelManager {
   }
 
   public init(texts: TextObject[], lvlInfo: LvlInfo) {
-    this.cache = texts
     this.genTexts(texts)
     this.lvlInfo = lvlInfo
     this.map["sys"] = ""

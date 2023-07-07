@@ -130,16 +130,20 @@ export class CameraFocusSystem extends System {
 
     const ccomp = this.queries[1].entities[0].getComponent(CameraComponent);
 
+    if (Store.getInstance().state.camPos) {
+      ccomp.data.active.position.copy(Store.getInstance().state.camPos)
+    }
+
     for (const entity of this.queries[0].entities) {
-      //<- Tranform groups
       if (tar === entity.getComponent(BaseDataComponent).data.name.toLowerCase()) {
         entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(GLOBALS.WORLD_POS);
         const rad = entity.getComponent(RadiusComponent).data.drawRadius;
-        console.log(rad);
+        
         // TODO calculate view vector from object to light (nearest)
         ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -= rad * (entity.getComponent(SunTypeComponent) ? 14 : 4);
-        ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS);
+        ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS.clone());
         ccomp.data.freeCtrl?.update();
+        console.log(ccomp.data.freeCtrl)
       }
     }
     this.enabled = false;
@@ -151,6 +155,11 @@ export class FocusRaycasterSystem extends System {
     [operand("exist", MeshComponent), operand("exist", BaseDataComponent)],
     [operand("exist", CameraComponent)]
   ];
+
+  constructor(world: World) {
+    super(world);
+    // this.enabled = false;
+  }
 
   execute(): void {
     if (!this.queries) return;
@@ -187,6 +196,11 @@ export class SwitchRaycasterSystem extends System {
     [operand("exist", MeshComponent), operand("exist", BaseDataComponent)],
     [operand("exist", CameraComponent)]
   ];
+
+  constructor(world: World) {
+    super(world);
+    // this.enabled = false;
+  }
 
   execute(): void {
     if (!this.queries) return;

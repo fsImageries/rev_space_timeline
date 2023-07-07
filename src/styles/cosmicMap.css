@@ -1,4 +1,6 @@
-
+#cosmicTextArea  > a {
+    pointer-events: all;
+}
 
 #cosmicMapTItle {
     user-select: none;
@@ -12,7 +14,7 @@
     flex-direction: column;
     gap: 2vh;
     margin: 5%;
-    opacity: 0;
+    /* opacity: 0; */
     pointer-events: none;
     /* font-family: 'Open Sans', sans-serif; */
     /* transition: opacity 259ms ease-in-out; */
@@ -31,7 +33,6 @@
 }
 
 #cosmicMapTItle .textArea {
-    pointer-events: none;
     font-size: small;
     min-width: 40%;
     width: fit-content;

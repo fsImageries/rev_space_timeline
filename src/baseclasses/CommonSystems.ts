@@ -1,4 +1,4 @@
-import { Raycaster } from "three";
+import { Raycaster, Vector3 } from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { System } from "../ecs/System";
 import { World } from "../ecs/World";
@@ -24,7 +24,7 @@ import {
   UniformsComponent
 } from "./imports";
 import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./imports";
-import { mapLinear } from "three/src/math/MathUtils";
+import { clamp, mapLinear } from "three/src/math/MathUtils";
 import { Store } from "../ecs/Store";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
@@ -270,4 +270,32 @@ export class CSSMarkerSystem extends System {
       marker.style.opacity = dist < rad * 30 ? `${mapLinear(dist, rad * 2, rad * 30, 0, 1)}` : "1";
     }
   }
+}
+
+
+const ORIGIN = new Vector3(0,0,0)
+const MAX  = (50*Store.getInstance().store.LIGHTYEAR) * 1e-11
+const MIN  = (25*Store.getInstance().store.LIGHTYEAR) * 1e-11
+
+export class CosmicMapStartTextSystem extends System {
+  static queries = [
+    [operand("exist", CameraComponent)]
+  ];
+
+  execute(): void {
+    if (!this.queries) return;
+
+    const cam = this.queries[0].entities[0].getComponent(CameraComponent).data.active;
+    let dist = cam.position.distanceTo(ORIGIN);
+    dist = clamp(dist, MIN, MAX);
+    dist = mapLinear(dist, MIN, MAX, 0, 1);
+    const txt = document.getElementById("cosmicMapTItle")
+    if (!txt) return
+    textOpacity(txt, dist)
+  }
+}
+
+function textOpacity(el:HTMLElement, value: number) {
+  el.style.opacity = value.toString();
+  el.style.visibility = value <= 0 ? "hidden" : "visible";
 }

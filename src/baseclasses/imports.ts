@@ -59,6 +59,7 @@ import {
   FocusRaycasterSystem,
   SwitchRaycasterSystem,
   CSSMarkerSystem,
+  CosmicMapStartTextSystem,
   resizeRendererToDisplaySize
 } from "./CommonSystems";
 
@@ -117,5 +118,6 @@ export {
   FocusRaycasterSystem,
   SwitchRaycasterSystem,
   CSSMarkerSystem,
+  CosmicMapStartTextSystem,
   resizeRendererToDisplaySize
 };

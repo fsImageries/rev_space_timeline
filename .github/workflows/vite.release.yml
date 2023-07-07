@@ -1,5 +1,5 @@
 
-name: release prod
+name: release-prod
 
 on:
   push:

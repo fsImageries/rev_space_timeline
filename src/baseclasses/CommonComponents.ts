@@ -25,9 +25,9 @@ export interface RenderComponentData {
 export class RenderComponent extends Component<RenderComponentData> {
   static typeID = crypto.randomUUID();
   static getDefaults(): RenderComponentData {
-    const canvas = document.createElement("canvas")
-    canvas.id = "main"
-    Store.getInstance().state.canvas = canvas
+    const canvas = document.createElement("canvas");
+    canvas.id = "main";
+    Store.getInstance().state.canvas = canvas;
     const renderer = new WebGLRenderer({
       canvas: Store.getInstance().state.canvas,
       antialias: true,

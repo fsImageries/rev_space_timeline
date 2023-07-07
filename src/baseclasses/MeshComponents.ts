@@ -338,7 +338,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
 
   public init(world: World) {
     if (!this.dependendQueries) return;
-    const entity = this.dependendQueries[0].entities[0]
+    const entity = this.dependendQueries[0].entities[0];
     const tcomp = entity.getComponent(TransformGroupComponent);
     const bcomp = entity.getComponent(BaseDataComponent);
 
@@ -356,18 +356,18 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
     let timeoutID = 0;
     txtDiv.onclick = (e) => {
       if (e.detail > 1) {
-        clearTimeout(timeoutID)
-        return
+        clearTimeout(timeoutID);
+        return;
       }
-      e.stopImmediatePropagation()
-      e.preventDefault()
+      e.stopImmediatePropagation();
+      e.preventDefault();
       const actualClick = () => {
-        world.uiManager.infoPanel.setTarget(entity)
-        world.uiManager.infoPanel.visible = true
-      }
+        world.uiManager.infoPanel.setTarget(entity);
+        world.uiManager.infoPanel.visible = true;
+      };
 
-      timeoutID = setTimeout(actualClick, 150)
-    }
+      timeoutID = setTimeout(actualClick, 150);
+    };
 
     const f = (e: MouseEvent) => {
       e.stopImmediatePropagation();
@@ -386,7 +386,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       mesh: markerLabel,
       containerDiv,
       diamondDiv: markerDiv,
-      txtDiv,
+      txtDiv
     };
 
     if (entity.getComponent(ParticleRingTypeComponent)) {

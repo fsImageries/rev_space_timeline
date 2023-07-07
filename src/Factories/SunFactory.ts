@@ -6,11 +6,7 @@ import {
   RotGroupComponent,
   TransformGroupComponent
 } from "../baseclasses/MeshComponents";
-import {
-  SunTypeComponent,
-  UniformsComponent,
-  UniformsData
-} from "../baseclasses/imports";
+import { SunTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/imports";
 import { SunData } from "../dataInterfaces";
 import { Entity } from "../ecs/Entity";
 import { Store } from "../ecs/Store";
@@ -18,7 +14,7 @@ import GLOBALS from "../helpers/Constants";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
 
-export function buildSun(entity: Entity, data: SunData, marker=true) {
+export function buildSun(entity: Entity, data: SunData, marker = true) {
   const [mesh, transformGrp, rotGrp, uniforms] = buildMeshes(data);
 
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
@@ -28,21 +24,20 @@ export function buildSun(entity: Entity, data: SunData, marker=true) {
   // if (data.distanceToParent)
   //   entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
 
-  
   entity
-  .addComponent(UniformsComponent, uniforms)
-  .addComponent(MeshComponent, { mesh: mesh as Mesh })
-  .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
-  .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
-  // .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
-  // .addComponent(BaseDataComponent, {
+    .addComponent(UniformsComponent, uniforms)
+    .addComponent(MeshComponent, { mesh: mesh as Mesh })
+    .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
+    .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
+    // .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
+    // .addComponent(BaseDataComponent, {
     //   name: data.name,
     //   uuid: crypto.randomUUID() as string,
     //   texts: data.texts
     // } as BaseDataData)
     .addComponent(SunTypeComponent);
-    
-    initCelestialComponents(entity, data, marker)
+
+  initCelestialComponents(entity, data, marker);
 
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
 

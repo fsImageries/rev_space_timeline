@@ -4,7 +4,7 @@ const TITLE_REG = /(?<Front>^.*)(?<Back>[A-Z]\w.+)/;
 const NUMTITLE_REG = /(?<Front>[A-Za-z]+)?(?<Digits>[0-9*#+-]+)(?<Back>[A-Za-z]+)?/;
 
 export function getFirstYear(str?: string) {
-  return str?.match(/(\d+)\D/)?.[0]
+  return str?.match(/(\d+)\D/)?.[0];
 }
 
 export function capitalize(str: string) {
@@ -24,9 +24,9 @@ export function toTitle(str: string) {
   if (match[idx] == undefined) idx += 1;
   return `${match[idx].length == 1 ? match[idx] : capitalize(match[idx])} ${match[idx + 1]}`;
 
-//   return splitWord(str)
-//     .map((s) => capitalize(s))
-//     .join(" ");
+  //   return splitWord(str)
+  //     .map((s) => capitalize(s))
+  //     .join(" ");
 }
 
 export function formatTexts(texts: string[], join = true, infectName: boolean | string = false, NL_SEP = "<br>• ") {
@@ -35,7 +35,9 @@ export function formatTexts(texts: string[], join = true, infectName: boolean | 
     if (infectName) {
       line[0] = `${line[0]} <span class="year" style="font-size:.8rem;">(${infectName})</span>`;
     }
-    return `${i != 0 && !join ? "<br><br>" : ""}<span class="year">${line[0]}</span>${NL_SEP}${line.slice(1).join(NL_SEP)}`;
+    return `${i != 0 && !join ? "<br><br>" : ""}<span class="year">${line[0]}</span>${NL_SEP}${line
+      .slice(1)
+      .join(NL_SEP)}`;
   });
   return texts;
 }

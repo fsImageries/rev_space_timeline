@@ -30,13 +30,13 @@ export class Store {
       // canvas: document.querySelector("canvas#main") as HTMLCanvasElement,
       raycaster: new Raycaster(),
       raypointer: new Vector2(Infinity, Infinity),
-      focusTarget: "yellowstone",
+      focusTarget: "yellowstone"
     };
 
-    this.state = {...BASE}
+    this.state = { ...BASE };
   }
 
   public resetState() {
-    this.state = {...BASE}
+    this.state = { ...BASE };
   }
 }

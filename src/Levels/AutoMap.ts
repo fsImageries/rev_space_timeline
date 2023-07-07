@@ -51,7 +51,7 @@ export function initSystem(world: World, data: SystemData) {
 
   initCommonEntities(world);
   world.load();
-  world.uiManager.infoPanel.init(data.texts, {name: data.name, constellation: data.constellation})
+  world.uiManager.infoPanel.init(data.texts, { name: data.name, constellation: data.constellation });
 
   // const master = data.texts.find(d => d.all)
   // if (master) {

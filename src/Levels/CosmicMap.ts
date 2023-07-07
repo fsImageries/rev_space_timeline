@@ -37,15 +37,15 @@ export function initCosmicMap(world: World) {
 
   initSuns(world);
   initLines(world);
-  Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.5)
+  Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.5);
   initCommonEntities(world, Store.getInstance().state.camPos);
   world.load();
-  world.uiManager.infoPanel.init([], {name: "Cosmic Map", constellation: ""})
+  world.uiManager.infoPanel.init([], { name: "Cosmic Map", constellation: "" });
 }
 
 function initSuns(world: World) {
-  const buildSun2 = (e:Entity, d:SunData) => buildSun(e, d, false)
- 
+  const buildSun2 = (e: Entity, d: SunData) => buildSun(e, d, false);
+
   buildSun2(world.ecManager.createEntity(), {
     highTemp: 7100,
     lowTemp: 3100,

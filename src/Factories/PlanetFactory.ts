@@ -9,8 +9,11 @@ import {
   ShaderMaterial
 } from "three";
 import {
-  AtmoComponent, MeshComponent,
-  OrbitLineComponent, PlanetTypeComponent, RotGroupComponent,
+  AtmoComponent,
+  MeshComponent,
+  OrbitLineComponent,
+  PlanetTypeComponent,
+  RotGroupComponent,
   TransformGroupComponent
 } from "../baseclasses/imports";
 import { Entity } from "../ecs/Entity";
@@ -35,9 +38,9 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
     .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
     .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot)) // implement random start rot
     .addComponent(AtmoComponent, { mesh: atmo })
-    .addComponent(OrbitLineComponent, { mesh: orbit })
-    
-    initCelestialComponents(entity, data)
+    .addComponent(OrbitLineComponent, { mesh: orbit });
+
+  initCelestialComponents(entity, data);
 
   data.type === "planet" ? entity.addComponent(PlanetTypeComponent) : entity.addComponent(MoonTypeComponent);
 

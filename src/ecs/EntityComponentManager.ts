@@ -17,24 +17,24 @@ export class EntityComponentManager {
 
   public unmount() {
     for (const entity of this.entities) {
-      const rcomp = entity.getComponent(RenderComponent)
-      if (!rcomp) continue
-      document.body.removeChild(rcomp.data.renderer3d.domElement)
-      document.body.removeChild(rcomp.data.renderer2d.domElement)
+      const rcomp = entity.getComponent(RenderComponent);
+      if (!rcomp) continue;
+      document.body.removeChild(rcomp.data.renderer3d.domElement);
+      document.body.removeChild(rcomp.data.renderer2d.domElement);
     }
   }
 
   public mount() {
     for (const entity of this.entities) {
-      const rcomp = entity.getComponent(RenderComponent)
-      if (!rcomp) continue
-      document.body.appendChild(rcomp.data.renderer3d.domElement)
-      document.body.appendChild(rcomp.data.renderer2d.domElement)
+      const rcomp = entity.getComponent(RenderComponent);
+      if (!rcomp) continue;
+      document.body.appendChild(rcomp.data.renderer3d.domElement);
+      document.body.appendChild(rcomp.data.renderer2d.domElement);
     }
   }
 
-  public getEntityByBaseName(name:string) {
-    return this.entities.find(e => e.getComponent(BaseDataComponent)?.data.name === name)
+  public getEntityByBaseName(name: string) {
+    return this.entities.find((e) => e.getComponent(BaseDataComponent)?.data.name === name);
   }
 
   public createEntity() {

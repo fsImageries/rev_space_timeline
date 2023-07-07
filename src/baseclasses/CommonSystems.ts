@@ -131,14 +131,14 @@ export class CameraFocusSystem extends System {
     const ccomp = this.queries[1].entities[0].getComponent(CameraComponent);
 
     if (Store.getInstance().state.camPos) {
-      ccomp.data.active.position.copy(Store.getInstance().state.camPos)
+      ccomp.data.active.position.copy(Store.getInstance().state.camPos);
     }
 
     for (const entity of this.queries[0].entities) {
       if (tar === entity.getComponent(BaseDataComponent).data.name.toLowerCase()) {
         entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(GLOBALS.WORLD_POS);
         const rad = entity.getComponent(RadiusComponent).data.drawRadius;
-        
+
         // TODO calculate view vector from object to light (nearest)
         ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -= rad * (entity.getComponent(SunTypeComponent) ? 14 : 4);
         ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS.clone());
@@ -221,7 +221,7 @@ export class SwitchRaycasterSystem extends System {
 
       if (intersects.length > 0) {
         const base = entity.getComponent(BaseDataComponent);
-        this.world.lvlManager.openLevel(base.data.name)
+        this.world.lvlManager.openLevel(base.data.name);
       }
     }
     this.enabled = false;
@@ -264,7 +264,7 @@ export class CSSMarkerSystem extends System {
         const camDist = cam.position.distanceTo(GLOBALS.WORLD_POS);
         const maxd = dist2par * 100;
         container.style.opacity = camDist < maxd ? `${mapLinear(dist, maxd, 0, 0, 1)}` : "0";
-        container.style.visibility = container.style.opacity === "0" ? "hidden" : "visible"
+        container.style.visibility = container.style.opacity === "0" ? "hidden" : "visible";
       }
 
       marker.style.opacity = dist < rad * 30 ? `${mapLinear(dist, rad * 2, rad * 30, 0, 1)}` : "1";

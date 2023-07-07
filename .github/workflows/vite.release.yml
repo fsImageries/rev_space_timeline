@@ -33,9 +33,13 @@ jobs:
       - name: Test project
         run: npm run test
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true)
+      - name: Pushes to prod repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          source-directory: '.'
+          destination-github-username: 'fsImageries'
+          destination-repository-name: 'rev_space_timeline_prod'
+          target-branch: main

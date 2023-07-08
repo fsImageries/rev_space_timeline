@@ -36,7 +36,7 @@ import {
   CSSMarkerComponent,
   ParentComponent,
   ParentComponentData,
-  ParticleRingComponent
+  ParticleRingComponent,
 } from "./MeshComponents";
 
 import {
@@ -56,8 +56,7 @@ import {
   OrbitRotSystem,
   SunUniformsUpdateSystem,
   CameraFocusSystem,
-  FocusRaycasterSystem,
-  SwitchRaycasterSystem,
+  RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
   resizeRendererToDisplaySize
@@ -90,7 +89,7 @@ export {
   ObjectLineComponent,
   CSSMarkerComponent,
   ParentComponent,
-  ParticleRingComponent
+  ParticleRingComponent,
 };
 export type {
   MeshData,
@@ -115,8 +114,7 @@ export {
   OrbitRotSystem,
   SunUniformsUpdateSystem,
   CameraFocusSystem,
-  FocusRaycasterSystem,
-  SwitchRaycasterSystem,
+  RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
   resizeRendererToDisplaySize

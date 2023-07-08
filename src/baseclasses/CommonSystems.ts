@@ -1,4 +1,4 @@
-import { Raycaster, Vector3 } from "three";
+import { Camera, Raycaster, Vector3 } from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { System } from "../ecs/System";
 import { World } from "../ecs/World";
@@ -26,6 +26,7 @@ import {
 import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./imports";
 import { clamp, mapLinear } from "three/src/math/MathUtils";
 import { Store } from "../ecs/Store";
+import { Entity } from "../ecs/Entity";
 
 const requiredElapsed = 1000 / 60; // desired interval is 60fps
 export class RenderSystem extends System {
@@ -149,15 +150,18 @@ export class CameraFocusSystem extends System {
   }
 }
 
-export class FocusRaycasterSystem extends System {
+
+export class RaycasterSystem extends System {
   static queries = [
     [operand("exist", MeshComponent), operand("exist", BaseDataComponent)],
     [operand("exist", CameraComponent)]
   ];
 
+  public forceSwtich = false
+
   constructor(world: World) {
     super(world);
-    // this.enabled = false;
+    this.enabled = false;
   }
 
   execute(): void {
@@ -179,53 +183,36 @@ export class FocusRaycasterSystem extends System {
       }
 
       if (intersects.length > 0) {
-        const base = entity.getComponent(BaseDataComponent);
-        Store.getInstance().store.focusTarget = base.data.name;
-        const sys = this.world.sysManager.getSystem(CameraFocusSystem);
-        if (!sys) return;
-        sys.enabled = true;
+        react2intersect(entity, cam, this.world, this.forceSwtich)
+        this.forceSwtich = false
       }
     }
     this.enabled = false;
   }
 }
 
-export class SwitchRaycasterSystem extends System {
-  static queries = [
-    [operand("exist", MeshComponent), operand("exist", BaseDataComponent)],
-    [operand("exist", CameraComponent)]
-  ];
-
-  constructor(world: World) {
-    super(world);
-    // this.enabled = false;
+function react2intersect(entity: Entity, cam: Camera, world: World, forceSwtich = false) {
+  const base = entity.getComponent(BaseDataComponent);
+  const rcomp = entity.getComponent(RadiusComponent)
+  const tcomp = entity.getComponent(TransformGroupComponent)
+  if (forceSwtich) {
+    world.lvlManager.openLevel(base.data.name);
+    return
   }
 
-  execute(): void {
-    if (!this.queries) return;
-
-    const cam = this.queries[1].entities[0].getComponent(CameraComponent).data.active;
-    const raycaster = Store.getInstance().store.raycaster as Raycaster;
-    raycaster.setFromCamera(Store.getInstance().store.raypointer, cam);
-
-    for (const entity of this.queries[0].entities) {
-      const mesh = entity.getComponent(MeshComponent).data.mesh;
-      let intersects = raycaster.intersectObject(mesh);
-      if (intersects.length === 0) {
-        // TODO build general text component, check for that and get texts if necessary
-        const hasTxt = entity.getComponent(CosmicMapSunTextComponent);
-        if (hasTxt) {
-          intersects = raycaster.intersectObjects([hasTxt.data.title, hasTxt.data.texts]);
-        }
-      }
-
-      if (intersects.length > 0) {
-        const base = entity.getComponent(BaseDataComponent);
-        this.world.lvlManager.openLevel(base.data.name);
-      }
+  if (rcomp && world.lvlManager.currentLvl === world.lvlManager.levelsNames[0]) {
+    tcomp.data.group.getWorldPosition(GLOBALS.WORLD_POS)
+    const dist = cam.position.distanceTo(GLOBALS.WORLD_POS)
+    if (dist < rcomp.data.drawRadius * 20) {
+      world.lvlManager.openLevel(base.data.name);
+      return
     }
-    this.enabled = false;
   }
+
+  Store.getInstance().store.focusTarget = base.data.name;
+  const sys = world.sysManager.getSystem(CameraFocusSystem);
+  if (!sys) return;
+  sys.enabled = true;
 }
 
 export class CSSMarkerSystem extends System {

@@ -7,7 +7,6 @@ import { System } from "./System";
 import { World } from "./World";
 import { Query } from "./types";
 
-import { CameraFocusSystem } from "../baseclasses/imports";
 import objectData from "../data/object_data.yaml";
 import { TextsMap } from "../gui/InfoPanel";
 const DATA = objectData as SystemsData;
@@ -106,8 +105,6 @@ export class LevelManager {
     }
 
     this.world.ecManager.mount();
-    const sys = this.world.sysManager.getSystem(CameraFocusSystem);
-    if (sys) sys.enabled = true;
     this.world.enabled = true;
   }
 }

@@ -26,7 +26,7 @@ export class World {
   }
 
   private initListeners() {
-    window.ondblclick = (e: MouseEvent) => {
+    const action = (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
       e.stopImmediatePropagation();
       this.updateMousePointer(e);
@@ -35,17 +35,21 @@ export class World {
       if (!sys) return;
       sys.enabled = true;
     };
+    
+    window.ondblclick = action
 
+    let start = -1;
+    let lastTEvt:TouchEvent
     window.ontouchstart = (e) => {
-      
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      this.updateMousePointer(e);
-
-      const sys = this.sysManager.getSystem(RaycasterSystem);
-      if (!sys) return;
-      sys.enabled = true;
+      start = performance.now()
+      lastTEvt = e
     };
+
+    window.ontouchend = (e) => {
+      const now = performance.now()
+      if (now - start > 300) return
+      action(lastTEvt)
+    }
 
     window.onclick = (e) => {
       this.updateMousePointer(e);

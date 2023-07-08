@@ -53,6 +53,11 @@ export class World {
       if (!this.uiManager.infoPanel.main.contains(tar) && !(tar.id === "infoPanelButton"))
         this.uiManager.infoPanel.visible = false;
     };
+
+    window.onpopstate = (e) => {
+      console.log(e)
+      this.lvlManager.openLevel(e.state.name, true);
+    }
   }
 
   private updateMousePointer(e: MouseEvent) {

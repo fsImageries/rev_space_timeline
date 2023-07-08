@@ -61,7 +61,7 @@ export class LevelManager {
     return Object.keys(levels);
   }
 
-  public openLevel(lvlName: string) {
+  public openLevel(lvlName: string, back=false) {
     let init = undefined;
     if (!(lvlName in this.levelMap)) {
       if (!(lvlName in levels)) {
@@ -72,6 +72,10 @@ export class LevelManager {
     }
     this._openLevel(lvlName, init);
     this._currentLvl = lvlName;
+
+    if (!back)
+      console.log("Hallo")
+      history.pushState({name:lvlName}, "", null)
   }
 
   public _openLevel(lvlName: string, init?: (world: World) => void) {

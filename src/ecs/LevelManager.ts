@@ -81,6 +81,12 @@ export class LevelManager {
   public _openLevel(lvlName: string, init?: (world: World) => void) {
     this.world.enabled = false;
 
+    if (this.currentLvl === this.levelsNames[0]) {
+      // should be build a level class to factor mount/unmounting actions?
+      const title = document.getElementById("cosmicMapTItle")
+      if (title) title.style.visibility = "hidden"
+    }
+
     this.world.ecManager.unmount();
     if (!(lvlName in this.levelMap)) {
       this.world.queryManager.sysQueries = {};

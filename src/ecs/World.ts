@@ -35,21 +35,21 @@ export class World {
       if (!sys) return;
       sys.enabled = true;
     };
-    
-    window.ondblclick = action
+
+    window.ondblclick = action;
 
     let start = -1;
-    let lastTEvt:TouchEvent
+    let lastTEvt: TouchEvent;
     window.ontouchstart = (e) => {
-      start = performance.now()
-      lastTEvt = e
+      start = performance.now();
+      lastTEvt = e;
     };
 
     window.ontouchend = () => {
-      const now = performance.now()
-      if (now - start > 300) return
-      action(lastTEvt)
-    }
+      const now = performance.now();
+      if (now - start > 300) return;
+      action(lastTEvt);
+    };
 
     window.onclick = (e) => {
       this.updateMousePointer(e);

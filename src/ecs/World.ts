@@ -45,7 +45,7 @@ export class World {
       lastTEvt = e
     };
 
-    window.ontouchend = (e) => {
+    window.ontouchend = () => {
       const now = performance.now()
       if (now - start > 300) return
       action(lastTEvt)

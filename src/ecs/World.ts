@@ -43,7 +43,7 @@ export class World {
           const sys = this.sysManager.getSystem(RaycasterSystem) as RaycasterSystem;
           if (!sys) return;
           sys.enabled = true;
-          sys.forceSwtich = true
+          sys.forceSwtich = true;
         } else {
           this.lvlManager.openLevel("Cosmic Map");
         }
@@ -55,9 +55,9 @@ export class World {
     };
 
     window.onpopstate = (e) => {
-      console.log(e)
+      console.log(e);
       this.lvlManager.openLevel(e.state.name, true);
-    }
+    };
   }
 
   private updateMousePointer(e: MouseEvent) {

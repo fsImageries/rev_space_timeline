@@ -61,7 +61,7 @@ export class LevelManager {
     return Object.keys(levels);
   }
 
-  public openLevel(lvlName: string, back=false) {
+  public openLevel(lvlName: string, back = false) {
     let init = undefined;
     if (!(lvlName in this.levelMap)) {
       if (!(lvlName in levels)) {
@@ -73,9 +73,8 @@ export class LevelManager {
     this._openLevel(lvlName, init);
     this._currentLvl = lvlName;
 
-    if (!back)
-      console.log("Hallo")
-      history.pushState({name:lvlName}, "", null)
+    if (!back) console.log("Hallo");
+    history.pushState({ name: lvlName }, "", null);
   }
 
   public _openLevel(lvlName: string, init?: (world: World) => void) {
@@ -83,8 +82,8 @@ export class LevelManager {
 
     if (this.currentLvl === this.levelsNames[0]) {
       // should be build a level class to factor mount/unmounting actions?
-      const title = document.getElementById("cosmicMapTItle")
-      if (title) title.style.visibility = "hidden"
+      const title = document.getElementById("cosmicMapTItle");
+      if (title) title.style.visibility = "hidden";
     }
 
     this.world.ecManager.unmount();

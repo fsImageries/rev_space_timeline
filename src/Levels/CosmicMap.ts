@@ -4,7 +4,7 @@ import {
   SunUniformsUpdateSystem,
   CameraFocusSystem,
   RaycasterSystem,
-  CosmicMapStartTextSystem,
+  CosmicMapStartTextSystem
 } from "../baseclasses/imports";
 import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
@@ -57,8 +57,7 @@ function initSuns(world: World) {
     radius: 3000,
     disableLight: true,
     texts: ["Earth", "- Moon", "Mars", "- Phobos", "Europa"]
-  })
-  .addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults())
+  }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults());
   // .addComponent(CSSOpenMarkerComponent);
 
   buildSun2(world.ecManager.createEntity(), {

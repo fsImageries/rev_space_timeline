@@ -150,14 +150,13 @@ export class CameraFocusSystem extends System {
   }
 }
 
-
 export class RaycasterSystem extends System {
   static queries = [
     [operand("exist", MeshComponent), operand("exist", BaseDataComponent)],
     [operand("exist", CameraComponent)]
   ];
 
-  public forceSwtich = false
+  public forceSwtich = false;
 
   constructor(world: World) {
     super(world);
@@ -183,8 +182,8 @@ export class RaycasterSystem extends System {
       }
 
       if (intersects.length > 0) {
-        react2intersect(entity, cam, this.world, this.forceSwtich)
-        this.forceSwtich = false
+        react2intersect(entity, cam, this.world, this.forceSwtich);
+        this.forceSwtich = false;
       }
     }
     this.enabled = false;
@@ -193,19 +192,19 @@ export class RaycasterSystem extends System {
 
 function react2intersect(entity: Entity, cam: Camera, world: World, forceSwtich = false) {
   const base = entity.getComponent(BaseDataComponent);
-  const rcomp = entity.getComponent(RadiusComponent)
-  const tcomp = entity.getComponent(TransformGroupComponent)
+  const rcomp = entity.getComponent(RadiusComponent);
+  const tcomp = entity.getComponent(TransformGroupComponent);
   if (forceSwtich) {
     world.lvlManager.openLevel(base.data.name);
-    return
+    return;
   }
 
   if (rcomp && world.lvlManager.currentLvl === world.lvlManager.levelsNames[0]) {
-    tcomp.data.group.getWorldPosition(GLOBALS.WORLD_POS)
-    const dist = cam.position.distanceTo(GLOBALS.WORLD_POS)
+    tcomp.data.group.getWorldPosition(GLOBALS.WORLD_POS);
+    const dist = cam.position.distanceTo(GLOBALS.WORLD_POS);
     if (dist < rcomp.data.drawRadius * 20) {
       world.lvlManager.openLevel(base.data.name);
-      return
+      return;
     }
   }
 

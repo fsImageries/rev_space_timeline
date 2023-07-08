@@ -37,7 +37,6 @@ export class World {
     };
 
     window.ontouchstart = (e) => {
-      
       e.preventDefault();
       e.stopImmediatePropagation();
       this.updateMousePointer(e);
@@ -72,10 +71,8 @@ export class World {
   }
 
   private updateMousePointer(e: MouseEvent | TouchEvent) {
-    const [clientX, clientY] = 
-      e instanceof MouseEvent ? 
-      [e.clientX, e.clientY] :
-      [e.touches[0].clientX, e.touches[0].clientY]
+    const [clientX, clientY] =
+      e instanceof MouseEvent ? [e.clientX, e.clientY] : [e.touches[0].clientX, e.touches[0].clientY];
 
     const s = Store.getInstance();
     s.store.raypointer.x = (clientX / window.innerWidth) * 2 - 1;

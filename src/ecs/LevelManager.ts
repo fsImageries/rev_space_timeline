@@ -7,7 +7,6 @@ import { System } from "./System";
 import { World } from "./World";
 import { Query } from "./types";
 
-import { CameraFocusSystem } from "../baseclasses/imports";
 import objectData from "../data/object_data.yaml";
 import { TextsMap } from "../gui/InfoPanel";
 const DATA = objectData as SystemsData;
@@ -62,7 +61,7 @@ export class LevelManager {
     return Object.keys(levels);
   }
 
-  public openLevel(lvlName: string) {
+  public openLevel(lvlName: string, back=false) {
     let init = undefined;
     if (!(lvlName in this.levelMap)) {
       if (!(lvlName in levels)) {
@@ -73,10 +72,20 @@ export class LevelManager {
     }
     this._openLevel(lvlName, init);
     this._currentLvl = lvlName;
+
+    if (!back)
+      console.log("Hallo")
+      history.pushState({name:lvlName}, "", null)
   }
 
   public _openLevel(lvlName: string, init?: (world: World) => void) {
     this.world.enabled = false;
+
+    if (this.currentLvl === this.levelsNames[0]) {
+      // should be build a level class to factor mount/unmounting actions?
+      const title = document.getElementById("cosmicMapTItle")
+      if (title) title.style.visibility = "hidden"
+    }
 
     this.world.ecManager.unmount();
     if (!(lvlName in this.levelMap)) {
@@ -106,8 +115,6 @@ export class LevelManager {
     }
 
     this.world.ecManager.mount();
-    const sys = this.world.sysManager.getSystem(CameraFocusSystem);
-    if (sys) sys.enabled = true;
     this.world.enabled = true;
   }
 }

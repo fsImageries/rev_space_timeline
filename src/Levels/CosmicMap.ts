@@ -3,9 +3,8 @@ import {
   AxisRotSystem,
   SunUniformsUpdateSystem,
   CameraFocusSystem,
-  FocusRaycasterSystem,
-  SwitchRaycasterSystem,
-  CosmicMapStartTextSystem
+  RaycasterSystem,
+  CosmicMapStartTextSystem,
 } from "../baseclasses/imports";
 import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
@@ -33,8 +32,7 @@ export function initCosmicMap(world: World) {
     .registerSystem(AxisRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(FocusRaycasterSystem)
-    .registerSystem(SwitchRaycasterSystem)
+    .registerSystem(RaycasterSystem)
     .registerSystem(CosmicMapStartTextSystem);
 
   initSuns(world);
@@ -43,6 +41,9 @@ export function initCosmicMap(world: World) {
   initCommonEntities(world, Store.getInstance().state.camPos);
   world.load();
   world.uiManager.infoPanel.init([], { name: "Cosmic Map", constellation: "" });
+
+  const sys = world.sysManager.getSystem(CameraFocusSystem);
+  if (sys) sys.enabled = true;
 }
 
 function initSuns(world: World) {
@@ -56,7 +57,9 @@ function initSuns(world: World) {
     radius: 3000,
     disableLight: true,
     texts: ["Earth", "- Moon", "Mars", "- Phobos", "Europa"]
-  }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults());
+  })
+  .addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults())
+  // .addComponent(CSSOpenMarkerComponent);
 
   buildSun2(world.ecManager.createEntity(), {
     highTemp: 5500,

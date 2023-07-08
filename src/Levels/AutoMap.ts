@@ -6,7 +6,7 @@ import {
   AxisRotSystem,
   CSSMarkerSystem,
   CameraFocusSystem,
-  FocusRaycasterSystem,
+  RaycasterSystem,
   OrbitRotSystem,
   RenderSystem,
   SunUniformsUpdateSystem
@@ -28,7 +28,7 @@ export function initSystem(world: World, data: SystemData) {
     .registerSystem(OrbitRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
     .registerSystem(CameraFocusSystem)
-    .registerSystem(FocusRaycasterSystem)
+    .registerSystem(RaycasterSystem)
     .registerSystem(CSSMarkerSystem);
 
   for (const d of data.objects) {

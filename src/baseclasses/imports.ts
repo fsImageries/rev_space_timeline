@@ -119,5 +119,5 @@ export {
   RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
-  InfoPanelCameraCoordSystem,
+  InfoPanelCameraCoordSystem
 };

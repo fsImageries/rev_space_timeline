@@ -16,7 +16,7 @@ export class InfoPanelManager {
   public subtext: HTMLDivElement;
   public menubtn: HTMLImageElement;
 
-  private _coords: [HTMLElement, HTMLElement, HTMLElement]
+  private _coords: [HTMLElement, HTMLElement, HTMLElement];
 
   private map: TextsMap;
   private fullTxt: string;
@@ -30,15 +30,15 @@ export class InfoPanelManager {
     this.subtitle = document.querySelector("#infoPanelTitleArea .subtitle") as HTMLDivElement;
     this.subtext = document.querySelector("#infoPanelSubtextArea .subtitle") as HTMLDivElement;
     this.menubtn = document.getElementById("infoPanelButton") as HTMLImageElement;
-    // if (!(this.main && this.timeline && this.title && this.subtitle && this.subtext && this.menubtn)) 
+    // if (!(this.main && this.timeline && this.title && this.subtitle && this.subtext && this.menubtn))
     //   throw new Error("Can't find info panel html elements")
 
-    const x = document.querySelector("#infoPanelFooter .x .digit") as HTMLElement
-    const y = document.querySelector("#infoPanelFooter .y .digit") as HTMLElement
-    const z = document.querySelector("#infoPanelFooter .z .digit") as HTMLElement
+    const x = document.querySelector("#infoPanelFooter .x .digit") as HTMLElement;
+    const y = document.querySelector("#infoPanelFooter .y .digit") as HTMLElement;
+    const z = document.querySelector("#infoPanelFooter .z .digit") as HTMLElement;
     // TODO need to implement disabling of ui in testing
     // if (!(x && y && z)) throw new Error("Can't find coordinate html elements")
-    this._coords = [x,y,z]
+    this._coords = [x, y, z];
 
     this.map = {};
     this.fullTxt = "";
@@ -72,13 +72,13 @@ export class InfoPanelManager {
   }
 
   public get visible() {
-    return this._visible
+    return this._visible;
   }
 
-  public set coords(vec:Vector3) {
-    this._coords[0].innerText = vec.x.toExponential(4)
-    this._coords[1].innerText = vec.y.toExponential(4)
-    this._coords[2].innerText = vec.z.toExponential(4)
+  public set coords(vec: Vector3) {
+    this._coords[0].innerText = vec.x.toExponential(4);
+    this._coords[1].innerText = vec.y.toExponential(4);
+    this._coords[2].innerText = vec.z.toExponential(4);
   }
 
   public set menuVisible(value: boolean) {

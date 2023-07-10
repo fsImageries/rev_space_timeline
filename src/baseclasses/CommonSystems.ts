@@ -290,6 +290,6 @@ export class InfoPanelCameraCoordSystem extends System {
     if (!this.queries || !this.world.uiManager.infoPanel.visible) return;
 
     const cam = this.queries[0].entities[0].getComponent(CameraComponent).data.active;
-    this.world.uiManager.infoPanel.coords = cam.position
+    this.world.uiManager.infoPanel.coords = cam.position;
   }
 }

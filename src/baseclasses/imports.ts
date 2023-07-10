@@ -51,6 +51,7 @@ import {
 } from "./CelestialComponents";
 
 import {
+  resizeRendererToDisplaySize,
   RenderSystem,
   AxisRotSystem,
   OrbitRotSystem,
@@ -59,7 +60,7 @@ import {
   RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
-  resizeRendererToDisplaySize
+  InfoPanelCameraCoordSystem
 } from "./CommonSystems";
 
 // Common Components
@@ -109,6 +110,7 @@ export type { RotData, DistanceToParentData, RadiusData };
 
 // Systems
 export {
+  resizeRendererToDisplaySize,
   RenderSystem,
   AxisRotSystem,
   OrbitRotSystem,
@@ -117,5 +119,5 @@ export {
   RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
-  resizeRendererToDisplaySize
+  InfoPanelCameraCoordSystem,
 };

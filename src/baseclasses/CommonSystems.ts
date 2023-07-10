@@ -282,3 +282,14 @@ function textOpacity(el: HTMLElement, value: number) {
   el.style.opacity = value.toString();
   el.style.visibility = value <= 0 ? "hidden" : "visible";
 }
+
+export class InfoPanelCameraCoordSystem extends System {
+  static queries = [[operand("exist", CameraComponent)]];
+
+  execute(): void {
+    if (!this.queries || !this.world.uiManager.infoPanel.visible) return;
+
+    const cam = this.queries[0].entities[0].getComponent(CameraComponent).data.active;
+    this.world.uiManager.infoPanel.coords = cam.position
+  }
+}

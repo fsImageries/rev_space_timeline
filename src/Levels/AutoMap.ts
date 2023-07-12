@@ -32,9 +32,7 @@ export function initSystem(world: World, data: SystemData) {
     .registerSystem(RaycasterSystem)
     .registerSystem(CSSMarkerSystem);
 
-
   for (const d of data.objects) {
-
     if (d.type === "sun") {
       buildSun(world.ecManager.createEntity(), d as SunData);
     }
@@ -43,7 +41,7 @@ export function initSystem(world: World, data: SystemData) {
       d.draw = {
         ...d.draw,
         initRot: randFloat(-Math.PI, Math.PI)
-      }
+      };
       buildPlanet(world.ecManager.createEntity(), d);
     }
 

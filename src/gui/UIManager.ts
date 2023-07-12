@@ -8,6 +8,6 @@ export class UIManager {
 
   constructor(public world: World) {
     this.infoPanel = new InfoPanelManager(this);
-    this.progress = new ProgressBar()
+    this.progress = new ProgressBar();
   }
 }

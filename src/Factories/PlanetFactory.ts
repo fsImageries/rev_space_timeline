@@ -26,7 +26,7 @@ import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
 import { buildOrbit } from "./OrbitFactory";
 
-export function buildPlanet(entity: Entity, data: SystemObjectData) {  
+export function buildPlanet(entity: Entity, data: SystemObjectData) {
   const [mesh, atmo, transformGrp, rotGrp] = buildMeshes(data);
   const orbit = buildOrbit(data.draw as DrawData);
 

@@ -77,11 +77,11 @@ export class InfoPanelManager {
   }
 
   public set coords(vec: Vector3) {
-    const [x,y,z] = [
-      vec.x * Store.getInstance().state.DISTANCE_SCALE, 
-      vec.y * Store.getInstance().state.DISTANCE_SCALE, 
+    const [x, y, z] = [
+      vec.x * Store.getInstance().state.DISTANCE_SCALE,
+      vec.y * Store.getInstance().state.DISTANCE_SCALE,
       vec.z * Store.getInstance().state.DISTANCE_SCALE
-    ]
+    ];
 
     this._coords[0].innerText = x.toExponential(4);
     this._coords[1].innerText = y.toExponential(4);

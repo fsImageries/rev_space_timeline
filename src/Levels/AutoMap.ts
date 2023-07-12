@@ -23,7 +23,7 @@ const planetCheck = ["moon", "planet"];
 
 export function initSystem(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}`);
-  
+
   Store.getInstance().state.DISTANCE_SCALE = 3e-8;
   Store.getInstance().state.SIZE_SCALE = 1e-5;
 
@@ -37,9 +37,9 @@ export function initSystem(world: World, data: SystemData) {
     .registerSystem(RaycasterSystem)
     .registerSystem(CSSMarkerSystem)
     .registerSystem(InfoPanelCameraCoordSystem);
-    GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_systems`);
+  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_systems`);
 
-    GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_entities`);
+  GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_entities`);
   for (const d of data.objects) {
     if (d.type === "sun") {
       buildSun(world.ecManager.createEntity(), d as SunData);

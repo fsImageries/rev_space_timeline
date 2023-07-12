@@ -75,17 +75,17 @@ export class World {
     };
 
     GLOBALS.LOAD_MANAGER.onStart = () => {
-      this.enabled = false
-      this.uiManager.progress.visible = true
+      this.enabled = false;
+      this.uiManager.progress.visible = true;
       // progress.visible = true;
-    }
+    };
 
     GLOBALS.LOAD_MANAGER.onLoad = () => {
       this.uiManager.progress.value = 0;
-      this.uiManager.progress.visible = false
-      this.enabled = true
+      this.uiManager.progress.visible = false;
+      this.enabled = true;
     };
-    
+
     GLOBALS.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {
       const val = (itemsLoaded / itemsTotal) * 100;
       console.debug(url, " ", val);

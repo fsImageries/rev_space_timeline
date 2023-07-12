@@ -5,6 +5,7 @@ import { Entity } from "../ecs/Entity";
 import { InfoPanelCache, LvlInfo } from "../ecs/LevelManager";
 import { capitalize, formatTexts, getFirstYear, splitWord } from "../helpers/utils";
 import { UIManager } from "./UIManager";
+import { Store } from "../ecs/Store";
 
 export type TextsMap = { [key: string]: string };
 
@@ -76,9 +77,15 @@ export class InfoPanelManager {
   }
 
   public set coords(vec: Vector3) {
-    this._coords[0].innerText = vec.x.toExponential(4);
-    this._coords[1].innerText = vec.y.toExponential(4);
-    this._coords[2].innerText = vec.z.toExponential(4);
+    const [x,y,z] = [
+      vec.x * Store.getInstance().state.DISTANCE_SCALE, 
+      vec.y * Store.getInstance().state.DISTANCE_SCALE, 
+      vec.z * Store.getInstance().state.DISTANCE_SCALE
+    ]
+
+    this._coords[0].innerText = x.toExponential(4);
+    this._coords[1].innerText = y.toExponential(4);
+    this._coords[2].innerText = z.toExponential(4);
   }
 
   public set menuVisible(value: boolean) {

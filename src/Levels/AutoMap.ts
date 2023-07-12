@@ -1,3 +1,4 @@
+import { randFloat } from "three/src/math/MathUtils";
 import { buildOortCloud } from "../Factories/OortFactory";
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
@@ -31,12 +32,18 @@ export function initSystem(world: World, data: SystemData) {
     .registerSystem(RaycasterSystem)
     .registerSystem(CSSMarkerSystem);
 
+
   for (const d of data.objects) {
+
     if (d.type === "sun") {
       buildSun(world.ecManager.createEntity(), d as SunData);
     }
 
     if (planetCheck.includes(d.type as string)) {
+      d.draw = {
+        ...d.draw,
+        initRot: randFloat(-Math.PI, Math.PI)
+      }
       buildPlanet(world.ecManager.createEntity(), d);
     }
 
@@ -52,13 +59,6 @@ export function initSystem(world: World, data: SystemData) {
   initCommonEntities(world);
   world.load();
   world.uiManager.infoPanel.init(data.texts, { name: data.name, constellation: data.constellation });
-
-  // const master = data.texts.find(d => d.all)
-  // if (master) {
-  //   const entity = world.ecManager.getEntityByBaseName(master.name)
-  //   if (entity) world.uiManager.infoPanel.setTarget(entity, "tab1")
-  //   world.uiManager.infoPanel.setConstellation(data.constellation)
-  // }
 
   if (data.startTarget) {
     Store.getInstance().store.focusTarget = data.startTarget;

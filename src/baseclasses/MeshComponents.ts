@@ -224,7 +224,6 @@ export class CosmicMapSunTextComponent extends Component<TextData> {
     const scene = this.dependendQueries[1].entities[0].getComponent(SceneComponent).data.scene;
     scene.add(this.data.title);
     scene.add(this.data.texts);
-    // console.log("Hallo")
   }
 }
 
@@ -437,11 +436,11 @@ export class ParentComponent extends Component<ParentComponentData> {
 
     const rgrp = self.getComponent(RotGroupComponent).data.group;
     const ptgrp = parent.getComponent(TransformGroupComponent).data.group;
-    const prgrp = parent.getComponent(RotGroupComponent).data.group;
+    // const prgrp = parent.getComponent(RotGroupComponent).data.group;
 
-    ptgrp.getWorldPosition(GLOBALS.WORLD_POS);
-    rgrp.position.add(GLOBALS.WORLD_POS);
-    prgrp.add(rgrp);
+    // ptgrp.getWorldPosition(GLOBALS.WORLD_POS);
+    // rgrp.position.add(GLOBALS.WORLD_POS);
+    ptgrp.add(rgrp);
   }
 }
 

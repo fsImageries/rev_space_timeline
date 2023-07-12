@@ -73,7 +73,6 @@ export class LevelManager {
     this._openLevel(lvlName, init);
     this._currentLvl = lvlName;
 
-    if (!back) console.log("Hallo");
     history.pushState({ name: lvlName }, "", null);
   }
 

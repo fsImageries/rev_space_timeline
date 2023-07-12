@@ -70,7 +70,7 @@ export class World {
     };
 
     window.onpopstate = (e) => {
-      this.lvlManager.openLevel(e.state.name, true);
+      this.lvlManager.openLevel(e.state.name);
     };
   }
 

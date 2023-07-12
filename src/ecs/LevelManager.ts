@@ -61,7 +61,7 @@ export class LevelManager {
     return Object.keys(levels);
   }
 
-  public openLevel(lvlName: string, back = false) {
+  public openLevel(lvlName: string) {
     let init = undefined;
     if (!(lvlName in this.levelMap)) {
       if (!(lvlName in levels)) {

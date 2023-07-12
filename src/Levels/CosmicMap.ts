@@ -23,8 +23,10 @@ import { initCommonEntities } from "./Common";
 import { Store } from "../ecs/Store";
 import { SunData } from "../dataInterfaces";
 import { Entity } from "../ecs/Entity";
+import GLOBALS from "../helpers/Constants";
 
 export function initCosmicMap(world: World) {
+  GLOBALS.LOAD_MANAGER.itemStart("://CosmicMap")
   Store.getInstance().state.DISTANCE_SCALE = 1e-11;
   Store.getInstance().state.SIZE_SCALE = 1.5e-3;
 
@@ -37,15 +39,21 @@ export function initCosmicMap(world: World) {
     .registerSystem(CosmicMapStartTextSystem)
     .registerSystem(InfoPanelCameraCoordSystem);
 
+  GLOBALS.LOAD_MANAGER.itemStart("://CosmicMap_suns")
   initSuns(world);
+  GLOBALS.LOAD_MANAGER.itemEnd("://CosmicMap_suns")
+
+  GLOBALS.LOAD_MANAGER.itemStart("://CosmicMap_world")
   initLines(world);
   Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.5);
   initCommonEntities(world, Store.getInstance().state.camPos);
   world.load();
   world.uiManager.infoPanel.init([], { name: "Cosmic Map", constellation: "" });
+  GLOBALS.LOAD_MANAGER.itemEnd("://CosmicMap_world")
 
   const sys = world.sysManager.getSystem(CameraFocusSystem);
   if (sys) sys.enabled = true;
+  GLOBALS.LOAD_MANAGER.itemEnd("://CosmicMap")
 }
 
 function initSuns(world: World) {
@@ -60,7 +68,6 @@ function initSuns(world: World) {
     disableLight: true,
     texts: ["Earth", "- Moon", "Mars", "- Phobos", "Europa"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults());
-  // .addComponent(CSSOpenMarkerComponent);
 
   buildSun2(world.ecManager.createEntity(), {
     highTemp: 5500,

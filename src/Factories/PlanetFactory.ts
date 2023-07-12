@@ -26,9 +26,7 @@ import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
 import { buildOrbit } from "./OrbitFactory";
 
-export function buildPlanet(entity: Entity, data: SystemObjectData) {
-  GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_components`);
-
+export function buildPlanet(entity: Entity, data: SystemObjectData) {  
   const [mesh, atmo, transformGrp, rotGrp] = buildMeshes(data);
   const orbit = buildOrbit(data.draw as DrawData);
 
@@ -44,14 +42,10 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
 
   data.type === "planet" ? entity.addComponent(PlanetTypeComponent) : entity.addComponent(MoonTypeComponent);
 
-  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_components`);
-
   return entity;
 }
 
 function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group] {
-  GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_meshes`);
-
   const albedo = GLOBALS.TEX_LOAD(data.draw?.albedoPath as string);
   albedo.magFilter = NearestFilter;
 
@@ -95,6 +89,5 @@ function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group] {
   const rotGrp = new Group();
   rotGrp.name = `${data.name}_rotGrp`;
 
-  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_meshes`);
   return [mesh, atmo, transformGrp, rotGrp];
 }

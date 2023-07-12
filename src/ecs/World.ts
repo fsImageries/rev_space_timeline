@@ -1,5 +1,6 @@
 import { RaycasterSystem } from "../baseclasses/imports";
 import { UIManager } from "../gui/UIManager";
+import GLOBALS from "../helpers/Constants";
 import { EntityComponentManager } from "./EntityComponentManager";
 import { LevelManager } from "./LevelManager";
 import { QueryManager } from "./QueryManager";
@@ -71,6 +72,24 @@ export class World {
 
     window.onpopstate = (e) => {
       this.lvlManager.openLevel(e.state.name);
+    };
+
+    GLOBALS.LOAD_MANAGER.onStart = () => {
+      this.enabled = false
+      this.uiManager.progress.visible = true
+      // progress.visible = true;
+    }
+
+    GLOBALS.LOAD_MANAGER.onLoad = () => {
+      this.uiManager.progress.value = 0;
+      this.uiManager.progress.visible = false
+      this.enabled = true
+    };
+    
+    GLOBALS.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {
+      const val = (itemsLoaded / itemsTotal) * 100;
+      console.debug(url, " ", val);
+      this.uiManager.progress.value = val;
     };
   }
 

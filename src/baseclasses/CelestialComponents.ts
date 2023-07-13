@@ -1,7 +1,7 @@
 import { Component } from "../ecs/Component";
 import { Store } from "../ecs/Store";
 import { operand } from "../ecs/utils";
-import { MeshData, RotGroupComponent, TransformGroupComponent } from "./imports";
+import { MeshData, RotGroupComponent, TransformGroupComponent } from "./MeshComponents";
 
 export interface RotData {
   period: number;

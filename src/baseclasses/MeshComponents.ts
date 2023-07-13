@@ -20,12 +20,10 @@ import { operand } from "../ecs/utils";
 import GLOBALS from "../helpers/Constants";
 import {
   BaseDataComponent,
-  CameraFocusSystem,
   ParticleRingTypeComponent,
-  RadiusComponent,
   SceneComponent,
   UniformsComponent
-} from "./imports";
+} from "./CommonComponents";
 
 export interface MeshData {
   mesh: Mesh;
@@ -335,7 +333,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
   static dependencies = [operand("self", TransformGroupComponent), operand("self", BaseDataComponent)];
   static typeID = crypto.randomUUID();
 
-  public init(world: World) {
+  public async init(world: World) {
     if (!this.dependendQueries) return;
     const entity = this.dependendQueries[0].entities[0];
     const tcomp = entity.getComponent(TransformGroupComponent);
@@ -368,11 +366,11 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       timeoutID = setTimeout(actualClick, 150);
     };
 
-    const f = (e: MouseEvent) => {
+    const f = async (e: MouseEvent) => {
       e.stopImmediatePropagation();
       e.preventDefault();
       Store.getInstance().store.focusTarget = bcomp.data.name.toLowerCase();
-      const sys = world.sysManager.getSystem(CameraFocusSystem);
+      const sys = world.sysManager.getSystem((await import("./CommonSystems")).CameraFocusSystem);
       if (!sys) return;
       sys.enabled = true;
     };
@@ -389,7 +387,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
     };
 
     if (entity.getComponent(ParticleRingTypeComponent)) {
-      const rad = entity.getComponent(RadiusComponent).data.drawRadius;
+      const rad = entity.getComponent((await import("./CelestialComponents")).RadiusComponent).data.drawRadius;
       // markerLabel.position.x += rad
       markerLabel.position.z -= rad;
     }

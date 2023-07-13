@@ -41,17 +41,3 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
-#home {
-  visibility: hidden;
-  position: absolute;
-  width: 2%;
-  top: 0;
-  left: 0;
-  margin: 1%;
-  user-select: none;
-}
-
-img {
-  cursor: pointer;
-}

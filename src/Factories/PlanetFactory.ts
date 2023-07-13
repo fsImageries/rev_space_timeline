@@ -1,148 +1,93 @@
-import * as THREE from "three";
-import { Text } from "troika-three-text";
+import {
+  AdditiveBlending,
+  BackSide,
+  Color,
+  Group,
+  Mesh,
+  MeshPhongMaterial,
+  NearestFilter,
+  ShaderMaterial
+} from "three";
+import {
+  AtmoComponent,
+  MeshComponent,
+  OrbitLineComponent,
+  PlanetTypeComponent,
+  RotGroupComponent,
+  TransformGroupComponent
+} from "../baseclasses/imports";
+import { Entity } from "../ecs/Entity";
+import GLOBALS from "../helpers/Constants";
 
-import { Planet } from "../Models/Planet";
-import { uuidv4 } from "../helpers/utils";
-import { SystemObjectData } from "../jsonInterfaces";
-import build_orbit from "./OrbitFactory";
-
-import { randFloat } from "three/src/math/MathUtils";
-import CelestialBase from "../Classes/CelestialBase";
-import Internal3DObject from "../Classes/Internal3DObject";
-import Constants from "../helpers/Constants";
+import { initCelestialComponents } from "../Levels/Common";
+import { MoonTypeComponent } from "../baseclasses/CommonComponents";
+import { DrawData, SystemObjectData } from "../dataInterfaces";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
+import { buildOrbit } from "./OrbitFactory";
 
-export default function build(data: SystemObjectData) {
-  Constants.LOAD_MANAGER.itemStart(`://${data.name}_planet`);
+export function buildPlanet(entity: Entity, data: SystemObjectData) {
+  const [mesh, atmo, transformGrp, rotGrp] = buildMeshes(data);
+  const orbit = buildOrbit(data.draw as DrawData);
 
-  const [mesh, atmo] = build_sphere_mesh_and_atmo(
-    new THREE.Color(parseInt(data.draw.glowColor)),
-    data.draw.glowIntensity,
-    data.draw.albedoPath,
-    data.draw.normalPath,
-    data.radius / Constants.SIZE_SCALE, //data.draw.radius,
-    data.name
-  );
+  entity
+    // .addComponent(UniformsComponent, uniforms)
+    .addComponent(MeshComponent, { mesh: mesh as Mesh })
+    .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
+    .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot)) // implement random start rot
+    .addComponent(AtmoComponent, { mesh: atmo })
+    .addComponent(OrbitLineComponent, { mesh: orbit });
 
-  const masterGrp = new THREE.Group();
-  masterGrp.name = `${data.name}_masterGrp`;
+  initCelestialComponents(entity, data);
 
-  const parentGrp = new THREE.Group();
-  parentGrp.name = `${data.name}_parentGrp`;
-  parentGrp.add(masterGrp);
+  data.type === "planet" ? entity.addComponent(PlanetTypeComponent) : entity.addComponent(MoonTypeComponent);
 
-  const meshGrp = new THREE.Group();
-  meshGrp.name = `${data.name}_meshGrp`;
-  meshGrp.add(mesh);
-  meshGrp.add(atmo);
-  masterGrp.add(meshGrp);
-
-  const orbit = build_orbit(data.draw);
-  masterGrp.add(orbit);
-
-  let markerSprite;
-  if (!data.type.includes("moon")) {
-    const map = Constants.TEX_LOAD("./diamond-solid.svg");
-    const material = new THREE.SpriteMaterial({ map: map });
-    markerSprite = new THREE.Sprite(material);
-    markerSprite.name = `${data.name}_markerSprite`;
-    markerSprite.position.y = data.draw.radius + data.draw.radius / 3;
-    masterGrp.add(markerSprite);
-  }
-
-  const celestialData = new CelestialBase({
-    id: uuidv4(),
-    name: data.name,
-    type: data.type,
-    tilt: data.tilt,
-    parent: data.parent,
-    radius: data.radius,
-    texts: data.texts,
-    orbitalPeriod: data.orbitalPeriod,
-    rotationPeriod: data.rotationPeriod,
-    distanceToParent: data.distanceToParent,
-    drawRadius: data.draw.radius
-  });
-
-  if (data.draw.orbInvert) celestialData.invertAngularOrbVel();
-
-  parentGrp.rotation.y = randFloat(-Math.PI * randFloat(1, 2), Math.PI * randFloat(1, 2));
-  const internalObject = new Internal3DObject({
-    parentGrp,
-    masterGrp,
-    meshGrp,
-    mesh,
-    atmo,
-    orbit,
-    markerSprite,
-    displayInfo: data.displayInfo
-  });
-
-  const planet = new Planet({
-    data: celestialData,
-    object: internalObject
-  });
-  Constants.LOAD_MANAGER.itemEnd(`://${data.name}_planet`);
-
-  return planet;
+  return entity;
 }
 
-function build_sphere_mesh_and_atmo(
-  glowColor: THREE.Color,
-  glowIntesity: number,
-  albedoPath: string,
-  normalPath: string,
-  radius: number,
-  name: string
-) {
-  const albedo = Constants.TEX_LOAD(albedoPath);
-  albedo.magFilter = THREE.NearestFilter;
+function buildMeshes(data: SystemObjectData): [Mesh, Mesh, Group, Group] {
+  const albedo = GLOBALS.TEX_LOAD(data.draw?.albedoPath as string);
+  albedo.magFilter = NearestFilter;
 
-  const normal = Constants.TEX_LOAD(normalPath);
-  normal.magFilter = THREE.NearestFilter;
+  const normal = GLOBALS.TEX_LOAD(data.draw?.normalPath as string);
+  normal.magFilter = NearestFilter;
 
-  const sphereMaterial = new THREE.MeshPhongMaterial({
+  const sphereMaterial = new MeshPhongMaterial({
     map: albedo,
     normalMap: normal
   });
 
-  const sphereGeometry = new THREE.SphereGeometry(radius, 55, 55);
-  const mesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  const mesh = new Mesh(GLOBALS.SPHERE_GEOM, sphereMaterial);
   mesh.castShadow = true;
-  mesh.name = `${name}_mesh`;
+  mesh.name = `${data.name}_mesh`;
 
-  const atmoMat = new THREE.ShaderMaterial({
-    uniforms: {
-      intensityMult: { value: glowIntesity },
-      viewVector: { value: new THREE.Vector3() },
-      glowColor: { value: glowColor }
-    },
+  const uniforms = {
+    intensityMult: { value: data.draw?.glowIntensity as number },
+    glowColor: { value: new Color(parseInt(data.draw?.glowColor as string)) }
+  };
+
+  const atmoMat = new ShaderMaterial({
+    uniforms,
     vertexShader: atmoVert,
     fragmentShader: atmoFrag,
-    side: THREE.BackSide,
-    blending: THREE.AdditiveBlending,
+    side: BackSide,
+    blending: AdditiveBlending,
     transparent: true,
     depthWrite: false,
     polygonOffset: true,
     polygonOffsetFactor: -4
   });
 
-  const atmo = new THREE.Mesh(sphereGeometry, atmoMat);
-  atmo.name = `${name}_atmo`;
-  atmo.castShadow = true;
-  atmo.scale.set(1.5, 1.5, 1.5);
+  const atmo = new Mesh(GLOBALS.SPHERE_GEOM, atmoMat);
+  atmo.name = `${data.name}_atmo`;
+  // atmo.castShadow = true;
+  atmo.scale.setScalar(1.025);
 
-  return [mesh, atmo];
-}
+  const transformGrp = new Group();
+  transformGrp.name = `${data.name}_transformGrp`;
 
-export function build_texts(texts: string[]) {
-  return texts.map((txt, idx) => {
-    const textMesh = new Text();
-    textMesh.text = txt;
-    textMesh.fontSize = 1;
-    textMesh.color = 0xffffff;
-    textMesh.userData["idx"] = idx;
-    return textMesh;
-  });
+  const rotGrp = new Group();
+  rotGrp.name = `${data.name}_rotGrp`;
+
+  return [mesh, atmo, transformGrp, rotGrp];
 }

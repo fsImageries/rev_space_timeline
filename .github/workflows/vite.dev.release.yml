@@ -1,5 +1,5 @@
 
-name: basic-deploy
+name: release-dev
 
 on:
   push:

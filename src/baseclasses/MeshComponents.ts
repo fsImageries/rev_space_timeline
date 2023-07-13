@@ -18,12 +18,7 @@ import { Store } from "../ecs/Store";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import GLOBALS from "../helpers/Constants";
-import {
-  BaseDataComponent,
-  ParticleRingTypeComponent,
-  SceneComponent,
-  UniformsComponent
-} from "./CommonComponents";
+import { BaseDataComponent, ParticleRingTypeComponent, SceneComponent, UniformsComponent } from "./CommonComponents";
 
 export interface MeshData {
   mesh: Mesh;

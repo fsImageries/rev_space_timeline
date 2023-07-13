@@ -32,19 +32,18 @@ type LevelCache = [
   // HTMLElement,    // CSSRendererDomElement
 ];
 
-let initSystem : (w:World, d:SystemData) => void;
-const levels = ["Cosmic Map", "Epsilon Eridani"]
+let initSystem: (w: World, d: SystemData) => void;
+const levels = ["Cosmic Map", "Epsilon Eridani"];
 const levelsInit = async (lvlName: string) => {
   if (lvlName === "Epsilon Eridani") {
-    const mod = await import("../Levels/AutoMap")
+    const mod = await import("../Levels/AutoMap");
     if (!initSystem) {
-      initSystem = mod.initSystem
+      initSystem = mod.initSystem;
     }
-    return (w:World) => initSystem(w, DATA.systems[0])
+    return (w: World) => initSystem(w, DATA.systems[0]);
   }
-  return initCosmicMap
-}
-
+  return initCosmicMap;
+};
 
 export class LevelManager {
   /**
@@ -78,9 +77,9 @@ export class LevelManager {
         return;
       }
       // init = levels[lvlName];
-      init = await levelsInit(lvlName)
+      init = await levelsInit(lvlName);
     }
-    
+
     this._openLevel(lvlName, init);
     this._currentLvl = lvlName;
 

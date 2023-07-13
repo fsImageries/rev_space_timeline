@@ -4,16 +4,8 @@ import { System } from "../ecs/System";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import GLOBALS from "../helpers/Constants";
-import {
-  ParticleRingTypeComponent,
-  PlanetTypeComponent,
-} from "./CommonComponents";
-import {
-  AxisRotComponent,
-  DistanceToParentComponent,
-  OrbitRotComponent,
-  RadiusComponent
-} from "./CelestialComponents";
+import { ParticleRingTypeComponent, PlanetTypeComponent } from "./CommonComponents";
+import { AxisRotComponent, DistanceToParentComponent, OrbitRotComponent, RadiusComponent } from "./CelestialComponents";
 import {
   BaseDataComponent,
   CameraComponent,
@@ -22,7 +14,14 @@ import {
   SunTypeComponent,
   UniformsComponent
 } from "./CommonComponents";
-import { MeshComponent, RotGroupComponent, TransformGroupComponent, CSSMarkerComponent, CosmicMapSunTextComponent, ParentComponent, } from "./MeshComponents";
+import {
+  MeshComponent,
+  RotGroupComponent,
+  TransformGroupComponent,
+  CSSMarkerComponent,
+  CosmicMapSunTextComponent,
+  ParentComponent
+} from "./MeshComponents";
 import { clamp, mapLinear } from "three/src/math/MathUtils";
 import { Store } from "../ecs/Store";
 import { Entity } from "../ecs/Entity";

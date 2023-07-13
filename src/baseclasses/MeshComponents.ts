@@ -184,9 +184,9 @@ export class CosmicMapSunTextComponent extends Component<TextData> {
     const t = new TText();
     t.color = 0xffffff;
     t.fontSize = fontSize;
-    t.font = "./Open_Sans/static/OpenSans-Light.ttf";
+    t.font = "./Open_Sans/OpenSans-Light.ttf";
     const t2 = new TText();
-    t2.font = "./Open_Sans/static/OpenSans-Light.ttf";
+    t2.font = "./Open_Sans/OpenSans-Light.ttf";
     t2.color = 0xffffff;
     t2.fontSize = fontSize * 0.5;
     return {
@@ -241,7 +241,7 @@ export class BasicRingTextComponent extends Component<TitleData> {
     t.position.x -= size * 1.5;
     t.position.y += size * 1.1;
     t.color = 0xffffff;
-    t.font = "./Open_Sans/static/OpenSans-Light.ttf";
+    t.font = "./Open_Sans/OpenSans-Light.ttf";
     return {
       title: t
     };

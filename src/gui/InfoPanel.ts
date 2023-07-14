@@ -23,7 +23,7 @@ export class InfoPanelManager {
   private fullTxt: string;
   private lvlInfo: LvlInfo;
   private _visible = false;
-  private sysKey:string;
+  private sysKey: string;
 
   constructor(public uiManager: UIManager) {
     this.main = document.getElementById("infoPanel") as HTMLDivElement;
@@ -45,7 +45,7 @@ export class InfoPanelManager {
     this.map = {};
     this.fullTxt = "";
     this.lvlInfo = {} as LvlInfo;
-    this.sysKey = ""
+    this.sysKey = "";
 
     this.menubtn.onclick = () => {
       this.setSysTarget();
@@ -141,7 +141,7 @@ export class InfoPanelManager {
     texts.forEach((obj) => {
       if (!obj.timeline) {
         if (!obj.all) return;
-        this.sysKey = obj.name.toLowerCase()
+        this.sysKey = obj.name.toLowerCase();
         map[this.sysKey] = this.fullTxt;
 
         return;

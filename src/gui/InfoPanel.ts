@@ -23,6 +23,7 @@ export class InfoPanelManager {
   private fullTxt: string;
   private lvlInfo: LvlInfo;
   private _visible = false;
+  private sysKey:string;
 
   constructor(public uiManager: UIManager) {
     this.main = document.getElementById("infoPanel") as HTMLDivElement;
@@ -44,6 +45,7 @@ export class InfoPanelManager {
     this.map = {};
     this.fullTxt = "";
     this.lvlInfo = {} as LvlInfo;
+    this.sysKey = ""
 
     this.menubtn.onclick = () => {
       this.setSysTarget();
@@ -95,7 +97,6 @@ export class InfoPanelManager {
   public init(texts: TextObject[], lvlInfo: LvlInfo) {
     this.genTexts(texts);
     this.lvlInfo = lvlInfo;
-    this.map["sys"] = "";
   }
 
   public setConstellation(name: string) {
@@ -112,7 +113,7 @@ export class InfoPanelManager {
   }
 
   private setSysTarget() {
-    this.timeline.innerHTML = this.map["sys"];
+    this.timeline.innerHTML = this.map[this.sysKey];
     this.title.innerText = this.lvlInfo.name;
     this.subtitle.innerText = "Local Group";
     this.setConstellation(this.lvlInfo.constellation);
@@ -140,7 +141,9 @@ export class InfoPanelManager {
     texts.forEach((obj) => {
       if (!obj.timeline) {
         if (!obj.all) return;
-        map[obj.name.toLowerCase()] = this.fullTxt;
+        this.sysKey = obj.name.toLowerCase()
+        map[this.sysKey] = this.fullTxt;
+
         return;
       }
 

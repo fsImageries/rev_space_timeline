@@ -142,7 +142,7 @@ export class CameraFocusSystem extends System {
         if (entity.getComponent(ParticleRingTypeComponent)) {
           GLOBALS.WORLD_POS.z -= rad;
           // GLOBALS.WORLD_POS.x += rad * 14
-          mult = 4
+          mult = 4;
         }
 
         // TODO calculate view vector from object to light (nearest)

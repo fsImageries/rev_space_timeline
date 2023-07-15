@@ -172,7 +172,7 @@ export class InfoPanelManager {
         if (!obj.all) return;
         this.sysKey = obj.name.toLowerCase();
         map[this.sysKey] = this.fullTxt;
-        this.fullInfo = obj.info ? obj.info : ""
+        this.fullInfo = obj.info ? obj.info : "";
 
         return;
       }

@@ -49,12 +49,11 @@ export function initCosmicMap(world: World) {
   initCommonEntities(world, Store.getInstance().state.camPos);
   world.load();
 
-  const textObjs:TextObject[] = [
+  const textObjs: TextObject[] = [
     {
       name: "txt",
       all: true,
-      info: 
-        `<div class="year">Unknown Locations:</div>
+      info: `<div class="year">Unknown Locations:</div>
         <br>•Aertha (Galactic North) [Nestbuilders]
         <br>•Bloater (Revelation Space)
         <br>•Golgotha (Diamond Dogs) [Blood Spire Civilisation]
@@ -70,8 +69,8 @@ export function initCosmicMap(world: World) {
         <br>
         <br>
         Original Map produced by Richard Terrett`
-    },
-  ]
+    }
+  ];
   world.uiManager.infoPanel.init(textObjs, { name: "Cosmic Map", constellation: "" });
   GLOBALS.LOAD_MANAGER.itemEnd("://CosmicMap_world");
 

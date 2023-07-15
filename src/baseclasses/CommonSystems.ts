@@ -4,17 +4,8 @@ import { System } from "../ecs/System";
 import { World } from "../ecs/World";
 import { operand } from "../ecs/utils";
 import GLOBALS from "../helpers/Constants";
-import {
-  AxisRotComponent,
-  CSSMarkerComponent,
-  CosmicMapSunTextComponent,
-  DistanceToParentComponent,
-  OrbitRotComponent,
-  ParentComponent,
-  ParticleRingTypeComponent,
-  PlanetTypeComponent,
-  RadiusComponent
-} from "./imports";
+import { ParticleRingTypeComponent, PlanetTypeComponent } from "./CommonComponents";
+import { AxisRotComponent, DistanceToParentComponent, OrbitRotComponent, RadiusComponent } from "./CelestialComponents";
 import {
   BaseDataComponent,
   CameraComponent,
@@ -22,8 +13,15 @@ import {
   SceneComponent,
   SunTypeComponent,
   UniformsComponent
-} from "./imports";
-import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "./imports";
+} from "./CommonComponents";
+import {
+  MeshComponent,
+  RotGroupComponent,
+  TransformGroupComponent,
+  CSSMarkerComponent,
+  CosmicMapSunTextComponent,
+  ParentComponent
+} from "./MeshComponents";
 import { clamp, mapLinear } from "three/src/math/MathUtils";
 import { Store } from "../ecs/Store";
 import { Entity } from "../ecs/Entity";
@@ -140,8 +138,15 @@ export class CameraFocusSystem extends System {
         entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(GLOBALS.WORLD_POS);
         const rad = entity.getComponent(RadiusComponent).data.drawRadius;
 
+        let mult = 14;
+        if (entity.getComponent(ParticleRingTypeComponent)) {
+          GLOBALS.WORLD_POS.z -= rad;
+          // GLOBALS.WORLD_POS.x += rad * 14
+          mult = 4;
+        }
+
         // TODO calculate view vector from object to light (nearest)
-        ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -= rad * 14;
+        ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -= rad * mult;
         ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS.clone());
         ccomp.data.freeCtrl?.update();
       }

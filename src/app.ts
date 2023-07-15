@@ -5,10 +5,10 @@ document.title = `${document.title} (${APP_VERSION})`;
 const v = document.getElementById("version")
 if (v) v.innerText = `v${APP_VERSION}`;
 
-window.onload = () => {
+window.onload = async () => {
   const world = new World();
 
-  world.lvlManager.openLevel("Cosmic Map");
+  await world.lvlManager.openLevel("Cosmic Map");
 
   const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
     .data.scene;
@@ -26,6 +26,5 @@ window.onload = () => {
     prev = timestamp;
     requestAnimationFrame(eventLoop);
   }
-
   eventLoop(0);
 };

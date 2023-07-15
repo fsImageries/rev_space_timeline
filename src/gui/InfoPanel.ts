@@ -12,10 +12,12 @@ export type TextsMap = { [key: string]: string };
 export class InfoPanelManager {
   public main: HTMLDivElement;
   public timeline: HTMLDivElement;
+  public info: HTMLDivElement;
   public title: HTMLDivElement;
   public subtitle: HTMLDivElement;
   public subtext: HTMLDivElement;
   public menubtn: HTMLImageElement;
+  public menutip: HTMLDivElement;
 
   private _coords: [HTMLElement, HTMLElement, HTMLElement];
 
@@ -23,14 +25,18 @@ export class InfoPanelManager {
   private fullTxt: string;
   private lvlInfo: LvlInfo;
   private _visible = false;
+  private sysKey: string;
+  private fullInfo: string;
 
   constructor(public uiManager: UIManager) {
     this.main = document.getElementById("infoPanel") as HTMLDivElement;
     this.timeline = document.getElementById("infoPanelTimeline") as HTMLDivElement;
+    this.info = document.getElementById("infoPanelInfo") as HTMLDivElement;
     this.title = document.querySelector("#infoPanelTitleArea .title") as HTMLDivElement;
     this.subtitle = document.querySelector("#infoPanelTitleArea .subtitle") as HTMLDivElement;
     this.subtext = document.querySelector("#infoPanelSubtextArea .subtitle") as HTMLDivElement;
     this.menubtn = document.getElementById("infoPanelButton") as HTMLImageElement;
+    this.menutip = document.getElementById("infoPanelButtonText") as HTMLDivElement;
     // if (!(this.main && this.timeline && this.title && this.subtitle && this.subtext && this.menubtn))
     //   throw new Error("Can't find info panel html elements")
 
@@ -43,12 +49,35 @@ export class InfoPanelManager {
 
     this.map = {};
     this.fullTxt = "";
+    this.fullInfo = "";
     this.lvlInfo = {} as LvlInfo;
+    this.sysKey = "";
 
     this.menubtn.onclick = () => {
       this.setSysTarget();
       this.visible = !this._visible;
     };
+
+    this.menubtn.onmouseover = () => {
+      this.menutip?.classList.add("active");
+    };
+
+    this.menubtn.onmouseleave = () => {
+      this.menutip?.classList.remove("active");
+    };
+
+    const handle = setTimeout(() => {
+      this.menutip?.classList.add("active");
+    }, 3000);
+
+    window.addEventListener(
+      "wheel",
+      () => {
+        clearTimeout(handle);
+        this.menutip?.classList.remove("active");
+      },
+      { once: true }
+    );
   }
 
   public getCache() {
@@ -95,7 +124,6 @@ export class InfoPanelManager {
   public init(texts: TextObject[], lvlInfo: LvlInfo) {
     this.genTexts(texts);
     this.lvlInfo = lvlInfo;
-    this.map["sys"] = "";
   }
 
   public setConstellation(name: string) {
@@ -112,15 +140,16 @@ export class InfoPanelManager {
   }
 
   private setSysTarget() {
-    this.timeline.innerHTML = this.map["sys"];
+    this.timeline.innerHTML = this.map[this.sysKey];
     this.title.innerText = this.lvlInfo.name;
+    this.info.innerHTML = this.fullInfo;
     this.subtitle.innerText = "Local Group";
     this.setConstellation(this.lvlInfo.constellation);
   }
 
   private genTexts(texts: TextObject[]) {
     // generate general text (all)
-    const sorted = texts
+    const timelines = texts
       .filter((obj) => obj.timeline)
       .map((obj) => formatTexts(obj.timeline as string[], true, capitalize(obj.name)))
       .flat()
@@ -133,14 +162,18 @@ export class InfoPanelManager {
         const year2 = parseInt(bb);
         return year1 - year2;
       });
-    this.fullTxt = sorted.join("<br><br>");
+
+    this.fullTxt = timelines.join("<br><br>");
 
     // generate map from obj to texts
     const map: TextsMap = {};
     texts.forEach((obj) => {
       if (!obj.timeline) {
         if (!obj.all) return;
-        map[obj.name.toLowerCase()] = this.fullTxt;
+        this.sysKey = obj.name.toLowerCase();
+        map[this.sysKey] = this.fullTxt;
+        this.fullInfo = obj.info ? obj.info : "";
+
         return;
       }
 

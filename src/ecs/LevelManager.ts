@@ -1,6 +1,6 @@
-import { initSystem } from "../Levels/AutoMap";
+// import { initSystem } from "../Levels/AutoMap";
 import { initCosmicMap } from "../Levels/CosmicMap";
-import { SystemsData } from "../dataInterfaces";
+import { SystemData, SystemsData } from "../dataInterfaces";
 import { Entity } from "./Entity";
 import { Store, TState } from "./Store";
 import { System } from "./System";
@@ -32,9 +32,17 @@ type LevelCache = [
   // HTMLElement,    // CSSRendererDomElement
 ];
 
-const levels: { [p: string]: (w: World) => void } = {
-  "Cosmic Map": initCosmicMap,
-  "Epsilon Eridani": (w: World) => initSystem(w, DATA.systems[0])
+let initSystem: (w: World, d: SystemData) => void;
+const levels = ["Cosmic Map", "Epsilon Eridani"];
+const levelsInit = async (lvlName: string) => {
+  if (lvlName === "Epsilon Eridani") {
+    const mod = await import("../Levels/AutoMap");
+    if (!initSystem) {
+      initSystem = mod.initSystem;
+    }
+    return (w: World) => initSystem(w, DATA.systems[0]);
+  }
+  return initCosmicMap;
 };
 
 export class LevelManager {
@@ -50,7 +58,7 @@ export class LevelManager {
   constructor(world: World) {
     this.levelMap = {};
     this.world = world;
-    this._currentLvl = Object.keys(levels)[0];
+    this._currentLvl = levels[0];
   }
 
   public get currentLvl(): string {
@@ -58,18 +66,20 @@ export class LevelManager {
   }
 
   public get levelsNames(): string[] {
-    return Object.keys(levels);
+    return levels;
   }
 
-  public openLevel(lvlName: string) {
+  public async openLevel(lvlName: string) {
     let init = undefined;
     if (!(lvlName in this.levelMap)) {
-      if (!(lvlName in levels)) {
+      if (!levels.includes(lvlName)) {
         console.info(`${lvlName} is not yet implemented.`);
         return;
       }
-      init = levels[lvlName];
+      // init = levels[lvlName];
+      init = await levelsInit(lvlName);
     }
+
     this._openLevel(lvlName, init);
     this._currentLvl = lvlName;
 

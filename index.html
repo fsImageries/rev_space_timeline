@@ -58,7 +58,10 @@
   </div>
 
 
-  <img id="infoPanelButton" src="./menu_g.svg" alt="menu_logo">
+  <div id="infoPanelButtonArea">
+    <img id="infoPanelButton" src="./menu_g.svg" alt="menu_logo">
+    <div id="infoPanelButtonText">Open menu for help</div>
+  </div>
 
   <div id="infoPanel">
     <div id="infoPanelHeader">
@@ -73,10 +76,10 @@
     </div>
 
     <div id="infoPanelMain">
-      <input checked="checked" id="tab1" type="radio" name="tabs" />
+      <input id="tab1" type="radio" name="tabs" />
       <input id="tab2" type="radio" name="tabs" />
       <input id="tab3" type="radio" name="tabs" />
-      <input id="tab4" type="radio" name="tabs" />
+      <input checked="checked" id="tab4" type="radio" name="tabs" />
 
       <nav>
         <label id="tab1Label" for="tab1">Info</label>
@@ -86,8 +89,7 @@
      </nav>
      
      <figure>
-        <div class="tab1">
-          Something
+        <div id="infoPanelInfo" class="tab1">
         </div>
         <div id="infoPanelTimeline" class="tab2">
           <!-- <span class="year">2090 – 2110 (Yellowstone)</span>
@@ -134,8 +136,53 @@
           <br><br><span class="year">≈2100 (MarcosEye)</span>
           <br>• Named in honour of Marco Ferris -->
         </div>
-        <div class="tab3">GHI</div>
-        <div class="tab4">DEF</div>
+        <div class="tab3">Coming soon</div>
+        <div class="tab4">
+
+          <div class="helpEntry">
+            <code>Focus Object</code>
+            <div class="instructions">
+              <pre>Double Click on the object (Desktop)</pre>
+              <pre>Touch the object (Mobile)</pre>
+            </div>
+          </div>
+
+          <hr>
+          <div class="helpEntry">
+            <code>Jump to solar system</code>
+            <div class="instructions">
+              <pre>Move close enough to object and double click it (Desktop)</pre>
+              <pre>Move close enough to object and touch it (Mobile)</pre>
+              <pre>Alt/Shift + Click to jump immediately</pre>
+            </div>
+          </div>
+
+          <hr>
+          <div class="helpEntry">
+            <code>Jump to cosmic map</code>
+            <div class="instructions">
+              <pre>Back button to jump immediately</pre>
+              <pre>Alt/Shift + Click anywhere to jump immediately</pre>
+            </div>
+          </div>
+
+          <hr>
+          <div class="helpEntry">
+            <code>Open Info Texts</code>
+            <div class="instructions">
+              <pre>Click/Touch the name on any object to show infos</pre>
+            </div>
+          </div>
+
+          <hr>
+          <div class="helpEntry">
+            <code>Close Info Texts</code>
+            <div class="instructions">
+              <pre>Click/Touch anywhere outside the info panel</pre>
+            </div>
+          </div>
+
+        </div>
      </figure>
     </div>
 
@@ -147,7 +194,6 @@
       </div>
     </div>
   </div>
-
   <code id="version"></code>
 </body>
 

@@ -35,6 +35,7 @@ export interface TextObject {
   name: string;
   all?: boolean;
   timeline?: string[];
+  info?: string;
 }
 
 export interface SystemData {

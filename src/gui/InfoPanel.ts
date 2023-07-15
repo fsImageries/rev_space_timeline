@@ -12,6 +12,7 @@ export type TextsMap = { [key: string]: string };
 export class InfoPanelManager {
   public main: HTMLDivElement;
   public timeline: HTMLDivElement;
+  public info: HTMLDivElement;
   public title: HTMLDivElement;
   public subtitle: HTMLDivElement;
   public subtext: HTMLDivElement;
@@ -25,10 +26,12 @@ export class InfoPanelManager {
   private lvlInfo: LvlInfo;
   private _visible = false;
   private sysKey: string;
+  private fullInfo: string;
 
   constructor(public uiManager: UIManager) {
     this.main = document.getElementById("infoPanel") as HTMLDivElement;
     this.timeline = document.getElementById("infoPanelTimeline") as HTMLDivElement;
+    this.info = document.getElementById("infoPanelInfo") as HTMLDivElement;
     this.title = document.querySelector("#infoPanelTitleArea .title") as HTMLDivElement;
     this.subtitle = document.querySelector("#infoPanelTitleArea .subtitle") as HTMLDivElement;
     this.subtext = document.querySelector("#infoPanelSubtextArea .subtitle") as HTMLDivElement;
@@ -46,6 +49,7 @@ export class InfoPanelManager {
 
     this.map = {};
     this.fullTxt = "";
+    this.fullInfo = "";
     this.lvlInfo = {} as LvlInfo;
     this.sysKey = "";
 
@@ -138,13 +142,14 @@ export class InfoPanelManager {
   private setSysTarget() {
     this.timeline.innerHTML = this.map[this.sysKey];
     this.title.innerText = this.lvlInfo.name;
+    this.info.innerHTML = this.fullInfo;
     this.subtitle.innerText = "Local Group";
     this.setConstellation(this.lvlInfo.constellation);
   }
 
   private genTexts(texts: TextObject[]) {
     // generate general text (all)
-    const sorted = texts
+    const timelines = texts
       .filter((obj) => obj.timeline)
       .map((obj) => formatTexts(obj.timeline as string[], true, capitalize(obj.name)))
       .flat()
@@ -157,7 +162,8 @@ export class InfoPanelManager {
         const year2 = parseInt(bb);
         return year1 - year2;
       });
-    this.fullTxt = sorted.join("<br><br>");
+
+    this.fullTxt = timelines.join("<br><br>");
 
     // generate map from obj to texts
     const map: TextsMap = {};
@@ -166,6 +172,7 @@ export class InfoPanelManager {
         if (!obj.all) return;
         this.sysKey = obj.name.toLowerCase();
         map[this.sysKey] = this.fullTxt;
+        this.fullInfo = obj.info ? obj.info : ""
 
         return;
       }

@@ -21,7 +21,7 @@ import {
 import { World } from "../ecs/World";
 import { initCommonEntities } from "./Common";
 import { Store } from "../ecs/Store";
-import { SunData } from "../dataInterfaces";
+import { SunData, TextObject } from "../dataInterfaces";
 import { Entity } from "../ecs/Entity";
 import GLOBALS from "../helpers/Constants";
 
@@ -48,7 +48,31 @@ export function initCosmicMap(world: World) {
   Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.5);
   initCommonEntities(world, Store.getInstance().state.camPos);
   world.load();
-  world.uiManager.infoPanel.init([], { name: "Cosmic Map", constellation: "" });
+
+  const textObjs:TextObject[] = [
+    {
+      name: "txt",
+      all: true,
+      info: 
+        `<div class="year">Unknown Locations:</div>
+        <br>•Aertha (Galactic North) [Nestbuilders]
+        <br>•Bloater (Revelation Space)
+        <br>•Golgotha (Diamond Dogs) [Blood Spire Civilisation]
+        <br>•Grand Teton (Multiple)
+        <br>•Hope (Galactic North)
+        <br>•Lascaille's Shroud (Muliple) [Shrouder Civilisation, Amarantin]
+        <br>•Shiva-Parvarti (Galactic North)
+        <br>•Spindrift (Revelation Space) [Pattern Jugglers]
+        <br>
+        <br><div class="year">Distant Locations:</div>
+        <br>•Hyades Cluster (Galactic North)
+        <br>•Pleiades Cluster (Galactic North)
+        <br>
+        <br>
+        Original Map produced by Richard Terrett`
+    },
+  ]
+  world.uiManager.infoPanel.init(textObjs, { name: "Cosmic Map", constellation: "" });
   GLOBALS.LOAD_MANAGER.itemEnd("://CosmicMap_world");
 
   const sys = world.sysManager.getSystem(CameraFocusSystem);

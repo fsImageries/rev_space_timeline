@@ -138,8 +138,15 @@ export class CameraFocusSystem extends System {
         entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(GLOBALS.WORLD_POS);
         const rad = entity.getComponent(RadiusComponent).data.drawRadius;
 
+        let mult = 14;
+        if (entity.getComponent(ParticleRingTypeComponent)) {
+          GLOBALS.WORLD_POS.z -= rad;
+          // GLOBALS.WORLD_POS.x += rad * 14
+          mult = 4
+        }
+
         // TODO calculate view vector from object to light (nearest)
-        ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -= rad * 14;
+        ccomp.data.active.position.copy(GLOBALS.WORLD_POS).x -= rad * mult;
         ccomp.data.freeCtrl?.target.copy(GLOBALS.WORLD_POS.clone());
         ccomp.data.freeCtrl?.update();
       }

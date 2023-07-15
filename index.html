@@ -58,7 +58,10 @@
   </div>
 
 
-  <img id="infoPanelButton" src="./menu_g.svg" alt="menu_logo">
+  <div id="infoPanelButtonArea">
+    <img id="infoPanelButton" src="./menu_g.svg" alt="menu_logo">
+    <div id="infoPanelButtonText">Open menu for help</div>
+  </div>
 
   <div id="infoPanel">
     <div id="infoPanelHeader">
@@ -73,10 +76,10 @@
     </div>
 
     <div id="infoPanelMain">
-      <input checked="checked" id="tab1" type="radio" name="tabs" />
+      <input id="tab1" type="radio" name="tabs" />
       <input id="tab2" type="radio" name="tabs" />
       <input id="tab3" type="radio" name="tabs" />
-      <input id="tab4" type="radio" name="tabs" />
+      <input checked="checked" id="tab4" type="radio" name="tabs" />
 
       <nav>
         <label id="tab1Label" for="tab1">Info</label>
@@ -192,7 +195,6 @@
       </div>
     </div>
   </div>
-
   <code id="version"></code>
 </body>
 

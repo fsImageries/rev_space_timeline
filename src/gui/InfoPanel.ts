@@ -16,6 +16,7 @@ export class InfoPanelManager {
   public subtitle: HTMLDivElement;
   public subtext: HTMLDivElement;
   public menubtn: HTMLImageElement;
+  public menutip: HTMLDivElement;
 
   private _coords: [HTMLElement, HTMLElement, HTMLElement];
 
@@ -32,6 +33,7 @@ export class InfoPanelManager {
     this.subtitle = document.querySelector("#infoPanelTitleArea .subtitle") as HTMLDivElement;
     this.subtext = document.querySelector("#infoPanelSubtextArea .subtitle") as HTMLDivElement;
     this.menubtn = document.getElementById("infoPanelButton") as HTMLImageElement;
+    this.menutip = document.getElementById("infoPanelButtonText") as HTMLDivElement;
     // if (!(this.main && this.timeline && this.title && this.subtitle && this.subtext && this.menubtn))
     //   throw new Error("Can't find info panel html elements")
 
@@ -51,6 +53,24 @@ export class InfoPanelManager {
       this.setSysTarget();
       this.visible = !this._visible;
     };
+
+    this.menubtn.onmouseover = () => {
+      this.menutip?.classList.add("active")
+    }
+
+    this.menubtn.onmouseleave = () => {
+      this.menutip?.classList.remove("active")
+    }
+
+    const handle = setTimeout(() => {
+      this.menutip?.classList.add("active")
+    }, 3000)
+
+    window.addEventListener("wheel", () => {
+      clearTimeout(handle)
+      this.menutip?.classList.remove("active")
+    }, {once:true})
+    
   }
 
   public getCache() {

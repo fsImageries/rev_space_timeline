@@ -55,22 +55,25 @@ export class InfoPanelManager {
     };
 
     this.menubtn.onmouseover = () => {
-      this.menutip?.classList.add("active")
-    }
+      this.menutip?.classList.add("active");
+    };
 
     this.menubtn.onmouseleave = () => {
-      this.menutip?.classList.remove("active")
-    }
+      this.menutip?.classList.remove("active");
+    };
 
     const handle = setTimeout(() => {
-      this.menutip?.classList.add("active")
-    }, 3000)
+      this.menutip?.classList.add("active");
+    }, 3000);
 
-    window.addEventListener("wheel", () => {
-      clearTimeout(handle)
-      this.menutip?.classList.remove("active")
-    }, {once:true})
-    
+    window.addEventListener(
+      "wheel",
+      () => {
+        clearTimeout(handle);
+        this.menutip?.classList.remove("active");
+      },
+      { once: true }
+    );
   }
 
   public getCache() {

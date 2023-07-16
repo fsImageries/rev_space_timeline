@@ -81,12 +81,13 @@ export class InfoPanelManager {
   }
 
   public getCache() {
-    return { map: this.map, full: this.fullTxt, lvlInfo: this.lvlInfo };
+    return { map: this.map, full: this.fullTxt, lvlInfo: this.lvlInfo, fullInfo:this.fullInfo };
   }
 
   public setCache(cache: InfoPanelCache) {
     this.map = cache.map;
     this.fullTxt = cache.full;
+    this.fullInfo = cache.fullInfo;
     this.lvlInfo = cache.lvlInfo;
   }
 

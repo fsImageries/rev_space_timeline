@@ -19,7 +19,7 @@ export type LvlInfo = {
 export type InfoPanelCache = {
   map: TextsMap;
   full: string;
-  fullInfo:string;
+  fullInfo: string;
   lvlInfo: LvlInfo;
 };
 

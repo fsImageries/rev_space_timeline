@@ -1,4 +1,4 @@
-import { SceneComponent } from "./baseclasses/imports";
+import { SceneComponent } from "./templates/__init__";
 import { World } from "./ecs/World";
 
 document.title = `${document.title} (${APP_VERSION})`;

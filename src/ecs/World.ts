@@ -1,4 +1,4 @@
-import { RaycasterSystem } from "../baseclasses/imports";
+import { RaycasterSystem } from "../templates/__init__";
 import { UIManager } from "../gui/UIManager";
 import GLOBALS from "../helpers/Constants";
 import { EntityComponentManager } from "./EntityComponentManager";

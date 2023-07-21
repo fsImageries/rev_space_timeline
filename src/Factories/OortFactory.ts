@@ -1,7 +1,7 @@
 import { BufferAttribute, BufferGeometry, Color, Mesh, Points, PointsMaterial } from "three";
 import { randFloat } from "three/src/math/MathUtils";
-import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "../baseclasses/MeshComponents";
-import { BaseDataComponent } from "../baseclasses/imports";
+import { MeshComponent, RotGroupComponent, TransformGroupComponent } from "../templates/components/MeshComponents";
+import { BaseDataComponent } from "../templates/__init__";
 import { Entity } from "../ecs/Entity";
 import { randSpherePointExcludes } from "../helpers/numericUtils";
 import { SystemObjectData } from "../dataInterfaces";

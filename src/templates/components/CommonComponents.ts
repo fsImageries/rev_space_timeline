@@ -10,11 +10,11 @@ import {
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
-import { Component, TypeComponent } from "../ecs/Component";
-import { operand } from "../ecs/utils";
-import { SystemObjectData } from "../dataInterfaces";
-import { Store } from "../ecs/Store";
-import Constants from "../helpers/Constants";
+import { Component, TypeComponent } from "../../ecs/Component";
+import { operand } from "../../ecs/utils";
+import { SystemObjectData } from "../../dataInterfaces";
+import { Store } from "../../ecs/Store";
+import Constants from "../../helpers/Constants";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;

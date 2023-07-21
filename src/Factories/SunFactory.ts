@@ -5,8 +5,8 @@ import {
   PointLightComponent,
   RotGroupComponent,
   TransformGroupComponent
-} from "../baseclasses/MeshComponents";
-import { SunTypeComponent, UniformsComponent, UniformsData } from "../baseclasses/imports";
+} from "../templates/components/MeshComponents";
+import { SunTypeComponent, UniformsComponent, UniformsData } from "../templates/__init__";
 import { SunData } from "../dataInterfaces";
 import { Entity } from "../ecs/Entity";
 import { Store } from "../ecs/Store";

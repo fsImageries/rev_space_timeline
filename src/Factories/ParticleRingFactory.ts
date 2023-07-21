@@ -7,7 +7,7 @@ import {
   ParticleRingComponent,
   RotGroupComponent,
   TransformGroupComponent
-} from "../baseclasses/MeshComponents";
+} from "../templates/components/MeshComponents";
 import {
   BaseDataComponent,
   DistanceToParentComponent,
@@ -16,7 +16,7 @@ import {
   RadiusComponent,
   UniformsComponent,
   UniformsData
-} from "../baseclasses/imports";
+} from "../templates/__init__";
 import { Entity } from "../ecs/Entity";
 import { SystemObjectData } from "../dataInterfaces";
 import { Store } from "../ecs/Store";

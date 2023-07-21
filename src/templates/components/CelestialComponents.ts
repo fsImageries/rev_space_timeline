@@ -1,6 +1,6 @@
-import { Component } from "../ecs/Component";
-import { Store } from "../ecs/Store";
-import { operand } from "../ecs/utils";
+import { Component } from "../../ecs/Component";
+import { Store } from "../../ecs/Store";
+import { operand } from "../../ecs/utils";
 import { MeshData, RotGroupComponent, TransformGroupComponent } from "./MeshComponents";
 
 export interface RotData {

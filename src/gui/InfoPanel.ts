@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { BaseDataComponent } from "../baseclasses/imports";
+import { BaseDataComponent } from "../templates/__init__";
 import { TextObject } from "../dataInterfaces";
 import { Entity } from "../ecs/Entity";
 import { InfoPanelCache, LvlInfo } from "../ecs/LevelManager";

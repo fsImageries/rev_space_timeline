@@ -12,7 +12,7 @@ import {
   SunTypeComponent,
   PlanetTypeComponent,
   ParticleRingTypeComponent
-} from "./CommonComponents";
+} from "./components/CommonComponents";
 
 import {
   MeshComponent,
@@ -37,7 +37,7 @@ import {
   ParentComponent,
   ParentComponentData,
   ParticleRingComponent
-} from "./MeshComponents";
+} from "./components/MeshComponents";
 
 import {
   RotData,
@@ -48,20 +48,26 @@ import {
   RadiusComponent,
   RadiusData,
   OrbitLineComponent
-} from "./CelestialComponents";
+} from "./components/CelestialComponents";
 
 import {
   resizeRendererToDisplaySize,
-  RenderSystem,
+  RenderSystem
+} from "./systems/CommonSystems";
+
+import {
   AxisRotSystem,
   OrbitRotSystem,
   SunUniformsUpdateSystem,
-  CameraFocusSystem,
-  RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
   InfoPanelCameraCoordSystem
-} from "./CommonSystems";
+} from "./systems/MeshSystems"
+
+import {
+  CameraFocusSystem,
+  RaycasterSystem,
+} from "./systems/CameraSystems"
 
 // Common Components
 export {

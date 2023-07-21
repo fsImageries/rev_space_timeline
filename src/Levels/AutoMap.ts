@@ -12,7 +12,7 @@ import {
   RenderSystem,
   SunUniformsUpdateSystem,
   InfoPanelCameraCoordSystem
-} from "../baseclasses/imports";
+} from "../templates/__init__";
 import { SunData, SystemData } from "../dataInterfaces";
 import { Store } from "../ecs/Store";
 import { World } from "../ecs/World";

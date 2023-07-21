@@ -15,30 +15,19 @@ import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
 
 export function buildSun(entity: Entity, data: SunData, marker = true) {
-  // GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}`);
   const [mesh, transformGrp, rotGrp, uniforms] = buildMeshes(data);
 
-  // if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
   if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 1e5));
-  // if (data.distanceToParent)
-  //   entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
 
   entity
     .addComponent(UniformsComponent, uniforms)
     .addComponent(MeshComponent, { mesh: mesh as Mesh })
     .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
     .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
-    // .addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius))
-    // .addComponent(BaseDataComponent, {
-    //   name: data.name,
-    //   uuid: crypto.randomUUID() as string,
-    //   texts: data.texts
-    // } as BaseDataData)
     .addComponent(SunTypeComponent);
 
   initCelestialComponents(entity, data, marker);
 
-  // GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}`);
   return entity;
 }
 

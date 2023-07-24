@@ -10,11 +10,11 @@ import {
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
-import { Component, TypeComponent } from "../ecs/Component";
-import { operand } from "../ecs/utils";
-import { SystemObjectData } from "../dataInterfaces";
-import { Store } from "../ecs/Store";
-import Constants from "../helpers/Constants";
+import { SystemObjectData } from "../../dataInterfaces";
+import { Component, TypeComponent } from "../../ecs/Component";
+import { Store } from "../../ecs/Store";
+import { operand } from "../../ecs/utils";
+import Constants from "../../helpers/Constants";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
@@ -64,6 +64,9 @@ export class SceneComponent extends Component<SceneComponentData> {
     backgroundImage.mapping = EquirectangularReflectionMapping;
     backgroundImage.encoding = sRGBEncoding;
     scene.background = backgroundImage;
+
+    // const ax = new AxesHelper(10000)
+    // scene.add(ax)
     return { scene };
   }
 }
@@ -81,7 +84,7 @@ export class CameraComponent extends Component<CameraComponentData> {
     const cam = new PerspectiveCamera(
       55,
       Store.getInstance().state.canvas.clientWidth / Store.getInstance().state.canvas.clientHeight,
-      0.001,
+      1e-5,
       1e12
     );
     cam.position.z = 1200;

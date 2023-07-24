@@ -12,7 +12,7 @@ import {
   SunTypeComponent,
   PlanetTypeComponent,
   ParticleRingTypeComponent
-} from "./CommonComponents";
+} from "./components/CommonComponents";
 
 import {
   MeshComponent,
@@ -37,7 +37,7 @@ import {
   ParentComponent,
   ParentComponentData,
   ParticleRingComponent
-} from "./MeshComponents";
+} from "./components/MeshComponents";
 
 import {
   RotData,
@@ -48,20 +48,31 @@ import {
   RadiusComponent,
   RadiusData,
   OrbitLineComponent
-} from "./CelestialComponents";
+} from "./components/CelestialComponents";
+
+import {
+  GravitationalObjectComponent,
+  GravitationalObjectData
+} from "./components/DynamicComponents"
 
 import {
   resizeRendererToDisplaySize,
-  RenderSystem,
+  RenderSystem
+} from "./systems/CommonSystems";
+
+import {
   AxisRotSystem,
   OrbitRotSystem,
   SunUniformsUpdateSystem,
-  CameraFocusSystem,
-  RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
   InfoPanelCameraCoordSystem
-} from "./CommonSystems";
+} from "./systems/MeshSystems"
+
+import {
+  CameraFocusSystem,
+  RaycasterSystem,
+} from "./systems/CameraSystems"
 
 // Common Components
 export {
@@ -107,6 +118,10 @@ export type {
 // Celestial Components
 export { AxisRotComponent, OrbitRotComponent, DistanceToParentComponent, RadiusComponent, OrbitLineComponent };
 export type { RotData, DistanceToParentData, RadiusData };
+
+// Dynamic Components
+export {GravitationalObjectComponent as MassComponent}
+export type {GravitationalObjectData as MassData}
 
 // Systems
 export {

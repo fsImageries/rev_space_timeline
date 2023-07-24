@@ -12,7 +12,7 @@ import {
   OrbitRotComponent,
   ParentComponent,
   ParentComponentData
-} from "../baseclasses/imports";
+} from "../templates/__init__";
 import { World } from "../ecs/World";
 import { Entity } from "../ecs/Entity";
 import { SystemObjectData } from "../dataInterfaces";

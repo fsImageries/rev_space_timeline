@@ -12,12 +12,12 @@ import {
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { DEG2RAD } from "three/src/math/MathUtils";
 import { Text as TText } from "troika-three-text";
-import { Component } from "../ecs/Component";
-import { Entity } from "../ecs/Entity";
-import { Store } from "../ecs/Store";
-import { World } from "../ecs/World";
-import { operand } from "../ecs/utils";
-import GLOBALS from "../helpers/Constants";
+import { Component } from "../../ecs/Component";
+import { Entity } from "../../ecs/Entity";
+import { Store } from "../../ecs/Store";
+import { World } from "../../ecs/World";
+import { operand } from "../../ecs/utils";
+import GLOBALS from "../../helpers/Constants";
 import { BaseDataComponent, ParticleRingTypeComponent, SceneComponent, UniformsComponent } from "./CommonComponents";
 
 export interface MeshData {
@@ -365,7 +365,7 @@ export class CSSMarkerComponent extends Component<CSSMarkerData> {
       e.stopImmediatePropagation();
       e.preventDefault();
       Store.getInstance().store.focusTarget = bcomp.data.name.toLowerCase();
-      const sys = world.sysManager.getSystem((await import("./CommonSystems")).CameraFocusSystem);
+      const sys = world.sysManager.getSystem((await import("../systems/CameraSystems")).CameraFocusSystem);
       if (!sys) return;
       sys.enabled = true;
     };

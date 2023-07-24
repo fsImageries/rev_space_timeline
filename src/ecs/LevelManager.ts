@@ -34,7 +34,7 @@ type LevelCache = [
 ];
 
 let initSystem: (w: World, d: SystemData) => void;
-const levels = ["Cosmic Map", "Epsilon Eridani"];
+const levels = ["Cosmic Map", "Epsilon Eridani", "Delta Pavonis"];
 const levelsInit = async (lvlName: string) => {
   if (lvlName === "Epsilon Eridani") {
     const mod = await import("../Levels/AutoMap");
@@ -42,6 +42,14 @@ const levelsInit = async (lvlName: string) => {
       initSystem = mod.initSystem;
     }
     return (w: World) => initSystem(w, DATA.systems[0]);
+  }
+
+  if (lvlName === "Delta Pavonis") {
+    const mod = await import("../Levels/AutoMap");
+    if (!initSystem) {
+      initSystem = mod.initSystem;
+    }
+    return (w: World) => initSystem(w, DATA.systems[1]);
   }
   return initCosmicMap;
 };

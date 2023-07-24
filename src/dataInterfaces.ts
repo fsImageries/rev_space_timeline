@@ -17,6 +17,9 @@ export interface DrawData {
   pointShader?: boolean;
   end?: number;
   initRot?: number;
+  mass?: number;
+  vel?:string;
+  acc?:string;
 }
 
 export interface SunData extends SystemObjectData {

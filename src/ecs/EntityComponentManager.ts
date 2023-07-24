@@ -1,4 +1,4 @@
-import { BaseDataComponent, RenderComponent } from "../baseclasses/imports";
+import { BaseDataComponent, RenderComponent } from "../templates/__init__";
 import { Component } from "./Component";
 import { Entity } from "./Entity";
 import { World } from "./World";

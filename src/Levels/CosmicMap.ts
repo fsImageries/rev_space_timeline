@@ -6,7 +6,7 @@ import {
   RaycasterSystem,
   CosmicMapStartTextSystem,
   InfoPanelCameraCoordSystem
-} from "../baseclasses/imports";
+} from "../templates/__init__";
 import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
 import {
@@ -17,7 +17,7 @@ import {
   LineSegmentData,
   ObjectLineComponent,
   ObjectLineData
-} from "../baseclasses/imports";
+} from "../templates/__init__";
 import { World } from "../ecs/World";
 import { initCommonEntities } from "./Common";
 import { Store } from "../ecs/Store";

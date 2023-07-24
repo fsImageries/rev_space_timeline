@@ -6,7 +6,7 @@
     },
     "name": "revelation-space-timeline",
     "private": true,
-    "version": "0.6.0-double-star-alpha",
+    "version": "0.6.3-double-star-alpha",
     "type": "module",
     "scripts": {
         "dev": "vite",

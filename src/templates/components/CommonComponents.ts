@@ -1,5 +1,4 @@
 import {
-  AxesHelper,
   Color,
   EquirectangularReflectionMapping,
   PCFSoftShadowMap,
@@ -11,10 +10,10 @@ import {
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
-import { Component, TypeComponent } from "../../ecs/Component";
-import { operand } from "../../ecs/utils";
 import { SystemObjectData } from "../../dataInterfaces";
+import { Component, TypeComponent } from "../../ecs/Component";
 import { Store } from "../../ecs/Store";
+import { operand } from "../../ecs/utils";
 import Constants from "../../helpers/Constants";
 
 export interface RenderComponentData {

@@ -200,9 +200,9 @@ systems:
     highTemp: 7000                # TODO implement into new interfaces
     lowTemp: 3000                 # TODO implement into new interfaces
     draw:
-      mass: 5100000
+      mass: 10100000
       # vel: 0,0,-.98e-1
-      vel: 0,0,-.025
+      vel: 0,0,-.015
       acc: 0,0,0
 
   - name: Hades
@@ -211,7 +211,7 @@ systems:
     radius: 2000.2
     rotationPeriod: 273.6
     # orbitalPeriod: 62
-    distanceToParent: 1.079e+10
+    distanceToParent: 5.079e+10
     highTemp: 25000             # TODO implement into new interfaces
     lowTemp: 1000                # TODO implement into new interfaces
     draw:
@@ -219,7 +219,6 @@ systems:
       # vel: 0,0,1e-1
       vel: 0,0,0
       acc: 0,0,.05
-
 
   - name: Oort Cloud
     type: oortcloud

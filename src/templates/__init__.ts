@@ -50,15 +50,9 @@ import {
   OrbitLineComponent
 } from "./components/CelestialComponents";
 
-import {
-  GravitationalObjectComponent,
-  GravitationalObjectData
-} from "./components/DynamicComponents"
+import { GravitationalObjectComponent, GravitationalObjectData } from "./components/DynamicComponents";
 
-import {
-  resizeRendererToDisplaySize,
-  RenderSystem
-} from "./systems/CommonSystems";
+import { resizeRendererToDisplaySize, RenderSystem } from "./systems/CommonSystems";
 
 import {
   AxisRotSystem,
@@ -67,12 +61,9 @@ import {
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
   InfoPanelCameraCoordSystem
-} from "./systems/MeshSystems"
+} from "./systems/MeshSystems";
 
-import {
-  CameraFocusSystem,
-  RaycasterSystem,
-} from "./systems/CameraSystems"
+import { CameraFocusSystem, RaycasterSystem } from "./systems/CameraSystems";
 
 // Common Components
 export {
@@ -120,8 +111,8 @@ export { AxisRotComponent, OrbitRotComponent, DistanceToParentComponent, RadiusC
 export type { RotData, DistanceToParentData, RadiusData };
 
 // Dynamic Components
-export {GravitationalObjectComponent as MassComponent}
-export type {GravitationalObjectData as MassData}
+export { GravitationalObjectComponent as MassComponent };
+export type { GravitationalObjectData as MassData };
 
 // Systems
 export {

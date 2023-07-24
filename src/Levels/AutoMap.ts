@@ -31,9 +31,9 @@ export function initSystem(world: World, data: SystemData) {
   Store.getInstance().state.SIZE_SCALE = 1e-5;
   // Store.getInstance().state.ORB_SCALE = 10_000_000;
 
-  initSystems(world, data)
-  initEntities(world, data)
-  initWorld(world, data)
+  initSystems(world, data);
+  initEntities(world, data);
+  initWorld(world, data);
 
   if (data.startTarget) {
     Store.getInstance().store.focusTarget = data.startTarget;
@@ -42,7 +42,6 @@ export function initSystem(world: World, data: SystemData) {
   }
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}`);
 }
-
 
 function initSystems(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_systems`);
@@ -56,7 +55,7 @@ function initSystems(world: World, data: SystemData) {
     .registerSystem(CSSMarkerSystem)
     .registerSystem(InfoPanelCameraCoordSystem);
 
-  if (!data.isSingleSun) world.sysManager.registerSystem(BinaryStarSystem)
+  if (!data.isSingleSun) world.sysManager.registerSystem(BinaryStarSystem);
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_systems`);
 }
 
@@ -66,11 +65,7 @@ function initEntities(world: World, data: SystemData) {
     if (d.type === "sun") {
       const entity = buildSun(world.ecManager.createEntity(), d as SunData);
       if (!data.isSingleSun && d.draw?.mass) {
-        entity.addComponent(MassComponent, MassComponent.getDefaults(
-          d.draw.mass,
-          d.draw.vel,
-          d.draw.acc
-          ))
+        entity.addComponent(MassComponent, MassComponent.getDefaults(d.draw.mass, d.draw.vel, d.draw.acc));
       }
     }
 

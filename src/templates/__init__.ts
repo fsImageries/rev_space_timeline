@@ -51,6 +51,11 @@ import {
 } from "./components/CelestialComponents";
 
 import {
+  GravitationalObjectComponent,
+  GravitationalObjectData
+} from "./components/DynamicComponents"
+
+import {
   resizeRendererToDisplaySize,
   RenderSystem
 } from "./systems/CommonSystems";
@@ -113,6 +118,10 @@ export type {
 // Celestial Components
 export { AxisRotComponent, OrbitRotComponent, DistanceToParentComponent, RadiusComponent, OrbitLineComponent };
 export type { RotData, DistanceToParentData, RadiusData };
+
+// Dynamic Components
+export {GravitationalObjectComponent as MassComponent}
+export type {GravitationalObjectData as MassData}
 
 // Systems
 export {

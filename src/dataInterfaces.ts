@@ -18,6 +18,8 @@ export interface DrawData {
   end?: number;
   initRot?: number;
   mass?: number;
+  vel?:string;
+  acc?:string;
 }
 
 export interface SunData extends SystemObjectData {

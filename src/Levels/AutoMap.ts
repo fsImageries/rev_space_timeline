@@ -11,13 +11,16 @@ import {
   OrbitRotSystem,
   RenderSystem,
   SunUniformsUpdateSystem,
-  InfoPanelCameraCoordSystem
+  InfoPanelCameraCoordSystem,
+  MassComponent
 } from "../templates/__init__";
 import { SunData, SystemData } from "../dataInterfaces";
 import { Store } from "../ecs/Store";
 import { World } from "../ecs/World";
 import { initCommonEntities } from "./Common";
 import GLOBALS from "../helpers/Constants";
+import { Vector3 } from "three";
+import { BinaryStarSystem } from "../templates/systems/MeshSystems";
 
 const planetCheck = ["moon", "planet"];
 
@@ -27,6 +30,20 @@ export function initSystem(world: World, data: SystemData) {
   Store.getInstance().state.DISTANCE_SCALE = 3e-8;
   Store.getInstance().state.SIZE_SCALE = 1e-5;
 
+  initSystems(world, data)
+  initEntities(world, data)
+  initWorld(world, data)
+
+  if (data.startTarget) {
+    Store.getInstance().store.focusTarget = data.startTarget;
+    const sys = world.sysManager.getSystem(CameraFocusSystem);
+    if (sys) sys.enabled = true;
+  }
+  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}`);
+}
+
+
+function initSystems(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_systems`);
   world.sysManager
     .registerSystem(RenderSystem)
@@ -37,12 +54,23 @@ export function initSystem(world: World, data: SystemData) {
     .registerSystem(RaycasterSystem)
     .registerSystem(CSSMarkerSystem)
     .registerSystem(InfoPanelCameraCoordSystem);
-  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_systems`);
 
+  if (!data.isSingleSun) world.sysManager.registerSystem(BinaryStarSystem)
+  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_systems`);
+}
+
+function initEntities(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_entities`);
   for (const d of data.objects) {
     if (d.type === "sun") {
-      buildSun(world.ecManager.createEntity(), d as SunData);
+      const entity = buildSun(world.ecManager.createEntity(), d as SunData);
+      if (!data.isSingleSun && d.draw?.mass) {
+        entity.addComponent(MassComponent, MassComponent.getDefaults(
+          d.draw.mass,
+          d.draw.vel,
+          d.draw.acc
+          ))
+      }
     }
 
     if (planetCheck.includes(d.type as string)) {
@@ -62,17 +90,12 @@ export function initSystem(world: World, data: SystemData) {
     }
   }
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_entities`);
+}
 
+function initWorld(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_world`);
   initCommonEntities(world);
   world.load();
   world.uiManager.infoPanel.init(data.texts, { name: data.name, constellation: data.constellation });
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_world`);
-
-  if (data.startTarget) {
-    Store.getInstance().store.focusTarget = data.startTarget;
-    const sys = world.sysManager.getSystem(CameraFocusSystem);
-    if (sys) sys.enabled = true;
-  }
-  GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}`);
 }

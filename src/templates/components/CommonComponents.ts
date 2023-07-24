@@ -1,4 +1,5 @@
 import {
+  AxesHelper,
   Color,
   EquirectangularReflectionMapping,
   PCFSoftShadowMap,
@@ -64,6 +65,9 @@ export class SceneComponent extends Component<SceneComponentData> {
     backgroundImage.mapping = EquirectangularReflectionMapping;
     backgroundImage.encoding = sRGBEncoding;
     scene.background = backgroundImage;
+
+    const ax = new AxesHelper(10000)
+    scene.add(ax)
     return { scene };
   }
 }
@@ -81,7 +85,7 @@ export class CameraComponent extends Component<CameraComponentData> {
     const cam = new PerspectiveCamera(
       55,
       Store.getInstance().state.canvas.clientWidth / Store.getInstance().state.canvas.clientHeight,
-      0.001,
+      1e-5,
       1e12
     );
     cam.position.z = 1200;

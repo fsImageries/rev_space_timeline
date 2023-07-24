@@ -193,13 +193,16 @@ systems:
   objects:
   - name: Delta Pavonis
     type: sun
-    radius: 508328.2
+    radius: 848800
     rotationPeriod: 273.6
-    distanceToParent: 1992000000  # in case of double sun its the distance from null origin
+    # distanceToParent: 1992000000
     highTemp: 7000                # TODO implement into new interfaces
     lowTemp: 3000                 # TODO implement into new interfaces
     draw:
-      mass: 20_000
+      mass: 5100000
+      # vel: 0,0,-.98e-1
+      vel: 0,0,-.025
+      acc: 0,0,0
 
   - name: Hades
     type: sun
@@ -207,11 +210,14 @@ systems:
     radius: 2000.2
     rotationPeriod: 273.6
     # orbitalPeriod: 62
-    distanceToParent: 1992000000  # in case of double sun its the distance from null origin
-    highTemp: 1e+12               # TODO implement into new interfaces
-    lowTemp: 1e+11                # TODO implement into new interfaces
+    distanceToParent: 1.079e+10
+    highTemp: 25000             # TODO implement into new interfaces
+    lowTemp: 1000                # TODO implement into new interfaces
     draw:
-      mass: 2000
+      mass: 2550000
+      # vel: 0,0,1e-1
+      vel: 0,0,0
+      acc: 0,0,.05
 
 
   - name: Oort Cloud

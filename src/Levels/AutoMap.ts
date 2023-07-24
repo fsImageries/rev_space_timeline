@@ -3,24 +3,23 @@ import { buildOortCloud } from "../Factories/OortFactory";
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
+import { SunData, SystemData } from "../dataInterfaces";
+import { Store } from "../ecs/Store";
+import { World } from "../ecs/World";
+import GLOBALS from "../helpers/Constants";
 import {
   AxisRotSystem,
   CSSMarkerSystem,
   CameraFocusSystem,
-  RaycasterSystem,
-  OrbitRotSystem,
-  RenderSystem,
-  SunUniformsUpdateSystem,
   InfoPanelCameraCoordSystem,
-  MassComponent
+  MassComponent,
+  OrbitRotSystem,
+  RaycasterSystem,
+  RenderSystem,
+  SunUniformsUpdateSystem
 } from "../templates/__init__";
-import { SunData, SystemData } from "../dataInterfaces";
-import { Store } from "../ecs/Store";
-import { World } from "../ecs/World";
-import { initCommonEntities } from "./Common";
-import GLOBALS from "../helpers/Constants";
-import { Vector3 } from "three";
 import { BinaryStarSystem } from "../templates/systems/MeshSystems";
+import { initCommonEntities } from "./Common";
 
 const planetCheck = ["moon", "planet"];
 
@@ -28,6 +27,7 @@ export function initSystem(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}`);
 
   Store.getInstance().state.DISTANCE_SCALE = 3e-8;
+  Store.getInstance().state.SIZE_SCALE = 1e-6;
   Store.getInstance().state.SIZE_SCALE = 1e-5;
 
   initSystems(world, data)

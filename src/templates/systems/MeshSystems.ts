@@ -140,7 +140,7 @@ export class InfoPanelCameraCoordSystem extends System {
 }
 
 const G = 6.674e+11
-const NUM_STEPS = 100
+const NUM_STEPS = 1
 export class BinaryStarSystem extends System {
   static queries = [[operand("exist", GravitationalObjectComponent)]];
 
@@ -178,7 +178,6 @@ export class BinaryStarSystem extends System {
   private static update(self: GravitationalObjectData) {
     if (!self.pos) return
 
-    // console.log(typeof self.vel)
     self.vel.add(self.acc)
     self.pos.add(self.vel)
     self.acc.setScalar(0)

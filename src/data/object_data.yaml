@@ -196,6 +196,7 @@ systems:
     radius: 848800
     rotationPeriod: 273.6
     # distanceToParent: 1992000000
+    distanceToParent: -1.079e+2
     highTemp: 7000                # TODO implement into new interfaces
     lowTemp: 3000                 # TODO implement into new interfaces
     draw:

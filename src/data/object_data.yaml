@@ -184,9 +184,9 @@ systems:
       Named in honour of Marco Ferris
 
 - name: Delta Pavonis
-  isSingleSun: false
+  isSingleSun: true
 
-  startTarget: Delta Pavonis  
+  startTarget: Hades
   freeCam: false
   constellation: "Pavo"
 
@@ -205,6 +205,37 @@ systems:
       vel: 0,0,-.015
       acc: 0,0,0
 
+  - name: Resurgam
+    type: planet
+    radius: 5600
+    rotationPeriod: 26
+    orbitalPeriod: 2453000
+    parent: Delta Pavonis
+    tilt: 20
+    distanceToParent: 2.992e+8
+    draw:
+      albedoPath: "./planet_textures/2k_orange_desert.jpg"
+      normalPath: "./planet_textures/1k_yellow_desert_normal.jpg"
+      glowColor: '0xdaa43d'
+      glowIntensity: 0.25
+      radius: 100
+      orbInvert: false
+
+  - name: ROC
+    type: planet
+    radius: 19113.1991
+    rotationPeriod: 50
+    orbitalPeriod: 39948
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 1.769e+8
+    draw:
+      albedoPath: "./epsilonEridani/2k_jupiter.jpg"
+      normalPath: "./epsilonEridani/ceres_normal_16k.png"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      radius: 100
+    
   - name: Hades
     type: sun
     disableLight: true
@@ -219,6 +250,22 @@ systems:
       # vel: 0,0,1e-1
       vel: 0,0,0
       acc: 0,0,.05
+
+  - name: Cerberus
+    type: "planet"
+    radius: 1737.4
+    rotationPeriod: 6552
+    orbitalPeriod: 655200
+    parent: Hades
+    tilt: 0
+    distanceToParent: 3084400000
+    draw:
+      albedoPath: "./epsilonEridani/marcosEye/moon_albedo.jpg"
+      normalPath: "./epsilonEridani/marcosEye/moon_normal.png"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      radius: 1
+      orbInvert: true
 
   - name: Oort Cloud
     type: oortcloud

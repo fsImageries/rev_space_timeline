@@ -97,6 +97,7 @@ function initWorld(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_world`);
   initCommonEntities(world);
   world.load();
+  console.log(data.constellation)
   world.uiManager.infoPanel.init(data.texts, { name: data.name, constellation: data.constellation });
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_world`);
 }

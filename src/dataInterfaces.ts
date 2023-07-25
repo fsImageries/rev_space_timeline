@@ -1,7 +1,6 @@
 import { ColorRepresentation } from "three";
 
 export interface DrawData {
-  radius?: number;
   cache?: string;
   albedoPath?: string;
   normalPath?: string;

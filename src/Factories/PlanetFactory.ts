@@ -34,7 +34,7 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
     // .addComponent(UniformsComponent, uniforms)
     .addComponent(MeshComponent, { mesh: mesh as Mesh })
     .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
-    .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot)) // implement random start rot
+    .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
     .addComponent(AtmoComponent, { mesh: atmo })
     .addComponent(OrbitLineComponent, { mesh: orbit });
 

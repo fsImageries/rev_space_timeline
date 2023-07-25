@@ -10,6 +10,7 @@ window.onload = async () => {
 
   // await world.lvlManager.openLevel("Cosmic Map");
   await world.lvlManager.openLevel("Delta Pavonis");
+  // await world.lvlManager.openLevel("Epsilon Eridani");
 
   const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
     .data.scene;

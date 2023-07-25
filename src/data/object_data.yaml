@@ -28,7 +28,6 @@ systems:
       normalPath: "./epsilonEridani/ceres_normal_16k.png"
       glowColor: '0xffffff'
       glowIntensity: 0.1
-      radius: 100
 
   - name: Yellowstone
     type: planet
@@ -43,7 +42,6 @@ systems:
       normalPath: "./epsilonEridani/ceres_normal_16k.png"
       glowColor: '0xf69f1f'
       glowIntensity: 0.25
-      radius: 100
 
   - name: Marcos Eye
     type: "moon"
@@ -186,7 +184,7 @@ systems:
 - name: Delta Pavonis
   isSingleSun: true
 
-  startTarget: Hades
+  startTarget: Delta Pavonis
   freeCam: false
   constellation: "Pavo"
 
@@ -194,7 +192,7 @@ systems:
   - name: Delta Pavonis
     type: sun
     radius: 848800
-    rotationPeriod: 273.6
+    # rotationPeriod: 273.6
     # distanceToParent: 1992000000
     distanceToParent: -1.079e+2
     highTemp: 7000                # TODO implement into new interfaces
@@ -218,8 +216,7 @@ systems:
       normalPath: "./planet_textures/1k_yellow_desert_normal.jpg"
       glowColor: '0xdaa43d'
       glowIntensity: 0.25
-      radius: 100
-      orbInvert: false
+      
 
   - name: ROC
     type: planet
@@ -234,13 +231,12 @@ systems:
       normalPath: "./epsilonEridani/ceres_normal_16k.png"
       glowColor: '0xffffff'
       glowIntensity: 0.1
-      radius: 100
     
   - name: Hades
     type: sun
     disableLight: true
     radius: 2000.2
-    rotationPeriod: 273.6
+    # rotationPeriod: 273.6
     # orbitalPeriod: 62
     distanceToParent: 5.079e+10
     highTemp: 25000             # TODO implement into new interfaces
@@ -264,20 +260,19 @@ systems:
       normalPath: "./epsilonEridani/marcosEye/moon_normal.png"
       glowColor: '0xffffff'
       glowIntensity: 0.1
-      radius: 1
-      orbInvert: true
+      orbInvert: true   
 
-  - name: Oort Cloud
-    type: oortcloud
-    radius: 
-    rotationPeriod: 
-    orbitalPeriod: 62000
-    parent: Delta Pavonis
-    tilt: 0          #1220000000000
-    distanceToParent: 19920000000000
-    draw:
-      # cache: "./epsilonEridani/oortcloud.glb"
-      radius: 2
+  # - name: Oort Cloud
+  #   type: oortcloud
+  #   radius: 
+  #   rotationPeriod: 
+  #   orbitalPeriod: 62000
+  #   parent: Delta Pavonis
+  #   tilt: 0          #1220000000000
+  #   distanceToParent: 19920000000000
+  #   draw:
+  #     # cache: "./epsilonEridani/oortcloud.glb"
+  #     radius: 2
 
   texts:
   - name: Delta Pavonis

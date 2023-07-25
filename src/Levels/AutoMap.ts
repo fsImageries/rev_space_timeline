@@ -59,6 +59,7 @@ function initSystems(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_systems`);
 }
 
+const RANGE: [number, number] = [-Math.PI / 2, Math.PI / 2]
 function initEntities(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_entities`);
   for (const d of data.objects) {
@@ -72,7 +73,7 @@ function initEntities(world: World, data: SystemData) {
     if (planetCheck.includes(d.type as string)) {
       d.draw = {
         ...d.draw,
-        initRot: randFloat(-Math.PI, Math.PI)
+        initRot: randFloat(...RANGE)
       };
       buildPlanet(world.ecManager.createEntity(), d);
     }
@@ -92,7 +93,6 @@ function initWorld(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_world`);
   initCommonEntities(world);
   world.load();
-  console.log(data.constellation)
   world.uiManager.infoPanel.init(data.texts, { name: data.name, constellation: data.constellation });
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_world`);
 }

@@ -6,7 +6,7 @@ export type TState = { [k: string]: any };
 const BASE = {
   DISTANCE_SCALE: 0,
   SIZE_SCALE: 0,
-  ORB_SCALE: 1,
+  ORB_SCALE: 1_000_0,
   ROT_SCALE: 10,
   camPos: null
 };

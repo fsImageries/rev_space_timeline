@@ -87,8 +87,8 @@ function initSuns(world: World) {
         ...d.draw,
         disableMarker: true
       }
-    }
-    return buildSun(e, d)
+    };
+    return buildSun(e, d);
   };
 
   buildSun2(world.ecManager.createEntity(), {

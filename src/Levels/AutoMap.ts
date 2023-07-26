@@ -58,7 +58,7 @@ function initSystems(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_systems`);
 }
 
-const RANGE: [number, number] = [-Math.PI / 2, Math.PI / 2]
+const RANGE: [number, number] = [-Math.PI / 2, Math.PI / 2];
 function initEntities(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_entities`);
   for (const d of data.objects) {

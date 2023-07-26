@@ -1,4 +1,5 @@
 import { Camera, Raycaster } from "three";
+import { Entity } from "../../ecs/Entity";
 import { Store } from "../../ecs/Store";
 import { System } from "../../ecs/System";
 import { World } from "../../ecs/World";
@@ -14,7 +15,6 @@ import {
     MeshComponent,
     TransformGroupComponent
 } from "../components/MeshComponents";
-import { Entity } from "../../ecs/Entity";
 
 
 export class CameraFocusSystem extends System {

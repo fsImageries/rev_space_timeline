@@ -14,7 +14,7 @@ import GLOBALS from "../helpers/Constants";
 import sunFrag from "./../glsl/sun_frag.glsl?raw";
 import sunVert from "./../glsl/sun_vert.glsl?raw";
 
-export function buildSun(entity: Entity, data: SunData, marker = true) {
+export function buildSun(entity: Entity, data: SunData) {
   const [mesh, transformGrp, rotGrp, uniforms] = buildMeshes(data);
 
   if (!data.disableLight) entity.addComponent(PointLightComponent, PointLightComponent.getDefaults("#fff", 1, 1e5));
@@ -26,7 +26,7 @@ export function buildSun(entity: Entity, data: SunData, marker = true) {
     .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
     .addComponent(SunTypeComponent);
 
-  initCelestialComponents(entity, data, marker);
+  initCelestialComponents(entity, data);
 
   return entity;
 }

@@ -80,7 +80,16 @@ export function initCosmicMap(world: World) {
 }
 
 function initSuns(world: World) {
-  const buildSun2 = (e: Entity, d: SunData) => buildSun(e, d, false);
+  const buildSun2 = (e: Entity, d: SunData) => {
+    d = {
+      ...d,
+      draw: {
+        ...d.draw,
+        disableMarker: true
+      }
+    }
+    return buildSun(e, d)
+  };
 
   buildSun2(world.ecManager.createEntity(), {
     highTemp: 7100,

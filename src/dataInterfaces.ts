@@ -1,7 +1,6 @@
 import { ColorRepresentation } from "three";
 
 export interface DrawData {
-  radius?: number;
   cache?: string;
   albedoPath?: string;
   normalPath?: string;
@@ -13,6 +12,7 @@ export interface DrawData {
   height?: number;
   orbInvert?: boolean;
   orbLen?: number;
+  orbOpacity?: number;
   genColor?: boolean;
   pointShader?: boolean;
   end?: number;
@@ -20,6 +20,7 @@ export interface DrawData {
   mass?: number;
   vel?:string;
   acc?:string;
+  disableMarker?: boolean;
 }
 
 export interface SunData extends SystemObjectData {

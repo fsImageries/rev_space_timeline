@@ -24,11 +24,10 @@ systems:
     tilt: 45
     distanceToParent: 5086400000
     draw:
-      albedoPath: "./epsilonEridani/2k_jupiter.jpg"
-      normalPath: "./epsilonEridani/ceres_normal_16k.png"
+      albedoPath: "./planetTextures/2k_jupiter.webp"
+      normalPath: "./planetTextures/ceres_normal_16k.webp"
       glowColor: '0xffffff'
       glowIntensity: 0.1
-      radius: 100
 
   - name: Yellowstone
     type: planet
@@ -39,11 +38,10 @@ systems:
     tilt: 20
     distanceToParent: 59840000000
     draw:
-      albedoPath: "./epsilonEridani/2k_venus_surface.jpg"
-      normalPath: "./epsilonEridani/ceres_normal_16k.png"
+      albedoPath: "./planetTextures/2k_venus_surface.webp"
+      normalPath: "./planetTextures/ceres_normal_16k.webp"
       glowColor: '0xf69f1f'
       glowIntensity: 0.25
-      radius: 100
 
   - name: Marcos Eye
     type: "moon"
@@ -54,8 +52,8 @@ systems:
     tilt: 0
     distanceToParent: 308440000
     draw:
-      albedoPath: "./epsilonEridani/marcosEye/moon_albedo.jpg"
-      normalPath: "./epsilonEridani/marcosEye/moon_normal.png"
+      albedoPath: "./planetTextures/moon_albedo.webp"
+      normalPath: "./planetTextures/moon_normal.webp"
       glowColor: '0xffffff'
       glowIntensity: 0.1
       radius: 1
@@ -186,7 +184,7 @@ systems:
 - name: Delta Pavonis
   isSingleSun: true
 
-  startTarget: Hades
+  startTarget: Delta Pavonis
   freeCam: false
   constellation: "Pavo"
 
@@ -194,7 +192,7 @@ systems:
   - name: Delta Pavonis
     type: sun
     radius: 848800
-    rotationPeriod: 273.6
+    # rotationPeriod: 273.6
     # distanceToParent: 1992000000
     distanceToParent: -1.079e+2
     highTemp: 7000                # TODO implement into new interfaces
@@ -205,22 +203,23 @@ systems:
       vel: 0,0,-.015
       acc: 0,0,0
 
-  - name: Resurgam
+  - name: VolcanicLike
     type: planet
-    radius: 5600
-    rotationPeriod: 26
-    orbitalPeriod: 2453000
+    radius: 3370.9
+    rotationPeriod: 66.66
+    orbitalPeriod: 19948
     parent: Delta Pavonis
-    tilt: 20
-    distanceToParent: 2.992e+8
+    tilt: 45
+    distanceToParent: 60095000
     draw:
-      albedoPath: "./planet_textures/2k_orange_desert.jpg"
-      normalPath: "./planet_textures/1k_yellow_desert_normal.jpg"
-      glowColor: '0xdaa43d'
-      glowIntensity: 0.25
-      radius: 100
-      orbInvert: false
-
+      albedoPath: "./planetTextures/2k_Volcanic.webp"
+      normalPath: "./planetTextures/2k_Volcanic_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+    
   - name: ROC
     type: planet
     radius: 19113.1991
@@ -230,17 +229,166 @@ systems:
     tilt: 45
     distanceToParent: 1.769e+8
     draw:
-      albedoPath: "./epsilonEridani/2k_jupiter.jpg"
-      normalPath: "./epsilonEridani/ceres_normal_16k.png"
+      albedoPath: "./planetTextures/2k_jupiter.webp"
+      normalPath: "./planetTextures/ceres_normal_16k.webp"
       glowColor: '0xffffff'
       glowIntensity: 0.1
-      radius: 100
+
+  - name: VenusLike
+    type: planet
+    radius: 1370.9
+    rotationPeriod: 44.66
+    orbitalPeriod: 70068
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 400950000
+    draw:
+      albedoPath: "./planetTextures/2k_Venusian.webp"
+      normalPath: "./planetTextures/2k_Venusian_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Pluto
+    type: planet
+    radius: 1469.7
+    rotationPeriod: 9
+    orbitalPeriod: 203680
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 650250000
+    draw:
+      albedoPath: "./planetTextures/2k_PlutoColour.webp"
+      normalPath: "./planetTextures/2k_PlutoColour_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: MakeMake
+    type: planet
+    radius: 2469.7
+    rotationPeriod: 9
+    orbitalPeriod: 1006800
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 750250000
+    draw:
+      albedoPath: "./planetTextures/2k_makemake_fictional.webp"
+      normalPath: "./planetTextures/2k_makemake_fictional_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
     
+  - name: Icy
+    type: planet
+    radius: 1163
+    rotationPeriod: 25.9
+    orbitalPeriod: 3004800
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 1000500000
+    draw:
+      albedoPath: "./planetTextures/2k_icy.webp"
+      normalPath: "./planetTextures/2k_icy_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Ceres
+    type: planet
+    radius: 469.7
+    rotationPeriod: 9
+    orbitalPeriod: 4036800
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 1302500000
+    draw:
+      albedoPath: "./planetTextures/2k_ceres_fictional.webp"
+      normalPath: "./planetTextures/2k_ceres_fictional_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Resurgam
+    type: planet
+    radius: 5600
+    rotationPeriod: 26
+    orbitalPeriod: 3241200
+    parent: Delta Pavonis
+    tilt: 20
+    distanceToParent: 1.6605e+9
+    draw:
+      albedoPath: "./planetTextures/2k_orange_desert.webp"
+      normalPath: "./planetTextures/1k_yellow_desert_normal.webp"
+      glowColor: '0xdaa43d'
+      glowIntensity: 0.25
+
+  - name: Haumea
+    type: planet
+    radius: 3469.7
+    rotationPeriod: 90
+    orbitalPeriod: 10068000
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 2502500000
+    draw:
+      albedoPath: "./planetTextures/2k_haumea_fictional.webp"
+      normalPath: "./planetTextures/2k_haumea_fictional_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Eris
+    type: planet
+    radius: 2069.7
+    rotationPeriod: 34
+    orbitalPeriod: 30068000
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 3502500000
+    draw:
+      albedoPath: "./planetTextures/2k_eris_fictional.webp"
+      normalPath: "./planetTextures/2k_eris_fictional_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: MartianLike
+    type: planet
+    radius: 1370.9
+    rotationPeriod: 50
+    orbitalPeriod: 70068000
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 4009500000
+    draw:
+      albedoPath: "./planetTextures/2k_Martian.webp"
+      normalPath: "./planetTextures/2k_Martian_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
   - name: Hades
     type: sun
     disableLight: true
     radius: 2000.2
-    rotationPeriod: 273.6
+    # rotationPeriod: 273.6
     # orbitalPeriod: 62
     distanceToParent: 5.079e+10
     highTemp: 25000             # TODO implement into new interfaces
@@ -260,24 +408,23 @@ systems:
     tilt: 0
     distanceToParent: 3084400000
     draw:
-      albedoPath: "./epsilonEridani/marcosEye/moon_albedo.jpg"
-      normalPath: "./epsilonEridani/marcosEye/moon_normal.png"
+      albedoPath: "./planetTextures/moon_albedo.webp"
+      normalPath: "./planetTextures/moon_normal.webp"
       glowColor: '0xffffff'
       glowIntensity: 0.1
-      radius: 1
-      orbInvert: true
+      orbInvert: true   
 
-  - name: Oort Cloud
-    type: oortcloud
-    radius: 
-    rotationPeriod: 
-    orbitalPeriod: 62000
-    parent: Delta Pavonis
-    tilt: 0          #1220000000000
-    distanceToParent: 19920000000000
-    draw:
-      # cache: "./epsilonEridani/oortcloud.glb"
-      radius: 2
+  # - name: Oort Cloud
+  #   type: oortcloud
+  #   radius: 
+  #   rotationPeriod: 
+  #   orbitalPeriod: 62000
+  #   parent: Delta Pavonis
+  #   tilt: 0          #1220000000000
+  #   distanceToParent: 19920000000000
+  #   draw:
+  #     # cache: "./epsilonEridani/oortcloud.glb"
+  #     radius: 2
 
   texts:
   - name: Delta Pavonis

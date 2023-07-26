@@ -28,10 +28,10 @@ export function initCommonEntities(world: World, camPos?: Vector3) {
   world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getDefaults(camPos));
 }
 
-export function initCelestialComponents(entity: Entity, data: SystemObjectData, marker = true) {
+export function initCelestialComponents(entity: Entity, data: SystemObjectData) {
   if (data.rotationPeriod) entity.addComponent(AxisRotComponent, AxisRotComponent.getDefaults(data.rotationPeriod));
   if (data.orbitalPeriod)
-    entity.addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod, data.draw?.orbInvert)); // TODO combine common component assignments for easy reuse (sun) like asp with servicecollection
+    entity.addComponent(OrbitRotComponent, OrbitRotComponent.getDefaults(data.orbitalPeriod, data.draw?.orbInvert));
   if (data.distanceToParent)
     entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
   if (data.parent) entity.addComponent(ParentComponent, ParentComponent.getDefaults() as ParentComponentData); // <- determine if dynamic?
@@ -43,5 +43,5 @@ export function initCelestialComponents(entity: Entity, data: SystemObjectData, 
     parent: data.parent
   } as BaseDataData);
 
-  if (marker) entity.addComponent(CSSMarkerComponent);
+  if (!data.draw?.disableMarker) entity.addComponent(CSSMarkerComponent);
 }

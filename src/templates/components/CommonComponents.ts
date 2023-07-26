@@ -60,7 +60,7 @@ export class SceneComponent extends Component<SceneComponentData> {
   static getDefaults(): SceneComponentData {
     const scene = new Scene();
     // Sky box
-    const backgroundImage = Constants.TEX_LOAD("./starmap_8k.jpg");
+    const backgroundImage = Constants.TEX_LOAD("./starmap_8k.webp");
     backgroundImage.mapping = EquirectangularReflectionMapping;
     backgroundImage.encoding = sRGBEncoding;
     scene.background = backgroundImage;

@@ -207,13 +207,13 @@ systems:
     type: planet
     radius: 5600
     rotationPeriod: 26
-    orbitalPeriod: 2453000
+    orbitalPeriod: 399480
     parent: Delta Pavonis
     tilt: 20
     distanceToParent: 2.992e+8
     draw:
-      albedoPath: "./planet_textures/2k_orange_desert.jpg"
-      normalPath: "./planet_textures/1k_yellow_desert_normal.jpg"
+      albedoPath: "./planetTextures/2k_orange_desert.jpg"
+      normalPath: "./planetTextures/1k_yellow_desert_normal.jpg"
       glowColor: '0xdaa43d'
       glowIntensity: 0.25
       
@@ -229,6 +229,20 @@ systems:
     draw:
       albedoPath: "./epsilonEridani/2k_jupiter.jpg"
       normalPath: "./epsilonEridani/ceres_normal_16k.png"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+
+  - name: Eris
+    type: planet
+    radius: 1163
+    rotationPeriod: 25.9
+    orbitalPeriod: 3994800
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 1012500000
+    draw:
+      albedoPath: "./planetTextures/2k_icy.jpg"
+      normalPath: "./planetTextures/2k_icy_normal.jpg"
       glowColor: '0xffffff'
       glowIntensity: 0.1
     

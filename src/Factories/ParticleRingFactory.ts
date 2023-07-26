@@ -199,7 +199,7 @@ function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
     basePos: { value: [0, 0, 0] },
     // maxRad: { value: ringRadius + ringWidth / 2 + 10 },
     // minRad: { value: -(ringRadius + ringWidth / 2 + 10) }
-    maxRad: { value: ringRadius},
+    maxRad: { value: ringRadius },
     minRad: { value: ringRadius }
   };
 

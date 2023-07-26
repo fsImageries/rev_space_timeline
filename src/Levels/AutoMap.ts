@@ -27,7 +27,7 @@ const planetCheck = ["moon", "planet"];
 export function initSystem(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}`);
 
-  Store.getInstance().state.DISTANCE_SCALE = data.DISTANCE_SCALE;  
+  Store.getInstance().state.DISTANCE_SCALE = data.DISTANCE_SCALE;
   Store.getInstance().state.SIZE_SCALE = data.SIZE_SCALE;
 
   initSystems(world, data);
@@ -55,7 +55,8 @@ function initSystems(world: World, data: SystemData) {
     .registerSystem(InfoPanelCameraCoordSystem);
 
   if (!data.isSingleSun) world.sysManager.registerSystem(BinaryStarSystem);
-  if (data.objects.find(obj => obj.type === "particlering")) world.sysManager.registerSystem(ParticleRingUniformsSystem);
+  if (data.objects.find((obj) => obj.type === "particlering"))
+    world.sysManager.registerSystem(ParticleRingUniformsSystem);
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_systems`);
 }
 

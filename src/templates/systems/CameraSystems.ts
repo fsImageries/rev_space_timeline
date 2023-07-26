@@ -41,7 +41,7 @@ export class CameraFocusSystem extends System {
         for (const entity of this.queries[0].entities) {
             if (tar === entity.getComponent(BaseDataComponent).data.name.toLowerCase()) {
                 entity.getComponent(TransformGroupComponent).data.group.getWorldPosition(GLOBALS.WORLD_POS);
-                const rad = entity.getComponent(RadiusComponent).data.drawRadius;
+                const rad = entity.getComponent(RadiusComponent).data.drawRadius * 2;
 
                 let mult = 14;
                 if (entity.getComponent(ParticleRingTypeComponent)) {

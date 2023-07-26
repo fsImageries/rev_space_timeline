@@ -183,3 +183,18 @@ export class BinaryStarSystem extends System {
     self.acc.setScalar(0)
   }
 }
+
+export class ParticleRingUniformsSystem extends System {
+  static queries = [[operand("exist", ParticleRingTypeComponent)]];
+
+  execute(): void {
+    if (!this.queries) return;
+    
+    for (const entity of this.queries[0].entities) {      
+      const trans = entity.getComponent(ParentComponent).data.parent.getComponent(TransformGroupComponent).data.group;
+      const ucomp = entity.getComponent(UniformsComponent);
+      trans.getWorldPosition(GLOBALS.WORLD_POS);
+      ucomp.data.basePos.value = GLOBALS.WORLD_POS.clone();
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import {
+  AxesHelper,
   Color,
   EquirectangularReflectionMapping,
   PCFSoftShadowMap,
@@ -65,7 +66,7 @@ export class SceneComponent extends Component<SceneComponentData> {
     backgroundImage.encoding = sRGBEncoding;
     scene.background = backgroundImage;
 
-    // const ax = new AxesHelper(10000)
+    // const ax = new AxesHelper(100000)
     // scene.add(ax)
     return { scene };
   }

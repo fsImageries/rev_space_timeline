@@ -45,6 +45,8 @@ export interface TextObject {
 export interface SystemData {
   name: string;
   isSingleSun: boolean;
+  DISTANCE_SCALE: number;
+  SIZE_SCALE: number;
   objects: SystemObjectData[];
   texts: TextObject[];
 

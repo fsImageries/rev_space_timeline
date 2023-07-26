@@ -29,7 +29,6 @@ export function initSystem(world: World, data: SystemData) {
   // Store.getInstance().state.DISTANCE_SCALE = 3e-8;
   Store.getInstance().state.DISTANCE_SCALE = 3e-7;
   Store.getInstance().state.SIZE_SCALE = 1e-5;
-  // Store.getInstance().state.ORB_SCALE = 10_000_000;
 
   initSystems(world, data);
   initEntities(world, data);

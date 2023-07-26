@@ -203,21 +203,23 @@ systems:
       vel: 0,0,-.015
       acc: 0,0,0
 
-  - name: Resurgam
+  - name: VolcanicLike
     type: planet
-    radius: 5600
-    rotationPeriod: 26
-    orbitalPeriod: 399480
+    radius: 3370.9
+    rotationPeriod: 66.66
+    orbitalPeriod: 19948
     parent: Delta Pavonis
-    tilt: 20
-    distanceToParent: 2.992e+8
+    tilt: 45
+    distanceToParent: 60095000
     draw:
-      albedoPath: "./planetTextures/2k_orange_desert.jpg"
-      normalPath: "./planetTextures/1k_yellow_desert_normal.jpg"
-      glowColor: '0xdaa43d'
-      glowIntensity: 0.25
-      
-
+      albedoPath: "./planetTextures/2k_Volcanic.png"
+      normalPath: "./planetTextures/2k_Volcanic_normal.jpg"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+    
   - name: ROC
     type: planet
     radius: 19113.1991
@@ -232,20 +234,156 @@ systems:
       glowColor: '0xffffff'
       glowIntensity: 0.1
 
-  - name: Eris
+  - name: VenusLike
+    type: planet
+    radius: 1370.9
+    rotationPeriod: 44.66
+    orbitalPeriod: 70068
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 400950000
+    draw:
+      albedoPath: "./planetTextures/2k_Venusian.png"
+      normalPath: "./planetTextures/2k_Venusian_normal.jpg"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Pluto
+    type: planet
+    radius: 1469.7
+    rotationPeriod: 9
+    orbitalPeriod: 203680
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 650250000
+    draw:
+      albedoPath: "./planetTextures/4k_PlutoColour.webp"
+      normalPath: "./planetTextures/4k_PlutoColour_normal.jpg"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: MakeMake
+    type: planet
+    radius: 2469.7
+    rotationPeriod: 9
+    orbitalPeriod: 1006800
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 750250000
+    draw:
+      albedoPath: "./planetTextures/2k_makemake_fictional.jpg"
+      normalPath: "./planetTextures/2k_makemake_fictional_normal.jpg"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+    
+  - name: Icy
     type: planet
     radius: 1163
     rotationPeriod: 25.9
-    orbitalPeriod: 3994800
+    orbitalPeriod: 3004800
     parent: Delta Pavonis
     tilt: 45
-    distanceToParent: 1012500000
+    distanceToParent: 1000500000
     draw:
       albedoPath: "./planetTextures/2k_icy.jpg"
       normalPath: "./planetTextures/2k_icy_normal.jpg"
       glowColor: '0xffffff'
       glowIntensity: 0.1
-    
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Ceres
+    type: planet
+    radius: 469.7
+    rotationPeriod: 9
+    orbitalPeriod: 4036800
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 1302500000
+    draw:
+      albedoPath: "./planetTextures/2k_ceres_fictional.jpg"
+      normalPath: "./planetTextures/2k_ceres_fictional_normal.jpg"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Resurgam
+    type: planet
+    radius: 5600
+    rotationPeriod: 26
+    orbitalPeriod: 3241200
+    parent: Delta Pavonis
+    tilt: 20
+    distanceToParent: 1.6605e+9
+    draw:
+      albedoPath: "./planetTextures/2k_orange_desert.jpg"
+      normalPath: "./planetTextures/1k_yellow_desert_normal.jpg"
+      glowColor: '0xdaa43d'
+      glowIntensity: 0.25
+
+  - name: Haumea
+    type: planet
+    radius: 3469.7
+    rotationPeriod: 90
+    orbitalPeriod: 10068000
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 2502500000
+    draw:
+      albedoPath: "./planetTextures/2k_haumea_fictional.jpg"
+      normalPath: "./planetTextures/2k_haumea_fictional_normal.jpg"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Eris
+    type: planet
+    radius: 2069.7
+    rotationPeriod: 34
+    orbitalPeriod: 30068000
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 3502500000
+    draw:
+      albedoPath: "./planetTextures/2k_eris_fictional.jpg"
+      normalPath: "./planetTextures/2k_eris_fictional_normal.jpg"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: MartianLike
+    type: planet
+    radius: 1370.9
+    rotationPeriod: 50
+    orbitalPeriod: 70068000
+    parent: Delta Pavonis
+    tilt: 45
+    distanceToParent: 4009500000
+    draw:
+      albedoPath: "./planetTextures/2k_Martian.png"
+      normalPath: "./planetTextures/2k_Martian_normal.jpg"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
   - name: Hades
     type: sun
     disableLight: true

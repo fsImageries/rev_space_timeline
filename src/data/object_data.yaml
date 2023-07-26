@@ -2,6 +2,8 @@
 systems:
 - name: Epsilon Eridani
   isSingleSun: true
+  DISTANCE_SCALE: 3e-8
+  SIZE_SCALE: 1e-5
 
   startTarget: Yellowstone  # determines which object should be targeted when the system is loaded
   freeCam: false            # determine if the scene should start in freeCam mode (Cosmic Map starts in freemode)
@@ -57,7 +59,7 @@ systems:
       glowColor: '0xffffff'
       glowIntensity: 0.1
       radius: 1
-      orbInvert: true
+      orbInvert: false
       orbLen: 45
       showMarker: false # TODO Defaults to true
       
@@ -183,6 +185,8 @@ systems:
 
 - name: Delta Pavonis
   isSingleSun: true
+  DISTANCE_SCALE: 3e-7
+  SIZE_SCALE: 2e-5
 
   startTarget: Delta Pavonis
   freeCam: false

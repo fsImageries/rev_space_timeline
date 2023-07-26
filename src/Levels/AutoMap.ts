@@ -16,7 +16,8 @@ import {
   OrbitRotSystem,
   RaycasterSystem,
   RenderSystem,
-  SunUniformsUpdateSystem
+  SunUniformsUpdateSystem,
+  ParticleRingUniformsSystem
 } from "../templates/__init__";
 import { BinaryStarSystem } from "../templates/systems/MeshSystems";
 import { initCommonEntities } from "./Common";
@@ -26,9 +27,8 @@ const planetCheck = ["moon", "planet"];
 export function initSystem(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}`);
 
-  // Store.getInstance().state.DISTANCE_SCALE = 3e-8;
-  Store.getInstance().state.DISTANCE_SCALE = 3e-7;
-  Store.getInstance().state.SIZE_SCALE = 1e-5;
+  Store.getInstance().state.DISTANCE_SCALE = data.DISTANCE_SCALE;  
+  Store.getInstance().state.SIZE_SCALE = data.SIZE_SCALE;
 
   initSystems(world, data);
   initEntities(world, data);
@@ -55,6 +55,7 @@ function initSystems(world: World, data: SystemData) {
     .registerSystem(InfoPanelCameraCoordSystem);
 
   if (!data.isSingleSun) world.sysManager.registerSystem(BinaryStarSystem);
+  if (data.objects.find(obj => obj.type === "particlering")) world.sysManager.registerSystem(ParticleRingUniformsSystem);
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_systems`);
 }
 

@@ -60,7 +60,8 @@ import {
   SunUniformsUpdateSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
-  InfoPanelCameraCoordSystem
+  InfoPanelCameraCoordSystem,
+  ParticleRingUniformsSystem
 } from "./systems/MeshSystems";
 
 import { CameraFocusSystem, RaycasterSystem } from "./systems/CameraSystems";
@@ -125,5 +126,6 @@ export {
   RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
-  InfoPanelCameraCoordSystem
+  InfoPanelCameraCoordSystem,
+  ParticleRingUniformsSystem
 };

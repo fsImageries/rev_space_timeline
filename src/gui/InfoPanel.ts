@@ -125,7 +125,7 @@ export class InfoPanelManager {
   public init(texts: TextObject[], lvlInfo: LvlInfo) {
     this.genTexts(texts);
     this.lvlInfo = lvlInfo;
-    this.setConstellation(lvlInfo.constellation)
+    this.setConstellation(lvlInfo.constellation);
   }
 
   public setConstellation(name: string) {
@@ -134,7 +134,7 @@ export class InfoPanelManager {
 
   public setTarget(entity: Entity, tab = "tab2") {
     const base = entity.getComponent(BaseDataComponent);
-    const content = this.map[base.data.name.toLowerCase()]
+    const content = this.map[base.data.name.toLowerCase()];
     this.timeline.innerHTML = content ? content : "N/A";
     this.title.innerText = base.data.name;
     this.subtitle.innerText = base.data.parent ? base.data.parent : "Local Group";

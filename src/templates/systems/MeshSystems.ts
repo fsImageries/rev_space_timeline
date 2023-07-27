@@ -104,8 +104,8 @@ export class CSSMarkerSystem extends System {
 }
 
 const ORIGIN = new Vector3(0, 0, 0); // TODO move to GLOBALS
-const MAX = 50 * Store.getInstance().store.LIGHTYEAR * 1e-11;
-const MIN = 25 * Store.getInstance().store.LIGHTYEAR * 1e-11;
+const MAX = 60 * Store.getInstance().store.LIGHTYEAR * 1e-11;
+const MIN = 35 * Store.getInstance().store.LIGHTYEAR * 1e-11;
 
 export class CosmicMapStartTextSystem extends System {
   static queries = [[operand("exist", CameraComponent)]];

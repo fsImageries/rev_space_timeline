@@ -45,7 +45,7 @@ export function initCosmicMap(world: World) {
 
   GLOBALS.LOAD_MANAGER.itemStart("://CosmicMap_world");
   initLines(world);
-  Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.5);
+  Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.65);
   initCommonEntities(world, Store.getInstance().state.camPos);
   world.load();
 
@@ -237,6 +237,18 @@ function initSuns(world: World) {
     draw: { initRot: Math.PI * -0.1 },
     texts: ["Haldora [SHADOWS]", "- Hela [SCUTTLERS, NESTBUILDERS(?)]"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
+
+  buildSun2(world.ecManager.createEntity(), {
+    highTemp: 3800,
+    lowTemp: 500,
+    name: "AU Microscopii",
+    rotationPeriod: 856,
+    radius: 2800,
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 28.69, Store.getInstance().store.LIGHTYEAR * -26.4],
+    disableLight: true,
+    draw: { initRot: Math.PI * -.8 },
+    texts: ["MichaelMas [Sun Hollow]"]
+  }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 }
 
 function initLines(world: World) {
@@ -255,6 +267,11 @@ function initLines(world: World) {
     .addComponent(BasicRingComponent, BasicRingComponent.getDefaults(15))
     .addComponent(BasicRingTextComponent, BasicRingTextComponent.getDefaults("15LY", 15));
 
+  world.ecManager
+    .createEntity()
+    .addComponent(BasicRingComponent, BasicRingComponent.getDefaults(25))
+    .addComponent(BasicRingTextComponent, BasicRingTextComponent.getDefaults("25LY", 25));
+
   world.ecManager.createEntity().addComponent(DiskLinesComponent, {} as LineSegmentData);
 
   const linepairs = [
@@ -271,7 +288,9 @@ function initLines(world: World) {
     "61 Cygni",
     "Sol",
     "Ross 248",
-    "Sol"
+    "Sol",
+    "Epsilon Eridani",
+    "AU Microscopii",
   ];
   world.ecManager.createEntity().addComponent(ObjectLineComponent, { pairs: linepairs } as unknown as ObjectLineData);
 }

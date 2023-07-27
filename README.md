@@ -17,4 +17,5 @@ Texture sources:
 - [Star map HDRI](https://svs.gsfc.nasa.gov/3895)
 - [Pluto maps](https://planet-texture-maps.fandom.com/wiki/Pluto)
 - [Fictional planet maps](https://www.texturesforplanets.com/texture-packs.shtml)
-- [Mesh Textures](https://www.freepik.com/free-photos-vectors/mesh-texture)
+- [Mesh Textures](https://www.freepik.com/free-vector/abstract-pattern-design_921190.htm#query=mesh%20texture&position=10&from_view=keyword&track=ais)
+- [Organic Texture](https://www.freepik.com/free-photo/pastel-green-bubble-art-black-background-diy-style_17586584.htm#query=sick%20texture&position=9&from_view=search&track=ais)

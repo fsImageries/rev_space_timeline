@@ -414,8 +414,8 @@ systems:
     tilt: 0
     distanceToParent: 3084400000
     draw:
-      albedoPath: "./planetTextures/moon_albedo.webp"
-      normalPath: "./planetTextures/moon_normal.webp"
+      albedoPath: "./planetTextures/cerberus.webp"
+      normalPath: "./planetTextures/cerberus_normal.webp"
       glowColor: '0xffffff'
       glowIntensity: 0.1
       orbInvert: true   

@@ -23,7 +23,8 @@ systems:
     rotationPeriod: 24
     orbitalPeriod: 63948
     parent: Epsilon Eridani
-    tilt: 45
+    # tilt: -30.1
+    tilt: -30.1
     distanceToParent: 5086400000
     draw:
       albedoPath: "./planetTextures/2k_jupiter.webp"
@@ -37,7 +38,7 @@ systems:
     rotationPeriod: 26
     orbitalPeriod: 2453000
     parent: Epsilon Eridani
-    tilt: 20
+    tilt: -3.13 
     distanceToParent: 59840000000
     draw:
       albedoPath: "./planetTextures/2k_venus_surface.webp"
@@ -213,7 +214,7 @@ systems:
     rotationPeriod: 66.66
     orbitalPeriod: 19948
     parent: Delta Pavonis
-    tilt: 45
+    tilt: .03
     distanceToParent: 60095000
     draw:
       albedoPath: "./planetTextures/2k_Volcanic.webp"
@@ -230,7 +231,7 @@ systems:
     rotationPeriod: 50
     orbitalPeriod: 39948
     parent: Delta Pavonis
-    tilt: 45
+    tilt: 2.64
     distanceToParent: 1.769e+8
     draw:
       albedoPath: "./planetTextures/2k_jupiter.webp"
@@ -244,7 +245,7 @@ systems:
     rotationPeriod: 44.66
     orbitalPeriod: 70068
     parent: Delta Pavonis
-    tilt: 45
+    tilt: 24.44
     distanceToParent: 400950000
     draw:
       albedoPath: "./planetTextures/2k_Venusian.webp"
@@ -261,7 +262,7 @@ systems:
     rotationPeriod: 9
     orbitalPeriod: 203680
     parent: Delta Pavonis
-    tilt: 45
+    tilt: 25.19
     distanceToParent: 650250000
     draw:
       albedoPath: "./planetTextures/2k_PlutoColour.webp"
@@ -278,7 +279,7 @@ systems:
     rotationPeriod: 9
     orbitalPeriod: 1006800
     parent: Delta Pavonis
-    tilt: 45
+    tilt: 3.13
     distanceToParent: 750250000
     draw:
       albedoPath: "./planetTextures/2k_makemake_fictional.webp"
@@ -295,7 +296,7 @@ systems:
     rotationPeriod: 25.9
     orbitalPeriod: 3004800
     parent: Delta Pavonis
-    tilt: 45
+    tilt: 26.73
     distanceToParent: 1000500000
     draw:
       albedoPath: "./planetTextures/2k_icy.webp"
@@ -312,7 +313,7 @@ systems:
     rotationPeriod: 9
     orbitalPeriod: 4036800
     parent: Delta Pavonis
-    tilt: 45
+    tilt: 82.29
     distanceToParent: 1302500000
     draw:
       albedoPath: "./planetTextures/2k_ceres_fictional.webp"
@@ -329,7 +330,7 @@ systems:
     rotationPeriod: 26
     orbitalPeriod: 3241200
     parent: Delta Pavonis
-    tilt: 20
+    tilt: 4.20
     distanceToParent: 1660500000
     draw:
       albedoPath: "./planetTextures/2k_orange_desert.webp"
@@ -343,7 +344,7 @@ systems:
     rotationPeriod: 90
     orbitalPeriod: 10068000
     parent: Delta Pavonis
-    tilt: 45
+    tilt: 28.32
     distanceToParent: 1452500000
     draw:
       albedoPath: "./planetTextures/2k_haumea_fictional.webp"
@@ -360,7 +361,7 @@ systems:
     rotationPeriod: 34
     orbitalPeriod: 30068000
     parent: Delta Pavonis
-    tilt: 45
+    tilt: 57.47
     #                 1660500000
     distanceToParent: 2095025000
     draw:
@@ -378,7 +379,7 @@ systems:
     rotationPeriod: 50
     orbitalPeriod: 70068000
     parent: Delta Pavonis
-    tilt: 45
+    tilt: 3.976
     distanceToParent: 310000000
     draw:
       albedoPath: "./planetTextures/2k_Martian.webp"
@@ -405,7 +406,7 @@ systems:
       acc: 0,0,.05
 
   - name: Cerberus
-    type: "planet"
+    type: "moon"
     radius: 1737.4
     rotationPeriod: 6552
     orbitalPeriod: 655200

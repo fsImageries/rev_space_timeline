@@ -7,7 +7,7 @@ const BASE = {
   DISTANCE_SCALE: 0,
   SIZE_SCALE: 0,
   ORB_SCALE: 1,
-  // ORB_SCALE: 1_0000,
+  // ORB_SCALE: 1_000000,
   ROT_SCALE: 10,
   camPos: null
 };

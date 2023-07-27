@@ -36,7 +36,7 @@ import {
   CSSMarkerComponent,
   ParentComponent,
   ParentComponentData,
-  ParticleRingComponent,
+  ParticleRingComponent
 } from "./components/MeshComponents";
 
 import {
@@ -48,7 +48,8 @@ import {
   RadiusComponent,
   RadiusData,
   OrbitLineComponent,
-  TiltComponent, TiltData
+  TiltComponent,
+  TiltData
 } from "./components/CelestialComponents";
 
 import { GravitationalObjectComponent, GravitationalObjectData } from "./components/DynamicComponents";
@@ -109,7 +110,14 @@ export type {
 };
 
 // Celestial Components
-export { AxisRotComponent, OrbitRotComponent, DistanceToParentComponent, RadiusComponent, OrbitLineComponent, TiltComponent };
+export {
+  AxisRotComponent,
+  OrbitRotComponent,
+  DistanceToParentComponent,
+  RadiusComponent,
+  OrbitLineComponent,
+  TiltComponent
+};
 export type { RotData, DistanceToParentData, RadiusData, TiltData };
 
 // Dynamic Components

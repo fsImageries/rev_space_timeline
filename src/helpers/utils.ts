@@ -52,7 +52,7 @@ export function formatYear(year:string) {
   const prefix = year.startsWith("≈") ? "≈": ""
   if (!match?.[0]) return year
   
-  let parsed = parseInt(match?.[0])
+  const parsed = parseInt(match?.[0])
   if (parsed) {
     year = formatter.format(parsed)
     // console.log(tmp)

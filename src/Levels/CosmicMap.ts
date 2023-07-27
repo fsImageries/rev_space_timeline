@@ -246,7 +246,7 @@ function initSuns(world: World) {
     radius: 2800,
     distanceToParent: [Store.getInstance().store.LIGHTYEAR * 28.69, Store.getInstance().store.LIGHTYEAR * -26.4],
     disableLight: true,
-    draw: { initRot: Math.PI * -.8 },
+    draw: { initRot: Math.PI * -0.8 },
     texts: ["MichaelMas [Sun Hollow]"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 }
@@ -290,7 +290,7 @@ function initLines(world: World) {
     "Ross 248",
     "Sol",
     "Epsilon Eridani",
-    "AU Microscopii",
+    "AU Microscopii"
   ];
   world.ecManager.createEntity().addComponent(ObjectLineComponent, { pairs: linepairs } as unknown as ObjectLineData);
 }

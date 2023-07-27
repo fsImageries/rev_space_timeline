@@ -143,11 +143,12 @@ export class InfoPanelManager {
   }
 
   private setSysTarget() {
+    console.log(this.fullInfo)
     this.timeline.innerHTML = this.map[this.sysKey];
     this.title.innerText = this.lvlInfo.name;
     this.info.innerHTML = this.fullInfo;
     this.subtitle.innerText = "Local Group";
-    this.setConstellation(this.lvlInfo.constellation);
+    // this.setConstellation(this.lvlInfo.constellation);
   }
 
   private genTexts(texts: TextObject[]) {
@@ -157,8 +158,11 @@ export class InfoPanelManager {
       .map((obj) => formatTexts(obj.timeline as string[], true, capitalize(obj.name)))
       .flat()
       .sort((a: string, b: string) => {
-        const aa = getFirstYear(splitWord(a)?.[0]);
-        const bb = getFirstYear(splitWord(b)?.[0]);
+        const aa = getFirstYear(splitWord(a)?.[0])?.replace(".", "");
+        const bb = getFirstYear(splitWord(b)?.[0])?.replace(".", "");
+        // console.log(splitWord(a)?.[0])
+        // console.log(parseInt(aa), bb)
+        if (!aa) return -1 // we assume something like 'unknown' is used
 
         if (!aa || !bb) return 0;
         const year1 = parseInt(aa);
@@ -171,15 +175,14 @@ export class InfoPanelManager {
     // generate map from obj to texts
     const map: TextsMap = {};
     texts.forEach((obj) => {
-      if (!obj.timeline) {
-        if (!obj.all) return;
+      if (obj.all) {
         this.sysKey = obj.name.toLowerCase();
         map[this.sysKey] = this.fullTxt;
         this.fullInfo = obj.info ? obj.info : "";
-
         return;
       }
 
+      if (!obj.timeline) return
       const val = formatTexts(obj.timeline, false) as string[];
       map[obj.name.toLowerCase()] = val.join("\n\r");
     });

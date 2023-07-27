@@ -116,7 +116,7 @@ systems:
   - name: Tangerine Dream
     timeline:
       - |-
-        2560-2600
+        2560 - 2600
         Demarchists start to mine and pre-process metallic hydrogen
       - |-
         2605
@@ -199,7 +199,8 @@ systems:
     radius: 848800
     # rotationPeriod: 273.6
     # distanceToParent: 1992000000
-    distanceToParent: -1.079e+2
+    orbitalPeriod: 21365.64
+    distanceToParent: -2697500000.0
     highTemp: 7000                # TODO implement into new interfaces
     lowTemp: 3000                 # TODO implement into new interfaces
     draw:
@@ -395,7 +396,7 @@ systems:
     disableLight: true
     radius: 2000.2
     # rotationPeriod: 273.6
-    # orbitalPeriod: 62
+    orbitalPeriod: 87600
     distanceToParent: 5.079e+10
     highTemp: 25000             # TODO implement into new interfaces
     lowTemp: 1000                # TODO implement into new interfaces
@@ -419,18 +420,6 @@ systems:
       glowColor: '0xffffff'
       glowIntensity: 0.1
       orbInvert: true   
-
-  # - name: Oort Cloud
-  #   type: oortcloud
-  #   radius: 
-  #   rotationPeriod: 
-  #   orbitalPeriod: 62000
-  #   parent: Delta Pavonis
-  #   tilt: 0          #1220000000000
-  #   distanceToParent: 19920000000000
-  #   draw:
-  #     # cache: "./epsilonEridani/oortcloud.glb"
-  #     radius: 2
 
   texts:
   - name: Delta Pavonis
@@ -477,5 +466,14 @@ systems:
     timeline: 
       - |-
         Unknown
-        Created from an unknown civilisation millions of years in the past
-
+        Created from unknown civilisation(s) millions of years in the past
+      - |-
+        -1000000
+        A faction of the Banished (subgroup of the Amarantin) fled into Hades
+      - |-
+        2566
+        Dan Sylveste and his wife entered the construct
+        Ana Khouri also entered and left the construct
+      - |-
+        ≈2633
+        Aura is conceived moments before entering the Hadex Matrix with Ana

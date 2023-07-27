@@ -143,7 +143,7 @@ export class InfoPanelManager {
   }
 
   private setSysTarget() {
-    console.log(this.fullInfo)
+    console.log(this.fullInfo);
     this.timeline.innerHTML = this.map[this.sysKey];
     this.title.innerText = this.lvlInfo.name;
     this.info.innerHTML = this.fullInfo;
@@ -162,7 +162,7 @@ export class InfoPanelManager {
         const bb = getFirstYear(splitWord(b)?.[0])?.replace(".", "");
         // console.log(splitWord(a)?.[0])
         // console.log(parseInt(aa), bb)
-        if (!aa) return -1 // we assume something like 'unknown' is used
+        if (!aa) return -1; // we assume something like 'unknown' is used
 
         if (!aa || !bb) return 0;
         const year1 = parseInt(aa);
@@ -182,7 +182,7 @@ export class InfoPanelManager {
         return;
       }
 
-      if (!obj.timeline) return
+      if (!obj.timeline) return;
       const val = formatTexts(obj.timeline, false) as string[];
       map[obj.name.toLowerCase()] = val.join("\n\r");
     });

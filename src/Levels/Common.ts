@@ -11,7 +11,8 @@ import {
   CSSMarkerComponent,
   OrbitRotComponent,
   ParentComponent,
-  ParentComponentData
+  ParentComponentData,
+  TiltComponent
 } from "../templates/__init__";
 import { World } from "../ecs/World";
 import { Entity } from "../ecs/Entity";
@@ -35,7 +36,8 @@ export function initCelestialComponents(entity: Entity, data: SystemObjectData) 
   if (data.distanceToParent)
     entity.addComponent(DistanceToParentComponent, DistanceToParentComponent.getDefaults(data.distanceToParent));
   if (data.parent) entity.addComponent(ParentComponent, ParentComponent.getDefaults() as ParentComponentData); // <- determine if dynamic?
-
+  if (data.tilt && data.tilt != 0) entity.addComponent(TiltComponent, TiltComponent.getDefaults(data.tilt))
+ 
   entity.addComponent(RadiusComponent, RadiusComponent.getDefaults(data.radius)).addComponent(BaseDataComponent, {
     name: data.name,
     uuid: crypto.randomUUID() as string,

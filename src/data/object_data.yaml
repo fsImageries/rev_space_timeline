@@ -435,3 +435,47 @@ systems:
   texts:
   - name: Delta Pavonis
     all: true
+    timeline:
+      - |-
+        2633
+        Was teared open by the Inibitors to cause mass ejection of solar mass
+
+  - name: Resurgam
+    timeline: 
+      - |-
+        2491
+        Departure of the Lorean to Resurgam (from Yellowstone)
+      - |-
+        2511
+        The Lorean colonized Resurgam
+      - |-
+        2511
+        Dan Sylveste starts acheological expedition
+      - |-
+        ≈2566
+        Nostalgia for Infinity reached Resurgam in the search for Syveste
+      - |-
+        2566
+        Abduction of Sylveste from Resurgam
+      - |-
+        2566
+        Start expedition to Cerberus
+      - |-
+        2633
+        Confrontation between Clavain and Volyova around Resurgam
+      - |-
+        2633
+        Was rendered uninhabitable once again by an Inihibitor solar weapon
+      
+  - name: ROC
+    timeline: 
+      - |-
+        ≈2630
+        Was destroyed by the Inhibitors to be used as weapon
+
+  - name: Hades
+    timeline: 
+      - |-
+        Unknown
+        Created from an unknown civilisation millions of years in the past
+

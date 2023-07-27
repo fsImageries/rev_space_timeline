@@ -5,7 +5,7 @@ import { System } from "../../ecs/System";
 import { World } from "../../ecs/World";
 import { operand } from "../../ecs/utils";
 import GLOBALS from "../../helpers/Constants";
-import { RadiusComponent } from "../components/CelestialComponents";
+import { OrbitLineComponent, RadiusComponent } from "../components/CelestialComponents";
 import {
     BaseDataComponent,
     CameraComponent, ParticleRingTypeComponent
@@ -89,6 +89,11 @@ export class RaycasterSystem extends System {
                 if (hasTxt) {
                     intersects = raycaster.intersectObjects([hasTxt.data.title, hasTxt.data.texts]);
                 }
+
+                const hasOrbit = entity.getComponent(OrbitLineComponent)
+                if (hasOrbit) {
+                    intersects = raycaster.intersectObject(hasOrbit.data.mesh)
+                }
             }
 
             if (intersects.length > 0) {
@@ -112,7 +117,7 @@ function react2intersect(entity: Entity, cam: Camera, world: World, forceSwtich 
     if (rcomp && world.lvlManager.currentLvl === world.lvlManager.levelsNames[0]) {
         tcomp.data.group.getWorldPosition(GLOBALS.WORLD_POS);
         const dist = cam.position.distanceTo(GLOBALS.WORLD_POS);
-        if (dist < rcomp.data.drawRadius * 20) {
+        if (dist < rcomp.data.drawRadius * 40) {
             world.lvlManager.openLevel(base.data.name);
             return;
         }

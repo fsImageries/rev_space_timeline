@@ -185,7 +185,7 @@ systems:
 
 - name: Delta Pavonis
   isSingleSun: true
-  DISTANCE_SCALE: 3e-7
+  DISTANCE_SCALE: 4e-7
   SIZE_SCALE: 2e-5
 
   startTarget: Delta Pavonis
@@ -330,7 +330,7 @@ systems:
     orbitalPeriod: 3241200
     parent: Delta Pavonis
     tilt: 20
-    distanceToParent: 1.6605e+9
+    distanceToParent: 1660500000
     draw:
       albedoPath: "./planetTextures/2k_orange_desert.webp"
       normalPath: "./planetTextures/1k_yellow_desert_normal.webp"
@@ -344,7 +344,7 @@ systems:
     orbitalPeriod: 10068000
     parent: Delta Pavonis
     tilt: 45
-    distanceToParent: 2502500000
+    distanceToParent: 1452500000
     draw:
       albedoPath: "./planetTextures/2k_haumea_fictional.webp"
       normalPath: "./planetTextures/2k_haumea_fictional_normal.webp"
@@ -361,7 +361,8 @@ systems:
     orbitalPeriod: 30068000
     parent: Delta Pavonis
     tilt: 45
-    distanceToParent: 3502500000
+    #                 1660500000
+    distanceToParent: 2095025000
     draw:
       albedoPath: "./planetTextures/2k_eris_fictional.webp"
       normalPath: "./planetTextures/2k_eris_fictional_normal.webp"
@@ -378,7 +379,7 @@ systems:
     orbitalPeriod: 70068000
     parent: Delta Pavonis
     tilt: 45
-    distanceToParent: 4009500000
+    distanceToParent: 310000000
     draw:
       albedoPath: "./planetTextures/2k_Martian.webp"
       normalPath: "./planetTextures/2k_Martian_normal.webp"

@@ -17,3 +17,4 @@ Texture sources:
 - [Star map HDRI](https://svs.gsfc.nasa.gov/3895)
 - [Pluto maps](https://planet-texture-maps.fandom.com/wiki/Pluto)
 - [Fictional planet maps](https://www.texturesforplanets.com/texture-packs.shtml)
+- [Mesh Textures](https://www.freepik.com/free-photos-vectors/mesh-texture)

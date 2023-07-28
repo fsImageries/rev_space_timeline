@@ -170,9 +170,9 @@
     font-weight: bold;
 }
 
-#infoPanelMain input {
+/* #infoPanelMain input {
     display: none;
-}
+} */
 
 #infoPanelMain .tab1,
 #infoPanelMain .tab2,
@@ -239,14 +239,6 @@
     background-color: rgba(255, 255, 255, 0.25);
 }
 
-/* #tab1:checked~nav label[for="tab1"]:after,
-#tab2:checked~nav label[for="tab2"]:after,
-#tab3:checked~nav label[for="tab3"]:after {} */
-
-/* #infoPanelMain .tab1,
-#infoPanelMain .tab2,
-#infoPanelMain .tab3 {} */
-
 /* Scrollbar crap */
 #infoPanelMain::-webkit-scrollbar-track {
     /* -webkit-box-shadow: inset 0 0 6px var(--gray-high); */
@@ -282,6 +274,26 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+}
+
+#checkboxArea {
+    display: flex;
+    flex-direction: column;
+}
+
+#checkboxArea .checkbox {
+    display: flex;
+    flex-direction: row;
+    font-weight: 500;
+    align-items: center;
+}
+
+#checkboxArea .checkbox input[type=checkbox] {
+    width: 3%;
+    height: 3%;
+    transform: scale(1.2);
+    margin: 0 2.5%;
+    accent-color: var(--gray);
 }
 
 @media only screen and (max-width: 1500px) {

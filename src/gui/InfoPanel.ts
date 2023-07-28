@@ -18,6 +18,7 @@ export class InfoPanelManager {
   public subtext: HTMLDivElement;
   public menubtn: HTMLImageElement;
   public menutip: HTMLDivElement;
+  public displayMarkerCB: HTMLInputElement;
 
   private _coords: [HTMLElement, HTMLElement, HTMLElement];
 
@@ -37,8 +38,11 @@ export class InfoPanelManager {
     this.subtext = document.querySelector("#infoPanelSubtextArea .subtitle") as HTMLDivElement;
     this.menubtn = document.getElementById("infoPanelButton") as HTMLImageElement;
     this.menutip = document.getElementById("infoPanelButtonText") as HTMLDivElement;
+    this.displayMarkerCB = document.getElementById("displayMarker") as HTMLInputElement;
     // if (!(this.main && this.timeline && this.title && this.subtitle && this.subtext && this.menubtn))
     //   throw new Error("Can't find info panel html elements")
+
+    this.displayMarkerCB.checked = Store.getInstance().store.displayMarkerVisibility
 
     const x = document.querySelector("#infoPanelFooter .x .digit") as HTMLElement;
     const y = document.querySelector("#infoPanelFooter .y .digit") as HTMLElement;
@@ -65,6 +69,10 @@ export class InfoPanelManager {
     this.menubtn.onmouseleave = () => {
       this.menutip?.classList.remove("active");
     };
+
+    this.displayMarkerCB.onchange = () => {
+      Store.getInstance().settings.displayMarkerVisibility[1](this.displayMarkerCB.checked)
+    }
 
     const handle = setTimeout(() => {
       this.menutip?.classList.add("active");

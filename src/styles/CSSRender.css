@@ -18,6 +18,7 @@
     position: relative;
     /* opacity: 0 !important; */
     /* pointer-events: none; */
+    visibility: var(--marker-diamond-visibility);
 }
 
 .markerText {

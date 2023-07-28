@@ -47,7 +47,7 @@ export class Store {
       displayMarkerVisibility: [visibility, (val:boolean) => {
         this.settings.displayMarkerVisibility[0] = val
         localStorage.setItem("markerVisiblity", val.toString())
-        document.documentElement.style.setProperty('--marker-diamond-visibility', val ? "visible" : "hidden");
+        document.documentElement?.style.setProperty('--marker-diamond-visibility', val ? "visible" : "hidden");
       }],
     }
 

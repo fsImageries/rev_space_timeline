@@ -26,10 +26,10 @@ export class Store {
   public state: TState;
 
   constructor() {
-    const dmVisibility = localStorage.getItem("markerVisiblity")
-    let visibility = true
+    const dmVisibility = localStorage.getItem("markerVisiblity");
+    let visibility = true;
     if (dmVisibility) {
-      visibility = dmVisibility === "true"? true: false
+      visibility = dmVisibility === "true" ? true : false;
     }
 
     this.store = {
@@ -44,19 +44,22 @@ export class Store {
 
     this.settings = {
       // TODO when more settings need to be saved in local storage switch to json object
-      displayMarkerVisibility: [visibility, (val:boolean) => {
-        this.settings.displayMarkerVisibility[0] = val
-        localStorage.setItem("markerVisiblity", val.toString())
-        document.documentElement?.style.setProperty('--marker-diamond-visibility', val ? "visible" : "hidden");
-      }],
-    }
+      displayMarkerVisibility: [
+        visibility,
+        (val: boolean) => {
+          this.settings.displayMarkerVisibility[0] = val;
+          localStorage.setItem("markerVisiblity", val.toString());
+          document.documentElement?.style.setProperty("--marker-diamond-visibility", val ? "visible" : "hidden");
+        }
+      ]
+    };
 
     this.state = { ...BASE };
 
     Object.entries(this.settings).forEach(([_, v]) => {
-      const [val, val_fn] = v
-      val_fn(val)
-    })
+      const [val, val_fn] = v;
+      val_fn(val);
+    });
   }
 
   public resetState() {

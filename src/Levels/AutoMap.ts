@@ -95,18 +95,18 @@ function initWorld(world: World, data: SystemData) {
   initCommonEntities(world);
   world.load();
   // world.uiManager.infoPanel.initTexts(data.texts, { name: data.name, constellation: data.constellation });
-  initTexts(world, data)
+  initTexts(world, data);
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_world`);
 }
 
-const BASE_URL = "https://raw.githubusercontent.com/fsImageries/rev_space_timeline_texts/main/raw/"
-function initTexts(world:World, data:SystemData) {
-  const file = data.name.replaceAll(" ", "").toLowerCase()
-  const dstUrl = `${BASE_URL}${file}.json`
+const BASE_URL = "https://raw.githubusercontent.com/fsImageries/rev_space_timeline_texts/main/raw/";
+function initTexts(world: World, data: SystemData) {
+  const file = data.name.replaceAll(" ", "").toLowerCase();
+  const dstUrl = `${BASE_URL}${file}.json`;
   fetch(dstUrl)
-  .then(resp => resp.text())
-  .then(raw => {
-    const obj:{texts:TextObject[]} = JSON.parse(raw)
-    world.uiManager.infoPanel.initTexts(obj.texts, { name: data.name, constellation: data.constellation });
-  })
+    .then((resp) => resp.text())
+    .then((raw) => {
+      const obj: { texts: TextObject[] } = JSON.parse(raw);
+      world.uiManager.infoPanel.initTexts(obj.texts, { name: data.name, constellation: data.constellation });
+    });
 }

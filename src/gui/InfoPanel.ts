@@ -158,7 +158,7 @@ export class InfoPanelManager {
     this.axisScaleIN.value = store.state.ROT_SCALE;
   }
 
-  public init(texts: TextObject[], lvlInfo: LvlInfo) {
+  public initTexts(texts: TextObject[], lvlInfo: LvlInfo) {
     this.genTexts(texts);
     this.lvlInfo = lvlInfo;
     this.setConstellation(lvlInfo.constellation);
@@ -179,12 +179,10 @@ export class InfoPanelManager {
   }
 
   private setSysTarget() {
-    console.log(this.fullInfo);
     this.timeline.innerHTML = this.map[this.sysKey];
     this.title.innerText = this.lvlInfo.name;
     this.info.innerHTML = this.fullInfo;
     this.subtitle.innerText = "Local Group";
-    // this.setConstellation(this.lvlInfo.constellation);
   }
 
   private genTexts(texts: TextObject[]) {

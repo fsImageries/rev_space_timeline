@@ -3,7 +3,7 @@ import { buildOortCloud } from "../Factories/OortFactory";
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
-import { SunData, SystemData } from "../dataInterfaces";
+import { SunData, SystemData, TextObject } from "../dataInterfaces";
 import { Store } from "../ecs/Store";
 import { World } from "../ecs/World";
 import GLOBALS from "../helpers/Constants";
@@ -14,10 +14,10 @@ import {
   InfoPanelCameraCoordSystem,
   MassComponent,
   OrbitRotSystem,
+  ParticleRingUniformsSystem,
   RaycasterSystem,
   RenderSystem,
-  SunUniformsUpdateSystem,
-  ParticleRingUniformsSystem
+  SunUniformsUpdateSystem
 } from "../templates/__init__";
 import { BinaryStarSystem } from "../templates/systems/MeshSystems";
 import { initCommonEntities } from "./Common";
@@ -94,6 +94,19 @@ function initWorld(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_world`);
   initCommonEntities(world);
   world.load();
-  world.uiManager.infoPanel.init(data.texts, { name: data.name, constellation: data.constellation });
+  // world.uiManager.infoPanel.initTexts(data.texts, { name: data.name, constellation: data.constellation });
+  initTexts(world, data)
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_world`);
+}
+
+const BASE_URL = "https://raw.githubusercontent.com/fsImageries/rev_space_timeline_texts/main/raw/"
+function initTexts(world:World, data:SystemData) {
+  const file = data.name.replaceAll(" ", "").toLowerCase()
+  const dstUrl = `${BASE_URL}${file}.json`
+  fetch(dstUrl)
+  .then(resp => resp.text())
+  .then(raw => {
+    const obj:{texts:TextObject[]} = JSON.parse(raw)
+    world.uiManager.infoPanel.initTexts(obj.texts, { name: data.name, constellation: data.constellation });
+  })
 }

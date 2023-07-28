@@ -42,6 +42,8 @@ export class InfoPanelManager {
     // if (!(this.main && this.timeline && this.title && this.subtitle && this.subtext && this.menubtn))
     //   throw new Error("Can't find info panel html elements")
 
+    this.displayMarkerCB.checked = Store.getInstance().store.displayMarkerVisibility
+
     const x = document.querySelector("#infoPanelFooter .x .digit") as HTMLElement;
     const y = document.querySelector("#infoPanelFooter .y .digit") as HTMLElement;
     const z = document.querySelector("#infoPanelFooter .z .digit") as HTMLElement;
@@ -68,8 +70,8 @@ export class InfoPanelManager {
       this.menutip?.classList.remove("active");
     };
 
-    this.displayMarkerCB.onchange = (e) => {
-      document.documentElement.style.setProperty('--marker-diamond-visibility', this.displayMarkerCB.checked ? "visible" : "hidden");
+    this.displayMarkerCB.onchange = () => {
+      Store.getInstance().settings.displayMarkerVisibility[1](this.displayMarkerCB.checked)
     }
 
     const handle = setTimeout(() => {

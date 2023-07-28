@@ -21,20 +21,41 @@ export class Store {
 
   /* eslint-disable @typescript-eslint/no-explicit-any*/
   public store: { [k: string]: any };
+  /* eslint-disable @typescript-eslint/no-explicit-any*/
+  public settings: { [k: string]: any };
   public state: TState;
 
   constructor() {
-    // const canvas = document.createElement("canvas")
+    const dmVisibility = localStorage.getItem("markerVisiblity")
+    let visibility = true
+    if (dmVisibility) {
+      visibility = dmVisibility === "true"? true: false
+    }
+
     this.store = {
       LIGHTYEAR: 9.461e12,
       canvas: null,
       // canvas: document.querySelector("canvas#main") as HTMLCanvasElement,
       raycaster: new Raycaster(),
       raypointer: new Vector2(Infinity, Infinity),
-      focusTarget: "yellowstone"
+      focusTarget: "yellowstone",
+      displayMarkerVisibility: visibility
     };
 
+    this.settings = {
+      displayMarkerVisibility: [visibility, (val:boolean) => {
+        this.store.displayMarkerVisibility = val
+        localStorage.setItem("markerVisiblity", val.toString())
+        document.documentElement.style.setProperty('--marker-diamond-visibility', val ? "visible" : "hidden");
+      }],
+    }
+
     this.state = { ...BASE };
+
+    Object.entries(this.settings).forEach(([_, v]) => {
+      const [val, val_fn] = v
+      val_fn(val)
+    })
   }
 
   public resetState() {

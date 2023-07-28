@@ -8,3 +8,6 @@ vi.stubGlobal("document", documentMock);
 
 const windowMock = { addEventListener: vi.fn(() => {}) };
 vi.stubGlobal("window", windowMock);
+
+const localStoraeMock = { getItem: vi.fn(() => "value") };
+vi.stubGlobal("localStorage", localStoraeMock);

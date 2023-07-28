@@ -18,7 +18,7 @@ export class InfoPanelManager {
   public subtext: HTMLDivElement;
   public menubtn: HTMLImageElement;
   public menutip: HTMLDivElement;
-  
+
   // Settings inputs
   public displayMarkerCB: HTMLInputElement;
   public orbScaleIN: HTMLInputElement;
@@ -54,47 +54,47 @@ export class InfoPanelManager {
     // TODO need to implement disabling of ui in testing
     // if (!(x && y && z)) throw new Error("Can't find coordinate html elements")
     this._coords = [x, y, z];
-    
+
     this.map = {};
     this.fullTxt = "";
     this.fullInfo = "";
     this.lvlInfo = {} as LvlInfo;
     this.sysKey = "";
 
-    this.initSettings()
-    
+    this.initSettings();
+
     this.menubtn.onclick = () => {
       this.setSysTarget();
       this.visible = !this._visible;
     };
-    
+
     this.menubtn.onmouseover = () => {
       this.menutip?.classList.add("active");
     };
-    
+
     this.menubtn.onmouseleave = () => {
       this.menutip?.classList.remove("active");
     };
-    
-    const store = Store.getInstance()
+
+    const store = Store.getInstance();
     this.displayMarkerCB.onchange = () => {
-      store.settings.displayMarkerVisibility[1](this.displayMarkerCB.checked)
-    }
-    
+      store.settings.displayMarkerVisibility[1](this.displayMarkerCB.checked);
+    };
+
     this.orbScaleIN.onchange = () => {
-      const parsed = parseFloat(this.orbScaleIN.value)
+      const parsed = parseFloat(this.orbScaleIN.value);
       if (parsed !== store.state.ORB_SCALE) {
-        store.state.ORB_SCALE = parsed
+        store.state.ORB_SCALE = parsed;
       }
-    }
+    };
 
     this.axisScaleIN.onchange = () => {
-      const parsed = parseFloat(this.axisScaleIN.value)
+      const parsed = parseFloat(this.axisScaleIN.value);
       if (parsed !== store.state.ROT_SCALE) {
-        store.state.ROT_SCALE = parsed
+        store.state.ROT_SCALE = parsed;
       }
-    }
-    
+    };
+
     const handle = setTimeout(() => {
       this.menutip?.classList.add("active");
     }, 3000);
@@ -151,11 +151,11 @@ export class InfoPanelManager {
     value ? (this.menubtn.style.transform = "scale(0)") : (this.menubtn.style.transform = "scale(1)");
   }
 
-  public initSettings(){
-    const store = Store.getInstance()
-    this.displayMarkerCB.checked = store.settings.displayMarkerVisibility[0]
-    this.orbScaleIN.value = store.state.ORB_SCALE
-    this.axisScaleIN.value = store.state.ROT_SCALE
+  public initSettings() {
+    const store = Store.getInstance();
+    this.displayMarkerCB.checked = store.settings.displayMarkerVisibility[0];
+    this.orbScaleIN.value = store.state.ORB_SCALE;
+    this.axisScaleIN.value = store.state.ROT_SCALE;
   }
 
   public init(texts: TextObject[], lvlInfo: LvlInfo) {

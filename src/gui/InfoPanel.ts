@@ -18,7 +18,11 @@ export class InfoPanelManager {
   public subtext: HTMLDivElement;
   public menubtn: HTMLImageElement;
   public menutip: HTMLDivElement;
+  
+  // Settings inputs
   public displayMarkerCB: HTMLInputElement;
+  public orbScaleIN: HTMLInputElement;
+  public axisScaleIN: HTMLInputElement;
 
   private _coords: [HTMLElement, HTMLElement, HTMLElement];
 
@@ -39,10 +43,10 @@ export class InfoPanelManager {
     this.menubtn = document.getElementById("infoPanelButton") as HTMLImageElement;
     this.menutip = document.getElementById("infoPanelButtonText") as HTMLDivElement;
     this.displayMarkerCB = document.getElementById("displayMarker") as HTMLInputElement;
+    this.orbScaleIN = document.getElementById("orbScale") as HTMLInputElement;
+    this.axisScaleIN = document.getElementById("axisScale") as HTMLInputElement;
     // if (!(this.main && this.timeline && this.title && this.subtitle && this.subtext && this.menubtn))
     //   throw new Error("Can't find info panel html elements")
-
-    this.displayMarkerCB.checked = Store.getInstance().store.displayMarkerVisibility;
 
     const x = document.querySelector("#infoPanelFooter .x .digit") as HTMLElement;
     const y = document.querySelector("#infoPanelFooter .y .digit") as HTMLElement;
@@ -50,30 +54,47 @@ export class InfoPanelManager {
     // TODO need to implement disabling of ui in testing
     // if (!(x && y && z)) throw new Error("Can't find coordinate html elements")
     this._coords = [x, y, z];
-
+    
     this.map = {};
     this.fullTxt = "";
     this.fullInfo = "";
     this.lvlInfo = {} as LvlInfo;
     this.sysKey = "";
 
+    this.initSettings()
+    
     this.menubtn.onclick = () => {
       this.setSysTarget();
       this.visible = !this._visible;
     };
-
+    
     this.menubtn.onmouseover = () => {
       this.menutip?.classList.add("active");
     };
-
+    
     this.menubtn.onmouseleave = () => {
       this.menutip?.classList.remove("active");
     };
-
+    
+    const store = Store.getInstance()
     this.displayMarkerCB.onchange = () => {
-      Store.getInstance().settings.displayMarkerVisibility[1](this.displayMarkerCB.checked);
-    };
+      store.settings.displayMarkerVisibility[1](this.displayMarkerCB.checked)
+    }
+    
+    this.orbScaleIN.onchange = () => {
+      const parsed = parseFloat(this.orbScaleIN.value)
+      if (parsed !== store.state.ORB_SCALE) {
+        store.state.ORB_SCALE = parsed
+      }
+    }
 
+    this.axisScaleIN.onchange = () => {
+      const parsed = parseFloat(this.axisScaleIN.value)
+      if (parsed !== store.state.ROT_SCALE) {
+        store.state.ROT_SCALE = parsed
+      }
+    }
+    
     const handle = setTimeout(() => {
       this.menutip?.classList.add("active");
     }, 3000);
@@ -128,6 +149,13 @@ export class InfoPanelManager {
 
   public set menuVisible(value: boolean) {
     value ? (this.menubtn.style.transform = "scale(0)") : (this.menubtn.style.transform = "scale(1)");
+  }
+
+  public initSettings(){
+    const store = Store.getInstance()
+    this.displayMarkerCB.checked = store.settings.displayMarkerVisibility[0]
+    this.orbScaleIN.value = store.state.ORB_SCALE
+    this.axisScaleIN.value = store.state.ROT_SCALE
   }
 
   public init(texts: TextObject[], lvlInfo: LvlInfo) {

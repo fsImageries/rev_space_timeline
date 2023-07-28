@@ -131,6 +131,7 @@ export class LevelManager {
       Store.getInstance().state = this.levelMap[lvlName][4];
     }
 
+    this.world.uiManager.infoPanel.initSettings()
     this.world.ecManager.mount();
     this.world.enabled = true;
   }

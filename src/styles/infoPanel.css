@@ -276,6 +276,10 @@
     align-items: flex-end;
 }
 
+#infoPanelMain .tab3 {
+    font-weight: 500;
+}
+
 #checkboxArea {
     display: flex;
     flex-direction: column;
@@ -284,8 +288,8 @@
 #checkboxArea .checkbox {
     display: flex;
     flex-direction: row;
-    font-weight: 500;
     align-items: center;
+    justify-content: space-between;
 }
 
 #checkboxArea .checkbox input[type=checkbox] {
@@ -294,6 +298,18 @@
     transform: scale(1.2);
     margin: 0 2.5%;
     accent-color: var(--gray);
+}
+
+#numericInputArea .numericInput input[type=number] {
+    width: min-content;
+    margin: 0 2.5%;   
+}
+
+#numericInputArea .numericInput{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 @media only screen and (max-width: 1500px) {

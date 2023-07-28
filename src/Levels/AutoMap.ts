@@ -3,7 +3,7 @@ import { buildOortCloud } from "../Factories/OortFactory";
 import { buildParticlering } from "../Factories/ParticleRingFactory";
 import { buildPlanet } from "../Factories/PlanetFactory";
 import { buildSun } from "../Factories/SunFactory";
-import { SunData, SystemData, SystemObjectData, TextObject } from "../dataInterfaces";
+import { SunData, SystemData, TextObject } from "../dataInterfaces";
 import { Store } from "../ecs/Store";
 import { World } from "../ecs/World";
 import GLOBALS from "../helpers/Constants";
@@ -14,10 +14,10 @@ import {
   InfoPanelCameraCoordSystem,
   MassComponent,
   OrbitRotSystem,
+  ParticleRingUniformsSystem,
   RaycasterSystem,
   RenderSystem,
-  SunUniformsUpdateSystem,
-  ParticleRingUniformsSystem
+  SunUniformsUpdateSystem
 } from "../templates/__init__";
 import { BinaryStarSystem } from "../templates/systems/MeshSystems";
 import { initCommonEntities } from "./Common";

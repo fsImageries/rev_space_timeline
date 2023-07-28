@@ -3,16 +3,39 @@
     position: absolute;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     pointer-events: none;
+    margin: .5%;
+}
+
+#buttonArea {
+    position: relative;
+    width: 2.5vh;
+}
+
+#infoPanelCloseButton {
+    color: white;
+    opacity: .8;
+    position: absolute;
+    left: .25rem;
+    font-size: 2rem;
+    transition: opacity 150ms ease, transform 150ms ease;
+    transform: scale(0);
+    pointer-events: all;
+    cursor: pointer;
+    z-index: 101;
+}
+
+#infoPanelCloseButton:hover {
+    opacity: 1;
 }
 
 #infoPanelButton {
-    /* top: 0;
-    position: absolute;  */
+    /* top: 0; */
+    position: absolute; 
     width: 2.5vh;
-    margin: 1vh;
+    /* margin: 1vh; */
     opacity: .8;
     cursor: pointer;
     transition: opacity 150ms ease, transform 150ms ease;

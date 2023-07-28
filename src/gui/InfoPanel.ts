@@ -18,6 +18,7 @@ export class InfoPanelManager {
   public subtext: HTMLDivElement;
   public menubtn: HTMLImageElement;
   public menutip: HTMLDivElement;
+  public menuclosebtn: HTMLDivElement;
 
   // Settings inputs
   public displayMarkerCB: HTMLInputElement;
@@ -41,6 +42,7 @@ export class InfoPanelManager {
     this.subtitle = document.querySelector("#infoPanelTitleArea .subtitle") as HTMLDivElement;
     this.subtext = document.querySelector("#infoPanelSubtextArea .subtitle") as HTMLDivElement;
     this.menubtn = document.getElementById("infoPanelButton") as HTMLImageElement;
+    this.menuclosebtn = document.getElementById("infoPanelCloseButton") as HTMLDivElement;
     this.menutip = document.getElementById("infoPanelButtonText") as HTMLDivElement;
     this.displayMarkerCB = document.getElementById("displayMarker") as HTMLInputElement;
     this.orbScaleIN = document.getElementById("orbScale") as HTMLInputElement;
@@ -75,6 +77,10 @@ export class InfoPanelManager {
     this.menubtn.onmouseleave = () => {
       this.menutip?.classList.remove("active");
     };
+
+    this.menuclosebtn.onclick = () => {
+      this.visible = false
+    }
 
     const store = Store.getInstance();
     this.displayMarkerCB.onchange = () => {
@@ -149,6 +155,7 @@ export class InfoPanelManager {
 
   public set menuVisible(value: boolean) {
     value ? (this.menubtn.style.transform = "scale(0)") : (this.menubtn.style.transform = "scale(1)");
+    value ? (this.menuclosebtn.style.transform = "scale(1)") : (this.menuclosebtn.style.transform = "scale(0)");
   }
 
   public initSettings() {

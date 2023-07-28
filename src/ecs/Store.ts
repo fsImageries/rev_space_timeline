@@ -42,20 +42,19 @@ export class Store {
       displayMarkerVisibility: visibility
     };
 
+    this.state = { ...BASE };
+
     this.settings = {
       // TODO when more settings need to be saved in local storage switch to json object
       displayMarkerVisibility: [visibility, (val:boolean) => {
         this.settings.displayMarkerVisibility[0] = val
         localStorage.setItem("markerVisiblity", val.toString())
         document.documentElement?.style.setProperty('--marker-diamond-visibility', val ? "visible" : "hidden");
-      }],
+      }]
     }
 
-    this.state = { ...BASE };
-
-    Object.entries(this.settings).forEach(([_, v]) => {
-      const [val, val_fn] = v
-      val_fn(val)
+    Object.values(this.settings).forEach(([val, val_fn]) => {
+      if (val_fn) val_fn(val)
     })
   }
 

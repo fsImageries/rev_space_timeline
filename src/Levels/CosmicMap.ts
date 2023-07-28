@@ -71,7 +71,7 @@ export function initCosmicMap(world: World) {
         Original Map produced by Richard Terrett`
     }
   ];
-  world.uiManager.infoPanel.init(textObjs, { name: "Cosmic Map", constellation: "" });
+  world.uiManager.infoPanel.initTexts(textObjs, { name: "Cosmic Map", constellation: "" });
   GLOBALS.LOAD_MANAGER.itemEnd("://CosmicMap_world");
 
   const sys = world.sysManager.getSystem(CameraFocusSystem);

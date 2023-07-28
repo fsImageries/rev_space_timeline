@@ -94,7 +94,7 @@ export class InfoPanelManager {
         store.state.ROT_SCALE = parsed
       }
     }
-
+    
     const handle = setTimeout(() => {
       this.menutip?.classList.add("active");
     }, 3000);

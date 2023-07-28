@@ -26,10 +26,10 @@ export class Store {
   public state: TState;
 
   constructor() {
-    const dmVisibility = localStorage.getItem("markerVisiblity")
-    let visibility = true
+    const dmVisibility = localStorage.getItem("markerVisiblity");
+    let visibility = true;
     if (dmVisibility) {
-      visibility = dmVisibility === "true"? true: false
+      visibility = dmVisibility === "true" ? true : false;
     }
 
     this.store = {

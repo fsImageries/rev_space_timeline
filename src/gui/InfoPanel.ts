@@ -79,8 +79,8 @@ export class InfoPanelManager {
     };
 
     this.menuclosebtn.onclick = () => {
-      this.visible = false
-    }
+      this.visible = false;
+    };
 
     const store = Store.getInstance();
     this.displayMarkerCB.onchange = () => {

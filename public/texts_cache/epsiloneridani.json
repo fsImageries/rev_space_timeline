@@ -1,0 +1,46 @@
+{
+    "texts": [
+        {
+            "name": "Epsilon Eridani",
+            "all": true
+        },
+        {
+            "name": "Tangerine Dream",
+            "timeline": [
+                "2560 - 2600\nDemarchists start to mine and pre-process metallic hydrogen",
+                "2605\nJames Bax is laid to rest by his daughter Antoinette Bax"
+            ]
+        },
+        {
+            "name": "Glitterband",
+            "timeline": [
+                "≈2510\nGlitterband shattered as a result of the Melding Plague"
+            ]
+        },
+        {
+            "name": "Yellowstone",
+            "timeline": [
+                "2090 – 2110\nOriginally settled by Americans\nSettled via Von Neumann machines housing fertilized human eggs\nColony failed in a similarly murderous manner as Diadem",
+                "2205 – 2250\nPeriod of great expansion\nRecontact with surviving settlements from Amerikano era",
+                "2351\nDan Sylveste born in Chasm City, Yellowstone",
+                "2372\nThe Eighty",
+                "2405\nDeparture of Sylveste expedition to Lascaille's Shroud",
+                "2415\nClockworker incident",
+                "2427\nAurora crisis",
+                "2441\nReturn of Sylveste’s expedition to Lascaille’s Shroud",
+                "2460\nDan Sylveste vanishes from Yellowstone for 30 days",
+                "2491\nDeparture of Resurgam expedition",
+                "2510\nMelding Plague afflicts Chasm City\nEffective end of Demarchist era",
+                "2517\nTanner Mirabel arrives in Chasm City",
+                "2524\nAna Khouri arrives in Chasm City",
+                "2551\nOutbreak of Conjoiner-Demarchist war around Yellowstone\nEstablishment of Ferrisville Convention"
+            ]
+        },
+        {
+            "name": "Marcos Eye",
+            "timeline": [
+                "≈2100\nNamed in honour of Marco Ferris"
+            ]
+        }
+    ]
+}

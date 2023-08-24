@@ -39,7 +39,7 @@ export interface TextObject {
   name: string;
   all?: boolean;
   timeline?: string[];
-  info?: string;
+  info?: string | string[];
 }
 
 export interface SystemData {

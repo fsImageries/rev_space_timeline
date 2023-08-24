@@ -99,7 +99,8 @@ function initWorld(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_world`);
 }
 
-const BASE_URL = "https://raw.githubusercontent.com/fsImageries/rev_space_timeline_texts/main/raw/";
+// const BASE_URL = "https://raw.githubusercontent.com/fsImageries/rev_space_timeline_texts/main/raw/";
+const BASE_URL = "./texts_cache/"
 function initTexts(world: World, data: SystemData) {
   const file = data.name.replaceAll(" ", "").toLowerCase();
   const dstUrl = `${BASE_URL}${file}.json`;

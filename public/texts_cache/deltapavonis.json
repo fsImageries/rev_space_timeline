@@ -1,0 +1,39 @@
+{
+    "texts": [
+        {
+            "name": "Delta Pavonis",
+            "all": true,
+            "timeline": [
+                "2633\nWas teared open by the Inibitors to cause mass ejection of solar mass"
+            ]
+        },
+        {
+            "name": "Resurgam",
+            "timeline": [
+                "2491\nDeparture of the Lorean to Resurgam (from Yellowstone)",
+                "2511\nThe Lorean colonized Resurgam",
+                "2511\nDan Sylveste starts acheological expedition",
+                "≈2566\nNostalgia for Infinity reached Resurgam in the search for Syveste",
+                "2566\nAbduction of Sylveste from Resurgam",
+                "2566\nStart expedition to Cerberus",
+                "2633\nConfrontation between Clavain and Volyova around Resurgam",
+                "2633\nWas rendered uninhabitable once again by an Inihibitor solar weapon"
+            ]
+        },
+        {
+            "name": "ROC",
+            "timeline": [
+                "≈2630\nWas destroyed by the Inhibitors to be used as weapon"
+            ]
+        },
+        {
+            "name": "Hades",
+            "timeline": [
+                "Unknown\nCreated from unknown civilisation(s) millions of years in the past",
+                "-1000000\nA faction of the Banished (subgroup of the Amarantin) fled into Hades",
+                "2566\nDan Sylveste and his wife entered the construct\nAna Khouri also entered and left the construct",
+                "≈2633\nAura is conceived moments before entering the Hadex Matrix with Ana"
+            ]
+        }
+    ]
+}

@@ -1,3 +1,20 @@
+#celestialInfoArea {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#celestialInfoArea .celestialInfo {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 1%;
+}
+
+#celestialInfoArea .celestialInfo .property {
+    font-weight: bold;
+}
+
 #infoPanelButtonArea {
     top: 0;
     position: absolute;

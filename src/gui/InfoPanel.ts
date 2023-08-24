@@ -194,6 +194,44 @@ export class InfoPanelManager {
 
   private genTexts(texts: TextObject[]) {
     // generate general text (all)
+    // const timelines = texts
+    //   .filter((obj) => obj.timeline)
+    //   .map((obj) => formatTexts(obj.timeline as string[], true, capitalize(obj.name)))
+    //   .flat()
+    //   .sort((a: string, b: string) => {
+    //     const aa = getFirstYear(splitWord(a)?.[0])?.replace(".", "");
+    //     const bb = getFirstYear(splitWord(b)?.[0])?.replace(".", "");
+    //     // console.log(splitWord(a)?.[0])
+    //     // console.log(parseInt(aa), bb)
+    //     if (!aa) return -1; // we assume something like 'unknown' is used
+
+    //     if (!aa || !bb) return 0;
+    //     const year1 = parseInt(aa);
+    //     const year2 = parseInt(bb);
+    //     return year1 - year2;
+    //   });
+
+    // this.fullTxt = timelines.join("<br><br>");
+    this._genTimelines(texts)
+
+    // generate map from obj to texts
+    const map: TextsMap = {};
+    texts.forEach((obj) => {
+      if (obj.all) {
+        this.sysKey = obj.name.toLowerCase();
+        map[this.sysKey] = this.fullTxt;
+        this.fullInfo = this._genInfo(obj.info);
+        return;
+      }
+
+      if (!obj.timeline) return;
+      const val = formatTexts(obj.timeline, false) as string[];
+      map[obj.name.toLowerCase()] = val.join("\n\r");
+    });
+    this.map = map;
+  }
+
+  private _genTimelines(texts: TextObject[]) {
     const timelines = texts
       .filter((obj) => obj.timeline)
       .map((obj) => formatTexts(obj.timeline as string[], true, capitalize(obj.name)))
@@ -212,21 +250,12 @@ export class InfoPanelManager {
       });
 
     this.fullTxt = timelines.join("<br><br>");
+  }
 
-    // generate map from obj to texts
-    const map: TextsMap = {};
-    texts.forEach((obj) => {
-      if (obj.all) {
-        this.sysKey = obj.name.toLowerCase();
-        map[this.sysKey] = this.fullTxt;
-        this.fullInfo = obj.info ? obj.info : "";
-        return;
-      }
-
-      if (!obj.timeline) return;
-      const val = formatTexts(obj.timeline, false) as string[];
-      map[obj.name.toLowerCase()] = val.join("\n\r");
-    });
-    this.map = map;
+  private _genInfo(info?: string | string[]): string {
+    if (!(typeof info === "string")) {
+      return ""
+    }
+    return info ? info : ""
   }
 }

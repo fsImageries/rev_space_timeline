@@ -22,6 +22,7 @@ export class InfoPanelManager {
 
   // Settings inputs
   public displayMarkerCB: HTMLInputElement;
+  public followCamCB: HTMLInputElement;
   public orbScaleIN: HTMLInputElement;
   public axisScaleIN: HTMLInputElement;
 
@@ -45,6 +46,7 @@ export class InfoPanelManager {
     this.menuclosebtn = document.getElementById("infoPanelCloseButton") as HTMLDivElement;
     this.menutip = document.getElementById("infoPanelButtonText") as HTMLDivElement;
     this.displayMarkerCB = document.getElementById("displayMarker") as HTMLInputElement;
+    this.followCamCB = document.getElementById("followCam") as HTMLInputElement;
     this.orbScaleIN = document.getElementById("orbScale") as HTMLInputElement;
     this.axisScaleIN = document.getElementById("axisScale") as HTMLInputElement;
     // if (!(this.main && this.timeline && this.title && this.subtitle && this.subtext && this.menubtn))
@@ -86,6 +88,10 @@ export class InfoPanelManager {
     this.displayMarkerCB.onchange = () => {
       store.settings.displayMarkerVisibility[1](this.displayMarkerCB.checked);
     };
+
+    this.followCamCB.onchange = () => {
+      store.state.followCam = this.followCamCB.checked;
+    }
 
     this.orbScaleIN.onchange = () => {
       const parsed = parseFloat(this.orbScaleIN.value);

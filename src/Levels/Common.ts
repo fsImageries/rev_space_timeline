@@ -12,7 +12,14 @@ import {
   OrbitRotComponent,
   ParentComponent,
   ParentComponentData,
-  TiltComponent
+  TiltComponent,
+
+  RenderSystem,
+  AxisRotSystem,
+  CameraFocusSystem,
+  RaycasterSystem,
+  FollowCameraSystem,
+  FollowCameraComponent
 } from "../templates/__init__";
 import { World } from "../ecs/World";
 import { Entity } from "../ecs/Entity";
@@ -27,6 +34,9 @@ export function initCommonEntities(world: World, camPos?: Vector3) {
 
   // Camera
   world.ecManager.createEntity().addComponent(CameraComponent, CameraComponent.getDefaults(camPos));
+
+  // Follow Cam
+  world.ecManager.createEntity().addComponent(FollowCameraComponent, FollowCameraComponent.getDefaults());
 }
 
 export function initCelestialComponents(entity: Entity, data: SystemObjectData) {
@@ -46,4 +56,13 @@ export function initCelestialComponents(entity: Entity, data: SystemObjectData) 
   } as BaseDataData);
 
   if (!data.draw?.disableMarker) entity.addComponent(CSSMarkerComponent);
+}
+
+export function initCommonSystem(world: World) {
+  world.sysManager
+    .registerSystem(RenderSystem)
+    .registerSystem(AxisRotSystem)
+    .registerSystem(CameraFocusSystem)
+    .registerSystem(RaycasterSystem)
+    .registerSystem(FollowCameraSystem)
 }

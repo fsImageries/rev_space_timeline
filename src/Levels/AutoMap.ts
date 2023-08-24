@@ -20,7 +20,7 @@ import {
   SunUniformsUpdateSystem
 } from "../templates/__init__";
 import { BinaryStarSystem } from "../templates/systems/MeshSystems";
-import { initCommonEntities } from "./Common";
+import { initCommonEntities, initCommonSystem } from "./Common";
 
 const planetCheck = ["moon", "planet"];
 
@@ -44,13 +44,15 @@ export function initSystem(world: World, data: SystemData) {
 
 function initSystems(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_systems`);
+
+  initCommonSystem(world)
   world.sysManager
-    .registerSystem(RenderSystem)
-    .registerSystem(AxisRotSystem)
+    // .registerSystem(RenderSystem)
+    // .registerSystem(AxisRotSystem)
     .registerSystem(OrbitRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
-    .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem)
+    // .registerSystem(CameraFocusSystem)
+    // .registerSystem(RaycasterSystem)
     .registerSystem(CSSMarkerSystem)
     .registerSystem(InfoPanelCameraCoordSystem);
 

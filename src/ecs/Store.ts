@@ -39,7 +39,7 @@ export class Store {
       raycaster: new Raycaster(),
       raypointer: new Vector2(Infinity, Infinity),
       focusTarget: "yellowstone",
-      displayMarkerVisibility: visibility
+      followCam: false
     };
 
     this.state = { ...BASE };

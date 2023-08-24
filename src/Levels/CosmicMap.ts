@@ -19,7 +19,7 @@ import {
   ObjectLineData
 } from "../templates/__init__";
 import { World } from "../ecs/World";
-import { initCommonEntities } from "./Common";
+import { initCommonEntities, initCommonSystem } from "./Common";
 import { Store } from "../ecs/Store";
 import { SunData, TextObject } from "../dataInterfaces";
 import { Entity } from "../ecs/Entity";
@@ -30,12 +30,14 @@ export function initCosmicMap(world: World) {
   Store.getInstance().state.DISTANCE_SCALE = 1e-11;
   Store.getInstance().state.SIZE_SCALE = 1.5e-3;
 
+  initCommonSystem(world)
+
   world.sysManager
-    .registerSystem(RenderSystem)
-    .registerSystem(AxisRotSystem)
+    // .registerSystem(RenderSystem)
+    // .registerSystem(AxisRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
-    .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem)
+    // .registerSystem(CameraFocusSystem)
+    // .registerSystem(RaycasterSystem)
     .registerSystem(CosmicMapStartTextSystem)
     .registerSystem(InfoPanelCameraCoordSystem);
 

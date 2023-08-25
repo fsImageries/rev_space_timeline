@@ -70,8 +70,7 @@ export class InfoPanelManager {
     const store = Store.getInstance();
 
     this.menubtn.onclick = () => {
-      this.setSysTarget();
-      this.visible = !this._visible;
+      this.openSysTarget(!this.visible)
     };
 
     this.menubtn.onmouseover = () => {
@@ -123,6 +122,11 @@ export class InfoPanelManager {
       },
       { once: true }
     );
+  }
+
+  public openSysTarget(force?:boolean) {
+    this.setSysTarget();
+    this.visible = force === undefined ? true : force;
   }
 
   public getCache() {

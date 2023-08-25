@@ -37,6 +37,7 @@ export class CameraFocusSystem extends System {
 
     execute(): void {
         const tar = Store.getInstance().store.focusTarget.toLowerCase();
+        console.log(tar)
         if (!this.queries || !tar) return;
 
         const ccomp = this.queries[1].entities[0].getComponent(CameraComponent);
@@ -74,7 +75,8 @@ export class CameraFocusSystem extends System {
 export class RaycasterSystem extends System {
     static queries = [
         [operand("exist", MeshComponent), operand("exist", BaseDataComponent)],
-        [operand("exist", CameraComponent)]
+        [operand("exist", CameraComponent)],
+        [operand("exist", FollowCameraComponent)]
     ];
 
     public forceSwtich = false;
@@ -88,8 +90,10 @@ export class RaycasterSystem extends System {
         if (!this.queries) return;
 
         const cam = this.queries[1].entities[0].getComponent(CameraComponent).data.active;
-        const raycaster = Store.getInstance().store.raycaster as Raycaster;
-        raycaster.setFromCamera(Store.getInstance().store.raypointer, cam);
+        const fcam = this.queries[2].entities[0].getComponent(FollowCameraComponent).data.cam;
+        const store = Store.getInstance()
+        const raycaster = store.store.raycaster as Raycaster;
+        raycaster.setFromCamera(Store.getInstance().store.raypointer, store.store.followCam ? fcam : cam);
 
         let closest: [number, Entity] | undefined = undefined;
 
@@ -117,6 +121,7 @@ export class RaycasterSystem extends System {
             }
         }
 
+        console.log(closest)
         if (closest) {
             react2intersect(closest[1], cam, this.world, this.forceSwtich);
             this.forceSwtich = false;
@@ -218,13 +223,18 @@ export class FollowCameraSystem extends System {
             idealOffset.z += store.store.rotateCamPivotDepth
         }
         
-        if (store.store.rotateCamPivot != 0) {
-            // const n = lerp(0, store.store.rotateCamPivot, 0.1 * t)
-            const n = lerp(store.store.rotateCamPivot, 0, 0.25 * t)
-            // console.log(n, store.store.rotateCamPivot, t, delta)
+        if (store.store.rotateCamPivotY != 0) {
+            const n = lerp(store.store.rotateCamPivotY, 0, 0.25 * t)
             pivot.rotateY(n)
-            store.store.rotateCamPivot = Math.abs(n) < 0.00000001 ? 0 : n
+            store.store.rotateCamPivotY = Math.abs(n) < 0.00000001 ? 0 : n
         }
+
+        if (store.store.rotateCamPivotX != 0) {
+            const n = lerp(store.store.rotateCamPivotX, 0, 0.25 * t)
+            pivot.rotateX(n)
+            store.store.rotateCamPivotX = Math.abs(n) < 0.00000001 ? 0 : n
+        }
+
         pivot.position.copy(GLOBALS.WORLD_POS)
         
         // const t = 1.0 - Math.pow(0.001, delta);

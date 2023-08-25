@@ -39,7 +39,8 @@ export class Store {
       raypointer: new Vector2(Infinity, Infinity),
       focusTarget: "yellowstone",
       followCam: true,
-      rotateCamPivot: 0,
+      rotateCamPivotY: 0,
+      rotateCamPivotX: 0,
       rotateCamPivotDepth: 0,
       displayMarkerVisibility: visibility
     };

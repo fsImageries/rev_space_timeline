@@ -131,25 +131,26 @@ function onkeydown(world:World, e:KeyboardEvent) {
   const store = Store.getInstance()
 
   if (e.key === "m") {
-    world.uiManager.infoPanel.visible = !world.uiManager.infoPanel.visible
+    world.uiManager.infoPanel.openSysTarget(!world.uiManager.infoPanel.visible);
   }
 
   if (e.key === "f") {
     store.store.followCam = !store.store.followCam
   }
 
-  const scalar = 0.05
+  const scalarY = 0.05
   if (e.key.toLowerCase() === "arrowright") {
-    store.store.rotateCamPivot = Math.PI * scalar
+    store.store.rotateCamPivotY = Math.PI * scalarY
   }
   if (e.key.toLowerCase() === "arrowleft") {
-    store.store.rotateCamPivot = -(Math.PI * scalar)
+    store.store.rotateCamPivotY = -(Math.PI * scalarY)
   }
 
+  const scalarX = 0.005
   if (e.key.toLowerCase() === "arrowup") {
-    store.store.rotateCamPivotDepth += 2
+    store.store.rotateCamPivotX = Math.PI * scalarX
   }
   if (e.key.toLowerCase() === "arrowdown") {
-    store.store.rotateCamPivotDepth -= 2
+    store.store.rotateCamPivotX = -(Math.PI * scalarX)
   }
 }

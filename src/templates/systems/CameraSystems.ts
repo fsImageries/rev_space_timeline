@@ -90,6 +90,8 @@ export class RaycasterSystem extends System {
         const raycaster = Store.getInstance().store.raycaster as Raycaster;
         raycaster.setFromCamera(Store.getInstance().store.raypointer, cam);
 
+        let closest: [number, Entity] | undefined = undefined;
+
         for (const entity of this.queries[0].entities) {
             const mesh = entity.getComponent(MeshComponent).data.mesh;
             let intersects = raycaster.intersectObject(mesh);
@@ -107,10 +109,16 @@ export class RaycasterSystem extends System {
             }
 
             if (intersects.length > 0) {
-                react2intersect(entity, cam, this.world, this.forceSwtich);
-                this.forceSwtich = false;
-                break;
+                const dist = intersects[0].distance
+                if (!closest || dist < closest[0]) {
+                    closest = [dist, entity]
+                }
             }
+        }
+
+        if (closest) {
+            react2intersect(closest[1], cam, this.world, this.forceSwtich);
+            this.forceSwtich = false;
         }
         this.enabled = false;
     }

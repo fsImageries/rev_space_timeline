@@ -23,83 +23,7 @@ export class World {
     this.queryManager = new QueryManager(this);
     this.uiManager = new UIManager(this);
 
-    this.initListeners();
-  }
-
-  private initListeners() {
-    const action = (e: MouseEvent | TouchEvent) => {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      this.updateMousePointer(e);
-
-      const sys = this.sysManager.getSystem(RaycasterSystem);
-      if (!sys) return;
-      sys.enabled = true;
-    };
-
-    window.ondblclick = action;
-
-    let start = -1;
-    let lastTEvt: TouchEvent;
-    window.ontouchstart = (e) => {
-      start = performance.now();
-      lastTEvt = e;
-    };
-
-    window.ontouchend = () => {
-      const now = performance.now();
-      if (now - start > 300) return;
-      action(lastTEvt);
-    };
-
-    window.onclick = (e) => {
-      this.updateMousePointer(e);
-      if (e.altKey || e.shiftKey) {
-        if (this.lvlManager.currentLvl == this.lvlManager.levelsNames[0]) {
-          const sys = this.sysManager.getSystem(RaycasterSystem) as RaycasterSystem;
-          if (!sys) return;
-          sys.enabled = true;
-          sys.forceSwtich = true;
-        } else {
-          this.lvlManager.openLevel("Cosmic Map");
-        }
-      }
-
-      const tar = e.target as HTMLElement;
-      if (!this.uiManager.infoPanel.main.contains(tar) && !(tar.id === "infoPanelButton"))
-        this.uiManager.infoPanel.visible = false;
-    };
-
-    window.onpopstate = (e) => {
-      this.lvlManager.openLevel(e.state.name);
-    };
-
-    GLOBALS.LOAD_MANAGER.onStart = () => {
-      this.enabled = false;
-      this.uiManager.progress.visible = true;
-      // progress.visible = true;
-    };
-
-    GLOBALS.LOAD_MANAGER.onLoad = () => {
-      this.uiManager.progress.value = 0;
-      this.uiManager.progress.visible = false;
-      this.enabled = true;
-    };
-
-    GLOBALS.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {
-      const val = (itemsLoaded / itemsTotal) * 100;
-      console.debug(url, " ", val);
-      this.uiManager.progress.value = val;
-    };
-  }
-
-  private updateMousePointer(e: MouseEvent | TouchEvent) {
-    const [clientX, clientY] =
-      e instanceof MouseEvent ? [e.clientX, e.clientY] : [e.touches[0].clientX, e.touches[0].clientY];
-
-    const s = Store.getInstance();
-    s.store.raypointer.x = (clientX / window.innerWidth) * 2 - 1;
-    s.store.raypointer.y = -(clientY / window.innerHeight) * 2 + 1;
+    initListeners(this);
   }
 
   public execute(delta: number, time: number) {
@@ -111,4 +35,94 @@ export class World {
     this.queryManager.queryComponentQueries();
     this.ecManager.init();
   }
+}
+
+function updateMousePointer(e: MouseEvent | TouchEvent) {
+  const [clientX, clientY] =
+    e instanceof MouseEvent ? [e.clientX, e.clientY] : [e.touches[0].clientX, e.touches[0].clientY];
+
+  const s = Store.getInstance();
+  s.store.raypointer.x = (clientX / window.innerWidth) * 2 - 1;
+  s.store.raypointer.y = -(clientY / window.innerHeight) * 2 + 1;
+}
+
+function initListeners(world:World) {
+  const action = (e: MouseEvent | TouchEvent) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    updateMousePointer(e);
+
+    const sys = world.sysManager.getSystem(RaycasterSystem);
+    if (!sys) return;
+    sys.enabled = true;
+  };
+
+  window.ondblclick = action;
+
+  let start = -1;
+  let lastTEvt: TouchEvent;
+  window.ontouchstart = (e) => {
+    start = performance.now();
+    lastTEvt = e;
+  };
+
+  window.ontouchend = () => {
+    const now = performance.now();
+    if (now - start > 300) return;
+    action(lastTEvt);
+  };
+
+  window.onclick = (e) => {
+    updateMousePointer(e);
+    if (e.altKey || e.shiftKey) {
+      if (world.lvlManager.currentLvl == world.lvlManager.levelsNames[0]) {
+        const sys = world.sysManager.getSystem(RaycasterSystem) as RaycasterSystem;
+        if (!sys) return;
+        sys.enabled = true;
+        sys.forceSwtich = true;
+      } else {
+        world.lvlManager.openLevel("Cosmic Map");
+      }
+    }
+
+    const tar = e.target as HTMLElement;
+    if (!world.uiManager.infoPanel.main.contains(tar) && !(tar.id === "infoPanelButton"))
+      world.uiManager.infoPanel.visible = false;
+  };
+
+  window.onpopstate = (e) => {
+    world.lvlManager.openLevel(e.state.name);
+  };
+
+  window.onkeydown = (e) => {
+    onkeydown(world, e)
+  }
+
+  GLOBALS.LOAD_MANAGER.onStart = () => {
+    world.enabled = false;
+    world.uiManager.progress.visible = true;
+    // progress.visible = true;
+  };
+
+  GLOBALS.LOAD_MANAGER.onLoad = () => {
+    world.uiManager.progress.value = 0;
+    world.uiManager.progress.visible = false;
+    world.enabled = true;
+  };
+
+  GLOBALS.LOAD_MANAGER.onProgress = (url, itemsLoaded, itemsTotal) => {
+    const val = (itemsLoaded / itemsTotal) * 100;
+    console.debug(url, " ", val);
+    world.uiManager.progress.value = val;
+  };
+}
+
+function onkeydown(world:World, e:KeyboardEvent) {
+  console.log(e.key)
+  if (e.key === "m") {
+    world.uiManager.infoPanel.visible = !world.uiManager.infoPanel.visible
+  }
+
+  if (e.key.toLowerCase() === "arrowright") {}
+  if (e.key.toLowerCase() === "arrowleft") {}
 }

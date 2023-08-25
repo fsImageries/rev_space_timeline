@@ -20,6 +20,7 @@ import {
     RotGroupComponent,
     TransformGroupComponent
 } from "../components/MeshComponents";
+import { damp, lerp } from "three/src/math/MathUtils";
 
 
 export class CameraFocusSystem extends System {
@@ -174,7 +175,7 @@ export class FollowCameraSystem extends System {
         const idealLookat = new Vector3(0, 0, 0);
         if (!tcomp) return idealLookat
         idealLookat.applyQuaternion(tcomp.data.group.quaternion);
-        idealLookat.add(tcomp.data.group.getWorldPosition(GLOBALS.WORLD_POS));
+        idealLookat.add(GLOBALS.WORLD_POS);
         return idealLookat;
       }
 
@@ -183,8 +184,9 @@ export class FollowCameraSystem extends System {
 
         const ccomp = this.queries[0].entities[0].getComponent(FollowCameraComponent);
 
+        const store = Store.getInstance();
         if (!ccomp.data.target) {
-            const ftar = Store.getInstance().state.focusTarget
+            const ftar = store.state.focusTarget
             const tar = this.world.ecManager.getEntityByBaseName(ftar)
             if (tar) {
                 ccomp.data.target = [tar, 0]
@@ -202,17 +204,39 @@ export class FollowCameraSystem extends System {
 
         const tcomp = ccomp.data.target?.[0].getComponent(TransformGroupComponent) as TransformGroupComponent
         const rad = ccomp.data.target?.[1] as number * 5
+        tcomp.data.group.getWorldPosition(GLOBALS.WORLD_POS)
 
         // console.log(ccomp.data.target?.[0].components)
-        const idealOffset = this.calculateIdealOffset(rad, tcomp);
+        // const idealOffset = this.calculateIdealOffset(rad, tcomp);
         const idealLookat = this.calculateIdealLookat(rad, tcomp);
-        
+        const idealOffset = new Vector3(0, 0, -rad * 2);
+
         const t = 1.0 - Math.pow(0.001, delta);
+        const pivot = ccomp.data.camPivot;
+
+        if (store.store.rotateCamPivotDepth != 0) {
+            idealOffset.z += store.store.rotateCamPivotDepth
+        }
+        
+        if (store.store.rotateCamPivot != 0) {
+            // const n = lerp(0, store.store.rotateCamPivot, 0.1 * t)
+            const n = lerp(store.store.rotateCamPivot, 0, 0.25 * t)
+            // console.log(n, store.store.rotateCamPivot, t, delta)
+            pivot.rotateY(n)
+            store.store.rotateCamPivot = Math.abs(n) < 0.00000001 ? 0 : n
+        }
+        pivot.position.copy(GLOBALS.WORLD_POS)
+        
+        // const t = 1.0 - Math.pow(0.001, delta);
         ccomp.data.currentPosition.lerp(idealOffset, t);
         ccomp.data.currentLookat.lerp(idealLookat, t);
 
         ccomp.data.cam.position.copy(ccomp.data.currentPosition);
         ccomp.data.cam.lookAt(ccomp.data.currentLookat);
+
+        // ccomp.data.camPivot.rotateX(store.state.rotateCamPivot)
+        // console.log(store.store.rotateCamPivot)
+        // ccomp.data.camPivot.rotation.y += store.state.rotateCamPivot
 
         // this.enabled = false;
     }

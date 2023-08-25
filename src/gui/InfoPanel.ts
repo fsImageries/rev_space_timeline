@@ -67,6 +67,8 @@ export class InfoPanelManager {
 
     this.initSettings();
 
+    const store = Store.getInstance();
+
     this.menubtn.onclick = () => {
       this.setSysTarget();
       this.visible = !this._visible;
@@ -84,13 +86,15 @@ export class InfoPanelManager {
       this.visible = false;
     };
 
-    const store = Store.getInstance();
+    this.displayMarkerVisible = store.store.displayMarkerVisibility
+    this.displayMarkerCB.checked = this.displayMarkerVisible
     this.displayMarkerCB.onchange = () => {
-      store.settings.displayMarkerVisibility[1](this.displayMarkerCB.checked);
+      this.displayMarkerVisible = this.displayMarkerCB.checked
     };
-
+    
+    this.followCamCB.checked = store.store.followCam
     this.followCamCB.onchange = () => {
-      store.state.followCam = this.followCamCB.checked;
+      store.store.followCam = this.followCamCB.checked;
     }
 
     this.orbScaleIN.onchange = () => {
@@ -164,9 +168,21 @@ export class InfoPanelManager {
     value ? (this.menuclosebtn.style.transform = "scale(1)") : (this.menuclosebtn.style.transform = "scale(0)");
   }
 
+  public set displayMarkerVisible(value: boolean) {
+    const store = Store.getInstance();
+    localStorage.setItem("markerVisiblity", value.toString());
+    document.documentElement?.style.setProperty("--marker-diamond-visibility", value ? "visible" : "hidden");
+    store.store.displayMarkerVisibility = value
+  }
+
+  public get displayMarkerVisible(): boolean {
+    return Store.getInstance().store.displayMarkerVisibility
+  }
+
   public initSettings() {
     const store = Store.getInstance();
-    this.displayMarkerCB.checked = store.settings.displayMarkerVisibility[0];
+    console.log(store.store.displayMarkerVisibility)
+    // this.displayMarkerCB.checked = store.store.displayMarkerVisibility
     this.orbScaleIN.value = store.state.ORB_SCALE;
     this.axisScaleIN.value = store.state.ROT_SCALE;
   }

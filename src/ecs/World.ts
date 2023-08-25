@@ -98,6 +98,15 @@ function initListeners(world:World) {
     onkeydown(world, e)
   }
 
+  
+  const store = Store.getInstance()
+  window.addEventListener(
+    "wheel",
+    (e) => {
+      store.store.rotateCamPivotDepth += e.deltaY
+    },
+  );
+
   GLOBALS.LOAD_MANAGER.onStart = () => {
     world.enabled = false;
     world.uiManager.progress.visible = true;
@@ -119,10 +128,28 @@ function initListeners(world:World) {
 
 function onkeydown(world:World, e:KeyboardEvent) {
   console.log(e.key)
+  const store = Store.getInstance()
+
   if (e.key === "m") {
     world.uiManager.infoPanel.visible = !world.uiManager.infoPanel.visible
   }
 
-  if (e.key.toLowerCase() === "arrowright") {}
-  if (e.key.toLowerCase() === "arrowleft") {}
+  if (e.key === "f") {
+    store.store.followCam = !store.store.followCam
+  }
+
+  const scalar = 0.05
+  if (e.key.toLowerCase() === "arrowright") {
+    store.store.rotateCamPivot = Math.PI * scalar
+  }
+  if (e.key.toLowerCase() === "arrowleft") {
+    store.store.rotateCamPivot = -(Math.PI * scalar)
+  }
+
+  if (e.key.toLowerCase() === "arrowup") {
+    store.store.rotateCamPivotDepth += 2
+  }
+  if (e.key.toLowerCase() === "arrowdown") {
+    store.store.rotateCamPivotDepth -= 2
+  }
 }

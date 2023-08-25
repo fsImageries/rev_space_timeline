@@ -38,14 +38,23 @@ export class RenderSystem extends System {
 
       let cam;
       const sys = this.world.sysManager.getSystem(FollowCameraSystem)
-      if (store.state.followCam) {
+
+      if (store.store.followCam) {
         const fcomp = followcam.getComponent(FollowCameraComponent);
         cam = fcomp.data.cam
 
-        if (sys && !sys.enabled) sys.enabled = true
-      } else {
+
+        if (sys && !sys.enabled) {
+          sys.enabled = true
+          if (ccomp.data.freeCtrl) ccomp.data.freeCtrl.enabled = false
+        }
+      } 
+      else {
         cam = ccomp.data.active
-        if (sys && sys.enabled) sys.enabled = false
+        if (sys && sys.enabled) {
+          sys.enabled = false
+          if (ccomp.data.freeCtrl) ccomp.data.freeCtrl.enabled = true
+        }
       }
 
       if (resizeRendererToDisplaySize(renderer, renderer2d)) {

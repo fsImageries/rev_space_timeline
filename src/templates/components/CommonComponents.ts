@@ -113,6 +113,7 @@ export class CameraComponent extends Component<CameraComponentData> {
 
 export interface FollowCameraComponentData {
   cam: PerspectiveCamera;
+  camPivot: Object3D;
   target?: [Entity, number];
   currentPosition: Vector3;
   currentLookat: Vector3;
@@ -128,13 +129,16 @@ export class FollowCameraComponent extends Component<FollowCameraComponentData> 
       1e-5,
       1e12
     );
-    // cam.position.z = 1200;
+    const camPivot = new Object3D();
+    camPivot.add(cam)
+    cam.position.z = 1200;
 
     const currentPosition = new Vector3();
     const currentLookat = new Vector3();
 
     return {
-      cam: cam,
+      cam,
+      camPivot,
       target: target ? [target, 0] : target,
       currentPosition,
       currentLookat

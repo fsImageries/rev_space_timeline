@@ -6,7 +6,7 @@
     },
     "name": "revelation-space-timeline",
     "private": true,
-    "version": "0.7.7-delta-pavonis-alpha",
+    "version": "0.8.0-delta-pavonis",
     "type": "module",
     "scripts": {
         "dev": "vite",

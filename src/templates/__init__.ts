@@ -82,7 +82,14 @@ export {
   ParticleRingTypeComponent,
   FollowCameraComponent
 };
-export type { RenderComponentData, SceneComponentData, CameraComponentData, BaseDataData, UniformsData, FollowCameraComponentData };
+export type {
+  RenderComponentData,
+  SceneComponentData,
+  CameraComponentData,
+  BaseDataData,
+  UniformsData,
+  FollowCameraComponentData
+};
 
 // Mesh Components
 export {

@@ -70,7 +70,7 @@ export class InfoPanelManager {
     const store = Store.getInstance();
 
     this.menubtn.onclick = () => {
-      this.openSysTarget(!this.visible)
+      this.openSysTarget(!this.visible);
     };
 
     this.menubtn.onmouseover = () => {
@@ -85,16 +85,16 @@ export class InfoPanelManager {
       this.visible = false;
     };
 
-    this.displayMarkerVisible = store.store.displayMarkerVisibility
-    this.displayMarkerCB.checked = this.displayMarkerVisible
+    this.displayMarkerVisible = store.store.displayMarkerVisibility;
+    this.displayMarkerCB.checked = this.displayMarkerVisible;
     this.displayMarkerCB.onchange = () => {
-      this.displayMarkerVisible = this.displayMarkerCB.checked
+      this.displayMarkerVisible = this.displayMarkerCB.checked;
     };
-    
-    this.followCamCB.checked = store.state.followCam
+
+    this.followCamCB.checked = store.state.followCam;
     this.followCamCB.onchange = () => {
       store.state.followCam = this.followCamCB.checked;
-    }
+    };
 
     this.orbScaleIN.onchange = () => {
       const parsed = parseFloat(this.orbScaleIN.value);
@@ -124,7 +124,7 @@ export class InfoPanelManager {
     );
   }
 
-  public openSysTarget(force?:boolean) {
+  public openSysTarget(force?: boolean) {
     this.setSysTarget();
     this.visible = force === undefined ? true : force;
   }
@@ -176,16 +176,16 @@ export class InfoPanelManager {
     const store = Store.getInstance();
     localStorage.setItem("markerVisiblity", value.toString());
     document.documentElement?.style.setProperty("--marker-diamond-visibility", value ? "visible" : "hidden");
-    store.store.displayMarkerVisibility = value
+    store.store.displayMarkerVisibility = value;
   }
 
   public get displayMarkerVisible(): boolean {
-    return Store.getInstance().store.displayMarkerVisibility
+    return Store.getInstance().store.displayMarkerVisibility;
   }
 
   public initSettings() {
     const store = Store.getInstance();
-    console.log(store.store.displayMarkerVisibility)
+    console.log(store.store.displayMarkerVisibility);
     // this.displayMarkerCB.checked = store.store.displayMarkerVisibility
     this.orbScaleIN.value = store.state.ORB_SCALE;
     this.axisScaleIN.value = store.state.ROT_SCALE;

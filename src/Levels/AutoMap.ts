@@ -42,7 +42,7 @@ export function initSystem(world: World, data: SystemData) {
 function initSystems(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_systems`);
 
-  initCommonSystem(world)
+  initCommonSystem(world);
   world.sysManager
     // .registerSystem(RenderSystem)
     // .registerSystem(AxisRotSystem)

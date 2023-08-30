@@ -27,7 +27,7 @@ export function initCosmicMap(world: World) {
   store.state.SIZE_SCALE = 1.5e-3;
   store.state.followCam = false;
 
-  initCommonSystem(world)
+  initCommonSystem(world);
 
   world.sysManager
     // .registerSystem(RenderSystem)

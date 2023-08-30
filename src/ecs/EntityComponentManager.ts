@@ -37,12 +37,12 @@ export class EntityComponentManager {
     // return this.entities.find((e) => e.getComponent(BaseDataComponent)?.data.name === name);
     for (let index = 0; index < this.entities.length; index++) {
       const entity = this.entities[index];
-      const comp = entity.getComponent(BaseDataComponent)
+      const comp = entity.getComponent(BaseDataComponent);
       if (comp) {
-        if (comp.data.name && comp.data.name === name) return entity
+        if (comp.data.name && comp.data.name === name) return entity;
       }
     }
-    return undefined
+    return undefined;
   }
 
   public createEntity() {

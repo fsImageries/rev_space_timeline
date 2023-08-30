@@ -46,7 +46,7 @@ function updateMousePointer(e: MouseEvent | TouchEvent) {
   s.store.raypointer.y = -(clientY / window.innerHeight) * 2 + 1;
 }
 
-function initListeners(world:World) {
+function initListeners(world: World) {
   const action = (e: MouseEvent | TouchEvent) => {
     e.preventDefault();
     e.stopImmediatePropagation();
@@ -95,17 +95,13 @@ function initListeners(world:World) {
   };
 
   window.onkeydown = (e) => {
-    onkeydown(world, e)
-  }
+    onkeydown(world, e);
+  };
 
-  
-  const store = Store.getInstance()
-  window.addEventListener(
-    "wheel",
-    (e) => {
-      store.store.rotateCamPivotDepth += e.deltaY
-    },
-  );
+  const store = Store.getInstance();
+  window.addEventListener("wheel", (e) => {
+    store.store.rotateCamPivotDepth += e.deltaY;
+  });
 
   GLOBALS.LOAD_MANAGER.onStart = () => {
     world.enabled = false;
@@ -126,31 +122,31 @@ function initListeners(world:World) {
   };
 }
 
-function onkeydown(world:World, e:KeyboardEvent) {
-  console.log(e.key)
-  const store = Store.getInstance()
+function onkeydown(world: World, e: KeyboardEvent) {
+  console.log(e.key);
+  const store = Store.getInstance();
 
   if (e.key === "m") {
     world.uiManager.infoPanel.openSysTarget(!world.uiManager.infoPanel.visible);
   }
 
   if (e.key === "f" && !world.lvlManager.isCosmicMap) {
-    store.state.followCam = !store.state.followCam
+    store.state.followCam = !store.state.followCam;
   }
 
-  const scalarY = 0.05
+  const scalarY = 0.05;
   if (e.key.toLowerCase() === "arrowright") {
-    store.store.rotateCamPivotY = Math.PI * scalarY
+    store.store.rotateCamPivotY = Math.PI * scalarY;
   }
   if (e.key.toLowerCase() === "arrowleft") {
-    store.store.rotateCamPivotY = -(Math.PI * scalarY)
+    store.store.rotateCamPivotY = -(Math.PI * scalarY);
   }
 
-  const scalarX = 0.005
+  const scalarX = 0.005;
   if (e.key.toLowerCase() === "arrowup") {
-    store.store.rotateCamPivotX = Math.PI * scalarX
+    store.store.rotateCamPivotX = Math.PI * scalarX;
   }
   if (e.key.toLowerCase() === "arrowdown") {
-    store.store.rotateCamPivotX = -(Math.PI * scalarX)
+    store.store.rotateCamPivotX = -(Math.PI * scalarX);
   }
 }

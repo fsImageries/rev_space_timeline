@@ -10,7 +10,7 @@ const BASE = {
   ORB_SCALE: 0,
   ROT_SCALE: 10,
   camPos: null,
-  followCam: false,
+  followCam: false
 };
 
 export class Store {

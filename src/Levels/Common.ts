@@ -13,7 +13,6 @@ import {
   ParentComponent,
   ParentComponentData,
   TiltComponent,
-
   RenderSystem,
   AxisRotSystem,
   CameraFocusSystem,
@@ -64,5 +63,5 @@ export function initCommonSystem(world: World) {
     .registerSystem(AxisRotSystem)
     .registerSystem(CameraFocusSystem)
     .registerSystem(RaycasterSystem)
-    .registerSystem(FollowCameraSystem)
+    .registerSystem(FollowCameraSystem);
 }

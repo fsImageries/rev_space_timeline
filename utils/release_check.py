@@ -19,6 +19,9 @@ def check_for_cosmicmap():
 
 
 if __name__ == "__main__":
-    assert PROJ.name == "rev_space_timeline", "Can't find project directory"
+    if PROJ.name != "rev_space_timeline":
+        print(PROJ)
+        raise AssertionError("Can't find project directory")
+
     check_for_cosmicmap()
     

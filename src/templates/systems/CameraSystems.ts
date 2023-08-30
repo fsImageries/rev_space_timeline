@@ -1,4 +1,5 @@
 import { Camera, Raycaster, Vector3 } from "three";
+import { lerp } from "three/src/math/MathUtils";
 import { Entity } from "../../ecs/Entity";
 import { Store } from "../../ecs/Store";
 import { System } from "../../ecs/System";
@@ -8,19 +9,16 @@ import GLOBALS from "../../helpers/Constants";
 import { OrbitLineComponent, RadiusComponent } from "../components/CelestialComponents";
 import {
     BaseDataComponent,
-    CameraComponent, 
-    ParticleRingTypeComponent,
+    CameraComponent,
     FollowCameraComponent,
-    FollowCameraComponentData,
+    ParticleRingTypeComponent,
     SunTypeComponent
 } from "../components/CommonComponents";
 import {
     CosmicMapSunTextComponent,
     MeshComponent,
-    RotGroupComponent,
     TransformGroupComponent
 } from "../components/MeshComponents";
-import { damp, lerp } from "three/src/math/MathUtils";
 
 
 export class CameraFocusSystem extends System {
@@ -165,18 +163,8 @@ export class FollowCameraSystem extends System {
         super(world);
         this.enabled = false;
     }
-
-    private calculateIdealOffset(radius:number, tcomp?: TransformGroupComponent) {
-        // const idealOffset = new Vector3(-15, 20, -30);
-        const idealOffset = new Vector3(0, 0, -radius * 2);
-        if (!tcomp) return idealOffset
-        idealOffset.applyQuaternion(tcomp.data.group.quaternion);
-        idealOffset.add(tcomp.data.group.getWorldPosition(GLOBALS.WORLD_POS));
-        return idealOffset;
-      }
     
-    private calculateIdealLookat(radius:number, tcomp?: TransformGroupComponent) {
-        // const idealLookat = new Vector3(0, 10, 50);
+    private calculateIdealLookat(tcomp?: TransformGroupComponent) {
         const idealLookat = new Vector3(0, 0, 0);
         if (!tcomp) return idealLookat
         idealLookat.applyQuaternion(tcomp.data.group.quaternion);
@@ -211,9 +199,7 @@ export class FollowCameraSystem extends System {
         const rad = ccomp.data.target?.[1] as number * 5
         tcomp.data.group.getWorldPosition(GLOBALS.WORLD_POS)
 
-        // console.log(ccomp.data.target?.[0].components)
-        // const idealOffset = this.calculateIdealOffset(rad, tcomp);
-        const idealLookat = this.calculateIdealLookat(rad, tcomp);
+        const idealLookat = this.calculateIdealLookat(tcomp);
         const idealOffset = new Vector3(0, 0, -rad * 2);
 
         const t = 1.0 - Math.pow(0.001, delta);

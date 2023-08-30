@@ -8,9 +8,9 @@ if (v) v.innerText = `v${APP_VERSION}`;
 window.onload = async () => {
   const world = new World();
 
-  await world.lvlManager.openLevel("Delta Pavonis");
+  // await world.lvlManager.openLevel("Delta Pavonis");
   // await world.lvlManager.openLevel("Epsilon Eridani");
-  // await world.lvlManager.openLevel("Cosmic Map");
+  await world.lvlManager.openLevel("Cosmic Map");
 
   const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
     .data.scene;

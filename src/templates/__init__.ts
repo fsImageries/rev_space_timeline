@@ -11,7 +11,9 @@ import {
   UniformsData,
   SunTypeComponent,
   PlanetTypeComponent,
-  ParticleRingTypeComponent
+  ParticleRingTypeComponent,
+  FollowCameraComponent,
+  FollowCameraComponentData
 } from "./components/CommonComponents";
 
 import {
@@ -66,7 +68,7 @@ import {
   ParticleRingUniformsSystem
 } from "./systems/MeshSystems";
 
-import { CameraFocusSystem, RaycasterSystem } from "./systems/CameraSystems";
+import { CameraFocusSystem, RaycasterSystem, FollowCameraSystem } from "./systems/CameraSystems";
 
 // Common Components
 export {
@@ -77,9 +79,10 @@ export {
   UniformsComponent,
   SunTypeComponent,
   PlanetTypeComponent,
-  ParticleRingTypeComponent
+  ParticleRingTypeComponent,
+  FollowCameraComponent
 };
-export type { RenderComponentData, SceneComponentData, CameraComponentData, BaseDataData, UniformsData };
+export type { RenderComponentData, SceneComponentData, CameraComponentData, BaseDataData, UniformsData, FollowCameraComponentData };
 
 // Mesh Components
 export {
@@ -136,5 +139,6 @@ export {
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
   InfoPanelCameraCoordSystem,
-  ParticleRingUniformsSystem
+  ParticleRingUniformsSystem,
+  FollowCameraSystem
 };

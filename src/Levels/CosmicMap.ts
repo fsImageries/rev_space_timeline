@@ -1,41 +1,40 @@
-import {
-  RenderSystem,
-  AxisRotSystem,
-  SunUniformsUpdateSystem,
-  CameraFocusSystem,
-  RaycasterSystem,
-  CosmicMapStartTextSystem,
-  InfoPanelCameraCoordSystem
-} from "../templates/__init__";
 import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
+import { SunData, TextObject } from "../dataInterfaces";
+import { Entity } from "../ecs/Entity";
+import { Store } from "../ecs/Store";
+import { World } from "../ecs/World";
+import GLOBALS from "../helpers/Constants";
 import {
   BasicRingComponent,
   BasicRingTextComponent,
+  CameraFocusSystem,
+  CosmicMapStartTextSystem,
   CosmicMapSunTextComponent,
   DiskLinesComponent,
+  InfoPanelCameraCoordSystem,
   LineSegmentData,
   ObjectLineComponent,
-  ObjectLineData
+  ObjectLineData,
+  SunUniformsUpdateSystem
 } from "../templates/__init__";
-import { World } from "../ecs/World";
-import { initCommonEntities } from "./Common";
-import { Store } from "../ecs/Store";
-import { SunData, TextObject } from "../dataInterfaces";
-import { Entity } from "../ecs/Entity";
-import GLOBALS from "../helpers/Constants";
+import { initCommonEntities, initCommonSystem } from "./Common";
 
 export function initCosmicMap(world: World) {
   GLOBALS.LOAD_MANAGER.itemStart("://CosmicMap");
-  Store.getInstance().state.DISTANCE_SCALE = 1e-11;
-  Store.getInstance().state.SIZE_SCALE = 1.5e-3;
+  const store = Store.getInstance();
+  store.state.DISTANCE_SCALE = 1e-11;
+  store.state.SIZE_SCALE = 1.5e-3;
+  store.state.followCam = false;
+
+  initCommonSystem(world)
 
   world.sysManager
-    .registerSystem(RenderSystem)
-    .registerSystem(AxisRotSystem)
+    // .registerSystem(RenderSystem)
+    // .registerSystem(AxisRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
-    .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem)
+    // .registerSystem(CameraFocusSystem)
+    // .registerSystem(RaycasterSystem)
     .registerSystem(CosmicMapStartTextSystem)
     .registerSystem(InfoPanelCameraCoordSystem);
 
@@ -45,8 +44,8 @@ export function initCosmicMap(world: World) {
 
   GLOBALS.LOAD_MANAGER.itemStart("://CosmicMap_world");
   initLines(world);
-  Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.65);
-  initCommonEntities(world, Store.getInstance().state.camPos);
+  store.state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.65);
+  initCommonEntities(world, store.state.camPos);
   world.load();
 
   const textObjs: TextObject[] = [

@@ -6,7 +6,8 @@ import {
   Scene,
   Vector3,
   WebGLRenderer,
-  sRGBEncoding
+  sRGBEncoding,
+  Object3D
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
@@ -15,11 +16,13 @@ import { Component, TypeComponent } from "../../ecs/Component";
 import { Store } from "../../ecs/Store";
 import { operand } from "../../ecs/utils";
 import Constants from "../../helpers/Constants";
+import { Entity } from "../../ecs/Entity";
 
 export interface RenderComponentData {
   // canvas: HTMLCanvasElement;
   renderer3d: WebGLRenderer;
   renderer2d: CSS2DRenderer;
+  shouldFollow: boolean;
 }
 
 export class RenderComponent extends Component<RenderComponentData> {
@@ -48,7 +51,7 @@ export class RenderComponent extends Component<RenderComponentData> {
     // document.body.appendChild(renderer.domElement);
     // document.body.appendChild(renderer2d.domElement);
 
-    return { renderer3d: renderer, renderer2d: renderer2d };
+    return { renderer3d: renderer, renderer2d: renderer2d, shouldFollow:false };
   }
 }
 
@@ -105,6 +108,41 @@ export class CameraComponent extends Component<CameraComponentData> {
     this.data.freeCtrl = new OrbitControls(this.data.active, renderer.domElement);
     this.data.freeCtrl.enableDamping = true;
     this.data.freeCtrl.dampingFactor = 0.5;
+  }
+}
+
+export interface FollowCameraComponentData {
+  cam: PerspectiveCamera;
+  camPivot: Object3D;
+  target?: [Entity, number];
+  currentPosition: Vector3;
+  currentLookat: Vector3;
+}
+export class FollowCameraComponent extends Component<FollowCameraComponentData> {
+  static dependencies = [];
+  static typeID = crypto.randomUUID();
+
+  static getDefaults(target?: Entity): FollowCameraComponentData {
+    const cam = new PerspectiveCamera(
+      55,
+      Store.getInstance().state.canvas.clientWidth / Store.getInstance().state.canvas.clientHeight,
+      1e-5,
+      1e12
+    );
+    const camPivot = new Object3D();
+    camPivot.add(cam)
+    cam.position.z = 1200;
+
+    const currentPosition = new Vector3();
+    const currentLookat = new Vector3();
+
+    return {
+      cam,
+      camPivot,
+      target: target ? [target, 0] : target,
+      currentPosition,
+      currentLookat
+    };
   }
 }
 

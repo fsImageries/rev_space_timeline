@@ -9,7 +9,8 @@ const BASE = {
   // ORB_SCALE: 1,
   ORB_SCALE: 0,
   ROT_SCALE: 10,
-  camPos: null
+  camPos: null,
+  followCam: false,
 };
 
 export class Store {
@@ -22,7 +23,6 @@ export class Store {
   /* eslint-disable @typescript-eslint/no-explicit-any*/
   public store: { [k: string]: any };
   /* eslint-disable @typescript-eslint/no-explicit-any*/
-  public settings: { [k: string]: any };
   public state: TState;
 
   constructor() {
@@ -39,26 +39,13 @@ export class Store {
       raycaster: new Raycaster(),
       raypointer: new Vector2(Infinity, Infinity),
       focusTarget: "yellowstone",
+      rotateCamPivotY: 0,
+      rotateCamPivotX: 0,
+      rotateCamPivotDepth: 0,
       displayMarkerVisibility: visibility
     };
 
     this.state = { ...BASE };
-
-    this.settings = {
-      // TODO when more settings need to be saved in local storage switch to json object
-      displayMarkerVisibility: [
-        visibility,
-        (val: boolean) => {
-          this.settings.displayMarkerVisibility[0] = val;
-          localStorage.setItem("markerVisiblity", val.toString());
-          document.documentElement?.style.setProperty("--marker-diamond-visibility", val ? "visible" : "hidden");
-        }
-      ]
-    };
-
-    Object.values(this.settings).forEach(([val, val_fn]) => {
-      if (val_fn) val_fn(val);
-    });
   }
 
   public resetState() {

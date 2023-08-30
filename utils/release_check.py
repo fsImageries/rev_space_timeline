@@ -19,7 +19,7 @@ def check_for_cosmicmap():
 
 
 if __name__ == "__main__":
-    if PROJ.name != "rev_space_timeline":
+    if "rev_space_timeline" not in PROJ.name:
         print(PROJ)
         raise AssertionError("Can't find project directory")
 

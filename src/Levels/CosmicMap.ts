@@ -1,41 +1,40 @@
-import {
-  RenderSystem,
-  AxisRotSystem,
-  SunUniformsUpdateSystem,
-  CameraFocusSystem,
-  RaycasterSystem,
-  CosmicMapStartTextSystem,
-  InfoPanelCameraCoordSystem
-} from "../baseclasses/imports";
 import { Vector3 } from "three";
 import { buildSun } from "../Factories/SunFactory";
+import { SunData, TextObject } from "../dataInterfaces";
+import { Entity } from "../ecs/Entity";
+import { Store } from "../ecs/Store";
+import { World } from "../ecs/World";
+import GLOBALS from "../helpers/Constants";
 import {
   BasicRingComponent,
   BasicRingTextComponent,
+  CameraFocusSystem,
+  CosmicMapStartTextSystem,
   CosmicMapSunTextComponent,
   DiskLinesComponent,
+  InfoPanelCameraCoordSystem,
   LineSegmentData,
   ObjectLineComponent,
-  ObjectLineData
-} from "../baseclasses/imports";
-import { World } from "../ecs/World";
-import { initCommonEntities } from "./Common";
-import { Store } from "../ecs/Store";
-import { SunData, TextObject } from "../dataInterfaces";
-import { Entity } from "../ecs/Entity";
-import GLOBALS from "../helpers/Constants";
+  ObjectLineData,
+  SunUniformsUpdateSystem
+} from "../templates/__init__";
+import { initCommonEntities, initCommonSystem } from "./Common";
 
 export function initCosmicMap(world: World) {
   GLOBALS.LOAD_MANAGER.itemStart("://CosmicMap");
-  Store.getInstance().state.DISTANCE_SCALE = 1e-11;
-  Store.getInstance().state.SIZE_SCALE = 1.5e-3;
+  const store = Store.getInstance();
+  store.state.DISTANCE_SCALE = 1e-11;
+  store.state.SIZE_SCALE = 1.5e-3;
+  store.state.followCam = false;
+
+  initCommonSystem(world);
 
   world.sysManager
-    .registerSystem(RenderSystem)
-    .registerSystem(AxisRotSystem)
+    // .registerSystem(RenderSystem)
+    // .registerSystem(AxisRotSystem)
     .registerSystem(SunUniformsUpdateSystem)
-    .registerSystem(CameraFocusSystem)
-    .registerSystem(RaycasterSystem)
+    // .registerSystem(CameraFocusSystem)
+    // .registerSystem(RaycasterSystem)
     .registerSystem(CosmicMapStartTextSystem)
     .registerSystem(InfoPanelCameraCoordSystem);
 
@@ -45,8 +44,8 @@ export function initCosmicMap(world: World) {
 
   GLOBALS.LOAD_MANAGER.itemStart("://CosmicMap_world");
   initLines(world);
-  Store.getInstance().state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.5);
-  initCommonEntities(world, Store.getInstance().state.camPos);
+  store.state.camPos = new Vector3(0, 2118 * 0.5, 10175 * 0.65);
+  initCommonEntities(world, store.state.camPos);
   world.load();
 
   const textObjs: TextObject[] = [
@@ -71,7 +70,7 @@ export function initCosmicMap(world: World) {
         Original Map produced by Richard Terrett`
     }
   ];
-  world.uiManager.infoPanel.init(textObjs, { name: "Cosmic Map", constellation: "" });
+  world.uiManager.infoPanel.initTexts(textObjs, { name: "Cosmic Map", constellation: "" });
   GLOBALS.LOAD_MANAGER.itemEnd("://CosmicMap_world");
 
   const sys = world.sysManager.getSystem(CameraFocusSystem);
@@ -80,7 +79,16 @@ export function initCosmicMap(world: World) {
 }
 
 function initSuns(world: World) {
-  const buildSun2 = (e: Entity, d: SunData) => buildSun(e, d, false);
+  const buildSun2 = (e: Entity, d: SunData) => {
+    d = {
+      ...d,
+      draw: {
+        ...d.draw,
+        disableMarker: true
+      }
+    };
+    return buildSun(e, d);
+  };
 
   buildSun2(world.ecManager.createEntity(), {
     highTemp: 7100,
@@ -228,6 +236,18 @@ function initSuns(world: World) {
     draw: { initRot: Math.PI * -0.1 },
     texts: ["Haldora [SHADOWS]", "- Hela [SCUTTLERS, NESTBUILDERS(?)]"]
   }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
+
+  buildSun2(world.ecManager.createEntity(), {
+    highTemp: 3800,
+    lowTemp: 500,
+    name: "AU Microscopii",
+    rotationPeriod: 856,
+    radius: 2800,
+    distanceToParent: [Store.getInstance().store.LIGHTYEAR * 28.69, Store.getInstance().store.LIGHTYEAR * -26.4],
+    disableLight: true,
+    draw: { initRot: Math.PI * -0.8 },
+    texts: ["MichaelMas [Sun Hollow]"]
+  }).addComponent(CosmicMapSunTextComponent, CosmicMapSunTextComponent.getDefaults(true));
 }
 
 function initLines(world: World) {
@@ -246,6 +266,11 @@ function initLines(world: World) {
     .addComponent(BasicRingComponent, BasicRingComponent.getDefaults(15))
     .addComponent(BasicRingTextComponent, BasicRingTextComponent.getDefaults("15LY", 15));
 
+  world.ecManager
+    .createEntity()
+    .addComponent(BasicRingComponent, BasicRingComponent.getDefaults(25))
+    .addComponent(BasicRingTextComponent, BasicRingTextComponent.getDefaults("25LY", 25));
+
   world.ecManager.createEntity().addComponent(DiskLinesComponent, {} as LineSegmentData);
 
   const linepairs = [
@@ -262,7 +287,9 @@ function initLines(world: World) {
     "61 Cygni",
     "Sol",
     "Ross 248",
-    "Sol"
+    "Sol",
+    "Epsilon Eridani",
+    "AU Microscopii"
   ];
   world.ecManager.createEntity().addComponent(ObjectLineComponent, { pairs: linepairs } as unknown as ObjectLineData);
 }

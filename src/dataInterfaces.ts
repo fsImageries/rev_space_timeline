@@ -1,7 +1,6 @@
 import { ColorRepresentation } from "three";
 
 export interface DrawData {
-  radius?: number;
   cache?: string;
   albedoPath?: string;
   normalPath?: string;
@@ -13,10 +12,15 @@ export interface DrawData {
   height?: number;
   orbInvert?: boolean;
   orbLen?: number;
+  orbOpacity?: number;
   genColor?: boolean;
   pointShader?: boolean;
   end?: number;
   initRot?: number;
+  mass?: number;
+  vel?:string;
+  acc?:string;
+  disableMarker?: boolean;
 }
 
 export interface SunData extends SystemObjectData {
@@ -41,6 +45,8 @@ export interface TextObject {
 export interface SystemData {
   name: string;
   isSingleSun: boolean;
+  DISTANCE_SCALE: number;
+  SIZE_SCALE: number;
   objects: SystemObjectData[];
   texts: TextObject[];
 

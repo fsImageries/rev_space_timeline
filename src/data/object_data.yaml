@@ -2,6 +2,8 @@
 systems:
 - name: Epsilon Eridani
   isSingleSun: true
+  DISTANCE_SCALE: 3e-8
+  SIZE_SCALE: 1e-5
 
   startTarget: Yellowstone  # determines which object should be targeted when the system is loaded
   freeCam: false            # determine if the scene should start in freeCam mode (Cosmic Map starts in freemode)
@@ -21,14 +23,14 @@ systems:
     rotationPeriod: 24
     orbitalPeriod: 63948
     parent: Epsilon Eridani
-    tilt: 45
+    # tilt: -30.1
+    tilt: -30.1
     distanceToParent: 5086400000
     draw:
-      albedoPath: "./epsilonEridani/2k_jupiter.jpg"
-      normalPath: "./epsilonEridani/ceres_normal_16k.png"
+      albedoPath: "./planetTextures/2k_jupiter.webp"
+      normalPath: "./planetTextures/ceres_normal_16k.webp"
       glowColor: '0xffffff'
       glowIntensity: 0.1
-      radius: 100
 
   - name: Yellowstone
     type: planet
@@ -36,14 +38,13 @@ systems:
     rotationPeriod: 26
     orbitalPeriod: 2453000
     parent: Epsilon Eridani
-    tilt: 20
+    tilt: -3.13 
     distanceToParent: 59840000000
     draw:
-      albedoPath: "./epsilonEridani/2k_venus_surface.jpg"
-      normalPath: "./epsilonEridani/ceres_normal_16k.png"
+      albedoPath: "./planetTextures/2k_venus_surface.webp"
+      normalPath: "./planetTextures/ceres_normal_16k.webp"
       glowColor: '0xf69f1f'
       glowIntensity: 0.25
-      radius: 100
 
   - name: Marcos Eye
     type: "moon"
@@ -54,12 +55,12 @@ systems:
     tilt: 0
     distanceToParent: 308440000
     draw:
-      albedoPath: "./epsilonEridani/marcosEye/moon_albedo.jpg"
-      normalPath: "./epsilonEridani/marcosEye/moon_normal.png"
+      albedoPath: "./planetTextures/moon_albedo.webp"
+      normalPath: "./planetTextures/moon_normal.webp"
       glowColor: '0xffffff'
       glowIntensity: 0.1
       radius: 1
-      orbInvert: true
+      orbInvert: false
       orbLen: 45
       showMarker: false # TODO Defaults to true
       
@@ -108,77 +109,239 @@ systems:
   #     pointShader: true
   #     orbInvert: true
 
-  texts:
-  - name: Epsilon Eridani
-    all: true
+- name: Delta Pavonis
+  isSingleSun: true
+  DISTANCE_SCALE: 4e-7
+  SIZE_SCALE: 2e-5
 
-  - name: Tangerine Dream
-    timeline:
-      - |-
-        2560-2600
-        Demarchists start to mine and pre-process metallic hydrogen
-      - |-
-        2605
-        James Bax is laid to rest by his daughter Antoinette Bax
+  startTarget: Delta Pavonis
+  freeCam: false
+  constellation: "Pavo"
 
-  - name: Glitterband
-    timeline:
-      - |-
-        ≈2510
-        Glitterband shattered as a result of the Melding Plague
-  
-  - name: Yellowstone
-    timeline:
-    - |-
-      2090 – 2110
-      Originally settled by Americans
-      Settled via Von Neumann machines housing fertilized human eggs
-      Colony failed in a similarly murderous manner as Diadem
-    - |-
-      2205 – 2250
-      Period of great expansion
-      Recontact with surviving settlements from Amerikano era
-    - |-
-      2351
-      Dan Sylveste born in Chasm City, Yellowstone
-    - |-
-      2372
-      The Eighty
-    - |-
-      2405
-      Departure of Sylveste expedition to Lascaille's Shroud
-    - |-
-      2415
-      Clockworker incident
-    - |-
-      2427
-      Aurora crisis
-    - |-
-      2441
-      Return of Sylveste’s expedition to Lascaille’s Shroud
-    - |-
-      2460
-      Dan Sylveste vanishes from Yellowstone for 30 days
-    - |-
-      2491
-      Departure of Resurgam expedition
-    - |-
-      2510
-      Melding Plague afflicts Chasm City
-      Effective end of Demarchist era
-    - |-
-      2517
-      Tanner Mirabel arrives in Chasm City
-    - |-
-      2524
-      Ana Khouri arrives in Chasm City
-    - |-
-      2551
-      Outbreak of Conjoiner-Demarchist war around Yellowstone
-      Establishment of Ferrisville Convention
+  objects:
+  - name: Delta Pavonis
+    type: sun
+    radius: 848800
+    # rotationPeriod: 273.6
+    # distanceToParent: 1992000000
+    orbitalPeriod: 21365.64
+    distanceToParent: -2697500000.0
+    highTemp: 7000                # TODO implement into new interfaces
+    lowTemp: 3000                 # TODO implement into new interfaces
+    draw:
+      mass: 10100000
+      # vel: 0,0,-.98e-1
+      vel: 0,0,-.015
+      acc: 0,0,0
 
-  - name: Marcos Eye
-    timeline:
-    - |-
-      ≈2100
-      Named in honour of Marco Ferris
+  - name: VolcanicLike
+    type: planet
+    radius: 3370.9
+    rotationPeriod: 66.66
+    orbitalPeriod: 19948
+    parent: Delta Pavonis
+    tilt: .03
+    distanceToParent: 60095000
+    draw:
+      albedoPath: "./planetTextures/2k_Volcanic.webp"
+      normalPath: "./planetTextures/2k_Volcanic_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+    
+  - name: ROC
+    type: planet
+    radius: 19113.1991
+    rotationPeriod: 50
+    orbitalPeriod: 39948
+    parent: Delta Pavonis
+    tilt: 2.64
+    distanceToParent: 1.769e+8
+    draw:
+      albedoPath: "./planetTextures/2k_jupiter.webp"
+      normalPath: "./planetTextures/ceres_normal_16k.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+
+  - name: VenusLike
+    type: planet
+    radius: 1370.9
+    rotationPeriod: 44.66
+    orbitalPeriod: 70068
+    parent: Delta Pavonis
+    tilt: 24.44
+    distanceToParent: 400950000
+    draw:
+      albedoPath: "./planetTextures/2k_Venusian.webp"
+      normalPath: "./planetTextures/2k_Venusian_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Pluto
+    type: planet
+    radius: 1469.7
+    rotationPeriod: 9
+    orbitalPeriod: 203680
+    parent: Delta Pavonis
+    tilt: 25.19
+    distanceToParent: 650250000
+    draw:
+      albedoPath: "./planetTextures/2k_PlutoColour.webp"
+      normalPath: "./planetTextures/2k_PlutoColour_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: MakeMake
+    type: planet
+    radius: 2469.7
+    rotationPeriod: 9
+    orbitalPeriod: 1006800
+    parent: Delta Pavonis
+    tilt: 3.13
+    distanceToParent: 750250000
+    draw:
+      albedoPath: "./planetTextures/2k_makemake_fictional.webp"
+      normalPath: "./planetTextures/2k_makemake_fictional_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+    
+  - name: Icy
+    type: planet
+    radius: 1163
+    rotationPeriod: 25.9
+    orbitalPeriod: 3004800
+    parent: Delta Pavonis
+    tilt: 26.73
+    distanceToParent: 1000500000
+    draw:
+      albedoPath: "./planetTextures/2k_icy.webp"
+      normalPath: "./planetTextures/2k_icy_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Ceres
+    type: planet
+    radius: 469.7
+    rotationPeriod: 9
+    orbitalPeriod: 4036800
+    parent: Delta Pavonis
+    tilt: 82.29
+    distanceToParent: 1302500000
+    draw:
+      albedoPath: "./planetTextures/2k_ceres_fictional.webp"
+      normalPath: "./planetTextures/2k_ceres_fictional_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Resurgam
+    type: planet
+    radius: 5600
+    rotationPeriod: 26
+    orbitalPeriod: 3241200
+    parent: Delta Pavonis
+    tilt: 4.20
+    distanceToParent: 1660500000
+    draw:
+      albedoPath: "./planetTextures/2k_orange_desert.webp"
+      normalPath: "./planetTextures/1k_yellow_desert_normal.webp"
+      glowColor: '0xdaa43d'
+      glowIntensity: 0.25
+
+  - name: Haumea
+    type: planet
+    radius: 3469.7
+    rotationPeriod: 90
+    orbitalPeriod: 10068000
+    parent: Delta Pavonis
+    tilt: 28.32
+    distanceToParent: 1452500000
+    draw:
+      albedoPath: "./planetTextures/2k_haumea_fictional.webp"
+      normalPath: "./planetTextures/2k_haumea_fictional_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Eris
+    type: planet
+    radius: 2069.7
+    rotationPeriod: 34
+    orbitalPeriod: 30068000
+    parent: Delta Pavonis
+    tilt: 57.47
+    #                 1660500000
+    distanceToParent: 2095025000
+    draw:
+      albedoPath: "./planetTextures/2k_eris_fictional.webp"
+      normalPath: "./planetTextures/2k_eris_fictional_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: MartianLike
+    type: planet
+    radius: 1370.9
+    rotationPeriod: 50
+    orbitalPeriod: 70068000
+    parent: Delta Pavonis
+    tilt: 3.976
+    distanceToParent: 310000000
+    draw:
+      albedoPath: "./planetTextures/2k_Martian.webp"
+      normalPath: "./planetTextures/2k_Martian_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbOpacity: .2
+      disableMarker: true
+      orbLen: 135
+
+  - name: Hades
+    type: sun
+    disableLight: true
+    radius: 2000.2
+    # rotationPeriod: 273.6
+    orbitalPeriod: 87600
+    distanceToParent: 5.079e+10
+    highTemp: 25000             # TODO implement into new interfaces
+    lowTemp: 1000                # TODO implement into new interfaces
+    draw:
+      mass: 2550000
+      # vel: 0,0,1e-1
+      vel: 0,0,0
+      acc: 0,0,.05
+
+  - name: Cerberus
+    type: "moon"
+    radius: 1737.4
+    rotationPeriod: 6552
+    orbitalPeriod: 655200
+    parent: Hades
+    tilt: 0
+    distanceToParent: 3084400000
+    draw:
+      albedoPath: "./planetTextures/cerberus.webp"
+      normalPath: "./planetTextures/cerberus_normal.webp"
+      glowColor: '0xffffff'
+      glowIntensity: 0.1
+      orbInvert: true

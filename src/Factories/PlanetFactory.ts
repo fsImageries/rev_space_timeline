@@ -15,12 +15,12 @@ import {
   PlanetTypeComponent,
   RotGroupComponent,
   TransformGroupComponent
-} from "../baseclasses/imports";
+} from "../templates/__init__";
 import { Entity } from "../ecs/Entity";
 import GLOBALS from "../helpers/Constants";
 
 import { initCelestialComponents } from "../Levels/Common";
-import { MoonTypeComponent } from "../baseclasses/CommonComponents";
+import { MoonTypeComponent } from "../templates/components/CommonComponents";
 import { DrawData, SystemObjectData } from "../dataInterfaces";
 import atmoFrag from "./../glsl/planet_atmo.frag.glsl?raw";
 import atmoVert from "./../glsl/planet_atmo.vert.glsl?raw";
@@ -34,7 +34,7 @@ export function buildPlanet(entity: Entity, data: SystemObjectData) {
     // .addComponent(UniformsComponent, uniforms)
     .addComponent(MeshComponent, { mesh: mesh as Mesh })
     .addComponent(TransformGroupComponent, TransformGroupComponent.getDefaults(transformGrp))
-    .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot)) // implement random start rot
+    .addComponent(RotGroupComponent, RotGroupComponent.getDefaults(rotGrp, data.draw?.initRot))
     .addComponent(AtmoComponent, { mesh: atmo })
     .addComponent(OrbitLineComponent, { mesh: orbit });
 

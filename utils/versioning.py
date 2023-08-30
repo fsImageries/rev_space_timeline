@@ -189,6 +189,6 @@ if __name__ == "__main__":
 
     if args.auto_increment:
         new_v = auto_increment_by_branch()
-        set_version_to_json(v)
+        set_version_to_json(new_v)
         print("[LOG] Version set successful")
         

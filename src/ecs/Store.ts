@@ -6,9 +6,11 @@ export type TState = { [k: string]: any };
 const BASE = {
   DISTANCE_SCALE: 0,
   SIZE_SCALE: 0,
-  ORB_SCALE: 1,
+  // ORB_SCALE: 1,
+  ORB_SCALE: 0,
   ROT_SCALE: 10,
-  camPos: null
+  camPos: null,
+  followCam: false
 };
 
 export class Store {
@@ -20,17 +22,27 @@ export class Store {
 
   /* eslint-disable @typescript-eslint/no-explicit-any*/
   public store: { [k: string]: any };
+  /* eslint-disable @typescript-eslint/no-explicit-any*/
   public state: TState;
 
   constructor() {
-    // const canvas = document.createElement("canvas")
+    const dmVisibility = localStorage.getItem("markerVisiblity");
+    let visibility = true;
+    if (dmVisibility) {
+      visibility = dmVisibility === "true" ? true : false;
+    }
+
     this.store = {
       LIGHTYEAR: 9.461e12,
       canvas: null,
       // canvas: document.querySelector("canvas#main") as HTMLCanvasElement,
       raycaster: new Raycaster(),
       raypointer: new Vector2(Infinity, Infinity),
-      focusTarget: "yellowstone"
+      focusTarget: "yellowstone",
+      rotateCamPivotY: 0,
+      rotateCamPivotX: 0,
+      rotateCamPivotDepth: 0,
+      displayMarkerVisibility: visibility
     };
 
     this.state = { ...BASE };

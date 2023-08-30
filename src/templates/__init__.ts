@@ -11,8 +11,10 @@ import {
   UniformsData,
   SunTypeComponent,
   PlanetTypeComponent,
-  ParticleRingTypeComponent
-} from "./CommonComponents";
+  ParticleRingTypeComponent,
+  FollowCameraComponent,
+  FollowCameraComponentData
+} from "./components/CommonComponents";
 
 import {
   MeshComponent,
@@ -37,7 +39,7 @@ import {
   ParentComponent,
   ParentComponentData,
   ParticleRingComponent
-} from "./MeshComponents";
+} from "./components/MeshComponents";
 
 import {
   RotData,
@@ -47,21 +49,26 @@ import {
   DistanceToParentData,
   RadiusComponent,
   RadiusData,
-  OrbitLineComponent
-} from "./CelestialComponents";
+  OrbitLineComponent,
+  TiltComponent,
+  TiltData
+} from "./components/CelestialComponents";
+
+import { GravitationalObjectComponent, GravitationalObjectData } from "./components/DynamicComponents";
+
+import { resizeRendererToDisplaySize, RenderSystem } from "./systems/CommonSystems";
 
 import {
-  resizeRendererToDisplaySize,
-  RenderSystem,
   AxisRotSystem,
   OrbitRotSystem,
   SunUniformsUpdateSystem,
-  CameraFocusSystem,
-  RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
-  InfoPanelCameraCoordSystem
-} from "./CommonSystems";
+  InfoPanelCameraCoordSystem,
+  ParticleRingUniformsSystem
+} from "./systems/MeshSystems";
+
+import { CameraFocusSystem, RaycasterSystem, FollowCameraSystem } from "./systems/CameraSystems";
 
 // Common Components
 export {
@@ -72,9 +79,17 @@ export {
   UniformsComponent,
   SunTypeComponent,
   PlanetTypeComponent,
-  ParticleRingTypeComponent
+  ParticleRingTypeComponent,
+  FollowCameraComponent
 };
-export type { RenderComponentData, SceneComponentData, CameraComponentData, BaseDataData, UniformsData };
+export type {
+  RenderComponentData,
+  SceneComponentData,
+  CameraComponentData,
+  BaseDataData,
+  UniformsData,
+  FollowCameraComponentData
+};
 
 // Mesh Components
 export {
@@ -105,8 +120,19 @@ export type {
 };
 
 // Celestial Components
-export { AxisRotComponent, OrbitRotComponent, DistanceToParentComponent, RadiusComponent, OrbitLineComponent };
-export type { RotData, DistanceToParentData, RadiusData };
+export {
+  AxisRotComponent,
+  OrbitRotComponent,
+  DistanceToParentComponent,
+  RadiusComponent,
+  OrbitLineComponent,
+  TiltComponent
+};
+export type { RotData, DistanceToParentData, RadiusData, TiltData };
+
+// Dynamic Components
+export { GravitationalObjectComponent as MassComponent };
+export type { GravitationalObjectData as MassData };
 
 // Systems
 export {
@@ -119,5 +145,7 @@ export {
   RaycasterSystem,
   CSSMarkerSystem,
   CosmicMapStartTextSystem,
-  InfoPanelCameraCoordSystem
+  InfoPanelCameraCoordSystem,
+  ParticleRingUniformsSystem,
+  FollowCameraSystem
 };

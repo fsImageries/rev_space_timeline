@@ -1,6 +1,7 @@
-import { Component } from "../ecs/Component";
-import { Store } from "../ecs/Store";
-import { operand } from "../ecs/utils";
+import { DEG2RAD } from "three/src/math/MathUtils";
+import { Component } from "../../ecs/Component";
+import { Store } from "../../ecs/Store";
+import { operand } from "../../ecs/utils";
 import { MeshData, RotGroupComponent, TransformGroupComponent } from "./MeshComponents";
 
 export interface RotData {
@@ -67,6 +68,32 @@ export class DistanceToParentComponent extends Component<DistanceToParentData> {
       const grp = entity.getComponent(TransformGroupComponent).data.group;
       grp.position.x += this.data.drawX;
       if (this.data.drawY) grp.position.y += this.data.drawY;
+    }
+  }
+}
+
+export interface TiltData {
+  deg:number;
+  rad:number;
+  shouldInit: boolean;
+}
+export class TiltComponent extends Component<TiltData> {
+  static dependencies = [operand("self", RotGroupComponent)];
+  static typeID = crypto.randomUUID();
+
+  static getDefaults(deg:number, shouldInit=true): TiltData {
+    const rad = deg * DEG2RAD
+    return {
+      deg, rad, shouldInit
+    };
+  }
+
+  public init() {
+    if (!this.dependendQueries || !this.data.shouldInit) return;
+
+    for (const entity of this.dependendQueries[0].entities) {
+      const grp = entity.getComponent(RotGroupComponent).data.group;
+      grp.rotation.x = this.data.rad
     }
   }
 }

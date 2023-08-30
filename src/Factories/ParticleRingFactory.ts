@@ -7,7 +7,7 @@ import {
   ParticleRingComponent,
   RotGroupComponent,
   TransformGroupComponent
-} from "../baseclasses/MeshComponents";
+} from "../templates/components/MeshComponents";
 import {
   BaseDataComponent,
   DistanceToParentComponent,
@@ -16,7 +16,7 @@ import {
   RadiusComponent,
   UniformsComponent,
   UniformsData
-} from "../baseclasses/imports";
+} from "../templates/__init__";
 import { Entity } from "../ecs/Entity";
 import { SystemObjectData } from "../dataInterfaces";
 import { Store } from "../ecs/Store";
@@ -55,7 +55,7 @@ void main() {
     vec4 localPosition = vec4( position, 1.);
     vec4 worldPosition = modelMatrix * localPosition;
     vec4 viewPosition = viewMatrix * worldPosition;
-    vvPosition = worldPosition.xyz;
+    
     
 	#ifdef USE_POINTS_UV
 
@@ -78,6 +78,7 @@ void main() {
 	#include <clipping_planes_vertex>
 	#include <worldpos_vertex>
 	#include <fog_vertex>
+  vvPosition = worldPosition.xyz;
 }   
 
     `;
@@ -104,24 +105,12 @@ const fragmentShader = `
       }
     
     void main() {
+        float distBase = distance(basePos, lightPos);
         
-        // vec2 xy = gl_PointCoord.xy - vec2(0.5);
-        // float ll = length(xy);
-        // gl_FragColor = vec4(color, step(ll, 0.5));
-
-        // need a vector pointing to the light
-        float v = map(vvPosition.x - basePos.x, minRad, maxRad * 5., 0., 1.0);
-        // float distanceToLightSource = distance(v, lightPos.x);
-        // vec3 lighterColor = color * distanceToLightSource * lightStrength;
-        
-        // vec3 actualPos = v3map(vPosition, vec3(minRad), vec3(maxRad), vec3(0.0), vec3(1.0));
-        // float distanceToLightSource = distance(lightPos, actualPos);
-        // vec3 lighterColor = color * distanceToLightSource * lightStrength;
-
-        // gl_FragColor = vec4(lighterColor, 1.0);
-        v = map((v * -1.0), -1., -.5, .75, 1.1);
-        // v = map((v * -1.0), -1., 0., 0.0, 1.);
-        gl_FragColor = vec4(vColor, 1.0) * v;
+        // the plus/minus variables need to be passed as uniforms from object_data
+        float v1 = map(distance(vvPosition, lightPos), distBase, distBase + 25., 1., 0.);
+        gl_FragColor = vec4(vColor, 1.0);
+        gl_FragColor.a = v1;
     }
     `;
 
@@ -208,8 +197,10 @@ function buildParticleSystem(data: SystemObjectData): [Mesh, UniformsData] {
     color: { value: [1, 1, 1] },
     lightPos: { value: [0, 0, 0] },
     basePos: { value: [0, 0, 0] },
-    maxRad: { value: ringRadius + ringWidth / 2 + 10 },
-    minRad: { value: -(ringRadius + ringWidth / 2 + 10) }
+    // maxRad: { value: ringRadius + ringWidth / 2 + 10 },
+    // minRad: { value: -(ringRadius + ringWidth / 2 + 10) }
+    maxRad: { value: ringRadius },
+    minRad: { value: ringRadius }
   };
 
   const mat = new ShaderMaterial({

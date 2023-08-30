@@ -1,4 +1,4 @@
-import { SceneComponent } from "./baseclasses/imports";
+import { SceneComponent } from "./templates/__init__";
 import { World } from "./ecs/World";
 
 document.title = `${document.title} (${APP_VERSION})`;
@@ -8,7 +8,9 @@ if (v) v.innerText = `v${APP_VERSION}`;
 window.onload = async () => {
   const world = new World();
 
-  await world.lvlManager.openLevel("Cosmic Map");
+  // await world.lvlManager.openLevel("Cosmic Map");
+  await world.lvlManager.openLevel("Delta Pavonis");
+  // await world.lvlManager.openLevel("Epsilon Eridani");
 
   const scene = world.ecManager.entities.find((e) => e.getComponent(SceneComponent))?.components[SceneComponent.typeID]
     .data.scene;

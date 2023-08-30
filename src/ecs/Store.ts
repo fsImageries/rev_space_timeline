@@ -9,7 +9,8 @@ const BASE = {
   // ORB_SCALE: 1,
   ORB_SCALE: 0,
   ROT_SCALE: 10,
-  camPos: null
+  camPos: null,
+  followCam: false,
 };
 
 export class Store {
@@ -38,7 +39,6 @@ export class Store {
       raycaster: new Raycaster(),
       raypointer: new Vector2(Infinity, Infinity),
       focusTarget: "yellowstone",
-      followCam: true,
       rotateCamPivotY: 0,
       rotateCamPivotX: 0,
       rotateCamPivotDepth: 0,

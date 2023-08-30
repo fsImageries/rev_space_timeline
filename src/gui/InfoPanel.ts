@@ -91,9 +91,9 @@ export class InfoPanelManager {
       this.displayMarkerVisible = this.displayMarkerCB.checked
     };
     
-    this.followCamCB.checked = store.store.followCam
+    this.followCamCB.checked = store.state.followCam
     this.followCamCB.onchange = () => {
-      store.store.followCam = this.followCamCB.checked;
+      store.state.followCam = this.followCamCB.checked;
     }
 
     this.orbScaleIN.onchange = () => {

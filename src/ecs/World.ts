@@ -134,8 +134,8 @@ function onkeydown(world:World, e:KeyboardEvent) {
     world.uiManager.infoPanel.openSysTarget(!world.uiManager.infoPanel.visible);
   }
 
-  if (e.key === "f") {
-    store.store.followCam = !store.store.followCam
+  if (e.key === "f" && !world.lvlManager.isCosmicMap) {
+    store.state.followCam = !store.state.followCam
   }
 
   const scalarY = 0.05

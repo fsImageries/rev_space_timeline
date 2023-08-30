@@ -78,6 +78,10 @@ export class LevelManager {
     return levels;
   }
 
+  public get isCosmicMap(): boolean {
+    return this.currentLvl === this.levelsNames[0]
+  }
+
   public async openLevel(lvlName: string) {
     let init = undefined;
     if (!(lvlName in this.levelMap)) {

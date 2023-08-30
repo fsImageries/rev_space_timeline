@@ -93,7 +93,7 @@ export class RaycasterSystem extends System {
         const fcam = this.queries[2].entities[0].getComponent(FollowCameraComponent).data.cam;
         const store = Store.getInstance()
         const raycaster = store.store.raycaster as Raycaster;
-        raycaster.setFromCamera(Store.getInstance().store.raypointer, store.store.followCam ? fcam : cam);
+        raycaster.setFromCamera(Store.getInstance().store.raypointer, store.state.followCam ? fcam : cam);
 
         let closest: [number, Entity] | undefined = undefined;
 

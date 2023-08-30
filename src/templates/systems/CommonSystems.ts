@@ -39,7 +39,7 @@ export class RenderSystem extends System {
       let cam;
       const sys = this.world.sysManager.getSystem(FollowCameraSystem)
 
-      if (store.store.followCam) {
+      if (store.state.followCam) {
         const fcomp = followcam.getComponent(FollowCameraComponent);
         cam = fcomp.data.cam
 

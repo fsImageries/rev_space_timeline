@@ -13,7 +13,7 @@ env:
   BASE_DIR: basedir
 
 jobs:
-  basic_check:
+  basic_checks:
     runs-on: ubuntu-latest
     permissions:
       contents: write

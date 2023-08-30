@@ -10,7 +10,7 @@ on:
 
 
 jobs:
-  basic_check:
+  release-dev:
     runs-on: ubuntu-latest
     permissions:
       contents: write

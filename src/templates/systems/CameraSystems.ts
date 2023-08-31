@@ -35,7 +35,6 @@ export class CameraFocusSystem extends System {
 
     execute(): void {
         const tar = Store.getInstance().store.focusTarget.toLowerCase();
-        console.log(tar)
         if (!this.queries || !tar) return;
 
         const ccomp = this.queries[1].entities[0].getComponent(CameraComponent);
@@ -119,7 +118,6 @@ export class RaycasterSystem extends System {
             }
         }
 
-        console.log(closest)
         if (closest) {
             react2intersect(closest[1], cam, this.world, this.forceSwtich);
             this.forceSwtich = false;

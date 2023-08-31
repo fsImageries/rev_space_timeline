@@ -41,7 +41,7 @@ jobs:
 
   prettify:
     runs-on: ubuntu-latest
-    needs: basic_check
+    needs: basic_checks
     permissions:
       contents: write
     if: (github.event_name == 'push' || github.event.pull_request.merged == true)

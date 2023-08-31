@@ -33,7 +33,7 @@ type LevelCache = [
   // HTMLElement,    // CSSRendererDomElement
 ];
 
-let initSystem: (w: World, d: SystemData) => void;
+let initSystem: (w: World, d: SystemData) => Promise<void> | void;
 const levels = ["Cosmic Map", "Epsilon Eridani", "Delta Pavonis"];
 const levelsInit = async (lvlName: string) => {
   if (lvlName === "Epsilon Eridani") {
@@ -89,17 +89,16 @@ export class LevelManager {
         console.info(`${lvlName} is not yet implemented.`);
         return;
       }
-      // init = levels[lvlName];
       init = await levelsInit(lvlName);
     }
 
-    this._openLevel(lvlName, init);
+    await this._openLevel(lvlName, init);
     this._currentLvl = lvlName;
 
     history.pushState({ name: lvlName }, "", null);
   }
 
-  public _openLevel(lvlName: string, init?: (world: World) => void) {
+  public async _openLevel(lvlName: string, init?: (world: World) => Promise<void> | void) {
     this.world.enabled = false;
 
     if (this.currentLvl === this.levelsNames[0]) {
@@ -118,7 +117,7 @@ export class LevelManager {
       Store.getInstance().resetState();
 
       if (!init) throw new Error("Level is not in map and no init-function was given");
-      init(this.world);
+      await init(this.world);
 
       this.levelMap[lvlName] = [
         [...this.world.ecManager.entities],

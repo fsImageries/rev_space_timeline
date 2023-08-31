@@ -130,7 +130,7 @@ export class InfoPanelManager {
   }
 
   public getCache() {
-    return { map: this.map, full: this.fullTxt, lvlInfo: this.lvlInfo, fullInfo: this.fullInfo };
+    return { map: {...this.map}, full: this.fullTxt, lvlInfo: this.lvlInfo, fullInfo: this.fullInfo };
   }
 
   public setCache(cache: InfoPanelCache) {
@@ -185,7 +185,7 @@ export class InfoPanelManager {
 
   public initSettings() {
     const store = Store.getInstance();
-    console.log(store.store.displayMarkerVisibility);
+    // console.log(store.store.displayMarkerVisibility);
     // this.displayMarkerCB.checked = store.store.displayMarkerVisibility
     this.orbScaleIN.value = store.state.ORB_SCALE;
     this.axisScaleIN.value = store.state.ROT_SCALE;
@@ -206,7 +206,7 @@ export class InfoPanelManager {
     const content = this.map[base.data.name.toLowerCase()];
     this.timeline.innerHTML = content ? content : "N/A";
     this.title.innerText = base.data.name;
-    this.subtitle.innerText = base.data.parent ? base.data.parent : "Local Group";
+    this.subtitle.innerText = base.data.parent ? base.data.parent : "Local Bubble";
 
     (document.getElementById(tab) as HTMLInputElement).checked = true;
   }
@@ -215,7 +215,7 @@ export class InfoPanelManager {
     this.timeline.innerHTML = this.map[this.sysKey];
     this.title.innerText = this.lvlInfo.name;
     this.info.innerHTML = this.fullInfo;
-    this.subtitle.innerText = "Local Group";
+    this.subtitle.innerText = "Local Bubble";
   }
 
   private genTexts(texts: TextObject[]) {

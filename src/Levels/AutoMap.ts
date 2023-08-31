@@ -21,7 +21,7 @@ import { initCommonEntities, initCommonSystem } from "./Common";
 
 const planetCheck = ["moon", "planet"];
 
-export function initSystem(world: World, data: SystemData) {
+export async function initSystem(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}`);
 
   Store.getInstance().state.DISTANCE_SCALE = data.DISTANCE_SCALE;
@@ -29,7 +29,7 @@ export function initSystem(world: World, data: SystemData) {
 
   initSystems(world, data);
   initEntities(world, data);
-  initWorld(world, data);
+  await initWorld(world, data);
 
   if (data.startTarget) {
     Store.getInstance().store.focusTarget = data.startTarget;
@@ -89,23 +89,26 @@ function initEntities(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_entities`);
 }
 
-function initWorld(world: World, data: SystemData) {
+async function initWorld(world: World, data: SystemData) {
   GLOBALS.LOAD_MANAGER.itemStart(`://${data.name}_world`);
   initCommonEntities(world);
   world.load();
   // world.uiManager.infoPanel.initTexts(data.texts, { name: data.name, constellation: data.constellation });
-  initTexts(world, data);
+  await initTexts(world, data);
   GLOBALS.LOAD_MANAGER.itemEnd(`://${data.name}_world`);
 }
 
 const BASE_URL = "https://raw.githubusercontent.com/fsImageries/rev_space_timeline_texts/main/raw/";
-function initTexts(world: World, data: SystemData) {
+async function initTexts(world: World, data: SystemData) {
   const file = data.name.replaceAll(" ", "").toLowerCase();
   const dstUrl = `${BASE_URL}${file}.json`;
-  fetch(dstUrl)
-    .then((resp) => resp.text())
-    .then((raw) => {
-      const obj: { texts: TextObject[] } = JSON.parse(raw);
-      world.uiManager.infoPanel.initTexts(obj.texts, { name: data.name, constellation: data.constellation });
-    });
+  const raw = await (await fetch(dstUrl)).text()
+  const obj: { texts: TextObject[] } = JSON.parse(raw);
+  world.uiManager.infoPanel.initTexts(obj.texts, { name: data.name, constellation: data.constellation });
+
+    // .then((resp) => resp.text())
+    // .then((raw) => {
+    //   const obj: { texts: TextObject[] } = JSON.parse(raw);
+    //   world.uiManager.infoPanel.initTexts(obj.texts, { name: data.name, constellation: data.constellation });
+    // });
 }

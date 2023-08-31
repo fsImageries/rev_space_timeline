@@ -102,13 +102,13 @@ const BASE_URL = "https://raw.githubusercontent.com/fsImageries/rev_space_timeli
 async function initTexts(world: World, data: SystemData) {
   const file = data.name.replaceAll(" ", "").toLowerCase();
   const dstUrl = `${BASE_URL}${file}.json`;
-  const raw = await (await fetch(dstUrl)).text()
+  const raw = await (await fetch(dstUrl)).text();
   const obj: { texts: TextObject[] } = JSON.parse(raw);
   world.uiManager.infoPanel.initTexts(obj.texts, { name: data.name, constellation: data.constellation });
 
-    // .then((resp) => resp.text())
-    // .then((raw) => {
-    //   const obj: { texts: TextObject[] } = JSON.parse(raw);
-    //   world.uiManager.infoPanel.initTexts(obj.texts, { name: data.name, constellation: data.constellation });
-    // });
+  // .then((resp) => resp.text())
+  // .then((raw) => {
+  //   const obj: { texts: TextObject[] } = JSON.parse(raw);
+  //   world.uiManager.infoPanel.initTexts(obj.texts, { name: data.name, constellation: data.constellation });
+  // });
 }

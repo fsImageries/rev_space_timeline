@@ -130,7 +130,7 @@ export class InfoPanelManager {
   }
 
   public getCache() {
-    return { map: {...this.map}, full: this.fullTxt, lvlInfo: this.lvlInfo, fullInfo: this.fullInfo };
+    return { map: { ...this.map }, full: this.fullTxt, lvlInfo: this.lvlInfo, fullInfo: this.fullInfo };
   }
 
   public setCache(cache: InfoPanelCache) {
